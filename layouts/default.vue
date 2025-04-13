@@ -1,12 +1,19 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gray-50">
+  <div class="min-h-screen flex flex-col">
+      <Header class="pb-[79px]"/>
 
-    <Header></Header>
+      <main class="flex-1 p-4">
+        <NuxtPage />
+      </main>
 
-    <main class="flex-1 p-4">
-      <NuxtPage />
-    </main>
-
-    <Footer/>
-  </div>
+      <Footer/>
+    </div>
 </template>
+
+<script setup>
+
+
+</script>
+
+<style scoped>
+</style>

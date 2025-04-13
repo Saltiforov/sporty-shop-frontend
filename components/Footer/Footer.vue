@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-[#3D3D3D] flex justify-around items-center h-[300px]">
+  <footer class="bg-[#3D3D3D] p-4 flex justify-around items-center h-[300px]">
 
     <div class="left-side flex">
       <div v-for="(list, index) in links" :key="index" class="links-list">

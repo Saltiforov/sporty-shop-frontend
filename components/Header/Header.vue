@@ -1,13 +1,13 @@
 <template>
-  <header class="bg-white flex items-end shadow p-4">
+  <header class="bg-white flex items-end p-4">
     <div class="logo mr-[67px]">
       <NuxtLink to="/"><img src="../../assets/images/header-logo.svg" alt="header-logo"></NuxtLink>
     </div>
 
     <LinksList
         :links="links"
-        :parent-classes="['flex', 'mr-[53px]']"
-        :link-class="['fw-600', 'mr-16', 'last:mr-0', 'font-semibold']"
+        :parent-classes="['flex', 'flex-wrap', 'gap-x-[16px]', 'md:gap-x-[32px]']"
+        :link-class="['mr-[32px]', 'sm:mr-[32px]', 'md:mr-[53px]', 'last:mr-0', 'font-semibold']"
     />
 
   </header>
