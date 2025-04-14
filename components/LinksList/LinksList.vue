@@ -15,16 +15,16 @@
 
 const props = defineProps({
   links: {
-    type: [String, Array],
+    type: Array,
     required: true,
     default: () => []
   },
   parentClasses: {
-    type: String,
+    type: [Array, String],
     required: false
   },
   linkClass: {
-    type: String,
+    type: [Array, String],
     required: false
   }
 })

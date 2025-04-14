@@ -1,9 +1,12 @@
 <template>
   <div>
     <Swiper :images="images" :options="swiperOptions"/>
-    <div class="grid gap-[30px] max-w-[1270px] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-      <ProductCard v-for="product in products" :product="product" />
+    <div class="grid mt-[20px] gap-[30px] max-w-[1270px] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+      <ProductCard v-for="product in products" :product="product"/>
     </div>
+
+    <ShoppingCart />
+
   </div>
 </template>
 
@@ -12,15 +15,27 @@ definePageMeta({
   layout: 'default',
 })
 
-const products = [
+const products = ref([
   {
     id: 1,
     title: "Nutrex Research Anabol Hardcore - 60 капс",
     grade: '4.6',
     countOfReviews: 10,
     price: 1116,
+    discountPrice: 768,
+    isFavorite: false,
+    status: 'new',
+    backgroundStatus: '#212094',
   },
-]
+  {
+    id: 2,
+    title: "Nutrex Research Anabol Hardcore - 60 капс",
+    grade: '4.1',
+    countOfReviews: 5,
+    price: 3241,
+    isFavorite: true,
+  },
+])
 
 const images = ref([
   'https://wallpapers.com/images/high/fitness-gym-with-equipment-iovhjg9dwfy87bzf.webp',

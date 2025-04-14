@@ -20,14 +20,14 @@
 
       <button
           @click="swiper.prev()"
-          class="absolute bg-[#ADADAD] top-1/2 -left-6 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full shadow-md hover:bg-[#C0C0C0]"
+          class="absolute bg-[#24242ACC] top-1/2 -left-6 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full shadow-md hover:bg-[#2A2A2D]"
       >
         <img src="@/assets/images/arrow-left.svg" alt="arrow-left.svg">
       </button>
 
       <button
           @click="swiper.next()"
-          class="absolute bg-[#ADADAD] top-1/2 -right-6 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full shadow-md hover:bg-[#C0C0C0]"
+          class="absolute bg-[#24242ACC] top-1/2 -right-6 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full shadow-md hover:bg-[#2A2A2D]"
       >
         <img src="@/assets/images/arrow-right.svg" alt="arrow-right.svg">
       </button>
@@ -60,5 +60,4 @@ const swiper = useSwiper(containerRef, props.options)
 
 
 <style scoped>
-
 </style>

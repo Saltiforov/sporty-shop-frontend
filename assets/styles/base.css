@@ -1,3 +1,31 @@
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
 }
+
+footer {
+    background: var(--color-primary-dark);
+}
+
+header {
+    background: var(--color-primary-dark);
+}
+
+.large-title {
+    color: var(--large-title-color);
+    font-weight: var(--large-title-weight);
+    font-size: var(--large-title-size);
+    line-height: var(--line-height-base);
+}
+
+.small-title {
+    color: var(--small-title-color);
+    font-weight: var(--small-title-weight);
+    font-size: var(--small-title-size);
+    line-height: var(--line-height-base);
+}
+
+.link-text {
+    color: var(--link-color);
+    font-size: var(--small-title-size);
+    line-height: var(--line-height-base);
+}
