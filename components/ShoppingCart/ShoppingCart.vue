@@ -1,29 +1,110 @@
 <template>
-  <div v-if="true" class="overlay">
-    <div class="shopping-cart rounded-tl-[32px] rounded-bl-[32px]">
+  <div v-if="isOpen" class="overlay">
+    <div class="shopping-cart pt-[36px] pb-[28px] pl-[46px] pr-[30px] rounded-tl-[32px] rounded-bl-[32px]">
       <div class="header flex justify-between pb-[49px] items-center">
         <div class="flex">
           <h1 class="large-title mr-[25px]">Кошик</h1>
-          <p class="large-title" style="color: #999999">(10)</p>
+          <p class="large-title" style="color: #999999">({{ totalCount }})</p>
         </div>
-        <div>
-          <Button>
+        <div class="pr-[8px]">
+          <Button @click="$emit('close')">
             <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1.63597 1.63649L7.51465 7.51517M7.51465 7.51517L13.3933 13.3938M7.51465 7.51517L1.63597 13.3938M7.51465 7.51517L13.3933 1.63649" stroke="#9E2B24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path
+                  d="M1.63597 1.63649L7.51465 7.51517M7.51465 7.51517L13.3933 13.3938M7.51465 7.51517L1.63597 13.3938M7.51465 7.51517L13.3933 1.63649"
+                  stroke="#9E2B24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </Button>
         </div>
       </div>
-      <div class="shopping-cart-content grid grid-rows-auto gap-4">
-        <CartProductCard />
-        <CartProductCard />
-        <CartProductCard />
+      <div class="shopping-cart-content mb-5 grid grid-rows-auto gap-[33px]">
+        <CartProductCard v-for="item in cartItems" :cart-product="item" :key="item.id" @delete="handleDelete"/>
+      </div>
+      <div class="final-price pr-[70px] mb-[42px] flex justify-end items-center">
+        <div>
+          <p class="fw-600 text-[16px] text-[#999999] mr-[14px] leading-[34px]">Разом:</p>
+        </div>
+        <div class="">
+          <p>
+            {{ totalPrice }} <span class="text-[15px] text-[var(--color-primary-dark)]">грн</span>
+          </p>
+        </div>
+      </div>
+      <div class="make-order-block flex flex-col items-center ">
+        <div class="mb-[10px]" ><Button class="max-w-[423px] w-full bg-[#24242A]"><p class="fw-400 murecho-font text-[#FFFFFF] text-[14px] leading-[22px]">
+          Оформити замовлення</p></Button></div>
+        <div>
+          <NuxtLink to="/product">
+            <p class="text-[#A3A3A7] murecho-font">Продовжити покупки</p>
+          </NuxtLink>
+        </div>
+      </div>
+      <div class="recommended-products mt-[50px]">
+        <div class="flex items-center gap-4">
+          <div class="w-[152px] h-px bg-white"></div>
+          <h2 class="h2-title text-center whitespace-nowrap">Рекомендовані товари</h2>
+          <div class="w-[152px] h-px bg-white"></div>
+        </div>
+        <div class="recommended-products-cards mt-[22px] grid grid-cols-2 gap-[30px]">
+          <ProductCard v-for="product in products" variant="small" :key="product.id" :product="product">
+            <template #buy-button>
+              <button class="bg-[#28A745] flex justify-center items-center w-[29px] h-[29px] text-white rounded-full">
+                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1.5 7.5H7.5M7.5 7.5H13.5M7.5 7.5V13.5M7.5 7.5V1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </template>
+          </ProductCard>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+const props = defineProps({
+  isOpen: {
+    type: Boolean,
+    default: true,
+  },
+  cartItems: {
+    type: Array,
+    required: false,
+    default: () => [],
+  }
+})
+
+const products = ref([
+  {
+    id: 1,
+    title: "Nutrex Research Anabol Hardcore - 60 капс",
+    grade: '4.6',
+    countOfReviews: 10,
+    price: 1116,
+    discountPrice: 768,
+    isFavorite: false,
+  },
+  {
+    id: 2,
+    title: "Nutrex Research Anabol Hardcore - 60 капс",
+    grade: '4.1',
+    countOfReviews: 5,
+    price: 3241,
+    isFavorite: true,
+  },
+])
+
+const totalCount = computed(() => {
+  return props.cartItems.reduce((acc, item) => {
+    return acc + item.quantity
+  }, 0)
+})
+
+const totalPrice = computed(() => {
+  return props.cartItems.reduce((acc, item) => {
+    const unitPrice = item.discountPrice ?? item.price
+    return acc + unitPrice * item.quantity
+  }, 0)
+})
 </script>
 
 <style scoped>
@@ -46,7 +127,6 @@
   background-color: #E6E7F8;
   z-index: 1000;
   box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.2);
-  padding: 20px;
   overflow-y: auto;
 }
 </style>

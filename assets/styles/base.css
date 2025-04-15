@@ -17,6 +17,12 @@ header {
     line-height: var(--line-height-base);
 }
 
+.h2-title {
+    font-weight: var(--text-h2-weight);
+    font-size: var(--text-h2-size);
+    line-height: var(--text-h2-line-height);
+}
+
 .small-title {
     color: var(--small-title-color);
     font-weight: var(--small-title-weight);
@@ -28,4 +34,8 @@ header {
     color: var(--link-color);
     font-size: var(--small-title-size);
     line-height: var(--line-height-base);
+}
+
+.murecho-font {
+    font-family: var(--ff-murecho);
 }

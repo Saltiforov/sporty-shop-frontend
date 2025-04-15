@@ -1,20 +1,16 @@
 <template>
   <ClientOnly>
-    <div class="relative max-w-[1783px] w-full max-h-[269px] mx-auto">
+    <div class="relative max-w-[1783px] w-full mx-auto">
       <swiper-container
           ref="containerRef"
           class="w-full"
       >
         <swiper-slide
-            v-for="(src, idx) in images"
+            v-for="(item, idx) in items"
             :key="idx"
             class="flex items-center justify-center"
         >
-          <img
-              :src="src"
-              :alt="`Слайд ${idx + 1}`"
-              class="w-full h-[269px] object-cover rounded-lg"
-          />
+          <slot :item="item" :index="idx" />
         </swiper-slide>
       </swiper-container>
 
@@ -39,7 +35,7 @@
 <script setup>
 
 const props = defineProps({
-  images: {
+  items: {
     type: Array,
     required: true,
     default: () => []

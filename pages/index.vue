@@ -1,11 +1,18 @@
 <template>
   <div>
-    <Swiper :images="images" :options="swiperOptions"/>
+    <SwiperWrapper :items="images" :options="swiperOptions">
+      <template #default="{ item }">
+        <img
+            :src="item"
+            class="w-full h-[269px] object-cover rounded-lg"
+        />
+      </template>
+    </SwiperWrapper>
     <div class="grid mt-[20px] gap-[30px] max-w-[1270px] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
       <ProductCard v-for="product in products" :product="product"/>
     </div>
 
-    <ShoppingCart />
+    <ShoppingCart :is-open="isShoppingCartShow" @close="handleClose" :cart-items="shoppingCartItems"/>
 
   </div>
 </template>
@@ -14,6 +21,17 @@
 definePageMeta({
   layout: 'default',
 })
+
+const shoppingCartItems = ref([
+  {image: '@/assets/images/product-image.png', name: 'Nutrex Research Anabol Hardcore - 60 капс', quantity: 3, price: 1121, id: 1, discountPrice: 999},
+  {image: '', name: 'Nutrex Research Anabol Hardcore - 60 капс', quantity: 10, price: 1121, id: 2},
+])
+
+const isShoppingCartShow = ref(false)
+
+const handleClose = () => {
+  isShoppingCartShow.value = false
+}
 
 const products = ref([
   {

@@ -1,5 +1,5 @@
 <template>
-  <div class="counter-container max-w-[108px] flex items-center gap-[4px]">
+  <div :style="style" class="counter-container w-[108px] flex items-center gap-[4px]">
     <Button @click="decrement" class="w-[34px] h-[34px] flex items-center justify-center border rounded">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M6 10H14M10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10C19 14.9706 14.9706 19 10 19Z" stroke="#7F7F7F" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="mix-blend-mode:luminosity"/>
@@ -10,7 +10,8 @@
 
     <input
         type="text"
-        class="w-[32px] h-[34px] border border-[#ADADAD] text-center text-[16px] fw-400 rounded-[8px] focus:outline-none"
+        :style="inputStyles"
+        class="w-[32px] h-[34px] bg-transparent border border-[#ADADAD] text-[#000000] text-center text-[16px] fw-400 rounded-[8px] focus:outline-none"
         v-model="inputValue"
         :min="min"
         :max="max"
@@ -30,6 +31,8 @@
 import { ref, watch } from 'vue'
 
 const props = defineProps({
+  style: { type: Object },
+  inputStyles: { type: Object },
   min: { type: Number, default: 1 },
   max: { type: Number, default: 10 },
   modelValue: { type: Number, required: true, default: 5 }
