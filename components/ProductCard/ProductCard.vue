@@ -2,7 +2,7 @@
   <div :class="{ 'max-h-[316px]' : variant === 'small' }"
        class="w-full relative bg-white pt-[30px] pr-[12px] pb-[22px] pl-[30px] max-w-[280px] h-auto aspect-[294/426] mx-auto rounded-lg flex flex-col justify-start shadow-md">
 
-    <div v-if="product.status" class="absolute max-w-[82px] w-full -top-3 -left-5 z-10">
+    <div v-if="product.status" class="absolute max-w-[82px] w-full -top-3 -left-5 z-100">
       <StatusBadge :label="product.status" :background-color="product.backgroundStatus"/>
     </div>
 

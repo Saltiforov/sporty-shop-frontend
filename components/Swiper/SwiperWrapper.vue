@@ -1,6 +1,6 @@
 <template>
   <ClientOnly>
-    <div class="relative max-w-[1783px] w-full mx-auto">
+    <div class="relative w-full mx-auto">
       <swiper-container
           ref="containerRef"
           class="w-full"
@@ -15,14 +15,14 @@
       </swiper-container>
 
       <button
-          @click="swiper.prev()"
+          @click="swipeToLeft"
           class="absolute bg-[#24242ACC] top-1/2 -left-6 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full shadow-md hover:bg-[#2A2A2D]"
       >
         <img src="@/assets/images/arrow-left.svg" alt="arrow-left.svg">
       </button>
 
       <button
-          @click="swiper.next()"
+          @click="swipeToRight"
           class="absolute bg-[#24242ACC] top-1/2 -right-6 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full shadow-md hover:bg-[#2A2A2D]"
       >
         <img src="@/assets/images/arrow-right.svg" alt="arrow-right.svg">
@@ -48,12 +48,22 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['swiper-slide-to-right'])
+
+const swipeToRight = () => {
+  swiper.next()
+  emit('swiper-slide-to-right')
+}
+const swipeToLeft = () => {
+  swiper.prev()
+  emit('swiper-slide-to-left')
+}
+
+
+
+
 const containerRef = ref(null)
 
 const swiper = useSwiper(containerRef, props.options)
 
 </script>
-
-
-<style scoped>
-</style>
