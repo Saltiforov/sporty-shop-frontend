@@ -16,16 +16,16 @@
 
       <button
           @click="swipeToLeft"
-          class="absolute bg-[#24242ACC] top-1/2 -left-6 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full shadow-md hover:bg-[#2A2A2D]"
+          class="swiper-btn -left-6"
       >
-        <img src="@/assets/images/arrow-left.svg" alt="arrow-left.svg">
+        <img src="@/assets/images/arrow-left.svg" alt="arrow-left.svg" />
       </button>
 
       <button
           @click="swipeToRight"
-          class="absolute bg-[#24242ACC] top-1/2 -right-6 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full shadow-md hover:bg-[#2A2A2D]"
+          class="swiper-btn -right-6"
       >
-        <img src="@/assets/images/arrow-right.svg" alt="arrow-right.svg">
+        <img src="@/assets/images/arrow-right.svg" alt="arrow-right.svg" />
       </button>
     </div>
   </ClientOnly>
@@ -59,11 +59,14 @@ const swipeToLeft = () => {
   emit('swiper-slide-to-left')
 }
 
-
-
-
 const containerRef = ref(null)
 
 const swiper = useSwiper(containerRef, props.options)
 
 </script>
+
+<style scoped>
+.swiper-btn {
+  @apply absolute bg-[#24242ACC] top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full shadow-md hover:bg-[#2A2A2D];
+}
+</style>

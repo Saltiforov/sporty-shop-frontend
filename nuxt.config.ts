@@ -11,5 +11,6 @@ export default defineNuxtConfig({
         '@/assets/styles/fonts.css',
         '@/assets/styles/base.css',
         '@/assets/css/variables.css',
+        "primeicons/primeicons.css",
     ],
 })

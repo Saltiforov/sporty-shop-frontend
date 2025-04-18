@@ -1,16 +1,13 @@
 <template>
-  <div class="max-w-[1660px] mx-auto px-4 py-6">
+  <div class="px-4 py-6">
     <div class="header flex flex-col">
-      <div class="bread-crumb">
-        Головна >> Каталог >> Спортивне харчування >> Бустери
-      </div>
       <div class="article text-[#999999] self-end mb-2">
         <p>Артикул: 9876678 {{ }} </p>
       </div>
     </div>
 
     <div
-        class="about-product-content mb-[46px] text-[#999999] flex flex-col lg:flex-row flex-wrap justify-center items-center text-center gap-8">
+        class="about-product-content mb-[46px] text-[#999999] flex flex-col lg:flex-row flex-wrap justify-between items-center gap-8">
       <div class="image relative w-full lg:max-w-[678px]">
         <div class="absolute z-[100] top-2 -right-4">
           <FavoriteButton
@@ -280,12 +277,12 @@
     </div>
 
     <div
-        class="viewed-products__content max-w-[1500px] pb-[100px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-[1300px]">
-      <ProductCard
-          v-for="product in products"
-          :key="product.id"
-          :product="product"
-      />
+        class="viewed-products__content mx-auto max-w-[1500px] pb-[70px] p-4">
+      <SwiperWrapper :items="products" :options="recommendedProductsSwiperOptions">
+        <template #default="{ item }">
+          <ProductCard class="mt-3 mb-3" :product="item"/>
+        </template>
+      </SwiperWrapper>
     </div>
 
 
@@ -293,9 +290,14 @@
 </template>
 
 <script setup>
+definePageMeta({
+  layout: 'breadcrumb',
+})
+
 import ProductImage from 'assets/images/big-product-image.png'
 import SocialTelegram from 'assets/images/social-telegram.svg'
 
+import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
 import AmountSelector from "~/components/UI/AmountSelector/AmountSelector.vue";
 import FavoriteButton from "~/components/UI/FavoriteButton/FavoriteButton.vue";
 

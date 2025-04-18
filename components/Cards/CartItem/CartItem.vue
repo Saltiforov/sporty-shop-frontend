@@ -1,7 +1,7 @@
 <template>
   <div class="cart-product flex">
     <div class="card-image shadow-xl rounded-[16px] mr-[22px] h-[156px] max-w-[156px]">
-      <img class="rounded-[16px]" src="@/assets/images/product-image.png" alt="product-image.png">
+      <img class="rounded-[16px]" src="../../../assets/images/product-image.png" alt="product-image.png">
     </div>
     <div class="card-content flex flex-col justify-between">
       <p class="card-title max-w-[276px] fw-500 text-[16px] leading-[var(--line-height-base)]">{{ cartProduct.name }}</p>

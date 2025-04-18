@@ -16,19 +16,7 @@
           </Button>
         </div>
       </div>
-      <div class="shopping-cart-content mb-5 grid grid-rows-auto gap-[33px]">
-        <CartProductCard v-for="item in cartItems" :cart-product="item" :key="item.id" @delete="handleDelete"/>
-      </div>
-      <div class="final-price pr-[70px] mb-[42px] flex justify-end items-center">
-        <div>
-          <p class="fw-600 text-[16px] text-[#999999] mr-[14px] leading-[34px]">Разом:</p>
-        </div>
-        <div class="">
-          <p>
-            {{ totalPrice }} <span class="text-[15px] text-[var(--color-primary-dark)]">грн</span>
-          </p>
-        </div>
-      </div>
+      <ProductsOverview :products-overview="cartItems"/>
       <div class="make-order-block flex flex-col items-center ">
         <div class="mb-[10px]" ><Button class="max-w-[423px] w-full bg-[#24242A]"><p class="fw-400 murecho-font text-[#FFFFFF] text-[14px] leading-[22px]">
           Оформити замовлення</p></Button></div>
@@ -96,13 +84,6 @@ const products = ref([
 const totalCount = computed(() => {
   return props.cartItems.reduce((acc, item) => {
     return acc + item.quantity
-  }, 0)
-})
-
-const totalPrice = computed(() => {
-  return props.cartItems.reduce((acc, item) => {
-    const unitPrice = item.discountPrice ?? item.price
-    return acc + unitPrice * item.quantity
   }, 0)
 })
 </script>

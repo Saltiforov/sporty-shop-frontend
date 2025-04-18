@@ -18,7 +18,7 @@
       <NuxtLink :to="`/product/${product.id}`" :style="{ marginBottom: variant === 'small' ? '4px' : '' }"
                 class="block mb-6">
         <img :class="{ 'max-w-[137px]': variant === 'small', }" class="rounded-lg"
-             src="@/assets/images/product-image.png" alt="Product image">
+             src="../../../assets/images/product-image.png" alt="Product image">
       </NuxtLink>
       <div class="product-name">
         <p :style="{ fontSize: variant === 'small' ? '16px' : '' }"
