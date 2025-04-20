@@ -12,6 +12,7 @@
   "dependencies": {
     "@primeuix/themes": "^1.0.3",
     "@primevue/forms": "^4.3.3",
+    "@primevue/themes": "^4.2.5",
     "nuxt": "^3.15.1",
     "nuxt-swiper": "^2.0.0",
     "primeicons": "^7.0.0",
