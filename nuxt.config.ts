@@ -1,6 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-
-import Aura from '@primeuix/themes/aura';
+import Noir from "./utils/themes/noir";
 
 export default defineNuxtConfig({
     compatibilityDate: '2024-11-01',
@@ -17,8 +16,18 @@ export default defineNuxtConfig({
     ],
     primevue: {
         options: {
+            pt: {
+              Button: {
+                  root: {
+                      class: 'btn-primary'
+                  }
+              }
+            },
             theme: {
-                preset: Aura
+                preset: Noir,
+                options: {
+                    darkModeSelector: 'light',
+                }
             }
         }
     }

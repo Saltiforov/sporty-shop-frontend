@@ -38,7 +38,7 @@
 
     <div class="flex relative items-center justify-between">
       <div>
-        <p v-if="product.discountPrice" class="discount-price absolute -top-2 left-0 fw-500 text-[15px] line-through">
+        <p v-if="product.discountPrice" class="discount-price absolute -top-3 left-0 fw-500 text-[15px] line-through">
           {{ product.price }} грн
         </p>
         <p :class="{ 'text-[#EF4B4B]': product?.discountPrice }"
@@ -48,15 +48,20 @@
 
 
       <slot name="buy-button">
-        <button
+        <Button
+            :pt="{
+              root: {
+                class: 'card-buy-button'
+              }
+            }"
             @click="$emit('add-to-cart', product)"
-            class="text-white self-end flex items-center w-[47px] h-[47px] bg-[#28A745] px-4 py-2 rounded-[50%] hover:bg-gray-800 transition">
+            class="text-white self-end flex items-center w-[47px] h-[47px]  px-4 py-2 rounded-[50%] transition">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M1 1H1.26835C1.74213 1 1.97943 1 2.17267 1.08548C2.34304 1.16084 2.48871 1.28218 2.59375 1.43604C2.71269 1.61026 2.75564 1.8429 2.84137 2.30727L5.00004 14L15.4218 14C15.875 14 16.1023 14 16.29 13.9199C16.4559 13.8492 16.5989 13.7346 16.7051 13.5889C16.8252 13.4242 16.8761 13.2037 16.9777 12.7631L16.9785 12.76L18.5477 5.95996L18.5481 5.95854C18.7023 5.29016 18.7796 4.95515 18.6947 4.69238C18.6202 4.46182 18.4635 4.26634 18.2556 4.14192C18.0184 4 17.6758 4 16.9887 4H3.5M16 19C15.4477 19 15 18.5523 15 18C15 17.4477 15.4477 17 16 17C16.5523 17 17 17.4477 17 18C17 18.5523 16.5523 19 16 19ZM6 19C5.44772 19 5 18.5523 5 18C5 17.4477 5.44772 17 6 17C6.55228 17 7 17.4477 7 18C7 18.5523 6.55228 19 6 19Z"
                 stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-        </button>
+        </Button>
       </slot>
     </div>
   </div>
@@ -94,4 +99,13 @@ const iconSize = computed(() => {
 </script>
 
 <style scoped>
+.card-buy-button {
+  border: none;
+  background: #28A745;
+}
+.card-buy-button:hover {
+  border: none;
+  background: #28A745;
+}
+
 </style>

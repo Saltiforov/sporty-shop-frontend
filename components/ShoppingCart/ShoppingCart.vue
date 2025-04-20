@@ -7,7 +7,11 @@
           <p class="large-title" style="color: #999999">({{ totalCount }})</p>
         </div>
         <div class="pr-[8px]">
-          <Button @click="$emit('close')">
+          <Button :pt="{
+            root: {
+              class: 'close-cart'
+            }
+          }" @click="$emit('close')">
             <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                   d="M1.63597 1.63649L7.51465 7.51517M7.51465 7.51517L13.3933 13.3938M7.51465 7.51517L1.63597 13.3938M7.51465 7.51517L13.3933 1.63649"
@@ -18,8 +22,14 @@
       </div>
       <ProductsOverview :products-overview="cartItems"/>
       <div class="make-order-block flex flex-col items-center ">
-        <div class="mb-[10px]" ><Button class="max-w-[423px] w-full bg-[#24242A]"><p class="fw-400 murecho-font text-[#FFFFFF] text-[14px] leading-[22px]">
-          Оформити замовлення</p></Button></div>
+        <div class="mb-[10px]" >
+          <Button :pt="{
+            root: {
+              class: 'make-order-button',
+            }
+          }"><p class="fw-400 murecho-font text-[#FFFFFF] text-[14px] leading-[22px]">
+          Оформити замовлення</p></Button>
+        </div>
         <div>
           <NuxtLink to="/product">
             <p class="text-[#A3A3A7] murecho-font">Продовжити покупки</p>
@@ -35,11 +45,15 @@
         <div class="recommended-products-cards mt-[22px] grid grid-cols-2 gap-[30px]">
           <ProductCard v-for="product in products" variant="small" :key="product.id" :product="product">
             <template #buy-button>
-              <button class="bg-[#28A745] flex justify-center items-center w-[29px] h-[29px] text-white rounded-full">
+              <Button :pt="{
+                root: {
+                  class: 'card-buy__small__btn',
+                }
+              }" class="flex justify-center items-center w-[29px] h-[29px]">
                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M1.5 7.5H7.5M7.5 7.5H13.5M7.5 7.5V13.5M7.5 7.5V1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-              </button>
+              </Button>
             </template>
           </ProductCard>
         </div>
@@ -49,6 +63,8 @@
 </template>
 
 <script setup>
+import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
+
 const props = defineProps({
   isOpen: {
     type: Boolean,
@@ -89,6 +105,39 @@ const totalCount = computed(() => {
 </script>
 
 <style scoped>
+.make-order-button {
+  width: 100%;
+  background: var(--color-primary-dark);
+}
+.make-order-button:hover {
+  width: 100%;
+  background: var(--color-primary-dark);
+}
+
+.card-buy__small__btn {
+  background: var(--color-primary-green);
+  color: var(--color-primary-white);
+  border-radius: 100%;
+  border: none;
+  padding: 0;
+}
+.card-buy__small__btn:hover {
+  background: var(--color-primary-green);
+  border: none;
+  padding: 0;
+}
+
+.close-cart {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+.close-cart:hover {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
 .overlay {
   position: fixed;
   top: 0;

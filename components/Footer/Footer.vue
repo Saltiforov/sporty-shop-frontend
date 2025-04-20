@@ -1,6 +1,6 @@
 <template>
   <footer class="pt-[21px] pr-3 pl-3">
-    <div class="footer-container flex justify-between flex-wrap items-center max-w-[1170px] px-[15px] mx-auto">
+    <div class="footer-container flex justify-between flex-wrap items-center max-w-[1190px] px-[15px] mx-auto">
       <div class="left-side flex w-full max-w-[661px] justify-between flex-wrap sm:flex-nowrap gap-2">
         <img src="@/assets/images/footer-logo.svg" alt="footer-logo.svg">
         <div class="links-list flex w-full max-w-[411px] justify-between flex-wrap sm:flex-nowrap gap-2">

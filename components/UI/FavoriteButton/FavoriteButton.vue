@@ -1,5 +1,9 @@
 <template>
-  <Button @click="toggleFavorite">
+  <Button :pt="{
+    root: {
+      class: 'favorite-button',
+    }
+  }" @click="toggleFavorite">
     <svg
         :style="{ fill: isFavorite ? '#B3261E' : '' }"
         :width="iconSize.width"
@@ -58,4 +62,16 @@ const strokeColor = computed(() =>
     props.isFavorite ? '#B3261E' : props.inactiveColor
 )
 </script>
+
+<style scoped>
+.favorite-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+.favorite-button:hover {
+  background: transparent;
+  border: none;
+}
+</style>
 

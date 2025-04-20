@@ -86,8 +86,18 @@
       </div>
     </div>
 
-    <div class="tabs-wrapper rounded-md bg-[#F2F2F7] pt-[12px] pl-[55px] pr-[55px] pb-[32px]">
-      <TabView>
+    <div class="tabs-wrapper pt-[24px] pr-[55px] pb-[32px] pl-[55px] rounded-md bg-[#F2F2F7]">
+      <TabView :pt="{
+        root: {
+          class: 'bg-transparent',
+        },
+       tabList: {
+         class: 'ZHOPA',
+       },
+         nav: {
+          class: 'tablist-nav',
+          },
+      }">
         <TabPanel header="Опис">
           <p class="m-0">
             <p class="mb-4">
@@ -480,17 +490,22 @@ const product = allProducts.value.find(p => p.id === id)
 </script>
 
 <style>
-.p-tabview-tablist-item-active {
-  position: relative;
+
+.tablist-nav {
+  background: transparent;
+  color: black;
 }
 
-.p-tabview-tablist-item-active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background-color: #5856D6;
+::v-deep(p-tabview-ink-bar) {
+  background-color: #5856D6 !important;
+}
+
+::v-deep(.p-tabview-panels) {
+  background: #5856D6 !important;
+}
+
+
+.p-tabview p-component {
+  background: #000;
 }
 </style>
