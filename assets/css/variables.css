@@ -10,6 +10,7 @@
     --color-primary-black: #000000;
 
     --color-gray-lavender: #F2F2F7;
+    --color-gray-light-lavender: #D6D6EB;
     --color-primary-dark-red: #B3261E;
     --color-muted-gray: #8E8E93;
 
@@ -17,6 +18,8 @@
     --ff-murecho: 'Murecho', sans-serif;
 
     --line-height-base: 22px;
+
+    --default-rounded: 8px;
 
     --link-color: #FFFFFF;
     --text-link-size: 15px;

@@ -46,8 +46,20 @@ header {
     line-height: 22px;
 }
 
+.title-lg-20 {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 22px;
+}
+
 .subtitle-lg {
     font-size: 16px;
     font-weight: 600;
+    line-height: 22px;
+}
+
+.text-light-16 {
+    font-weight: 200;
+    font-size: 16px;
     line-height: 22px;
 }

@@ -1,0 +1,66 @@
+<template>
+  <div class="favorite-products">
+    <h1 class="title-lg-20 mb-8">Вподобані товари</h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
+      <ProductCard
+          v-for="product in products"
+          :key="product.id"
+          :product="product"
+      />
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
+
+const products = ref([
+  {
+    id: 1,
+    title: "Nutrex Research Anabol Hardcore - 60 капс",
+    grade: '4.6',
+    countOfReviews: 10,
+    price: 1116,
+    discountPrice: 768,
+    isFavorite: false,
+  },
+  {
+    id: 2,
+    title: "Nutrex Research Anabol Hardcore - 60 капс",
+    grade: '4.1',
+    countOfReviews: 5,
+    price: 3241,
+    isFavorite: true,
+  },
+  {
+    id: 2,
+    title: "Nutrex Research Anabol Hardcore - 60 капс",
+    grade: '4.1',
+    countOfReviews: 5,
+    price: 3241,
+    isFavorite: true,
+  },
+  {
+    id: 2,
+    title: "Nutrex Research Anabol Hardcore - 60 капс",
+    grade: '4.1',
+    countOfReviews: 5,
+    price: 3241,
+    isFavorite: true,
+  },
+  {
+    id: 2,
+    title: "Nutrex Research Anabol Hardcore - 60 капс",
+    grade: '4.1',
+    countOfReviews: 5,
+    price: 3241,
+    isFavorite: true,
+  },
+])
+
+</script>
+
+
+<style scoped>
+
+</style>

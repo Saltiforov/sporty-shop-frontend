@@ -4,14 +4,14 @@
 
       <div class=" w-full max-w-[1064px] mr-[71px]">
 
-        <div class="checkout-fields pt-[24px] pr-[45px] pb-[44px] pl-[42px] mb-[46px] rounded-lg bg-[var(--color-gray-lavender)]">
+        <div
+            class="checkout-fields pt-[24px] pr-[45px] pb-[44px] pl-[42px] mb-[46px] rounded-lg bg-[var(--color-gray-lavender)]">
           <div class="header-fields">
             <h1 class="title-lg mb-2">Оформлення замовлення</h1>
-            <p class="subtitle-lg text-[var(--color-muted-gray)]">Вже є аккаунт? Увійти</p>
+            <p class="subtitle-lg mb-[24px] text-[var(--color-muted-gray)]">Вже є аккаунт? Увійти</p>
           </div>
-
           <div class="fields-content">
-
+            <FieldsBlock :config="config.fields"/>
           </div>
         </div>
 
@@ -85,7 +85,6 @@
 </template>
 
 <script setup>
-
 definePageMeta({
   layout: 'breadcrumb',
 })
@@ -96,16 +95,141 @@ const togglePromoCodeUse = () => {
   isUsePromoCode.value = !isUsePromoCode.value
 }
 
-const shoppingCartItems = ref([
-  {
-    image: '@/assets/images/product-image.png',
-    name: 'Nutrex Research Anabol Hardcore - 60 капс',
-    quantity: 3,
-    price: 1121,
-    id: 1,
-    discountPrice: 999
-  },
-  {image: '', name: 'Nutrex Research Anabol Hardcore - 60 капс', quantity: 10, price: 1121, id: 2},
-])
+const config = {
+  fields: {
+    items: [
+      {
+        name: 'userName',
+        code: 'userName',
+        label: 'Ім’я*',
+        type: 'InputText',
+        props: {
+          side: 'left',
+          type: 'text',
+          placeholder: "",
+          required: true
+        },
+      },
+
+      {
+        name: 'country',
+        code: 'country',
+        label: 'Країна*',
+        type: 'Select',
+        props: {
+          side: 'right',
+          half: true,
+          placeholder: ''
+        }
+      },
+      {
+        name: 'postCode',
+        code: 'postCode',
+        label: 'Поштовий індекс*',
+        type: 'InputText',
+        props: {
+          side: 'right',
+          half: true,
+          placeholder: ''
+        }
+      },
+      {
+        name: 'state',
+        code: 'state',
+        label: 'Штат\\Область\\Регіон',
+        type: 'InputText',
+        props: {
+          side: 'right',
+          placeholder: ''
+        }
+      },
+      {
+        name: 'city',
+        code: 'city',
+        label: 'Місто*',
+        type: 'InputText',
+        props: {
+          side: 'right',
+          placeholder: ''
+        }
+      },
+      {
+        name: 'deliveryInfo',
+        code: 'deliveryInfo',
+        label: 'Служба доставки та номер відділення',
+        type: 'InputText',
+        props: {
+          side: 'right',
+          placeholder: ''
+        }
+      },
+
+      {
+        name: 'lastName',
+        code: 'lastName',
+        label: 'Прізвище*',
+        type: 'InputText',
+        props: {
+          side: 'left',
+          type: 'text',
+          placeholder: "",
+          required: true
+        },
+      },
+      {
+        name: 'email',
+        code: 'email',
+        label: 'Електронна пошта*',
+        type: 'InputText',
+        props: {
+          side: 'left',
+          type: 'text',
+          placeholder: "",
+          required: true
+        },
+      },
+      {
+        name: 'phoneNumber',
+        code: 'phoneNumber',
+        label: 'Номер телефону*',
+        type: 'InputText',
+        props: {
+          side: 'left',
+          type: 'text',
+          placeholder: "",
+          required: true
+        },
+      },
+      {
+        name: 'telegramUsername',
+        code: 'telegramUsername',
+        label: 'Username телеграм',
+        type: 'InputText',
+        props: {
+          side: 'left',
+          type: 'text',
+          placeholder: "",
+          required: true
+        },
+      },
+
+
+    ]
+  }
+}
+
+
+const
+    shoppingCartItems = ref([
+      {
+        image: '@/assets/images/product-image.png',
+        name: 'Nutrex Research Anabol Hardcore - 60 капс',
+        quantity: 3,
+        price: 1121,
+        id: 1,
+        discountPrice: 999
+      },
+      {image: '', name: 'Nutrex Research Anabol Hardcore - 60 капс', quantity: 10, price: 1121, id: 2},
+    ])
 
 </script>
