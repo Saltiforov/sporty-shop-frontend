@@ -60,6 +60,12 @@ header {
     line-height: 22px;
 }
 
+.text-medium-20 {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 22px;
+}
+
 .subtitle-lg {
     font-size: 16px;
     font-weight: 600;
@@ -74,7 +80,9 @@ header {
 
 .btn-primary {
     border: none;
+    background: transparent
 }
 .btn-primary:hover {
     border: none;
+    background: transparent
 }

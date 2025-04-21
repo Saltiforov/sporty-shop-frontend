@@ -3,13 +3,20 @@
     <h1 class="title-lg-20 mb-[30px]">Контактна інформація</h1>
     <FieldsBlock :config="config.fields"/>
     <div
-        class="personal-information__btn max-w-[338px] mx-auto py-[10px] px-[10px] rounded-[var(--default-rounded)] text-white text-center bg-[var(--color-primary-dark)]">
-      <Button>Зберегти</Button>
+        class="max-w-[338px] mx-auto py-[10px] px-[10px]">
+      <Button :pt="{
+        root: {
+          class: 'personal-information__btn'
+        }
+      }">Зберегти
+      </Button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+
+import {InputGroup, InputGroupAddon, InputText} from "primevue";
 
 const config = {
   fields: {
@@ -114,17 +121,31 @@ const config = {
           required: true
         },
       },
+
       {
         name: 'phoneNumber',
         code: 'phoneNumber',
         label: 'Номер телефону*',
-        type: 'InputText',
+        type: 'Custom',
         props: {
           side: 'left',
-          type: 'text',
-          placeholder: "",
-          required: true
         },
+        render: () =>
+            h(InputGroup, {}, {
+              default: () => [
+                h(InputGroupAddon, {
+                  pt: {
+                    root: {
+                      style: {
+                        backgroundColor: 'white',
+                        color: 'var(--color-primary-dark)',
+                      }
+                    }
+                  }
+                }, () => '+380'),
+                h(InputText, {placeholder: ''})
+              ]
+            })
       },
 
     ]
@@ -133,7 +154,15 @@ const config = {
 
 </script>
 
-
 <style scoped>
+.personal-information__btn {
+  width: 100%;
+  border-radius: var(--default-rounded);
+  background-color: var(--color-primary-dark);
+}
+
+.personal-information__btn:hover {
+  background-color: var(--color-primary-dark);
+}
 
 </style>

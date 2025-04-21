@@ -43,7 +43,7 @@ import FavoriteProducts from "~/components/UserProfile/FavoriteProducts/Favorite
 import ChangePassword from "~/components/UserProfile/ChangePassword/ChangePassword.vue";
 import Logout from "~/components/UserProfile/Logout/Logout.vue";
 
-const components = { PersonalInformation, OrderHistory, FavoriteProducts, ChangePassword };
+const components = { PersonalInformation, OrderHistory, FavoriteProducts, ChangePassword, Logout };
 
 const list = [
   { title: 'Особиста інформація', icon: 'user', component: 'PersonalInformation' },
@@ -53,7 +53,7 @@ const list = [
   { title: 'Вихід', icon: 'user', component: 'Logout' },
 ]
 
-const currentTab = ref('PersonalInformation')
+const currentTab = ref('OrderHistory')
 
 const selectComponent = (component) => {
   currentTab.value = component;

@@ -12,10 +12,10 @@
           <template v-for="field in leftFullFields" :key="field.name">
             <div class="form-group">
               <p class="form__title mb-[11px]">{{ field.label }}:</p>
-              <div class="border rounded-[8px] bg-white py-2 px-2">
+              <div>
                 <component
                     class="w-full"
-                    :is="field.type"
+                    :is="field.render || field.type"
                     v-bind="field.props"
                     :config="field.props"
                     v-model="formData[field.name]"
@@ -38,10 +38,10 @@
               <template v-for="field in pair" :key="field.name">
                 <div class="form-group w-1/2">
                   <p class="form__title mb-[11px]">{{ field.label }}:</p>
-                  <div class="border rounded-[8px] bg-white py-2 px-2">
+                  <div>
                     <component
                         class="w-full"
-                        :is="field.type"
+                        :is="field.render || field.type"
                         v-bind="field.props"
                         :config="field.props"
                         v-model="formData[field.name]"
@@ -69,10 +69,10 @@
               <template v-for="field in pair" :key="field.name">
                 <div class="form-group w-1/2">
                   <p class="form__title mb-[11px]">{{ field.label }}:</p>
-                  <div class="border rounded-[8px] bg-white py-2 px-2">
+                  <div>
                     <component
                         class="w-full"
-                        :is="field.type"
+                        :is="field.render || field.type"
                         v-bind="field.props"
                         :config="field.props"
                         v-model="formData[field.name]"
@@ -95,10 +95,10 @@
           <template v-for="field in rightFullFields" :key="field.name">
             <div class="form-group">
               <p class="form__title mb-[11px]">{{ field.label }}:</p>
-              <div class="border rounded-[8px] bg-white py-2 px-2">
+              <div>
                 <component
                     class="w-full"
-                    :is="field.type"
+                    :is="field.render || field.type"
                     v-bind="field.props"
                     :config="field.props"
                     v-model="formData[field.name]"

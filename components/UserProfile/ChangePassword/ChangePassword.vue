@@ -3,9 +3,12 @@
     <div class="max-w-[432px]">
       <h1 class="title-lg-20 mb-[30px]">Зміна паролю</h1>
       <FieldsBlock :config="config.fields"/>
-      <div
-          class="change-password__btn mx-auto max-w-[377px] px-[10px] py-[10px] text-center text-white rounded-[var(--default-rounded)] bg-[var(--color-primary-dark)]">
-        <Button>Змінити пароль</Button>
+      <div class="max-w-[377px] mx-auto">
+        <Button :pt="{
+          root: {
+            class: 'change-password__btn'
+          }
+        }">Змінити пароль</Button>
       </div>
     </div>
   </div>
@@ -59,3 +62,15 @@ const config = {
 }
 
 </script>
+
+<style scoped>
+.change-password__btn {
+  color: var(--link-color);
+  background-color: var(--color-primary-dark);
+  width: 100%;
+}
+.change-password__btn:hover {
+  background-color: var(--color-primary-dark);
+}
+
+</style>

@@ -17,10 +17,10 @@ export default defineNuxtConfig({
     primevue: {
         options: {
             pt: {
-              Button: {
+              button: {
                   root: {
-                      class: 'btn-primary'
-                  }
+                      class: 'btn-primary',
+                   }
               }
             },
             theme: {

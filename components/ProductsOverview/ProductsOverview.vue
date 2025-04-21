@@ -1,7 +1,8 @@
 <template>
   <div class="shopping-cart-content mb-5 grid grid-rows-auto gap-[33px]">
     <CartItem v-for="item in productsOverview" :cart-product="item" :key="item.id" @delete="handleDelete"/>
-    <div class="final-price pr-[70px] mb-[42px]">
+
+    <div class="final-price pr-[50px] mb-[42px]">
       <div class="flex justify-end items-center">
         <p class="fw-600 text-[16px] text-[#999999] mr-[14px] leading-[34px]">Загальна сума:</p>
         <p>
@@ -28,6 +29,7 @@
 
 <script setup>
 import CartItem from "~/components/Cards/CartItem/CartItem.vue";
+import {calculateTotal} from "~/utils/index.js";
 
 const {productsOverview} = defineProps({
   productsOverview: {
@@ -37,12 +39,6 @@ const {productsOverview} = defineProps({
   }
 });
 
-const calculateTotal = (items, useDiscount = true) => {
-  return items.reduce((total, item) => {
-    const price = useDiscount ? item.discountPrice ?? item.price : item.price
-    return total + price * item.quantity
-  }, 0)
-}
 
 const totalPrice = computed(() => calculateTotal(productsOverview, true))
 

@@ -22,7 +22,7 @@
       </div>
       <ProductsOverview :products-overview="cartItems"/>
       <div class="make-order-block flex flex-col items-center ">
-        <div class="mb-[10px]" >
+        <div class="mb-[10px] w-full max-w-[423px]">
           <Button :pt="{
             root: {
               class: 'make-order-button',
@@ -107,6 +107,7 @@ const totalCount = computed(() => {
 <style scoped>
 .make-order-button {
   width: 100%;
+  border-radius: var(--default-rounded);
   background: var(--color-primary-dark);
 }
 .make-order-button:hover {
