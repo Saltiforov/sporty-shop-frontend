@@ -88,15 +88,18 @@
 
     <div class="tabs-wrapper pt-[24px] pr-[55px] pb-[32px] pl-[55px] rounded-md bg-[#F2F2F7]">
       <TabView :pt="{
-        root: {
-          class: 'bg-transparent',
+        panelContainer: {
+          class: 'bg-transparent'
         },
-       tabList: {
-         class: 'ZHOPA',
-       },
+        navContainer: {
+          class: 'border-none'
+        },
          nav: {
-          class: 'tablist-nav',
+          class: 'bg-transparent border-[0] nav-panel'
           },
+          inkbar: {
+           class: 'h-[4px] bg-[var(--color-primary-purple)]'
+          }
       }">
         <TabPanel header="Опис">
           <p class="m-0">
@@ -227,12 +230,12 @@
 
             <div class="review-form max-w-[642px] w-full">
               <div class="mb-4">
-                <strong><h2 class="form-title fw-500">Новий відгук</h2></strong>
+                <h2 class="form-title fw-500">Новий відгук</h2>
               </div>
-              <div class="border mb-4 rounded-[8px] py-[10px] px-[10px] bg-white  max-w-[354px]">
+              <div class="mb-4 rounded-[8px] max-w-[354px]">
                 <InputText class="w-full h-[42px] py-[10px] rounded-[8px]" placeholder="Ваше ім’я"/>
               </div>
-              <div class="bg-white mb-[10px] py-[10px] px-[10px] rounded-[8px]">
+              <div class="mb-[10px] rounded-[8px]">
                 <Textarea style="resize: none" class="w-full rounded-[8px]" placeholder="Поділіться вашими враженнями"
                           rows="5" cols="30"/>
               </div>
@@ -250,8 +253,12 @@
               </div>
 
               <div
-                  class="send-review__btn  text-center rounded-[8px] text-[#FFFFFF] py-[10px] px-[10px] bg-[var(--color-primary-dark)] max-w-[386px]">
-                <Button><p class="text-[14px]">Надіслати відгук</p></Button>
+                  class="rounded-[8px] max-w-[386px]">
+                <Button :pt="{
+                  root: {
+                    class: 'send-review__btn'
+                  }
+                }"><p class="text-[14px]">Надіслати відгук</p></Button>
               </div>
 
             </div>
@@ -489,23 +496,17 @@ const tabs = {
 const product = allProducts.value.find(p => p.id === id)
 </script>
 
-<style>
-
-.tablist-nav {
-  background: transparent;
-  color: black;
+<style scoped>
+.send-review__btn {
+  background: var(--color-primary-dark);
+  width: 100%;
 }
 
-::v-deep(p-tabview-ink-bar) {
-  background-color: #5856D6 !important;
+.send-review__btn:hover {
+  background: var(--color-primary-dark);
 }
 
-::v-deep(.p-tabview-panels) {
-  background: #5856D6 !important;
-}
-
-
-.p-tabview p-component {
-  background: #000;
+.nav-panel:hover {
+  color: darkred;
 }
 </style>

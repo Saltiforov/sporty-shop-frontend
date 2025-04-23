@@ -1,5 +1,5 @@
 <template>
-  <div class="fields-block mb-12">
+  <div class="fields-block">
     <div class="container">
       <div
           :class="{
@@ -7,7 +7,7 @@
       'grid-cols-1': !leftFullFields.length || !rightFullFields.length,
       'grid-cols-2': leftFullFields.length && rightFullFields.length
       }"
-          class="grid gap-6 mb-[34px]">
+          class="grid gap-6">
         <div class="flex flex-col gap-6">
           <template v-for="field in leftFullFields" :key="field.name">
             <div class="form-group">

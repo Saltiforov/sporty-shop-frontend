@@ -11,36 +11,82 @@
       />
 
       <div class="search-field  max-w-[425px] w-full">
-        <IconField >
+        <IconField>
           <InputText :pt="{
           root: {
             class: 'header-search-field'
           }
-        }" placeholder="Пошук..." />
-          <InputIcon class="pi pi-search" />
+        }" placeholder="Пошук..."/>
+          <InputIcon :pt="{
+            root: {
+              class: 'text-[var(--color-primary-black)]'
+            }
+          }" class="pi pi-search"/>
         </IconField>
       </div>
 
+      <div class="locale-switch">
+        <LocaleSwitch/>
+      </div>
+
+
       <div class="action-panel max-w-[134px] w-full h-[36px] flex justify-between">
-        <Button :pt="{
-          root: {
-            class: 'action-panel-icon'
-          }
-        }"  v-for="icon in actionIcons">
-          <img :src="icon" alt="action-icon.svg">
+        <Button :pt="{ root: { class: 'action-panel-icon' } }">
+          <img src="~/assets/icons/favorite-icon-heart.svg" alt="favorite-icon-heart.svg"/>
+        </Button>
+        <Button type="button" @mouseenter="toggle" aria-haspopup="true" aria-controls="overlay_menu"
+                :pt="{ root: { class: 'action-panel-icon' } }">
+          <img src="~/assets/icons/user-icon.svg" alt="user-icon.svg"/>
+        </Button>
+        <Button :pt="{ root: { class: 'action-panel-icon' } }">
+          <img src="~/assets/icons/shopping-cart-icon.svg" alt="shopping-cart-icon.svg"/>
         </Button>
       </div>
     </div>
+    <Menu
+        :pt="{
+    root: {
+      class: 'relative bg-[var(--color-gray-light-lavender)] before:content-[\'\'] before:absolute before:top-[-26px] before:right-[40px] before:border-[13px] before:border-transparent before:border-b-[var(--color-gray-light-lavender)]'
+    },
+    submenuLabel: {
+      class: 'p-0'
+    },
+    itemLink: {
+      class: 'border-b border-[var(--color-gray-light-lavender)] last:border-b-0'
+    }
+  }"
+        ref="menu"
+        id="overlay_menu"
+        :style="{ top: '106.4219px', insetInlineStart: '1667.5px' }"
+        :model="items"
+        :popup="true"
+    />
+
+
 
   </header>
 </template>
 
 <script setup>
-import IconFavorite from '~/assets/icons/favorite-icon-heart.svg'
-import IconUser from '~/assets/icons/user-icon.svg'
-import IconCart from '~/assets/icons/shopping-cart-icon.svg'
+import LocaleSwitch from "~/components/UI/LocaleSwitch/LocaleSwitch.vue";
 
-const actionIcons = [ IconFavorite, IconUser, IconCart ]
+const menu = ref();
+const items = ref([
+  {
+    items: [
+      {
+        label: 'Увійти',
+      },
+      {
+        label: 'Зареєструватись',
+      }
+    ]
+  }
+]);
+
+const toggle = (event) => {
+  menu.value.toggle(event);
+};
 
 const links = ref([
   {
@@ -69,6 +115,7 @@ const links = ref([
   border: none;
   padding: 0;
 }
+
 .action-panel-icon:hover {
   background: transparent;
   border: none;
@@ -79,6 +126,8 @@ const links = ref([
   width: 100%;
   padding: 11px 0 11px 14px;
   border-radius: 12px;
+  border: none;
+  font-weight: 300;
+  line-height: 22px;
 }
-
 </style>

@@ -26,15 +26,16 @@
       </div>
     </div>
 
+    <AuthWrapper/>
 
-    <ShoppingCart :is-open="true" @close="handleClose" :cart-items="shoppingCartItems"/>
+    <ShoppingCart :is-open="false" @close="handleClose" :cart-items="shoppingCartItems"/>
 
   </div>
 </template>
 
 <script setup>
 import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
-import PopupComponent from "~/components/PopupComponent/PopupComponent.vue";
+import AuthWrapper from "~/wrappers/AuthWrapper.vue";
 
 definePageMeta({
   layout: 'default',

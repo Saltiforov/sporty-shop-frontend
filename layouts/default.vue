@@ -1,8 +1,8 @@
 <template>
   <div class="min-h-screen flex flex-col">
-    <Header class="mb-[98px]"/>
+    <Header/>
 
-    <div class="w-full px-4 mx-auto mb-[53px]">
+    <div class="w-full px-4 mx-auto mt-[98px] mb-[53px]">
       <div class="mx-auto w-full max-w-[1756px]">
         <SwiperWrapper :items="images" :options="swiperOptions">
           <template #default="{ item }">

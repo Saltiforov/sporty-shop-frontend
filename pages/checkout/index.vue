@@ -18,13 +18,29 @@
         <div class="checkout-payment-method pt-[24px] px-[42px]  pb-[36px] rounded-lg bg-[var(--color-gray-lavender)]">
           <h2 class="mb-[36px] title-lg">Спосіб оплати</h2>
           <div class="checkout-payment-method__checkboxes">
-            <div class="payment-method__checkbox murecho-font fw-500 text-[16px] mb-[24px] flex">
-              <input class="mr-[2px]" type="checkbox">
-              <p>Відправити sms по вказаних данних</p>
+            <div class="murecho-font checkbox-wrapper">
+              <Checkbox :pt="{
+                root: {
+                  class: 'payment-method__checkbox'
+                },
+
+                box: {
+                  class: 'h-[16px] border-[2px] border-[var(--color-primary-blue)] rounded-none w-[16px]'
+                },
+
+              }" binary/>
+              <p class="text-[var(--color-primary-black)]">Відправити sms по вказаних данних</p>
             </div>
-            <div class="payment-method__checkbox murecho-font fw-500 text-[16px] flex">
-              <input class="mr-[2px]" type="checkbox">
-              <p>Накладений платіж</p>
+            <div class="murecho-font checkbox-wrapper">
+              <Checkbox :pt="{
+                root: {
+                  class: 'payment-method__checkbox '
+                },
+                 box: {
+                  class: 'h-[16px] border-[2px] border-[var(--color-primary-blue)] rounded-none w-[16px]'
+                }
+              }" binary/>
+              <p class="text-[var(--color-primary-black)]">Накладений платіж</p>
             </div>
 
           </div>
@@ -40,41 +56,61 @@
           <div class="use-promocode">
             <div class="flex justify-between mb-[17px]">
               <p class="text-[var(--color-primary-dark)]">Використати промокод</p>
-              <div class="use-promocode__btn">
-                <Button v-if="isUsePromoCode" @click="togglePromoCodeUse">
+              <div class="use-promocode-wrapper__btn">
+                <Button :pt="{
+                  root: {
+                    class: 'use-promocode__btn'
+                  }
+                }" v-if="isUsePromoCode" @click="togglePromoCodeUse">
                   <img src="@/assets/icons/promocode-btn-plus.svg" alt="">
                 </Button>
-                <Button v-else @click="togglePromoCodeUse">
+                <Button :pt="{
+                  root: {
+                    class: 'use-promocode__btn'
+                  }
+                }" v-else @click="togglePromoCodeUse">
                   <img src="@/assets/icons/promocode-btn-minus.svg" alt="">
                 </Button>
 
               </div>
             </div>
             <div v-if="isUsePromoCode"
-                 class="use-promocode__field mb-[36px] bg-white flex rounded-lg overflow-hidden border w-full">
+                 class="use-promocode__field mb-[36px] bg-white flex rounded-[var(--default-rounded)] overflow-hidden border w-full">
               <InputText
+                  :pt="{
+                    root: {
+                      class: 'py-[12px]'
+                    }
+                  }"
                   placeholder="Введіть код"
                   class="flex-1 rounded-none border-none focus:ring-0 focus:outline-none px-4 py-2"
               />
-              <button
-                  class="bg-[var(--color-primary-blue)] text-white px-4 py-2"
+              <Button :pt="{
+                root: {
+                  class: 'max-w-[48px] w-full rounded-none use-promocode-field__btn'
+                }
+              }"
               >
                 <img src="@/assets/icons/arrow-right-white.svg" alt="arrow-right-white.svg">
-              </button>
+              </Button>
             </div>
           </div>
 
           <div class="comment-to-order mb-[24px]">
             <p class="murecho-font mb-[18px]">Коментар до замовлення</p>
-            <div class="bg-white mb-[10px] py-[10px] px-[10px] rounded-[8px]">
+            <div class="mb-[10px] rounded-[8px]">
                 <Textarea style="resize: none" class="w-full rounded-[8px]"
                           rows="2" cols="30"/>
             </div>
           </div>
 
           <div
-              class="checkout__btn rounded-[8px] px-[10px] text-center py-[10px] text-white bg-[var(--color-primary-dark-red)]">
-            <Button><p class="murecho-font">Підтвердити замовлення</p></Button>
+              class="checkout__wrapper-btn rounded-[8px] w-full">
+            <Button :pt="{
+              root: {
+                class: 'checkout__btn'
+              }
+            }"><p class="murecho-font text-[14px]">Підтвердити замовлення</p></Button>
           </div>
 
         </div>
@@ -233,3 +269,66 @@ const
     ])
 
 </script>
+
+<style scoped>
+.checkout__btn {
+  background-color: var(--color-primary-dark-red);
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+  border: none;
+}
+
+.checkout__btn:hover {
+  background-color: var(--color-primary-dark-red);
+  border: none;
+}
+
+.use-promocode__btn {
+  background: transparent;
+  border: none;
+}
+
+.use-promocode__btn:hover {
+  background: transparent;
+  border: none;
+}
+
+.use-promocode-field__btn {
+  background: var(--color-primary-blue);
+  padding: 12px;
+}
+
+.use-promocode-field__btn:hover {
+  background: var(--color-primary-blue);
+}
+
+.payment-method__checkbox {
+  margin-right: 4px;
+  width: 16px;
+  height: 16px;
+  border-color: var(--color-primary-blue);
+}
+
+.payment-method__checkbox:checked {
+  border-color: var(--color-primary-blue);
+  color: #9E2B24;
+}
+.payment-method__checkbox:hover {
+  border-color: yellow;
+
+}
+
+.payment-method__checkbox__box:hover {
+  border-color: var(--color-primary-blue);
+  color: #9E2B24;
+}
+
+.checkbox-wrapper {
+  font-weight: 500;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+</style>
