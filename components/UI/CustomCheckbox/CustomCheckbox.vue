@@ -13,10 +13,13 @@
     />
     <div
         class="checkbox-box"
-        :style="{ borderColor: props.borderColor }"
+        :style="{
+          borderColor: isChecked ? props.checkedBorderColor : props.uncheckedBorderColor,
+          borderRadius: props.borderRadius
+        }"
     >
       <svg v-if="isChecked" class="check-icon" viewBox="0 0 24 24" fill="none">
-        <path d="M5 13l6 5L19 6" stroke="var(--color-primary-blue)" stroke-width="3" />
+        <path d="M5 13l6 5L19 6" :stroke="strokeColor" stroke-width="3" />
       </svg>
     </div>
     <span class="label">
@@ -42,6 +45,22 @@ const props = defineProps({
     type: String,
     default: 'var(--color-primary-blue)',
   },
+  strokeColor: {
+    type: String,
+    default: 'var(--color-primary-blue)',
+  },
+  checkedBorderColor: {
+    type: String,
+    default: 'var(--color-primary-blue)',
+  },
+  uncheckedBorderColor: {
+    type: String,
+    default: 'var(--color-primary-blue)',
+  },
+  borderRadius: {
+    type: String,
+    default: '0px',
+  }
 })
 const emit = defineEmits(['update:modelValue'])
 

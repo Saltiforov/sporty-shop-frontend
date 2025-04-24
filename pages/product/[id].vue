@@ -2,7 +2,7 @@
   <div class="px-4 py-6">
     <div class="header flex flex-col">
       <div class="article text-[#999999] self-end mb-2">
-        <p>Артикул: 9876678 {{ }} </p>
+        <p>Артикул: 9876678</p>
       </div>
     </div>
 
@@ -43,7 +43,7 @@
 
       <div class="about-product-info w-full flex flex-col self-start max-w-full lg:max-w-[870px]">
         <div class="bg-[#F2F2F7] rounded-[8px] pt-[35px] pr-[55px] pb-[65px] pl-[31px]">
-          <h1 class="text-[36px] text-[#24242A] font-600 leading-[34px] mb-4">{{ product.title }}</h1>
+          <h1 class="text-[36px] text-[#24242A] font-600 leading-[34px] mb-4">{{ product.name }}</h1>
           <div class="availability-grade mb-[73px] flex justify-between">
             <div class="availability">
               <p v-if="product.availability" class="text-[#28A745]">Є в наявності!</p>
@@ -56,8 +56,8 @@
                     d="M1.75122 6.75258C1.51628 6.53531 1.6439 6.14254 1.96167 6.10487L6.46436 5.5708C6.59387 5.55544 6.70636 5.47411 6.76099 5.35569L8.66016 1.23835C8.79419 0.947769 9.20728 0.947714 9.34131 1.23829L11.2405 5.3556C11.2951 5.47403 11.4069 5.55558 11.5364 5.57093L16.0393 6.10487C16.3571 6.14254 16.4843 6.53543 16.2494 6.75269L12.9208 9.83143C12.8251 9.91998 12.7824 10.0518 12.8079 10.1797L13.6913 14.627C13.7536 14.9408 13.4196 15.184 13.1404 15.0277L9.18386 12.8125C9.07006 12.7488 8.9318 12.7491 8.818 12.8128L4.86108 15.0271C4.58185 15.1834 4.24721 14.9408 4.30957 14.627L5.19311 10.18C5.21852 10.0521 5.176 9.91995 5.08025 9.8314L1.75122 6.75258Z"
                     stroke="#FFCC00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <p class="product-grade text-[16px] text-[#8E8E93] fw-500">{{ product.grade }}
-                <span>({{ product.countOfReviews }})</span></p>
+              <p class="product-grade text-[16px] text-[#8E8E93] fw-500">{{ product.rating }}
+                <span>({{ product.reviewCount }})</span></p>
             </div>
           </div>
           <div class="description">
@@ -455,20 +455,6 @@ const products = ref([
   },
 ])
 
-const allProducts = ref([
-  {
-    id: '1',
-    title: "Nutrex Research Anabol Hardcore - 60 капс",
-    price: 1116,
-    grade: '4.6',
-    quantity: 8,
-    countOfReviews: 30,
-    developer: "BioTech",
-    description: "Nutrex Anabol допомагає збільшити синтез протеїну в скелетних м'язах, при одночасному зменшенні впливу протеолітичних процесів. Надаючи кращі адаптогенні ефекти в тренувальному процесі і харчуванні, Anabol 5 допомагає дорегулювати власний цикл білка в організмі.",
-    image: 'https://wallpapers.com/images/high/home-gym-with-barbell-r4xvbh7jalyuhdme.webp',
-    availability: true
-  },
-])
 
 const tabs = {
   description: {
@@ -493,7 +479,14 @@ const tabs = {
   }
 }
 
-const product = allProducts.value.find(p => p.id === id)
+const product = ref({})
+
+onMounted(async () => {
+  const {$api} = useNuxtApp()
+
+  product.value = await $api.get(`/api/products/${id}`)
+
+})
 </script>
 
 <style scoped>

@@ -15,14 +15,14 @@
             :icon-size="iconSize"
         />
       </div>
-      <NuxtLink :to="`/product/${product.id}`" :style="{ marginBottom: variant === 'small' ? '4px' : '' }"
+      <NuxtLink :to="`/product/${product._id}`" :style="{ marginBottom: variant === 'small' ? '4px' : '' }"
                 class="block mb-6">
         <img :class="{ 'max-w-[137px]': variant === 'small', }" class="rounded-lg"
              src="../../../assets/images/product-image.png" alt="Product image">
       </NuxtLink>
-      <div class="product-name">
+      <div class="product-name min-h-[44px]">
         <p :style="{ fontSize: variant === 'small' ? '16px' : '' }"
-           class="text-[20px] leading-[22px] fw-500 line-clamp-3">{{ product.title }}</p>
+           class="text-[20px] leading-[22px] fw-500 line-clamp-2">{{ product.name }}</p>
       </div>
     </div>
 
@@ -32,18 +32,18 @@
             d="M1.75122 6.75258C1.51628 6.53531 1.6439 6.14254 1.96167 6.10487L6.46436 5.5708C6.59387 5.55544 6.70636 5.47411 6.76099 5.35569L8.66016 1.23835C8.79419 0.947769 9.20728 0.947714 9.34131 1.23829L11.2405 5.3556C11.2951 5.47403 11.4069 5.55558 11.5364 5.57093L16.0393 6.10487C16.3571 6.14254 16.4843 6.53543 16.2494 6.75269L12.9208 9.83143C12.8251 9.91998 12.7824 10.0518 12.8079 10.1797L13.6913 14.627C13.7536 14.9408 13.4196 15.184 13.1404 15.0277L9.18386 12.8125C9.07006 12.7488 8.9318 12.7491 8.818 12.8128L4.86108 15.0271C4.58185 15.1834 4.24721 14.9408 4.30957 14.627L5.19311 10.18C5.21852 10.0521 5.176 9.91995 5.08025 9.8314L1.75122 6.75258Z"
             stroke="#FFCC00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      <p class="product-grade text-[16px] text-[#8E8E93] fw-500">{{ product.grade }}
-        <span>({{ product.countOfReviews }})</span></p>
+      <p class="product-grade text-[16px] text-[#8E8E93] fw-500">{{ product.rating }}
+        <span>({{ product.reviewCount }})</span></p>
     </div>
 
     <div class="flex relative items-center justify-between">
       <div>
-        <p v-if="product.discountPrice" class="discount-price absolute -top-3 left-0 fw-500 text-[15px] line-through">
+        <p v-if="product.discount" class="discount-price absolute -top-3 left-0 fw-500 text-[15px] line-through">
           {{ product.price }} грн
         </p>
-        <p :class="{ 'text-[#EF4B4B]': product?.discountPrice }"
+        <p :class="{ 'text-[#EF4B4B]': product?.discount }"
            :style="{ fontSize: variant === 'small' ? '16px' : '' }" class="text-[24px] leading-[22px] fw-500">
-          {{ product.price }} грн</p>
+          {{ product.price - product.discount }} грн</p>
       </div>
 
 
