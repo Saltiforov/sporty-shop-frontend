@@ -1,11 +1,12 @@
 <template>
   <div class="max-w-[1783px] mx-auto">
 
-    <div class="grid grid-cols-1 lg:grid-cols-[390px_1fr] gap-[30px]">
 
+
+    <div class="grid grid-cols-1 lg:grid-cols-[390px_1fr] gap-[30px]">
       <aside class="p-4 rounded-md">
         <div class="filters mb-[91px] w-full max-w-[354px] h-[554px] shadow-lg">
-          <h2>Filters</h2>
+          <Filters/>
         </div>
         <div class="promotional-products text-center">
           <p class="text-[#EF4B4B] mb-[21px] fw-600 text-[20px]">Акційні товари</p>
@@ -17,12 +18,28 @@
         </div>
       </aside>
 
-      <div class="grid gap-[30px] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 max-w-full w-full">
-        <ProductCard
-            v-for="product in products"
-            :key="product.id"
-            :product="product"
-        />
+      <div class="">
+        <div class="sort-select flex max-w-[1340px] w-full justify-end mb-5">
+          <p class="mr-5">Сортування:</p>
+          <SortSelect/>
+        </div>
+        <div class="grid gap-[30px] mb-[45px] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 max-w-full w-full">
+          <ProductCard
+              v-for="product in products"
+              :key="product.id"
+              :product="product"
+          />
+        </div>
+        <div class="load-more-wrapper mb-3 flex justify-center">
+          <LoadMoreButton label="Показати ще 24 товари">
+            <template #icon>
+              <img src="~/assets/icons/load-more-icon.svg" alt="load-more-icon">
+            </template>
+          </LoadMoreButton>
+        </div>
+        <div class="product-pagination-wrapper flex justify-center">
+          <ProductPaginationButton :max-pages="5"/>
+        </div>
       </div>
     </div>
 
@@ -36,6 +53,10 @@
 <script setup>
 import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
 import AuthWrapper from "~/wrappers/AuthWrapper.vue";
+import SortSelect from "~/components/UI/SortSelect/SortSelect.vue";
+import LoadMoreButton from "~/components/UI/LoadMoreButton/LoadMoreButton.vue";
+import ProductPaginationButton from "~/components/UI/ProductPaginationButton/ProductPaginationButton.vue";
+import Filters from "~/components/UI/Filters/Filters.vue";
 
 definePageMeta({
   layout: 'default',

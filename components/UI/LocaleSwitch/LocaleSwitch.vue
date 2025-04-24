@@ -9,7 +9,7 @@
       },
       dropdown: {
         class: 'w-5'
-      },
+      }
     }"
             class="w-full"
             v-model="selectedLanguage"

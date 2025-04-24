@@ -16,30 +16,17 @@
         </div>
 
         <div class="checkout-payment-method pt-[24px] px-[42px]  pb-[36px] rounded-lg bg-[var(--color-gray-lavender)]">
-          <h2 class="mb-[36px] title-lg">Спосіб оплати</h2>
+          <h2 class="mb-[36px] flex title-lg">
+            Спосіб оплати
+            <TooltipIcon class="ml-2" message="При оплаті через телеграм з вами з’яжеться наш менеджер"/>
+          </h2>
           <div class="checkout-payment-method__checkboxes">
             <div class="murecho-font checkbox-wrapper">
-              <Checkbox :pt="{
-                root: {
-                  class: 'payment-method__checkbox'
-                },
-
-                box: {
-                  class: 'h-[16px] border-[2px] border-[var(--color-primary-blue)] rounded-none w-[16px]'
-                },
-
-              }" binary/>
+              <CustomCheckbox v-model="checkbox"/>
               <p class="text-[var(--color-primary-black)]">Відправити sms по вказаних данних</p>
             </div>
             <div class="murecho-font checkbox-wrapper">
-              <Checkbox :pt="{
-                root: {
-                  class: 'payment-method__checkbox '
-                },
-                 box: {
-                  class: 'h-[16px] border-[2px] border-[var(--color-primary-blue)] rounded-none w-[16px]'
-                }
-              }" binary/>
+              <CustomCheckbox v-model="checkbox"/>
               <p class="text-[var(--color-primary-black)]">Накладений платіж</p>
             </div>
 
@@ -121,9 +108,14 @@
 </template>
 
 <script setup>
+import TooltipIcon from "~/components/UI/TooltipIcon/TooltipIcon.vue";
+import CustomCheckbox from "~/components/UI/CustomCheckbox/CustomCheckbox.vue";
+
 definePageMeta({
   layout: 'breadcrumb',
 })
+
+const checkbox = ref(false)
 
 const isUsePromoCode = ref(false)
 
@@ -241,6 +233,10 @@ const config = {
         code: 'telegramUsername',
         label: 'Username телеграм',
         type: 'InputText',
+        tooltipComponent: defineAsyncComponent(() => import('~/components/UI/TooltipIcon/TooltipIcon.vue')),
+        tooltipProps: {
+          message: 'Необхідно для зв’язку з метою подальшої оплати'
+        },
         props: {
           side: 'left',
           type: 'text',
@@ -310,14 +306,6 @@ const
   border-color: var(--color-primary-blue);
 }
 
-.payment-method__checkbox:checked {
-  border-color: var(--color-primary-blue);
-  color: #9E2B24;
-}
-.payment-method__checkbox:hover {
-  border-color: yellow;
-
-}
 
 .payment-method__checkbox__box:hover {
   border-color: var(--color-primary-blue);

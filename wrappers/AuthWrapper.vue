@@ -1,15 +1,28 @@
 <template>
   <div v-if="isVisible" class="overlay">
-    <div class="popup">
+    <div class="popup murecho-font w-full">
       <div class="popup-header">
-        <Tabs v-model="activeTab">
+        <Tabs v-model:value="activeTab">
           <TabList :pt="{
             tabList: {
               class: 'bg-transparent',
+            },
+            activeBar: {
+              root: {
+                class: 'bg-transparent',
+              }
             }
           }">
-            <Tab value="login" @click="activeTab = 'login'">Вхід</Tab>
-            <Tab value="register" @click="activeTab = 'register'">Реєстрація</Tab>
+            <Tab :pt="{
+              root: {
+                class: 'custom-border'
+              }
+            }" value="login" @click="activeTab = 'login'">Вхід</Tab>
+            <Tab :pt="{
+              root: {
+                class: 'custom-border'
+              }
+            }" value="register" @click="activeTab = 'register'">Реєстрація</Tab>
           </TabList>
         </Tabs>
       </div>
@@ -17,7 +30,7 @@
       <div class="popup-content">
         <TabPanels :pt="{
           root: {
-            class: 'bg-transparent',
+            class: 'bg-transparent p-0',
           }
         }">
           <TabPanel >
@@ -26,7 +39,15 @@
         </TabPanels>
       </div>
 
-      <button class="close-btn" @click="isVisible = false">✕</button>
+      <Button :pt="{
+        root: {
+          class: 'close-btn'
+        }
+      }" @click="isVisible = false">
+        <svg width="12" height="12" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1.63597 1.63649L7.51465 7.51517M7.51465 7.51517L13.3933 13.3938M7.51465 7.51517L1.63597 13.3938M7.51465 7.51517L13.3933 1.63649" stroke="#9E2B24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </Button>
     </div>
   </div>
 </template>
@@ -34,7 +55,7 @@
 <script setup>
 import { ref } from 'vue'
 
-const isVisible = ref(true)
+const isVisible = ref(false)
 const activeTab = ref('login')
 const isLogin = computed(() => activeTab.value === 'login')
 
@@ -58,8 +79,7 @@ const isLogin = computed(() => activeTab.value === 'login')
   position: relative;
   background: #E6E7F8;
   border-radius: 12px;
-  width: 600px;
-  max-width: 90%;
+  max-width: 480px;
   padding: 24px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
@@ -68,9 +88,8 @@ const isLogin = computed(() => activeTab.value === 'login')
   margin-bottom: 1rem;
 }
 
-.popup-content {
-  max-height: 60vh;
-  overflow-y: auto;
+.custom-border {
+  border-bottom: 1px solid var(--color-gray-lavender) !important;
 }
 
 .close-btn {
@@ -81,5 +100,9 @@ const isLogin = computed(() => activeTab.value === 'login')
   border: none;
   font-size: 20px;
   cursor: pointer;
+}
+.close-btn:hover {
+  background: transparent;
+  border: none;
 }
 </style>

@@ -11,7 +11,15 @@
         <div class="flex flex-col gap-6">
           <template v-for="field in leftFullFields" :key="field.name">
             <div class="form-group">
-              <p class="form__title mb-[11px]">{{ field.label }}:</p>
+              <p class="form__title mb-[11px] flex items-center gap-2">
+                {{ field.label }}:
+                <component
+                    v-if="field.tooltipComponent"
+                    :is="field.tooltipComponent"
+                    v-bind="field.tooltipProps"
+                    class="self-start"
+                />
+              </p>
               <div>
                 <component
                     class="w-full"
@@ -37,7 +45,15 @@
             <div class="flex gap-6">
               <template v-for="field in pair" :key="field.name">
                 <div class="form-group w-1/2">
-                  <p class="form__title mb-[11px]">{{ field.label }}:</p>
+                  <p class="form__title mb-[11px] flex items-center gap-2">
+                    {{ field.label }}:
+                    <component
+                        v-if="field.tooltipComponent"
+                        :is="field.tooltipComponent"
+                        v-bind="field.tooltipProps"
+                        class="self-start"
+                    />
+                  </p>
                   <div>
                     <component
                         class="w-full"
@@ -68,7 +84,15 @@
             <div class="flex gap-6">
               <template v-for="field in pair" :key="field.name">
                 <div class="form-group w-1/2">
-                  <p class="form__title mb-[11px]">{{ field.label }}:</p>
+                  <p class="form__title mb-[11px] flex items-center gap-2">
+                    {{ field.label }}:
+                    <component
+                        v-if="field.tooltipComponent"
+                        :is="field.tooltipComponent"
+                        v-bind="field.tooltipProps"
+                        class="self-start"
+                    />
+                  </p>
                   <div>
                     <component
                         class="w-full"
@@ -94,7 +118,15 @@
 
           <template v-for="field in rightFullFields" :key="field.name">
             <div class="form-group">
-              <p class="form__title mb-[11px]">{{ field.label }}:</p>
+              <p class="form__title mb-[11px] flex items-center gap-2">
+                {{ field.label }}:
+                <component
+                    v-if="field.tooltipComponent"
+                    :is="field.tooltipComponent"
+                    v-bind="field.tooltipProps"
+                    class="self-start"
+                />
+              </p>
               <div>
                 <component
                     class="w-full"

@@ -1,6 +1,6 @@
 <template>
   <div class="auth-component">
-    <FieldsBlock :config="config.fields"/>
+    <FieldsBlock :config="fieldsConfig.fields"/>
     <div v-if="isLogin" class="reset-password justify-end mb-[27px] flex">
       <NuxtLink><p class="text-[var(--color-muted-gray)]">Забули пароль? Відновити</p></NuxtLink>
     </div>
@@ -8,7 +8,11 @@
         'mx-auto mb-[37px]',
         isLogin ? 'max-w-[320px]' : 'max-w-[386px]'
     ]" class="auth-button-wrapper">
-      <Button  class="auth-button">{{ buttonLabel }}</Button>
+      <Button :pt="{
+        root: {
+          class: 'auth-button'
+        }
+      }">{{ buttonLabel }}</Button>
     </div>
     <div class="flex mb-[16px] items-center justify-center gap-4">
       <div class="max-w-[196px] w-full h-px bg-[var(--link-color)]"></div>
@@ -20,23 +24,27 @@
         isLogin ? 'border-b border-[var(--link-color)]' : ''
     ]">
       <div class="mb-[14px]">
-        <NuxtLink><p class="murecho-font text-[var(--color-muted-gray)]"> {{ isLogin ? 'Увійти за допомогою' : 'Зареєструватись за допомогою' }} </p></NuxtLink>
+        <NuxtLink><p class="murecho-font text-[12px] text-[var(--color-muted-gray)]"> {{ isLogin ? 'Увійти за допомогою' : 'Зареєструватись за допомогою' }} </p></NuxtLink>
       </div>
 
-      <div class="login-with__img mb-6">
-        <Button>
+      <div class="login-with-wrapper mb-6">
+        <Button :pt="{
+          root: {
+            class: 'login-with__img'
+          }
+        }">
           <img src="~/assets/icons/google-icon.svg" alt="google-icon">
         </Button>
       </div>
 
     </div>
     <div class="login-with-footer">
-      <div class="flex justify-center">
+      <div class="flex text-[12px] justify-center">
         <div v-if="isLogin" class="flex">
           <p class="mr-[17px]">Новий клієнт?</p>
           <p><NuxtLink class="text-[var(--color-primary-dark-red)]">Зареєструватись</NuxtLink> для вигідних пропозицій</p>
         </div>
-        <p v-else>Реєструючись, ви погоджуєтесь з угодою користувача</p>
+        <p v-else class="text-[var(--color-muted-gray)]">Реєструючись, ви погоджуєтесь з угодою користувача</p>
       </div>
     </div>
   </div>
@@ -44,6 +52,8 @@
 
 
 <script setup>
+
+import {InputGroup, InputGroupAddon, InputText, Password} from "primevue";
 
 const { isLogin } = defineProps({
   isLogin: {
@@ -54,7 +64,9 @@ const { isLogin } = defineProps({
 
 const buttonLabel = computed(() => isLogin ? 'Увійти' : 'Зареєструватись')
 
-const config = {
+const fieldsConfig = computed(() => isLogin ? loginFields : registerFields)
+
+const loginFields = {
   fields: {
     items: [
       {
@@ -86,11 +98,116 @@ const config = {
   }
 }
 
+const registerFields = {
+  fields: {
+    items: [
+      {
+        name: 'firstName',
+        code: 'firstName',
+        label: 'Ваше Ім’я*',
+        type: 'InputText',
+        props: {
+          side: 'left',
+          type: 'text',
+          placeholder: "",
+          required: true
+        },
+      },
+
+      {
+        name: 'lastName',
+        code: 'lastName',
+        label: 'Ваше Прізвище*',
+        type: 'InputText',
+        props: {
+          side: 'left',
+          type: 'text',
+          placeholder: "",
+          required: true
+        },
+      },
+      {
+        name: 'phoneNumber',
+        code: 'phoneNumber',
+        label: 'Номер телефону*',
+        type: 'Custom',
+        props: {
+          side: 'left',
+        },
+        render: () =>
+            h(InputGroup, {}, {
+              default: () => [
+                h(InputGroupAddon, {
+                  pt: {
+                    root: {
+                      style: {
+                        backgroundColor: 'white',
+                        color: 'var(--color-primary-dark)',
+                      }
+                    }
+                  }
+                }, () => '+380'),
+                h(InputText, {placeholder: ''})
+              ]
+            })
+      },
+      {
+        name: 'email',
+        code: 'email',
+        label: 'Електронна пошта*',
+        type: 'InputText',
+        props: {
+          side: 'left',
+          type: 'text',
+          placeholder: "",
+          required: true
+        },
+      },
+      {
+        name: 'password',
+        code: 'password',
+        label: 'Пароль*',
+        type: 'Custom',
+        props: {
+          side: 'left',
+        },
+        render: () =>
+            h(InputGroup, {}, {
+              default: () => [
+                h(Password, {
+                  placeholder: '',
+                  toggleMask: true,
+                  feedback: false,
+                  pt: {
+                    input: { class: 'w-full' },
+                  },
+                }),
+              ]
+            })
+      }
+
+
+    ]
+  }
+}
 </script>
 
 <style scoped>
 .auth-button {
   background: var(--color-primary-dark);
   width: 100%;
+}
+.auth-button:hover {
+  background: var(--color-primary-dark);
+  width: 100%;
+}
+
+.login-with__img {
+  background: transparent;
+  border: none;
+}
+.login-with__img:hover {
+  background: transparent;
+  border: none;
 }
 </style>
