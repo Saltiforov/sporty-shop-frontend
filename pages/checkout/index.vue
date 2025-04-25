@@ -39,7 +39,8 @@
           class="checkout-products-list bg-[var(--color-gray-lavender)]  rounded-lg max-w-[643px] pt-[24px] pr-[46px] pl-[48px] pb-[30px] w-full">
         <div class="products-list__container max-w-[547px] w-full">
           <h2 class="title-lg mb-[44px]">Список товарів до замовлення</h2>
-          <ProductsOverview :products-overview="shoppingCartItems"/>
+          <ProductsOverview :products-overview="cartProducts"/>
+
           <div class="use-promocode">
             <div class="flex justify-between mb-[17px]">
               <p class="text-[var(--color-primary-dark)]">Використати промокод</p>
@@ -241,7 +242,8 @@ const config = {
           side: 'left',
           type: 'text',
           placeholder: "",
-          required: true
+          required: true,
+          class: 'w-full'
         },
       },
 
@@ -249,21 +251,6 @@ const config = {
     ]
   }
 }
-
-
-const
-    shoppingCartItems = ref([
-      {
-        image: '@/assets/images/product-image.png',
-        name: 'Nutrex Research Anabol Hardcore - 60 капс',
-        quantity: 3,
-        price: 1121,
-        id: 1,
-        discountPrice: 999
-      },
-      {image: '', name: 'Nutrex Research Anabol Hardcore - 60 капс', quantity: 10, price: 1121, id: 2},
-    ])
-
 </script>
 
 <style scoped>

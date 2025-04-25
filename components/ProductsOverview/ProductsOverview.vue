@@ -12,14 +12,14 @@
       <div class="flex text-[var(--color-primary-pink)] justify-end items-center">
         <p class="fw-600 text-[16px] mr-[14px] leading-[34px]">Знижка:</p>
         <p>
-          {{ totalPriceWithoutDiscount - totalPrice }} <span
+          {{ totalDiscount }} <span
             class="text-[15px]">грн</span>
         </p>
       </div>
       <div class="flex justify-end items-center">
         <p class="fw-600 text-[16px] text-[#999999] mr-[14px] leading-[34px]">До оплати:</p>
         <p>
-          {{ totalPrice }} <span class="text-[15px] text-[var(--color-primary-dark)]">грн</span>
+          {{ finallyPrice  }} <span class="text-[15px] text-[var(--color-primary-dark)]">грн</span>
         </p>
       </div>
 
@@ -31,6 +31,8 @@
 import CartItem from "~/components/Cards/CartItem/CartItem.vue";
 import {calculateTotal} from "~/utils/index.js";
 
+const { $eventBus } = useNuxtApp()
+
 const {productsOverview} = defineProps({
   productsOverview: {
     type: Array,
@@ -39,8 +41,14 @@ const {productsOverview} = defineProps({
   }
 });
 
-
-const totalPrice = computed(() => calculateTotal(productsOverview, true))
+const handleDelete = (product) => {
+  $eventBus.emit("handle-delete-cart-item", product);
+}
 
 const totalPriceWithoutDiscount = computed(() => calculateTotal(productsOverview, false))
+
+const totalDiscount = computed(() => calculateTotal(productsOverview, true))
+
+const finallyPrice = computed(() => totalPriceWithoutDiscount.value - totalDiscount.value)
+
 </script>

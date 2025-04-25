@@ -18,7 +18,7 @@
       <NuxtLink :to="`/product/${product._id}`" :style="{ marginBottom: variant === 'small' ? '4px' : '' }"
                 class="block mb-6">
         <img :class="{ 'max-w-[137px]': variant === 'small', }" class="rounded-lg"
-             src="../../../assets/images/product-image.png" alt="Product image">
+             :src="productImage" alt="Product image">
       </NuxtLink>
       <div class="product-name min-h-[44px]">
         <p :style="{ fontSize: variant === 'small' ? '16px' : '' }"
@@ -35,7 +35,6 @@
       <p class="product-grade text-[16px] text-[#8E8E93] fw-500">{{ product.rating }}
         <span>({{ product.reviewCount }})</span></p>
     </div>
-
     <div class="flex relative items-center justify-between">
       <div>
         <p v-if="product.discount" class="discount-price absolute -top-3 left-0 fw-500 text-[15px] line-through">
@@ -43,7 +42,7 @@
         </p>
         <p :class="{ 'text-[#EF4B4B]': product?.discount }"
            :style="{ fontSize: variant === 'small' ? '16px' : '' }" class="text-[24px] leading-[22px] fw-500">
-          {{ product.price - product.discount }} грн</p>
+          {{ product.price - product.discount || product.price }} грн</p>
       </div>
 
 
@@ -54,7 +53,7 @@
                 class: 'card-buy-button'
               }
             }"
-            @click="$emit('add-to-cart', product)"
+            @click="addToCart(product)"
             class="text-white self-end flex items-center w-[47px] h-[47px]  px-4 py-2 rounded-[50%] transition">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -69,15 +68,22 @@
 
 
 <script setup>
-
 import StatusBadge from "~/components/UI/StatusBadge/StatusBadge.vue";
 import FavoriteButton from "~/components/UI/FavoriteButton/FavoriteButton.vue";
+
+import DefaultProductImage from '~/assets/images/product-image.png'
+
+const { $eventBus } = useNuxtApp();
 
 const toggleFavorite = (product) => {
   product.isFavorite = !product.isFavorite;
 }
 
-const props = defineProps({
+const addToCart = (product) => {
+  $eventBus.emit('add-to-cart', product);
+}
+
+const { product, variant } = defineProps({
   product: {
     type: Object,
     required: true,
@@ -90,8 +96,12 @@ const props = defineProps({
   },
 })
 
+const productImage = computed(() => {
+ return product?.images?.length ?  fullImageUrls(product.images)[0] : DefaultProductImage
+})
+
 const iconSize = computed(() => {
-  return props.variant === 'small'
+  return variant === 'small'
       ? {width: 19, height: 17}
       : {width: 26, height: 23}
 })
@@ -107,5 +117,4 @@ const iconSize = computed(() => {
   border: none;
   background: #28A745;
 }
-
 </style>

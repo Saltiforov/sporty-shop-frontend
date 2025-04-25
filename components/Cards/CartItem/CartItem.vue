@@ -12,7 +12,7 @@
             'rounded-[16px]',
             isHistoryView ? 'h-[210px] object-cover' : ''
           ]"
-            src="../../../assets/images/product-image.png"
+            :src="fullImageUrls(cartProduct.images)[0]"
             alt="product-image.png"
         />
       </div>
@@ -51,7 +51,7 @@
             <div
                 :class="[
                 isHistoryView ? 'discount-price__history-view' : 'fw-600 leading-[34px]',
-                cartProduct?.discountPrice
+                cartProduct?.discount
                   ? 'line-through text-[#8E8E93] text-[13px] mr-[14px]'
                   : 'text-[16px]'
               ]"
@@ -60,13 +60,13 @@
             </div>
 
             <div
-                v-if="cartProduct?.discountPrice"
+                v-if="cartProduct?.discount"
                 :class="[
                     isHistoryView ? 'text-medium-20' : 'fw-600 text-[16px] leading-[34px]',
                 ]"
                 class="discount-price text-[var(--color-primary-pink)]"
             >
-              {{ cartProduct?.discountPrice || '600' }} <span class="text-[18px]">грн</span>
+              {{ discountPrice || '600' }} <span class="text-[18px]">грн</span>
             </div>
           </div>
 
@@ -109,6 +109,9 @@ const {cartProduct} = defineProps({
     required: false,
   }
 })
+
+const discountPrice = computed(() => cartProduct?.price - cartProduct?.discount)
+
 </script>
 
 

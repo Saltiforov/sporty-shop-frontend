@@ -9,7 +9,7 @@ export class Fetch {
      */
     async request(method, url, { params = {}, data = {}, headers = {}, ...config } = {}) {
         // const token = localStorage.getItem('authToken')
-        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcklkIjoiNjdhNGYxMGVjZTMzNDg0MjE5OTUzZTkwIiwiaWF0IjoxNzQ1NTM0ODE2LCJleHAiOjE3NDU2MjEyMTZ9.vZaY2wGjxi-G-MztriUKYOIlo0cTXe0NJXXiKEjz5RM'
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcklkIjoiNjdhNGYxMGVjZTMzNDg0MjE5OTUzZTkwIiwiaWF0IjoxNzQ1NjIyMTM5LCJleHAiOjE3NDU3MDg1Mzl9.ruJ2q2HukPbsXw5z5H_QELPMpWsd8TKLSnhrvlSUnks'
 
         const finalHeaders = {
             ...this.defaultHeaders,

@@ -20,6 +20,11 @@
           </Button>
         </div>
       </div>
+
+      <div v-if="!cartItems.length" class="cart-empty-title">
+        <h2 class="text-center text-[var(--color-gray-dark-charcoal)] text-[24px] py-[50px]">Ой! Ви ще нічого не додали в кошик</h2>
+      </div>
+
       <ProductsOverview :products-overview="cartItems"/>
       <div class="make-order-block flex flex-col items-center ">
         <div class="mb-[10px] w-full max-w-[423px]">
@@ -80,18 +85,18 @@ const props = defineProps({
 const products = ref([
   {
     id: 1,
-    title: "Nutrex Research Anabol Hardcore - 60 капс",
-    grade: '4.6',
-    countOfReviews: 10,
+    name: "Nutrex Research Anabol Hardcore - 60 капс",
+    rating: '4.6',
+    reviewCount: 10,
     price: 1116,
-    discountPrice: 768,
+    discount: 768,
     isFavorite: false,
   },
   {
     id: 2,
-    title: "Nutrex Research Anabol Hardcore - 60 капс",
-    grade: '4.1',
-    countOfReviews: 5,
+    name: "Nutrex Research Anabol Hardcore - 60 капс",
+    rating: '4.1',
+    reviewCount: 5,
     price: 3241,
     isFavorite: true,
   },
@@ -137,16 +142,6 @@ const totalCount = computed(() => {
   background: transparent;
   border: none;
   padding: 0;
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
 }
 
 .shopping-cart {
