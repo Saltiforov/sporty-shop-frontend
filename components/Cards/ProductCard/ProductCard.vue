@@ -17,7 +17,10 @@
       </div>
       <NuxtLink :to="`/product/${product._id}`" :style="{ marginBottom: variant === 'small' ? '4px' : '' }"
                 class="block mb-6">
-        <img :class="{ 'max-w-[137px]': variant === 'small', }" class="rounded-lg"
+        <img :class="[
+              'rounded-lg',
+               variant === 'small' ? 'max-w-[137px] max-h-[137px]' : 'max-w-[180px] max-h-[180px]'
+                  ]"
              :src="productImage" alt="Product image">
       </NuxtLink>
       <div class="product-name min-h-[44px]">
@@ -72,18 +75,19 @@ import StatusBadge from "~/components/UI/StatusBadge/StatusBadge.vue";
 import FavoriteButton from "~/components/UI/FavoriteButton/FavoriteButton.vue";
 
 import DefaultProductImage from '~/assets/images/product-image.png'
+import {useCartStore} from "~/stores/cart.js";
 
-const { $eventBus } = useNuxtApp();
+const cartStore = useCartStore()
 
 const toggleFavorite = (product) => {
   product.isFavorite = !product.isFavorite;
 }
 
 const addToCart = (product) => {
-  $eventBus.emit('add-to-cart', product);
+  cartStore.addToCart(product);
 }
 
-const { product, variant } = defineProps({
+const {product, variant} = defineProps({
   product: {
     type: Object,
     required: true,
@@ -97,7 +101,7 @@ const { product, variant } = defineProps({
 })
 
 const productImage = computed(() => {
- return product?.images?.length ?  fullImageUrls(product.images)[0] : DefaultProductImage
+  return product?.images?.length ? fullImageUrls(product.images)[0] : DefaultProductImage
 })
 
 const iconSize = computed(() => {
@@ -113,6 +117,7 @@ const iconSize = computed(() => {
   border: none;
   background: #28A745;
 }
+
 .card-buy-button:hover {
   border: none;
   background: #28A745;

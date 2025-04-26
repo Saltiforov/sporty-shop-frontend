@@ -10,7 +10,7 @@
         </div>
         <div class="promotional-products text-center">
           <p class="text-[#EF4B4B] mb-[21px] fw-600 text-[20px]">Акційні товари</p>
-          <SwiperWrapper :items="products.list" :options="promotionalProductsSwiperOptions">
+          <SwiperWrapper :items="products" :options="promotionalProductsSwiperOptions">
             <template #default="{ item }">
               <ProductCard class="mt-3 mb-3" :product="item"/>
             </template>
@@ -25,23 +25,30 @@
             <SortSelect/>
           </div>
         </div>
-        <div
-            class="grid gap-[30px] mb-[45px] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 max-w-full w-full">
+        <div v-if="products.length"
+             class="grid gap-[30px] mb-[45px] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 max-w-full w-full">
           <ProductCard
-              v-for="product in products.list"
+              v-for="product in products"
               :key="product.id"
               :product="product"
           />
         </div>
-        <div class="load-more-wrapper mb-3 flex justify-center">
-          <LoadMoreButton @click="fetchProducts" label="Показати ще 10 товарів">
-            <template #icon>
-              <img src="~/assets/icons/load-more-icon.svg" alt="load-more-icon">
-            </template>
-          </LoadMoreButton>
-        </div>
-        <div class="product-pagination-wrapper flex justify-center">
-          <ProductPaginationButton :max-pages="5"/>
+        <div class="products-pagination-actions mb-[72px]">
+          <div class="load-more-wrapper mb-3 flex justify-center">
+            <LoadMoreButton :disabled="allLoaded" @click="fetchProducts" label="Показати ще 10 товарів">
+              <template #icon>
+                <img src="~/assets/icons/load-more-icon.svg" alt="load-more-icon">
+              </template>
+            </LoadMoreButton>
+          </div>
+          <div class="product-pagination-wrapper flex justify-center">
+            <ProductPaginationButton
+                v-model="activePage"
+                :max-pages="totalPages"
+                :all-loaded="allLoaded"
+                @update:model-value="getProductsByPage"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -55,7 +62,7 @@
     <transition name="slide-right">
       <ShoppingCart
           :is-open="isShoppingCartShow"
-          :cart-items="cartProducts"
+          :cart-items="cartStore.getCartProducts"
           @close="isShoppingCartShow = false"
       />
     </transition>
@@ -64,32 +71,63 @@
 </template>
 
 <script setup>
+definePageMeta({
+  layout: 'default',
+})
+
 import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
 import AuthWrapper from "~/wrappers/AuthWrapper.vue";
 import SortSelect from "~/components/UI/SortSelect/SortSelect.vue";
 import LoadMoreButton from "~/components/UI/LoadMoreButton/LoadMoreButton.vue";
 import ProductPaginationButton from "~/components/UI/ProductPaginationButton/ProductPaginationButton.vue";
 import Filters from "~/components/UI/Filters/Filters.vue";
-import {addProductToCart} from "~/utils/index.js";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
-import { useProducts } from "~/composables/useProducts.js";
+import {useProducts} from "~/composables/useProducts.js";
+import {useQueryParams} from "~/composables/useQueryParams.js";
+
+import { useCartStore } from "~/stores/cart.js";
 
 const promotionalProductsSwiperOptions = {
   slidesPerView: 1,
   loop: true,
 }
 
-definePageMeta({
-  layout: 'default',
-})
+const route = useRoute()
+
+const cartStore = useCartStore()
 
 const {$eventBus} = useNuxtApp();
 
-const { getAll } = useProducts();
+const {getAll} = useProducts();
 
-const currentPage = ref(0)
+const activePage = ref(Number(route.query.page))
 
-const itemsPerPage = ref(10);
+const page = ref(Number(route.query.page) || 1)
+
+const limit = ref(Number(route.query.limit) || 10)
+
+const totalProductsRecords = ref(0)
+
+const totalPages = computed(() => Math.ceil(totalProductsRecords.value / limit.value))
+
+const skip = computed(() => (page.value - 1) * limit.value)
+
+const allLoaded = computed(() => products.value.length >= totalProductsRecords.value || page.value === totalPages.value)
+
+const productsQueryParams = computed(() => {
+  return {
+    page: page.value,
+    limit: limit.value,
+    skip: skip.value
+  }
+})
+
+const getProductsByPage  = async (newPage) => {
+  page.value = newPage
+  await fetchProducts(true)
+}
+
+const { updateQueryParams } = useQueryParams(productsQueryParams);
 
 const products = ref([])
 
@@ -97,43 +135,38 @@ const isLoading = ref(true)
 
 const isShoppingCartShow = ref(false)
 
-const cartProducts = ref([])
-
-const fetchProducts = async (params = {}) => {
+const fetchProducts = async (shouldReplace = false) => {
   try {
     isLoading.value = true
-    const response = await getAll({
-      limit: itemsPerPage.value,
-      skip: currentPage.value * itemsPerPage.value,
-    });
-    console.log(response)
-    products.value = await getAll(params)
+    const response = await getAll({...productsQueryParams.value});
+
+    if (totalProductsRecords.value === 0) {
+      totalProductsRecords.value = response.count
+    }
+
+    updateQueryParams()
+
+    if (shouldReplace) {
+      products.value = [...response.list]
+    } else {
+      products.value.push(...response.list)
+      page.value += 1
+    }
   } finally {
     isLoading.value = false
   }
 }
 
 onMounted(async () => {
-
   await fetchProducts()
 
   $eventBus.on('show-cart', () => {
     isShoppingCartShow.value = true
   });
-
-  $eventBus.on('add-to-cart', (product) => {
-    addProductToCart(cartProducts, product)
-  });
-
-  $eventBus.on('handle-delete-cart-item', (product) => {
-    cartProducts.value = cartProducts.value.filter(item => item._id !== product._id)
-  });
 });
 
 onBeforeUnmount(() => {
   $eventBus.off('show-cart');
-  $eventBus.off('add-to-cart');
-  $eventBus.off('handle-delete-cart-item');
 });
 
 </script>

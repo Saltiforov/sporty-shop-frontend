@@ -15,11 +15,11 @@
 
         <div class="text-[15px] w-full justify-between flex">
           <p :class="{ 'active-page': activePageType === 'current' }"
-             @click="activePageType = 'current'"
+             @click="handleClickPageType('current')"
              class="page-count  max-w-[32px]">{{ currentPage }}</p>
           <div class="text-[#24242ACF] text-[20px] flex justify-center items-center max-w-[42px] w-full">...</div>
           <p  :class="{ 'active-page': activePageType === 'total' }"
-              @click="activePageType = 'total'"
+              @click="handleClickPageType('total')"
               class="page-count max-w-[32px]">{{ totalPages }}</p>
         </div>
 
@@ -45,11 +45,12 @@ import {ref, watch} from 'vue'
 const props = defineProps({
   modelValue: {type: Number, default: 1},
   maxPages: {type: Number, required: true},
+  allLoaded: {type: Boolean, default: false},
 })
 
 const emit = defineEmits(['update:modelValue'])
 
-const currentPage = ref(props.modelValue)
+const currentPage = ref(Number(props.modelValue) || 1)
 const totalPages = ref(props.maxPages)
 const initialTotalPages = ref(props.maxPages)
 
@@ -57,21 +58,31 @@ const activePageType = ref('current')
 
 watch(() => props.modelValue, val => currentPage.value = val)
 watch(() => props.maxPages, val => totalPages.value = val)
+watch(() => props.maxPages, val => initialTotalPages.value = val)
+
+const handleClickPageType = (type) => {
+  activePageType.value = type
+
+  const pageToEmit = type === 'current' ? currentPage.value : totalPages.value
+  emit('update:modelValue', pageToEmit)
+}
 
 const handlePageChange = (direction = 'right') => {
   const isMovingLeft = direction === 'left'
 
-  if (isMovingLeft && currentPage.value > 1) {
-    currentPage.value -= 1
-    if (totalPages.value < initialTotalPages.value) {
-      totalPages.value += 1
+  if (!isMovingLeft && (currentPage.value < initialTotalPages.value)) {
+    currentPage.value += 1
+    emit('update:modelValue', currentPage.value)
+    if (totalPages.value > 1) {
+      totalPages.value -= 1
     }
   }
 
-  if (!isMovingLeft && currentPage.value < initialTotalPages.value) {
-    currentPage.value += 1
-    if (totalPages.value > 1) {
-      totalPages.value -= 1
+  if (isMovingLeft && currentPage.value > 1) {
+    currentPage.value -= 1
+    emit('update:modelValue', currentPage.value)
+    if (totalPages.value < initialTotalPages.value) {
+      totalPages.value += 1
     }
   }
 }

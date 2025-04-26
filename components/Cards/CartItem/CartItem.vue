@@ -12,7 +12,7 @@
             'rounded-[16px]',
             isHistoryView ? 'h-[210px] object-cover' : ''
           ]"
-            :src="fullImageUrls(cartProduct.images)[0]"
+            :src="fullImageUrls(cartProduct.images)[0] || cartProduct.image"
             alt="product-image.png"
         />
       </div>
@@ -81,7 +81,7 @@
             class: 'cart-item__delete-btn'
           }
         }"
-          @click="$emit('delete', cartProduct)"
+          @click="deleteProduct(cartProduct._id)"
       >
         <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -97,6 +97,13 @@
 
 <script setup>
 import AmountSelector from "~/components/UI/AmountSelector/AmountSelector.vue";
+import {useCartStore} from "~/stores/cart.js";
+
+const cartStore = useCartStore();
+
+const deleteProduct = (id) => {
+  cartStore.removeFromCart(id)
+}
 
 const {cartProduct} = defineProps({
   cartProduct: {

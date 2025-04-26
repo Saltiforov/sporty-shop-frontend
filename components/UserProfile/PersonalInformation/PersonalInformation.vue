@@ -1,7 +1,7 @@
 <template>
   <div class="personal-information">
     <h1 class="title-lg-20 mb-[30px]">Контактна інформація</h1>
-    <FieldsBlock :config="config.fields"/>
+    <FieldsBlock class="mb-[73px]" :config="config.fields"/>
     <div
         class="max-w-[338px] mx-auto py-[10px] px-[10px]">
       <Button :pt="{

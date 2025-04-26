@@ -4,7 +4,7 @@
       <div class="header flex justify-between pb-[49px] items-center">
         <div class="flex">
           <h1 class="large-title mr-[25px]">Кошик</h1>
-          <p class="large-title" style="color: #999999">({{ totalCount }})</p>
+          <p class="large-title" style="color: #999999">({{ cartStore.cartCount }})</p>
         </div>
         <div class="pr-[8px]">
           <Button :pt="{
@@ -70,6 +70,8 @@
 <script setup>
 import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
 
+const cartStore = useCartStore();
+
 const props = defineProps({
   isOpen: {
     type: Boolean,
@@ -102,11 +104,7 @@ const products = ref([
   },
 ])
 
-const totalCount = computed(() => {
-  return props.cartItems.reduce((acc, item) => {
-    return acc + item.quantity
-  }, 0)
-})
+
 </script>
 
 <style scoped>

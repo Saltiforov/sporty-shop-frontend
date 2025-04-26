@@ -14,6 +14,8 @@ export default defineNuxtConfig({
       '@primevue/nuxt-module',
       '@nuxtjs/tailwindcss',
       'nuxt-swiper',
+      '@pinia/nuxt',
+      '@nuxtjs/i18n'
     ],
     css: [
         'primeicons/primeicons.css',
@@ -21,6 +23,13 @@ export default defineNuxtConfig({
         '@/assets/styles/base.css',
         '@/assets/css/variables.css',
     ],
+    i18n: {
+        defaultLocale: 'en',
+        locales: [
+            { code: 'en', name: 'EN', file: 'en.json' },
+            { code: 'ua', name: 'UA', file: 'uk.json' },
+        ]
+    },
     primevue: {
         options: {
             pt: {

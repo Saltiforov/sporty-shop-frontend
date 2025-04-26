@@ -1,6 +1,7 @@
 <template>
   <div class="load-more-button-wrapper ">
     <Button
+        :disabled
         :label="''"
         :pt="{
         root: {
@@ -29,6 +30,10 @@ defineProps({
     required: false,
     default: 'Показати ще 24 товари',
   },
+  disabled: {
+    type: Boolean,
+    required: false,
+  }
 })
 
 </script>

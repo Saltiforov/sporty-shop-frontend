@@ -61,7 +61,7 @@
         <Button @click="showShoppingCart" :pt="{ root: { class: 'action-panel-icon' } }">
           <div class="badge-container">
             <img src="~/assets/icons/shopping-cart-icon.svg" alt="shopping-cart-icon" />
-            <Badge value="2" severity="secondary" class="custom-badge" />
+            <Badge :value="cartStore.cartCount" severity="secondary" class="custom-badge" />
           </div>
         </Button>
       </div>
@@ -73,6 +73,8 @@
 import LocaleSwitch from "~/components/UI/LocaleSwitch/LocaleSwitch.vue";
 
 const { $eventBus } = useNuxtApp();
+
+const cartStore = useCartStore();
 
 const showShoppingCart = () => {
   $eventBus.emit('show-cart');

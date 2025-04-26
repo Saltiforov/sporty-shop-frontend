@@ -16,7 +16,7 @@
                 @click="selectComponent(item.component)"
                 class="flex items-center gap-2 cursor-pointer"
             >
-              <i class="mr-5" :class="item.icon">Icon</i>
+              <img class="mr-3" :src="item.icon" alt="">
               <span class="py-[11px] max-w-[185.5px] w-full rounded-tr-[100px] rounded-br-[100px] pr-[18.5px]" :class="{ 'active': item.component === currentTab }">{{ item.title }}</span>
             </li>
           </ul>
@@ -43,14 +43,20 @@ import FavoriteProducts from "~/components/UserProfile/FavoriteProducts/Favorite
 import ChangePassword from "~/components/UserProfile/ChangePassword/ChangePassword.vue";
 import Logout from "~/components/UserProfile/Logout/Logout.vue";
 
+import PersonalInformationIcon from '~/assets/icons/user-profile-persn-inf-icon.svg'
+import OrderHistoryIcon from '~/assets/icons/user-profile-order-history-icon.svg'
+import FavoriteProductsIcon from '~/assets/icons/user-profile-favorite-products-icon.svg'
+import ChangePasswordIcon from '~/assets/icons/user-profile-change-passwrd-icon.svg'
+import LogoutIcon from '~/assets/icons/user-profile-logout-icon.svg'
+
 const components = { PersonalInformation, OrderHistory, FavoriteProducts, ChangePassword, Logout };
 
 const list = [
-  { title: 'Особиста інформація', icon: 'user', component: 'PersonalInformation' },
-  { title: 'Історія замовлень', icon: 'user', component: 'OrderHistory' },
-  { title: 'Вподобані товари', icon: 'user', component: 'FavoriteProducts' },
-  { title: 'Змінити пароль', icon: 'user', component: 'ChangePassword' },
-  { title: 'Вихід', icon: 'user', component: 'Logout' },
+  { title: 'Особиста інформація', icon: PersonalInformationIcon, component: 'PersonalInformation' },
+  { title: 'Історія замовлень', icon: OrderHistoryIcon, component: 'OrderHistory' },
+  { title: 'Вподобані товари', icon: FavoriteProductsIcon, component: 'FavoriteProducts' },
+  { title: 'Змінити пароль', icon: ChangePasswordIcon, component: 'ChangePassword' },
+  { title: 'Вихід', icon: LogoutIcon, component: 'Logout' },
 ]
 
 const currentTab = ref('OrderHistory')
@@ -63,6 +69,8 @@ const selectComponent = (component) => {
 <style scoped>
 
 .active {
+  transform: scale(1.05);
+  transition: transform 0.3s ease, background 0.3s ease;
   background: linear-gradient(to left, #D6D6EB, #FFFFFF);
 }
 
