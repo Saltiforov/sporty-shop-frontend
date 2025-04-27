@@ -5,7 +5,7 @@
 
     <div class="header flex flex-col">
       <div class="article text-[#999999] self-end mb-2">
-        <p>Артикул: 9876678</p>
+        <p>{{ `${t('product.sku')}: 9876678` }}</p>
       </div>
     </div>
 
@@ -52,8 +52,8 @@
           <h1 class="text-[36px] text-[#24242A] font-600 leading-[34px] mb-4">{{ product.name }}</h1>
           <div class="availability-grade mb-[73px] flex justify-between">
             <div class="availability">
-              <p v-if="product.availability" class="text-[#28A745]">Є в наявності!</p>
-              <p v-else class="text-[var(--color-primary-red)]">Немає в наявності!</p>
+              <p v-if="product.availability" class="text-[#28A745]">{{ t('product.available') }}</p>
+              <p v-else class="text-[var(--color-primary-red)]">{{ t('product.outOfStock') }}</p>
             </div>
             <div class="flex items-center">
               <svg class="mr-2" width="18" height="18" viewBox="0 0 18 17" fill="none"
@@ -70,17 +70,17 @@
             <p class="fw-500 text-[18px] leading-[34px] text-[var(--color-primary-dark)]">{{ product.description }}</p>
           </div>
           <div class="developer mb-[24px]">
-            <p class="text-[20px] fw-400 leading-[34px]">Виробник: {{ product.developer }}</p>
+            <p class="text-[20px] fw-400 leading-[34px]">{{ t('product.developer') }} {{ product.developer }}</p>
           </div>
           <div class="price mb-10 flex items-center">
-            <div class="fw-600 mr-[57px] text-[#000000] text-[36px] leading-[34px]">{{ product.price }} <span>грн</span>
+            <div class="fw-600 mr-[57px] text-[#000000] text-[36px] leading-[34px]">{{ product.price }} <span>{{ t('currency') }}</span>
             </div>
             <AmountSelector v-model="product.quantity" :style="{ width: '129px' }"
                             :input-styles="{ width: '53px', height: '60px' }"/>
           </div>
           <div class="action-button text-[#F6F6F6]">
             <button class="bg-[#28A745] rounded-2xl max-w-[456px] w-full h-[59px] flex justify-center items-center">
-              <p class="mr-1">Купити</p>
+              <p class="mr-1">{{ t('product.buyNow') }}</p>
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M1 1H1.26835C1.74213 1 1.97943 1 2.17267 1.08548C2.34304 1.16084 2.48871 1.28218 2.59375 1.43604C2.71269 1.61026 2.75564 1.8429 2.84137 2.30727L5.00004 14L15.4218 14C15.875 14 16.1023 14 16.29 13.9199C16.4559 13.8492 16.5989 13.7346 16.7051 13.5889C16.8252 13.4242 16.8761 13.2037 16.9777 12.7631L16.9785 12.76L18.5477 5.95996L18.5481 5.95854C18.7023 5.29016 18.7796 4.95515 18.6947 4.69238C18.6202 4.46182 18.4635 4.26634 18.2556 4.14192C18.0184 4 17.6758 4 16.9887 4H3.5M16 19C15.4477 19 15 18.5523 15 18C15 17.4477 15.4477 17 16 17C16.5523 17 17 17.4477 17 18C17 18.5523 16.5523 19 16 19ZM6 19C5.44772 19 5 18.5523 5 18C5 17.4477 5.44772 17 6 17C6.55228 17 7 17.4477 7 18C7 18.5523 6.55228 19 6 19Z"
@@ -100,7 +100,7 @@
       <div class="flex items-center justify-center mb-[70px] gap-6 my-8">
         <div class="h-px w-[56px] bg-[#5856D6]"></div>
         <h2 class="text-xl font-semibold text-center whitespace-nowrap">
-          Рекомендовані товари
+          {{ t('recommendedProducts') }}
         </h2>
         <div class="h-px w-full bg-[#5856D6]"></div>
       </div>
@@ -117,7 +117,7 @@
     <div class="viewed-products flex items-center justify-center gap-6 my-8">
       <div class="h-px w-[56px] bg-[#5856D6]"></div>
       <h2 class="text-xl font-semibold text-center whitespace-nowrap">
-        Переглянуті товари
+        {{ t('viewedProducts') }}
       </h2>
       <div class="h-px w-full bg-[#5856D6]"></div>
     </div>
@@ -151,6 +151,8 @@ import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 import {useProducts} from "~/composables/useProducts.js";
 
 const {getOne} = useProducts()
+
+const { t } = useI18n()
 
 const route = useRoute()
 const id = route.params.id

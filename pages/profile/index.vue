@@ -1,33 +1,34 @@
 <template>
   <div class="layout justify-between">
 
-      <div class="sidebar max-w-[277px] w-full">
-        <div class="sidebar-header flex pb-[24px] items-center border-b border-[var(--color-gray-light-lavender)]">
-          <div class="w-[44px] mr-3">
-            <img class="rounded-[50%]" src="/assets/icons/user-profile-icon.png" alt="user-profile-icon.png">
-          </div>
-          <h2 class="text-light-16">User_name</h2>
+    <div class="sidebar max-w-[277px] w-full">
+      <div class="sidebar-header flex pb-[24px] items-center border-b border-[var(--color-gray-light-lavender)]">
+        <div class="w-[44px] mr-3">
+          <img class="rounded-[50%]" src="/assets/icons/user-profile-icon.png" alt="user-profile-icon.png">
         </div>
-        <nav class="sidebar-nav flex justify-center  w-full">
-          <ul>
-            <li
-                v-for="item in list"
-                :key="item.title"
-                @click="selectComponent(item.component)"
-                class="flex items-center gap-2 cursor-pointer"
-            >
-              <img class="mr-3" :src="item.icon" alt="">
-              <span class="py-[11px] max-w-[185.5px] w-full rounded-tr-[100px] rounded-br-[100px] pr-[18.5px]" :class="{ 'active': item.component === currentTab }">{{ item.title }}</span>
-            </li>
-          </ul>
-        </nav>
+        <h2 class="text-light-16">User_name</h2>
       </div>
+      <nav class="sidebar-nav flex justify-center  w-full">
+        <ul>
+          <li
+              v-for="item in localizedList"
+              :key="item.title"
+              @click="selectComponent(item.component)"
+              class="flex items-center gap-2 cursor-pointer"
+          >
+            <img class="mr-3" :src="item.icon" alt="">
+            <span class="py-[11px] max-w-[185.5px] w-full rounded-tr-[100px] rounded-br-[100px] pr-[18.5px]"
+                  :class="{ 'active': item.component === currentTab }">{{ item.title }}</span>
+          </li>
+        </ul>
+      </nav>
+    </div>
 
-      <div class="content">
-        <main>
-          <component :is="components[currentTab]" />
-        </main>
-      </div>
+    <div class="content">
+      <main>
+        <component :is="components[currentTab]"/>
+      </main>
+    </div>
 
   </div>
 </template>
@@ -49,15 +50,17 @@ import FavoriteProductsIcon from '~/assets/icons/user-profile-favorite-products-
 import ChangePasswordIcon from '~/assets/icons/user-profile-change-passwrd-icon.svg'
 import LogoutIcon from '~/assets/icons/user-profile-logout-icon.svg'
 
-const components = { PersonalInformation, OrderHistory, FavoriteProducts, ChangePassword, Logout };
+const components = {PersonalInformation, OrderHistory, FavoriteProducts, ChangePassword, Logout};
 
-const list = [
-  { title: 'Особиста інформація', icon: PersonalInformationIcon, component: 'PersonalInformation' },
-  { title: 'Історія замовлень', icon: OrderHistoryIcon, component: 'OrderHistory' },
-  { title: 'Вподобані товари', icon: FavoriteProductsIcon, component: 'FavoriteProducts' },
-  { title: 'Змінити пароль', icon: ChangePasswordIcon, component: 'ChangePassword' },
-  { title: 'Вихід', icon: LogoutIcon, component: 'Logout' },
-]
+const {t} = useI18n();
+
+const localizedList = computed(() => [
+  {title: t('menu.personalInformation'), icon: PersonalInformationIcon, component: 'PersonalInformation'},
+  {title: t('menu.orderHistory'), icon: OrderHistoryIcon, component: 'OrderHistory'},
+  {title: t('menu.favoriteProducts'), icon: FavoriteProductsIcon, component: 'FavoriteProducts'},
+  {title: t('menu.changePassword'), icon: ChangePasswordIcon, component: 'ChangePassword'},
+  {title: t('menu.logout'), icon: LogoutIcon, component: 'Logout'},
+]);
 
 const currentTab = ref('OrderHistory')
 

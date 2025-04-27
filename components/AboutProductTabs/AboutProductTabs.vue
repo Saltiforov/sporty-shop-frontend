@@ -13,7 +13,7 @@
            class: 'h-[4px] bg-[var(--color-primary-purple)]'
           }
       }">
-    <TabPanel header="Опис">
+    <TabPanel :header="tabs.description.header">
       <p class="m-0">
         <p class="mb-4">
           <strong>Nutrex Anabol</strong>  допомагає збільшити синтез протеїну в скелетних м'язах, при одночасному
@@ -65,7 +65,7 @@
         </div>
       </div>
     </TabPanel>
-    <TabPanel header="Доставка та оплата">
+    <TabPanel :header="tabs.delivery.header">
       <div class="delivery-and-payment">
         <div class="mb-4">
           <strong class="fw-600 leading-[33px]">Оплата</strong>
@@ -112,7 +112,7 @@
         </div>
       </div>
     </TabPanel>
-    <TabPanel header="Відгуки">
+    <TabPanel :header="tabs.reviews.header">
       <div class="reviews-content  murecho-font flex justify-between">
 
         <div class="review-list pt-[26px] justify-self-start">
@@ -181,6 +181,8 @@
 
 <script setup>
 
+const { t } = useI18n()
+
 const reviews = [
   {
     name: "Огірковий Огірок",
@@ -207,10 +209,16 @@ const reviews = [
 
 const tabs = {
   description: {
-    header: "Опис",
+    header:  computed(() => t('tabs.description')),
+  },
+  delivery: {
+    header: computed(() => t('tabs.delivery'))
+  },
+  reviews: {
+    header: computed(() => t('tabs.reviews')),
   },
   characteristics: {
-    header: "Характеристики",
+    header: computed(() => t('tabs.characteristics')),
     list: [
       {key: "Виробник", value: "Nutrex Research"},
       {key: "Тип продукту", value: "Анаболічна добавка"},

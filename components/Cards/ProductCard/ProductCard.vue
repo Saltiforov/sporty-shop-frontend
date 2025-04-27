@@ -1,6 +1,6 @@
 <template>
   <div :class="{ 'max-h-[316px]' : variant === 'small' }"
-       class="w-full relative bg-white pt-[30px] pr-[12px] pb-[22px] pl-[30px] max-w-[280px] h-auto aspect-[294/426] mx-auto rounded-lg flex flex-col justify-start shadow-md">
+       class="w-full relative bg-white pt-[30px] pr-[30px] pb-[22px] pl-[30px] max-w-[280px] h-auto aspect-[294/426] mx-auto rounded-lg flex flex-col justify-start shadow-md">
 
     <div v-if="product.status" class="absolute max-w-[82px] w-full -top-3 -left-5 z-100">
       <StatusBadge :label="product.status" :background-color="product.backgroundStatus"/>
@@ -41,11 +41,11 @@
     <div class="flex relative items-center justify-between">
       <div>
         <p v-if="product.discount" class="discount-price absolute -top-3 left-0 fw-500 text-[15px] line-through">
-          {{ product.price }} грн
+          {{ product.price }} {{ t('currency') }}
         </p>
         <p :class="{ 'text-[#EF4B4B]': product?.discount }"
            :style="{ fontSize: variant === 'small' ? '16px' : '' }" class="text-[24px] leading-[22px] fw-500">
-          {{ product.price - product.discount || product.price }} грн</p>
+          {{ product.price - product.discount || product.price }} {{ t('currency') }}</p>
       </div>
 
 
@@ -65,6 +65,7 @@
           </svg>
         </Button>
       </slot>
+
     </div>
   </div>
 </template>
@@ -76,16 +77,6 @@ import FavoriteButton from "~/components/UI/FavoriteButton/FavoriteButton.vue";
 
 import DefaultProductImage from '~/assets/images/product-image.png'
 import {useCartStore} from "~/stores/cart.js";
-
-const cartStore = useCartStore()
-
-const toggleFavorite = (product) => {
-  product.isFavorite = !product.isFavorite;
-}
-
-const addToCart = (product) => {
-  cartStore.addToCart(product);
-}
 
 const {product, variant} = defineProps({
   product: {
@@ -99,6 +90,21 @@ const {product, variant} = defineProps({
     default: 'default',
   },
 })
+
+const emit = defineEmits(['add-to-cart'])
+
+const cartStore = useCartStore()
+
+const { t } = useI18n()
+
+const toggleFavorite = (product) => {
+  product.isFavorite = !product.isFavorite;
+}
+
+const addToCart = (product) => {
+  emit('add-to-cart', product)
+  cartStore.addToCart(product);
+}
 
 const productImage = computed(() => {
   return product?.images?.length ? fullImageUrls(product.images)[0] : DefaultProductImage

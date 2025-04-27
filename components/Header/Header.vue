@@ -6,7 +6,7 @@
     <div class="pb-[24px] justify-between items-center flex w-full items-end">
       <LinksList
           :links="links"
-          :parent-classes="['flex', 'flex-wrap', 'gap-x-[16px]', 'md:gap-x-[32px]']"
+          :parent-classes="['flex', 'flex-wrap', 'gap-x-[16px]', 'md:gap-x-[32px]', 'w-full', 'max-w-[815px]']"
           :link-class="['mr-[32px]', 'text-[#F6F6F6]', 'sm:mr-[32px]', 'md:mr-[53px]', 'last:mr-0', 'font-semibold']"
       />
 
@@ -16,7 +16,7 @@
           root: {
             class: 'header-search-field'
           }
-        }" placeholder="Пошук..."/>
+        }" :placeholder="searchFieldPlaceholder"/>
           <InputIcon :pt="{
             root: {
               class: 'text-[var(--color-primary-black)]'
@@ -28,7 +28,6 @@
       <div class="locale-switch">
         <LocaleSwitch/>
       </div>
-
 
       <div class="action-panel max-w-[144px] w-full h-[36px] flex justify-between">
         <Button :pt="{ root: { class: 'action-panel-icon' } }">
@@ -65,6 +64,7 @@
           </div>
         </Button>
       </div>
+
     </div>
   </header>
 </template>
@@ -73,6 +73,8 @@
 import LocaleSwitch from "~/components/UI/LocaleSwitch/LocaleSwitch.vue";
 
 const { $eventBus } = useNuxtApp();
+
+const { t } = useI18n();
 
 const cartStore = useCartStore();
 
@@ -85,10 +87,10 @@ const items = ref([
   {
     items: [
       {
-        label: 'Увійти',
+        label: computed(() => t('auth.login')),
       },
       {
-        label: 'Зареєструватись',
+        label: computed(() => t('auth.register')),
       }
     ]
   }
@@ -98,26 +100,35 @@ const toggle = (event) => {
   menu.value.toggle(event);
 };
 
+const searchFieldPlaceholder = computed(() => t('searchPlaceholder'))
+
 const links = ref([
   {
-    label: "КАТАЛОГ",
+    label: computed(() => t('header.catalog')),
     icon: "pi pi-filter",
     page: "catalog",
   },
   {
-    label: "АКЦІЇ", icon: "pi pi-shopping-cart", page: "promotions",
+    label: computed(() => t('header.promotions')),
+    icon: "pi pi-shopping-cart",
+    page: "promotions",
   },
   {
-    label: "НОВИНКИ", icon: "pi pi-user", page: "new",
+    label: computed(() => t('header.new')),
+    icon: "pi pi-user",
+    page: "new",
   },
   {
-    label: "ДОСТАВКА ТА ОПЛАТА", icon: "pi pi-user", page: "shipping-and-payment",
+    label: computed(() => t('header.shippingAndPayment')),
+    icon: "pi pi-user",
+    page: "shipping-and-payment",
   },
   {
-    label: "ПРО НАС", icon: "pi pi-user", page: "about-us",
+    label: computed(() => t('header.aboutUs')),
+    icon: "pi pi-user",
+    page: "about-us",
   },
 ])
-
 
 
 </script>

@@ -2,58 +2,51 @@
   <div class="auth-component">
     <FieldsBlock :config="fieldsConfig.fields"/>
     <div v-if="isLogin" class="reset-password justify-end mb-[27px] flex">
-      <NuxtLink><p class="text-[var(--color-muted-gray)]">Забули пароль? Відновити</p></NuxtLink>
+      <NuxtLink><p class="text-[var(--color-muted-gray)]">{{ t('forgotPassword') }}</p></NuxtLink>
     </div>
     <div :class="[
         'mx-auto mb-[37px]',
         isLogin ? 'max-w-[320px]' : 'max-w-[386px]'
     ]" class="auth-button-wrapper">
-      <Button :pt="{
-        root: {
-          class: 'auth-button'
-        }
-      }">{{ buttonLabel }}</Button>
+      <Button :pt="{ root: { class: 'auth-button' } }">{{ buttonLabel }}</Button>
     </div>
     <div class="flex mb-[16px] items-center justify-center gap-4">
       <div class="max-w-[196px] w-full h-px bg-[var(--link-color)]"></div>
-      <h2 class="murecho-font text-[12px] fw-400">або</h2>
+      <h2 class="murecho-font text-[12px] fw-400">{{ t('or') }}</h2>
       <div class="max-w-[196px] w-full h-px bg-[var(--link-color)]"></div>
     </div>
     <div :class="[
-        'login-with mb-6  flex flex-col items-center justify-center',
+        'login-with mb-6 flex flex-col items-center justify-center',
         isLogin ? 'border-b border-[var(--link-color)]' : ''
     ]">
       <div class="mb-[14px]">
-        <NuxtLink><p class="murecho-font text-[12px] text-[var(--color-muted-gray)]"> {{ isLogin ? 'Увійти за допомогою' : 'Зареєструватись за допомогою' }} </p></NuxtLink>
+        <NuxtLink><p class="murecho-font text-[12px] text-[var(--color-muted-gray)]">{{ isLogin ? t('loginWith') : t('registerWith') }}</p></NuxtLink>
       </div>
 
       <div class="login-with-wrapper mb-6">
-        <Button :pt="{
-          root: {
-            class: 'login-with__img'
-          }
-        }">
+        <Button :pt="{ root: { class: 'login-with__img' } }">
           <img src="~/assets/icons/google-icon.svg" alt="google-icon">
         </Button>
       </div>
-
     </div>
     <div class="login-with-footer">
       <div class="flex text-[12px] justify-center">
         <div v-if="isLogin" class="flex">
-          <p class="mr-[17px]">Новий клієнт?</p>
-          <p><NuxtLink class="text-[var(--color-primary-dark-red)]">Зареєструватись</NuxtLink> для вигідних пропозицій</p>
+          <p class="mr-[17px]">{{ t('newClient') }}</p>
+          <p><NuxtLink class="text-[var(--color-primary-dark-red)]">{{ t('registerButton') }}</NuxtLink> {{ t('forGoodOffers') }}</p>
         </div>
-        <p v-else class="text-[var(--color-muted-gray)]">Реєструючись, ви погоджуєтесь з угодою користувача</p>
+        <p v-else class="text-[var(--color-muted-gray)]">{{ t('userAgreement') }}</p>
       </div>
     </div>
   </div>
 </template>
 
 
-<script setup>
 
+<script setup>
 import {InputGroup, InputGroupAddon, InputText, Password} from "primevue";
+
+const { t } = useI18n();
 
 const { isLogin } = defineProps({
   isLogin: {
@@ -62,7 +55,7 @@ const { isLogin } = defineProps({
   }
 })
 
-const buttonLabel = computed(() => isLogin ? 'Увійти' : 'Зареєструватись')
+const buttonLabel = computed(() => isLogin ? t('login') : t('registerButton'))
 
 const fieldsConfig = computed(() => isLogin ? loginFields : registerFields)
 
@@ -72,7 +65,7 @@ const loginFields = {
       {
         name: 'oldPassword',
         code: 'oldPassword',
-        label: 'Телефон або email*',
+        label: computed(() => t('authPhoneOrEmail')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -85,7 +78,7 @@ const loginFields = {
       {
         name: 'password',
         code: 'password',
-        label: 'Пароль*',
+        label: computed(() => t('authPassword')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -104,7 +97,7 @@ const registerFields = {
       {
         name: 'firstName',
         code: 'firstName',
-        label: 'Ваше Ім’я*',
+        label: computed(() => t('authFirstName')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -117,7 +110,7 @@ const registerFields = {
       {
         name: 'lastName',
         code: 'lastName',
-        label: 'Ваше Прізвище*',
+        label: computed(() => t('authLastName')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -129,7 +122,7 @@ const registerFields = {
       {
         name: 'phoneNumber',
         code: 'phoneNumber',
-        label: 'Номер телефону*',
+        label: computed(() => t('authPhoneNumber')),
         type: 'Custom',
         props: {
           side: 'left',
@@ -154,7 +147,7 @@ const registerFields = {
       {
         name: 'email',
         code: 'email',
-        label: 'Електронна пошта*',
+        label: computed(() => t('authEmail')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -166,7 +159,7 @@ const registerFields = {
       {
         name: 'password',
         code: 'password',
-        label: 'Пароль*',
+        label: computed(() => t('authPassword')),
         type: 'Custom',
         props: {
           side: 'left',

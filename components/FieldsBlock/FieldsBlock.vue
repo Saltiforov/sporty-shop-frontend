@@ -176,7 +176,6 @@ const props = defineProps({
 const formData = ref({});
 
 onMounted(() => {
-  console.log("onMounted", !!props.data,);
   props.config.items.forEach((field) => {
     if (field.code && props?.data?.[field?.code]) {
       formData.value[field.code] =
@@ -211,4 +210,11 @@ function chunkArray(arr, size) {
   return chunks
 }
 
+const getData = () => {
+  return { ...formData.value };
+};
+
+defineExpose({
+  getData
+});
 </script>

@@ -14,7 +14,7 @@
       <div class="right-side w-full max-w-[393px] justify-between flex-wrap sm:flex-nowrap gap-2  flex">
         <div class="contacts-wrapper">
           <div class="contacts ml-4 mb-3">
-            <p class="small-title">Контакти</p>
+            <p class="small-title">{{ t('footer.contacts.title') }}</p>
             <NuxtLink class="text-[var(--link-color)] link-text" to="/news">qwerty@gmail.com</NuxtLink>
           </div>
           <div class="contacts-links w-[182px] flex justify-between items-center">
@@ -29,7 +29,7 @@
           </div>
         </div>
         <div class="our-social max-w-[102px] w-full">
-          <div><p class="small-title mb-5">Наші соцмережі</p></div>
+          <div><p class="small-title mb-5">{{ t('footer.socialNetworks') }}</p></div>
           <div class="flex justify-between">
             <NuxtLink to="https://www.instagram.com/" class="flex flex-col items-center text-center gap-1">
               <img src="@/assets/images/social-instagram.svg" alt="social-instagram.svg">
@@ -47,24 +47,26 @@
 
 <script setup lang="ts">
 
+const { t } = useI18n()
+
 const links = ref([
   {
-    title: 'Про нас',
+    title: computed(() => t('footer.aboutUs')),
     links: [
-      {label: 'Про нас', page: '/page1'},
-      {label: 'Гарантії', page: '/page1'},
-      {label: 'Умови використання', page: '/page1'},
+      { label: computed(() => t('footer.aboutUs')), page: '/page1' },
+      { label: computed(() => t('footer.warranties')), page: '/page1' },
+      { label: computed(() => t('footer.termsOfUse')), page: '/page1' },
     ]
   },
   {
-    title: 'Для покупців',
+    title: computed(() => t('footer.paymentMethods')),
     links: [
-      {label: 'Способи оплати', page: '/page3'},
-      {label: 'Доставка', page: '/page3'},
-      {label: 'F.Q.A.', page: '/page3'},
+      { label: computed(() => t('footer.paymentMethods')), page: '/page3' },
+      { label: computed(() => t('footer.delivery')), page: '/page3' },
+      { label: computed(() => t('footer.faq')), page: '/page3' },
     ]
   },
-])
+]);
 
 </script>
 

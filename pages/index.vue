@@ -1,5 +1,6 @@
 <template>
-  <div class="max-w-[1783px] mx-auto">
+  <div class="">
+    <Toast position="bottom-right" group="br"/>
 
     <LoadingOverlay :visible="isLoading"/>
 
@@ -9,7 +10,7 @@
           <Filters/>
         </div>
         <div class="promotional-products text-center">
-          <p class="text-[#EF4B4B] mb-[21px] fw-600 text-[20px]">Акційні товари</p>
+          <p class="text-[#EF4B4B] mb-[21px] fw-600 text-[20px]">{{ t('promoProducts.title') }}</p>
           <SwiperWrapper :items="products" :options="promotionalProductsSwiperOptions">
             <template #default="{ item }">
               <ProductCard class="mt-3 mb-3" :product="item"/>
@@ -21,7 +22,7 @@
       <div class="">
         <div class="sort-select flex max-w-[1340px] w-full justify-end mb-5">
           <div class="min-w-[310px] flex">
-            <p class="mr-5">Сортування:</p>
+            <p class="mr-5">{{ sortTitle }}</p>
             <SortSelect/>
           </div>
         </div>
@@ -31,11 +32,12 @@
               v-for="product in products"
               :key="product.id"
               :product="product"
+              @add-to-cart="showBottomRight"
           />
         </div>
         <div class="products-pagination-actions mb-[72px]">
           <div class="load-more-wrapper mb-3 flex justify-center">
-            <LoadMoreButton :disabled="allLoaded" @click="fetchProducts" label="Показати ще 10 товарів">
+            <LoadMoreButton :disabled="allLoaded" @click="fetchProducts(false)" :label="loadMoreLabel">
               <template #icon>
                 <img src="~/assets/icons/load-more-icon.svg" alt="load-more-icon">
               </template>
@@ -55,6 +57,8 @@
 
     <AuthWrapper/>
 
+    <Toast position="bottom-right" group="br"/>
+
     <transition v-if="isShoppingCartShow">
       <div class="overlay"/>
     </transition>
@@ -68,6 +72,7 @@
     </transition>
 
   </div>
+
 </template>
 
 <script setup>
@@ -85,12 +90,16 @@ import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 import {useProducts} from "~/composables/useProducts.js";
 import {useQueryParams} from "~/composables/useQueryParams.js";
 
-import { useCartStore } from "~/stores/cart.js";
+import {useCartStore} from "~/stores/cart.js";
 
 const promotionalProductsSwiperOptions = {
   slidesPerView: 1,
   loop: true,
 }
+
+const {t} = useI18n();
+
+const toast = useToast();
 
 const route = useRoute()
 
@@ -99,6 +108,8 @@ const cartStore = useCartStore()
 const {$eventBus} = useNuxtApp();
 
 const {getAll} = useProducts();
+
+const sortTitle = computed(() => t('sort.title'))
 
 const activePage = ref(Number(route.query.page))
 
@@ -112,7 +123,22 @@ const totalPages = computed(() => Math.ceil(totalProductsRecords.value / limit.v
 
 const skip = computed(() => (page.value - 1) * limit.value)
 
-const allLoaded = computed(() => products.value.length >= totalProductsRecords.value || page.value === totalPages.value)
+const allLoaded = computed(() => products.value.length >= totalProductsRecords.value || activePage.value === totalPages.value)
+
+const loadMoreLabel = computed(() => {
+  return t('loadMore', {count: limit.value});
+});
+
+const showBottomRight = (product) => {
+  console.log("showBottomRight", product)
+  toast.add({
+    severity: 'success',
+    summary: t('toast.successTitle'),
+    detail: t('toast.addedToCart', { productName: product.name }),
+    group: 'br',
+    life: 3000
+  });
+};
 
 const productsQueryParams = computed(() => {
   return {
@@ -122,12 +148,12 @@ const productsQueryParams = computed(() => {
   }
 })
 
-const getProductsByPage  = async (newPage) => {
+const getProductsByPage = async (newPage) => {
   page.value = newPage
   await fetchProducts(true)
 }
 
-const { updateQueryParams } = useQueryParams(productsQueryParams);
+const {updateQueryParams} = useQueryParams(productsQueryParams);
 
 const products = ref([])
 

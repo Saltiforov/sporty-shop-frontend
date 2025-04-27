@@ -1,6 +1,6 @@
 <template>
   <div class="price-range-filter p-[8px_36px]">
-      <div class="range-title mb-[17px]">Ціна, грн</div>
+    <div class="range-title mb-[17px]">{{ t('priceRange.title') }}</div>
     <div class="range-fields-wrapper  flex">
       <div class="range-fields w-full flex justify-between">
 
@@ -29,22 +29,17 @@
                 root: {
                   class: 'range-button w-[100px] max-w-[68px]'
                 }
-              }" label="Ок"/>
+              }" :label="t('priceRange.okButton')"/>
         </div>
 
-
-
-
       </div>
-
-
-
     </div>
-
   </div>
 </template>
 
 <script setup>
+
+const { t } = useI18n();
 const min = ref(0);
 const max = ref(2000);
 </script>

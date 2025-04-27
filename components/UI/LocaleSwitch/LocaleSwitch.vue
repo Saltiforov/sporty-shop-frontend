@@ -19,7 +19,9 @@
 import {ref, computed} from 'vue'
 import Select from 'primevue/select'
 
-const {locales, locale, t, setLocale} = useI18n()
+const {locales, locale, setLocale, defaultLocale} = useI18n()
+
+const storedLocale = computed(() =>  locale.value || localStorage.getItem('locale'))
 
 const languages = computed(() =>
     locales.value.map(lang => ({
@@ -28,8 +30,10 @@ const languages = computed(() =>
     }))
 )
 
+const defaultLanguage = computed(() => languages.value.find(l => l.code === defaultLocale))
+
 const selectedLanguage = ref(
-    languages.value.find(l => l.code === locale.value) || {name: 'EN', code: 'en'}
+    languages.value.find(l => l.code === storedLocale.value) || defaultLanguage.value
 )
 
 const switchLocale = () => {

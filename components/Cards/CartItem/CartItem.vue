@@ -12,7 +12,7 @@
             'rounded-[16px]',
             isHistoryView ? 'h-[210px] object-cover' : ''
           ]"
-            :src="fullImageUrls(cartProduct.images)[0] || cartProduct.image"
+            :src="imageSource"
             alt="product-image.png"
         />
       </div>
@@ -33,7 +33,7 @@
         </p>
 
         <div v-if="isHistoryView" class="card-quantity w-full flex justify-end">
-          <p class="text-medium-20">{{ cartProduct.quantity }} од.</p>
+          <p class="text-medium-20">{{ cartProduct.quantity }} {{ t('unit') }}.</p>
         </div>
 
         <div :class="[
@@ -56,7 +56,7 @@
                   : 'text-[16px]'
               ]"
             >
-              {{ cartProduct?.price || '1121' }} грн
+              {{ cartProduct?.price || '1121' }} {{ t('currency') }}
             </div>
 
             <div
@@ -66,7 +66,7 @@
                 ]"
                 class="discount-price text-[var(--color-primary-pink)]"
             >
-              {{ discountPrice || '600' }} <span class="text-[18px]">грн</span>
+              {{ discountPrice || '600' }} <span class="text-[18px]">{{ t('currency') }}</span>
             </div>
           </div>
 
@@ -101,6 +101,8 @@ import {useCartStore} from "~/stores/cart.js";
 
 const cartStore = useCartStore();
 
+const { t } = useI18n();
+
 const deleteProduct = (id) => {
   cartStore.removeFromCart(id)
 }
@@ -116,6 +118,8 @@ const {cartProduct} = defineProps({
     required: false,
   }
 })
+
+const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] || cartProduct.image)
 
 const discountPrice = computed(() => cartProduct?.price - cartProduct?.discount)
 

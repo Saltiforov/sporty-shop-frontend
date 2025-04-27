@@ -11,9 +11,9 @@
           }
         }" >
           <div class="flex w-full items-center justify-between">
-            <p class="title-lg-20">Замовлення №{{ item.orderNumber }}</p>
+            <p class="title-lg-20">{{ t('orderNumber', { number: item.orderNumber }) }}</p>
             <div class="order-status  text-white px-[12px] bg-[var(--color-primary-purple)] rounded-[var(--default-rounded)] py-[10px] mx-[20px]">
-              {{ item.status }}
+              {{ t(localizeStatus(item.status)) }}
             </div>
           </div>
         </AccordionHeader>
@@ -27,13 +27,13 @@
                   :is-history-view="true"
               />
               <div class="history-view-price justify-end text-[var(--color-primary-red)] title-lg-20 flex">
-                <p class="mr-5">Разом:</p>
-                <p>{{ finalPrice }} грн</p>
+                <p class="mr-5">{{ t('total') }}:</p>
+                <p>{{ finalPrice }} {{ t('currency') }}</p>
               </div>
             </div>
             <div class="flex text-[var(--color-gray-dark-charcoal)] max-w-[890px] justify-between">
               <div class="flex flex-col gap-6 w-full max-w-[427px]">
-                <p v-for="(value, label) in item.userInfo" :key="label">{{ label }}</p>
+                <p v-for="(labelKey, index) in userInfoLabels" :key="index">{{ t(labelKey) }}</p>
               </div>
 
               <div class="flex flex-col gap-6 w-full max-w-[427px]">
@@ -52,6 +52,31 @@ import {calculateTotal} from "~/utils/index.js";
 
 const finalPrice = computed(() => calculateTotal(shoppingCartItems.value, true))
 
+const { t } = useI18n();
+
+const userInfoLabels = [
+  'userInfo.firstName',
+  'userInfo.lastName',
+  'userInfo.email',
+  'userInfo.phone',
+  'userInfo.address',
+  'userInfo.deliveryComment'
+];
+
+const statusLocalization = {
+  'Відправлено': 'status.sent',
+  'В обробці': 'status.processing',
+  'Доставлено': 'status.delivered',
+  'Скасовано': 'status.cancelled',
+  'Очікує обробки': 'status.pending',
+  'Відправлений': 'status.shipped',
+  'Завершено': 'status.completed',
+  'Повернуто': 'status.returned'
+};
+
+const localizeStatus = (status) => {
+  return statusLocalization[status];
+}
 
 const orderList = [
   {
@@ -63,13 +88,12 @@ const orderList = [
     phone: '+380 99 765 55 55',
     email: 'qwerty@gmail.com',
     userInfo: {
-      'Електронна пошта': 'qwerty@gmail.com',
-      'Телефон': '+380 99 765 55 55',
-      'Прізвище': 'Огірковий',
-      'Ім’я': 'Огірок',
-      'Адреса доставки:': 'Київ',
-      'Додаткова інформація про доставку:': 'Відділення НП №60'
-
+      firstName: 'Огірок',
+      lastName: 'Огірковий',
+      email: 'qwerty@gmail.com',
+      phone: '+380 99 765 55 55',
+      address: 'Київ',
+      deliveryComment: 'Відділення НП №60'
     }
   },
   {
@@ -81,12 +105,12 @@ const orderList = [
     phone: '+380 97 123 45 67',
     email: 'maria@example.com',
     userInfo: {
-      'Електронна пошта': 'qwerty@gmail.com',
-      'Телефон': '+380 99 765 55 55',
-      'Прізвище': 'Огірковий',
-      'Ім’я': 'Огірок',
-      'Адреса доставки:': 'Київ',
-      'Додаткова інформація про доставку:': 'Відділення НП №60'
+      firstName: 'Огірок',
+      lastName: 'Огірковий',
+      email: 'qwerty@gmail.com',
+      phone: '+380 99 765 55 55',
+      address: 'Київ',
+      deliveryComment: 'Відділення НП №60'
     }
   }
 ];

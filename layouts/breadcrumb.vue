@@ -23,12 +23,14 @@
 
 <script setup>
 
+const { t } = useI18n();
+
 const home = ref({ icon: 'pi pi-home' });
 const items = [
-  { label: 'Головна', to: '/' },
-  { label: 'Каталог', to: '/catalog' },
-  { label: 'Спортивне харчування', to: '/catalog/sport-nutrition' },
-  { label: 'Бустери', to: '/catalog/sport-nutrition/boosters' }
+  { label: computed(() => t('navigation.home')), to: '/' },
+  { label: computed(() => t('navigation.catalog')), to: '/catalog' },
+  { label: computed(() => t('navigation.sportNutrition')), to: '/catalog/sport-nutrition' },
+  { label: computed(() => t('navigation.boosters')), to: '/catalog/sport-nutrition/boosters' }
 ]
 
 </script>

@@ -1,14 +1,14 @@
 <template>
   <div class="change-password">
     <div class="max-w-[432px]">
-      <h1 class="title-lg-20 mb-[30px]">Зміна паролю</h1>
+      <h1 class="title-lg-20 mb-[30px]">{{ t('changePassword') }}</h1>
       <FieldsBlock :config="config.fields"/>
       <div class="max-w-[377px] mx-auto">
         <Button :pt="{
           root: {
             class: 'change-password__btn'
           }
-        }">Змінити пароль</Button>
+        }">{{ t('changePasswordButton') }}</Button>
       </div>
     </div>
   </div>
@@ -16,13 +16,15 @@
 
 <script setup>
 
+const { t } = useI18n()
+
 const config = {
   fields: {
     items: [
       {
         name: 'oldPassword',
         code: 'oldPassword',
-        label: 'Старий пароль*',
+        label: computed(() => t('oldPassword')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -31,11 +33,10 @@ const config = {
           required: true
         },
       },
-
       {
         name: 'newPassword',
         code: 'newPassword',
-        label: 'Новий пароль*',
+        label: computed(() => t('newPassword')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -44,11 +45,10 @@ const config = {
           required: true
         },
       },
-
       {
         name: 'confirmPassword',
         code: 'confirmPassword',
-        label: 'Підтвердити новий пароль*',
+        label: computed(() => t('confirmPassword')),
         type: 'InputText',
         props: {
           side: 'left',

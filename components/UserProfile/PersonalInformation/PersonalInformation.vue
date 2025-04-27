@@ -1,6 +1,6 @@
 <template>
   <div class="personal-information">
-    <h1 class="title-lg-20 mb-[30px]">Контактна інформація</h1>
+    <h1 class="title-lg-20 mb-[30px]">{{ t('contactInformation') }}</h1>
     <FieldsBlock class="mb-[73px]" :config="config.fields"/>
     <div
         class="max-w-[338px] mx-auto py-[10px] px-[10px]">
@@ -8,15 +8,16 @@
         root: {
           class: 'personal-information__btn'
         }
-      }">Зберегти
+      }">{{ t('save') }}
       </Button>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-
+<script setup >
 import {InputGroup, InputGroupAddon, InputText} from "primevue";
+
+const { t } = useI18n();
 
 const config = {
   fields: {
@@ -24,7 +25,7 @@ const config = {
       {
         name: 'userName',
         code: 'userName',
-        label: 'Ім’я*',
+        label: computed(() => t('userName')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -37,7 +38,7 @@ const config = {
       {
         name: 'country',
         code: 'country',
-        label: 'Країна*',
+        label: computed(() => t('country')),
         type: 'Select',
         props: {
           side: 'right',
@@ -48,7 +49,7 @@ const config = {
       {
         name: 'postCode',
         code: 'postCode',
-        label: 'Поштовий індекс*',
+        label: computed(() => t('postCode')),
         type: 'InputText',
         props: {
           side: 'right',
@@ -59,7 +60,7 @@ const config = {
       {
         name: 'state',
         code: 'state',
-        label: 'Штат\\Область\\Регіон',
+        label: computed(() => t('state')),
         type: 'InputText',
         props: {
           side: 'right',
@@ -69,7 +70,7 @@ const config = {
       {
         name: 'city',
         code: 'city',
-        label: 'Місто*',
+        label: computed(() => t('city')),
         type: 'InputText',
         props: {
           side: 'right',
@@ -79,7 +80,7 @@ const config = {
       {
         name: 'street',
         code: 'street',
-        label: 'Вулиця, будинок, квартира',
+        label: computed(() => t('streetAddress')),
         type: 'InputText',
         props: {
           side: 'right',
@@ -89,7 +90,7 @@ const config = {
       {
         name: 'deliveryComment',
         code: 'deliveryComment',
-        label: 'Додати примітку до доставки',
+        label: computed(() => t('noteToDelivery')),
         type: 'InputText',
         props: {
           side: 'right',
@@ -100,7 +101,7 @@ const config = {
       {
         name: 'lastName',
         code: 'lastName',
-        label: 'Прізвище*',
+        label: computed(() => t('lastName')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -112,7 +113,7 @@ const config = {
       {
         name: 'email',
         code: 'email',
-        label: 'Електронна пошта*',
+        label: computed(() => t('email')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -125,7 +126,7 @@ const config = {
       {
         name: 'phoneNumber',
         code: 'phoneNumber',
-        label: 'Номер телефону*',
+        label: computed(() => t('phoneNumber')),
         type: 'Custom',
         props: {
           side: 'left',

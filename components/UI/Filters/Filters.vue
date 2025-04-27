@@ -77,7 +77,9 @@ import SportsNutritionIcon from '~/assets/icons/filters/sports-nutrition-icon.sv
 import InjectionsIcon from '~/assets/icons/filters/injections-icon.svg'
 import PriceRangeFilter from "~/components/UI/PriceRangeFilter/PriceRangeFilter.vue";
 
-const expandedKeys = ref({"o": true})
+const { t } = useI18n()
+
+const expandedKeys = ref({"0": true})
 
 const toggle = (node) => {
   expandedKeys.value[node.key] = !expandedKeys.value[node.key]
@@ -106,56 +108,56 @@ const updateChildrenSelection = (children, isChecked) => {
 const nodes = ref([
   {
     key: '0',
-    label: 'Спортивне харчування',
+    label: computed(() => t('filters.sportsNutrition')),
     icon: SportsNutritionIcon,
     children: [
       {
         key: '0-0',
-        label: 'Протеїн',
+        label: computed(() => t('filters.protein')),
         modelValue: false,
         children: [
           {
             key: '0-0-1',
-            label: 'Амінокислоти',
+            label: computed(() => t('filters.aminoAcids')),
             modelValue: false,
           },
         ]
       },
       {
         key: '0-1',
-        label: 'Амінокислоти',
+        label: computed(() => t('filters.aminoAcids')),
         modelValue: false,
       },
       {
         key: '0-2',
-        label: 'Креатин',
+        label: computed(() => t('filters.creatine')),
         modelValue: true,
       },
       {
         key: '0-3',
-        label: 'Коллаген',
+        label: computed(() => t('filters.collagen')),
         modelValue: false,
       },
     ]
   },
   {
     key: '1',
-    label: 'Ін’єкції',
+    label: computed(() => t('filters.injections')),
     icon: InjectionsIcon,
     children: [
       {
         key: '1-0',
-        label: 'Протеїн',
+        label: computed(() => t('filters.protein')),
         modelValue: false,
       },
       {
         key: '1-1',
-        label: 'Амінокислоти',
+        label: computed(() => t('filters.aminoAcids')),
         modelValue: false,
       },
       {
         key: '1-2',
-        label: 'Креатин',
+        label: computed(() => t('filters.creatine')),
         modelValue: true,
       },
     ]

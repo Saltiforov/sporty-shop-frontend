@@ -3,7 +3,7 @@
     <div class="shopping-cart pt-[36px] pb-[28px] pl-[46px] pr-[30px] rounded-tl-[32px] rounded-bl-[32px]">
       <div class="header flex justify-between pb-[49px] items-center">
         <div class="flex">
-          <h1 class="large-title mr-[25px]">Кошик</h1>
+          <h1 class="large-title mr-[25px]">{{  t('cartTitle') }}</h1>
           <p class="large-title" style="color: #999999">({{ cartStore.cartCount }})</p>
         </div>
         <div class="pr-[8px]">
@@ -22,29 +22,31 @@
       </div>
 
       <div v-if="!cartItems.length" class="cart-empty-title">
-        <h2 class="text-center text-[var(--color-gray-dark-charcoal)] text-[24px] py-[50px]">Ой! Ви ще нічого не додали в кошик</h2>
+        <h2 class="text-center text-[var(--color-gray-dark-charcoal)] text-[24px] py-[50px]">{{ t('emptyCartText') }}</h2>
       </div>
 
       <ProductsOverview :products-overview="cartItems"/>
       <div class="make-order-block flex flex-col items-center ">
         <div class="mb-[10px] w-full max-w-[423px]">
-          <Button :pt="{
+          <NuxtLink to="/checkout">
+            <Button :pt="{
             root: {
               class: 'make-order-button',
             }
           }"><p class="fw-400 murecho-font text-[#FFFFFF] text-[14px] leading-[22px]">
-          Оформити замовлення</p></Button>
+              {{ t('makeOrder') }}</p></Button>
+          </NuxtLink>
         </div>
         <div>
           <NuxtLink to="/product">
-            <p class="text-[#A3A3A7] murecho-font">Продовжити покупки</p>
+            <p class="text-[#A3A3A7] murecho-font">{{ t('continueShopping') }}</p>
           </NuxtLink>
         </div>
       </div>
       <div class="recommended-products mt-[50px]">
         <div class="flex items-center gap-4">
           <div class="w-[152px] h-px bg-white"></div>
-          <h2 class="h2-title text-center whitespace-nowrap">Рекомендовані товари</h2>
+          <h2 class="h2-title text-center whitespace-nowrap">{{ t('recommendedProducts') }}</h2>
           <div class="w-[152px] h-px bg-white"></div>
         </div>
         <div class="recommended-products-cards mt-[22px] grid grid-cols-2 gap-[30px]">
@@ -72,6 +74,8 @@ import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
 
 const cartStore = useCartStore();
 
+const { t } = useI18n()
+
 const props = defineProps({
   isOpen: {
     type: Boolean,
@@ -83,6 +87,18 @@ const props = defineProps({
     default: () => [],
   }
 })
+
+watch(() => props.isOpen, (newVal) => {
+  if (newVal) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+  }
+});
+
+onUnmounted(() => {
+  document.body.style.overflow = '';
+});
 
 const products = ref([
   {

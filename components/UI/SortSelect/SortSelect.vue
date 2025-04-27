@@ -23,14 +23,17 @@
 import Select from "primevue/select";
 import {ref} from "vue";
 
-const selectedOption = ref({ name: 'За популярністю', code: 'popular' });
+const {t} = useI18n()
+
+const selectedOption = ref({name: computed(() => t('sort.popular')), code: 'popular'});
+
 const sortOptions = ref([
-  { name: 'За популярністю', code: 'popular' },
-  { name: 'Від дешевих до дорогих', code: 'price_asc' },
-  { name: 'Від дорогих до дешевих', code: 'price_desc' },
-  { name: 'За новинками', code: 'newest' },
-  { name: 'За рейтингом', code: 'rating' }
-]);
+  {code: 'popular', name: computed(() => t('sort.popular'))},
+  {code: 'price_asc', name: computed(() => t('sort.priceAsc'))},
+  {code: 'price_desc', name: computed(() => t('sort.priceDesc'))},
+  {code: 'newest', name: computed(() => t('sort.newest'))},
+  {code: 'rating', name: computed(() => t('sort.rating'))}
+])
 </script>
 
 

@@ -1,6 +1,6 @@
 <template>
   <div class="favorite-products">
-    <h1 class="title-lg-20 mb-8">Вподобані товари</h1>
+    <h1 class="title-lg-20 mb-8">{{ t('menu.favoriteProducts') }}</h1>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
       <ProductCard
           v-for="product in products"
@@ -13,6 +13,8 @@
 
 <script setup lang="ts">
 import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
+
+const { t } = useI18n()
 
 const products = ref([
   {

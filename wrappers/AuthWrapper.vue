@@ -17,12 +17,12 @@
               root: {
                 class: 'custom-border'
               }
-            }" value="login" @click="activeTab = 'login'">Вхід</Tab>
+            }" value="login" @click="activeTab = 'login'">{{ t('login') }}</Tab>
             <Tab :pt="{
               root: {
                 class: 'custom-border'
               }
-            }" value="register" @click="activeTab = 'register'">Реєстрація</Tab>
+            }" value="register" @click="activeTab = 'register'">{{ t('registerTab') }}</Tab>
           </TabList>
         </Tabs>
       </div>
@@ -54,6 +54,8 @@
 
 <script setup>
 import { ref } from 'vue'
+
+const { t } = useI18n()
 
 const isVisible = ref(false)
 const activeTab = ref('login')
