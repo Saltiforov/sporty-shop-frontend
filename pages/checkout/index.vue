@@ -193,6 +193,17 @@ const config = {
           placeholder: ''
         }
       },
+       {
+        name: 'street',
+        code: 'street',
+        label: computed(() => t('street')),
+        type: 'InputText',
+        props: {
+          side: 'right',
+          placeholder: ''
+        }
+      },
+
       {
         name: 'city',
         code: 'city',

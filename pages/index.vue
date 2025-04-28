@@ -46,7 +46,7 @@
           <div class="product-pagination-wrapper flex justify-center">
             <ProductPaginationButton
                 v-model="activePage"
-                :max-pages="totalPages"
+                :max-pages="5"
                 :all-loaded="allLoaded"
                 @update:model-value="getProductsByPage"
             />
@@ -117,11 +117,11 @@ const page = ref(Number(route.query.page) || 1)
 
 const limit = ref(Number(route.query.limit) || 10)
 
+const skip = computed(() => (page.value - 1) * limit.value)
+
 const totalProductsRecords = ref(0)
 
 const totalPages = computed(() => Math.ceil(totalProductsRecords.value / limit.value))
-
-const skip = computed(() => (page.value - 1) * limit.value)
 
 const allLoaded = computed(() => products.value.length >= totalProductsRecords.value || activePage.value === totalPages.value)
 
@@ -134,7 +134,7 @@ const showBottomRight = (product) => {
   toast.add({
     severity: 'success',
     summary: t('toast.successTitle'),
-    detail: t('toast.addedToCart', { productName: product.name }),
+    detail: t('toast.addedToCart', {productName: product.name}),
     group: 'br',
     life: 3000
   });
@@ -151,6 +151,10 @@ const productsQueryParams = computed(() => {
 const getProductsByPage = async (newPage) => {
   page.value = newPage
   await fetchProducts(true)
+}
+
+const syncFromRoute = () => {
+  page.value = Number(route.query.page) || 1
 }
 
 const {updateQueryParams} = useQueryParams(productsQueryParams);
@@ -184,6 +188,8 @@ const fetchProducts = async (shouldReplace = false) => {
 }
 
 onMounted(async () => {
+  syncFromRoute()
+
   await fetchProducts()
 
   $eventBus.on('show-cart', () => {

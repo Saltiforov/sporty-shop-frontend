@@ -64,6 +64,7 @@
   "userName": "First Name*",
   "country": "Country*",
   "postCode": "Postal Code*",
+  "street": "Street*",
   "state": "State/Province/Region",
   "city": "City*",
   "deliveryInfo": "Delivery Service and Branch Number",

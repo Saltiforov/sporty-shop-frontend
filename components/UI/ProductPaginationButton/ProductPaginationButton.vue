@@ -2,34 +2,39 @@
   <div class="pagination-button-wrapper w-full max-w-[278px]">
     <div class="pagination-button">
       <div class="flex w-full max-w-[220px] items-center gap-4">
-        <Button :pt="{
+        <Button :disabled="isNoNextAvailablePageToLeft" :pt="{
           root: {
             class: 'slide-button'
           }
         }" @click="handlePageChange('left')">
           <svg width="31" height="31" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M11.5 13.5L8.5 10.5L11.5 7.5M19.5 10.5C19.5 5.52944 15.4706 1.5 10.5 1.5C5.52944 1.5 1.5 5.52944 1.5 10.5C1.5 15.4706 5.52944 19.5 10.5 19.5C15.4706 19.5 19.5 15.4706 19.5 10.5Z" stroke="#1B1F26" stroke-opacity="0.72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+                d="M11.5 13.5L8.5 10.5L11.5 7.5M19.5 10.5C19.5 5.52944 15.4706 1.5 10.5 1.5C5.52944 1.5 1.5 5.52944 1.5 10.5C1.5 15.4706 5.52944 19.5 10.5 19.5C15.4706 19.5 19.5 15.4706 19.5 10.5Z"
+                stroke="#1B1F26" stroke-opacity="0.72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </Button>
-
         <div class="text-[15px] w-full justify-between flex">
-          <p v-for="(page, index) in visiblePages" :key="index"
-             :class="{ 'active-page': page === currentPage }"
-             @click="handleClickPage(page)"
-             class="page-count max-w-[32px]">{{ page }}</p>
+          <p :class="{ 'active-page': activePageType === 'first' }"
+             @click="handleClickPageType('first')"
+             class="page-count  max-w-[32px]">{{ firstPage }}</p>
 
-          <div v-if="showEllipsisBefore" class="text-[#24242ACF] text-[20px] flex justify-center items-center max-w-[42px] w-full">...</div>
+          <p :class="{ 'active-page': activePageType === 'next' }"
+             @click="handleClickPageType('next')"
+             class="page-count max-w-[32px]">{{ nextPage }}</p>
 
-          <div v-if="showEllipsisAfter" class="text-[#24242ACF] text-[20px] flex justify-center items-center max-w-[42px] w-full">...</div>
+          <p :class="{ 'active-page': activePageType === 'last' }"
+             @click="handleClickPageType('last')"
+             class="page-count max-w-[32px]">{{ lastPage }}</p>
         </div>
-
-        <Button :pt="{
+        <Button :disabled="isNoNextAvailablePageToRight" :pt="{
           root: {
             class: 'slide-button'
           }
         }" @click="handlePageChange('right')">
           <svg width="31" height="31" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9.5 7.5L12.5 10.5L9.5 13.5M19.5 10.5C19.5 5.52944 15.4706 1.5 10.5 1.5C5.52944 1.5 1.5 5.52944 1.5 10.5C1.5 15.4706 5.52944 19.5 10.5 19.5C15.4706 19.5 19.5 15.4706 19.5 10.5Z" stroke="#1B1F26" stroke-opacity="0.72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+                d="M9.5 7.5L12.5 10.5L9.5 13.5M19.5 10.5C19.5 5.52944 15.4706 1.5 10.5 1.5C5.52944 1.5 1.5 5.52944 1.5 10.5C1.5 15.4706 5.52944 19.5 10.5 19.5C15.4706 19.5 19.5 15.4706 19.5 10.5Z"
+                stroke="#1B1F26" stroke-opacity="0.72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </Button>
       </div>
@@ -38,70 +43,95 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import {ref, computed} from 'vue'
 
 const props = defineProps({
-  modelValue: { type: Number, default: 1 },
-  maxPages: { type: Number, required: true },
-  allLoaded: { type: Boolean, default: false },
+  modelValue: {type: Number, default: 1},
+  maxPages: {type: Number, required: true},
+  allLoaded: {type: Boolean, default: false},
 })
 
 const emit = defineEmits(['update:modelValue'])
 
-const currentPage = ref(Number(props.modelValue) || 1)
-const totalPages = ref(props.maxPages)
+const route = useRoute()
 
-const visiblePages = computed(() => {
-  const pages = []
+watch(() => props.maxPages, (val) => lastPage.value = val)
 
-  if (totalPages.value === 1) {
-    pages.push(1)
-  } else if (totalPages.value === 2) {
-    pages.push(1, '...', 2)
-  } else {
-    const start = Math.max(1, currentPage.value - 1)
-    const end = Math.min(totalPages.value, currentPage.value + 1)
+const numberOfPageFromQuery = computed(() => Number(route.query.page))
 
-    if (start > 1) {
-      pages.push(1)
-      pages.push('...')
-    }
-
-    for (let i = start; i <= end; i++) {
-      pages.push(i)
-    }
-
-    if (end < totalPages.value) {
-      pages.push('...')
-      pages.push(totalPages.value)
-    }
-  }
-
-  return pages
+const nextPageAfterFirstPage = computed(() => {
+  return activePageType.value === 'first' ? 2 : 2
 })
 
-const showEllipsisBefore = computed(() => visiblePages.value[0] === '...')
-const showEllipsisAfter = computed(() => visiblePages.value[visiblePages.value.length - 1] === '...')
+const previousPageBeforeLastPage = computed(() => {
+})
 
-const handleClickPage = (page) => {
-  if (page !== '...') {
-    currentPage.value = page
-    emit('update:modelValue', page)
+const firstPage = ref(1)
+
+const lastPage = ref(props.maxPages)
+
+const nextPage = ref(2)
+
+const activePageType = ref('first')
+
+const isNoNextAvailablePageToRight = computed(() => {
+  return lastPage.value - 1 === nextPage.value && activePageType.value !== 'first'
+})
+const isNoNextAvailablePageToLeft = computed(() => {
+  return firstPage.value + 1 === nextPage.value && activePageType.value === 'next' || activePageType.value === 'first'
+})
+
+const pageNumberToEmit = ref({
+  first: firstPage.value,
+  next: computed(() => nextPage.value),
+  last: lastPage.value,
+})
+
+const handleClickPageType = (type) => {
+  activePageType.value = type
+  emit('update:modelValue', pageNumberToEmit.value[type])
+}
+
+const setNextPage = (newPage) => {
+  if (newPage !== firstPage.value && newPage !== lastPage.value) {
+    nextPage.value = newPage
   }
+}
+
+const setPageState = (pageNumber, type) => {
+  nextPage.value = pageNumber
+  activePageType.value = type
 }
 
 const handlePageChange = (direction = 'right') => {
-  if (direction === 'left' && currentPage.value > 1) {
-    currentPage.value -= 1
-    emit('update:modelValue', currentPage.value)
+  const from = activePageType.value
+
+  const pageToRight = from === 'first' ? nextPage.value : nextPage.value + 1
+  const pageToLeft = from === 'last' ? nextPage.value : nextPage.value - 1
+
+  activePageType.value = 'next'
+
+  if (direction === 'left' && nextPage.value > firstPage.value) {
+    setNextPage(pageToLeft)
+    emit('update:modelValue', nextPage.value)
   }
-  if (direction === 'right' && currentPage.value < totalPages.value) {
-    currentPage.value += 1
-    emit('update:modelValue', currentPage.value)
+
+  if (direction === 'right' && nextPage.value < lastPage.value) {
+    setNextPage(pageToRight)
+    emit('update:modelValue', nextPage.value)
   }
 }
-</script>
 
+onMounted(() => {
+  if (numberOfPageFromQuery.value > firstPage.value) {
+    setPageState(numberOfPageFromQuery.value, 'next')
+  }
+  if (numberOfPageFromQuery.value === lastPage.value) {
+    setPageState(numberOfPageFromQuery.value - 1, 'last')
+  }
+})
+
+</script>
 
 
 <style scoped>

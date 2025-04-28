@@ -33,7 +33,7 @@
       <div class="flex text-[12px] justify-center">
         <div v-if="isLogin" class="flex">
           <p class="mr-[17px]">{{ t('newClient') }}</p>
-          <p><NuxtLink class="text-[var(--color-primary-dark-red)]">{{ t('registerButton') }}</NuxtLink> {{ t('forGoodOffers') }}</p>
+          <p><NuxtLink @click="authPopup.setType('register')"  class="text-[var(--color-primary-dark-red)] cursor-pointer">{{ t('registerButton') }}</NuxtLink> {{ t('forGoodOffers') }}</p>
         </div>
         <p v-else class="text-[var(--color-muted-gray)]">{{ t('userAgreement') }}</p>
       </div>
@@ -47,6 +47,8 @@
 import {InputGroup, InputGroupAddon, InputText, Password} from "primevue";
 
 const { t } = useI18n();
+
+const authPopup = useAuthPopup()
 
 const { isLogin } = defineProps({
   isLogin: {

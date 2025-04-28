@@ -17,12 +17,14 @@
               root: {
                 class: 'custom-border'
               }
-            }" value="login" @click="activeTab = 'login'">{{ t('login') }}</Tab>
+            }" value="login" @click="setActiveTab('login')">{{ t('login') }}
+            </Tab>
             <Tab :pt="{
               root: {
                 class: 'custom-border'
               }
-            }" value="register" @click="activeTab = 'register'">{{ t('registerTab') }}</Tab>
+            }" value="register" @click="setActiveTab('register')">{{ t('registerTab') }}
+            </Tab>
           </TabList>
         </Tabs>
       </div>
@@ -33,7 +35,7 @@
             class: 'bg-transparent p-0',
           }
         }">
-          <TabPanel >
+          <TabPanel>
             <AuthComponent :is-login="isLogin"/>
           </TabPanel>
         </TabPanels>
@@ -43,9 +45,11 @@
         root: {
           class: 'close-btn'
         }
-      }" @click="isVisible = false">
+      }" @click="authPopup.close">
         <svg width="12" height="12" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M1.63597 1.63649L7.51465 7.51517M7.51465 7.51517L13.3933 13.3938M7.51465 7.51517L1.63597 13.3938M7.51465 7.51517L13.3933 1.63649" stroke="#9E2B24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path
+              d="M1.63597 1.63649L7.51465 7.51517M7.51465 7.51517L13.3933 13.3938M7.51465 7.51517L1.63597 13.3938M7.51465 7.51517L13.3933 1.63649"
+              stroke="#9E2B24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </Button>
     </div>
@@ -53,12 +57,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+const {t} = useI18n()
 
-const { t } = useI18n()
+const authPopup = useAuthPopup()
 
-const isVisible = ref(false)
-const activeTab = ref('login')
+const setActiveTab = (activeTab) => {
+  authPopup.setType(activeTab)
+}
+
+const isVisible = computed(() => authPopup.isShow)
+const activeTab = computed(() => authPopup.popupType)
 const isLogin = computed(() => activeTab.value === 'login')
 
 </script>
@@ -103,6 +111,7 @@ const isLogin = computed(() => activeTab.value === 'login')
   font-size: 20px;
   cursor: pointer;
 }
+
 .close-btn:hover {
   background: transparent;
   border: none;

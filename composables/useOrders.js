@@ -1,6 +1,5 @@
 export const useOrders = () => {
     const { $api } = useNuxtApp()
-
     const router = {
         orders: '/api/orders',
     }
