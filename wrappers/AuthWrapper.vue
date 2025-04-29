@@ -66,7 +66,9 @@ const setActiveTab = (activeTab) => {
 }
 
 const isVisible = computed(() => authPopup.isShow)
+
 const activeTab = computed(() => authPopup.popupType)
+
 const isLogin = computed(() => activeTab.value === 'login')
 
 </script>

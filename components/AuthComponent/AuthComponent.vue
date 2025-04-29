@@ -1,6 +1,6 @@
 <template>
   <div class="auth-component">
-    <FieldsBlock :config="fieldsConfig.fields"/>
+    <FieldsBlock :config="fieldsConfig.fields" ref="fieldsBlock"/>
     <div v-if="isLogin" class="reset-password justify-end mb-[27px] flex">
       <NuxtLink><p class="text-[var(--color-muted-gray)]">{{ t('forgotPassword') }}</p></NuxtLink>
     </div>
@@ -8,7 +8,7 @@
         'mx-auto mb-[37px]',
         isLogin ? 'max-w-[320px]' : 'max-w-[386px]'
     ]" class="auth-button-wrapper">
-      <Button :pt="{ root: { class: 'auth-button' } }">{{ buttonLabel }}</Button>
+      <Button @click="handleAuth" :pt="{ root: { class: 'auth-button' } }">{{ buttonLabel }}</Button>
     </div>
     <div class="flex mb-[16px] items-center justify-center gap-4">
       <div class="max-w-[196px] w-full h-px bg-[var(--link-color)]"></div>
@@ -20,7 +20,8 @@
         isLogin ? 'border-b border-[var(--link-color)]' : ''
     ]">
       <div class="mb-[14px]">
-        <NuxtLink><p class="murecho-font text-[12px] text-[var(--color-muted-gray)]">{{ isLogin ? t('loginWith') : t('registerWith') }}</p></NuxtLink>
+        <NuxtLink><p class="murecho-font text-[12px] text-[var(--color-muted-gray)]">
+          {{ isLogin ? t('loginWith') : t('registerWith') }}</p></NuxtLink>
       </div>
 
       <div class="login-with-wrapper mb-6">
@@ -33,7 +34,12 @@
       <div class="flex text-[12px] justify-center">
         <div v-if="isLogin" class="flex">
           <p class="mr-[17px]">{{ t('newClient') }}</p>
-          <p><NuxtLink @click="authPopup.setType('register')"  class="text-[var(--color-primary-dark-red)] cursor-pointer">{{ t('registerButton') }}</NuxtLink> {{ t('forGoodOffers') }}</p>
+          <p>
+            <NuxtLink @click="authPopup.setType('register')"
+                      class="text-[var(--color-primary-dark-red)] cursor-pointer">{{ t('registerButton') }}
+            </NuxtLink>
+            {{ t('forGoodOffers') }}
+          </p>
         </div>
         <p v-else class="text-[var(--color-muted-gray)]">{{ t('userAgreement') }}</p>
       </div>
@@ -42,20 +48,49 @@
 </template>
 
 
-
 <script setup>
 import {InputGroup, InputGroupAddon, InputText, Password} from "primevue";
 
-const { t } = useI18n();
+import {storeToRefs} from 'pinia';
+import {useAuthStore} from '~/stores/auth';
+
+const {authenticateUser, registerUser} = useAuthStore();
+
+const {authenticated} = storeToRefs(useAuthStore());
+
+const user = ref({
+  username: 'emilys2',
+  password: 'emilyspass2',
+  email: '@gmail.com.emilyspass2',
+  firstName: 'emilyspass1',
+  lastName: 'emilyspass1',
+  phone: 35435436,
+  address: {emilyspass: "emilyspass1"},
+});
+// const user = ref({
+//   username: 'emilys',
+//   password: 'emilyspass',
+// });
+
+const {t} = useI18n();
+
+const fieldsBlock = ref(null);
 
 const authPopup = useAuthPopup()
 
-const { isLogin } = defineProps({
+const {isLogin} = defineProps({
   isLogin: {
     type: Boolean,
     default: true
   }
 })
+
+const handleAuth = async () => {
+  await registerUser(user.value);
+  // if (authenticated) {
+  //   navigateTo('/profile')
+  // }
+}
 
 const buttonLabel = computed(() => isLogin ? t('login') : t('registerButton'))
 
@@ -65,8 +100,8 @@ const loginFields = {
   fields: {
     items: [
       {
-        name: 'oldPassword',
-        code: 'oldPassword',
+        name: 'username',
+        code: 'username',
         label: computed(() => t('authPhoneOrEmail')),
         type: 'InputText',
         props: {
@@ -174,7 +209,7 @@ const registerFields = {
                   toggleMask: true,
                   feedback: false,
                   pt: {
-                    input: { class: 'w-full' },
+                    input: {class: 'w-full'},
                   },
                 }),
               ]
@@ -192,6 +227,7 @@ const registerFields = {
   background: var(--color-primary-dark);
   width: 100%;
 }
+
 .auth-button:hover {
   background: var(--color-primary-dark);
   width: 100%;
@@ -201,6 +237,7 @@ const registerFields = {
   background: transparent;
   border: none;
 }
+
 .login-with__img:hover {
   background: transparent;
   border: none;

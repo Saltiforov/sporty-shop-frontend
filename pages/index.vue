@@ -63,7 +63,7 @@
       <div class="overlay"/>
     </transition>
 
-    <transition name="slide-right">
+    <transition @click="handleCartOverlayClick" name="slide-right">
       <ShoppingCart
           :is-open="isShoppingCartShow"
           :cart-items="cartStore.getCartProducts"
@@ -79,6 +79,13 @@
 definePageMeta({
   layout: 'default',
 })
+
+const handleCartOverlayClick = (event) => {
+  const clickedElement = event.target
+  if (clickedElement.classList.contains('overlay')) {
+    isShoppingCartShow.value = false
+  }
+}
 
 import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
 import AuthWrapper from "~/wrappers/AuthWrapper.vue";
@@ -200,7 +207,6 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   $eventBus.off('show-cart');
 });
-
 </script>
 
 <style scoped>

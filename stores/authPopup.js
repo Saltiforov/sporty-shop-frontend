@@ -2,8 +2,9 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useAuthPopup = defineStore('authPopup', () => {
-    const isShow = ref(true)
-    const popupType = ref('login') // просто строка без типов
+    const isShow = ref(false)
+
+    const popupType = ref('login')
 
     function open(type = 'login') {
         isShow.value = true

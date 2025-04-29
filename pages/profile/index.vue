@@ -13,7 +13,7 @@
           <li
               v-for="item in localizedList"
               :key="item.title"
-              @click="selectComponent(item.component)"
+              @click="item.command()"
               class="flex items-center gap-2 cursor-pointer"
           >
             <img class="mr-3" :src="item.icon" alt="">
@@ -34,8 +34,11 @@
 </template>
 
 <script setup>
+import {useAuthStore} from "~/stores/auth.js";
+
 definePageMeta({
   layout: 'breadcrumb',
+  middleware: 'auth',
 })
 
 import PersonalInformation from '~/components/UserProfile/PersonalInformation/PersonalInformation.vue'
@@ -49,24 +52,44 @@ import OrderHistoryIcon from '~/assets/icons/user-profile-order-history-icon.svg
 import FavoriteProductsIcon from '~/assets/icons/user-profile-favorite-products-icon.svg'
 import ChangePasswordIcon from '~/assets/icons/user-profile-change-passwrd-icon.svg'
 import LogoutIcon from '~/assets/icons/user-profile-logout-icon.svg'
+import {onMounted} from "vue";
 
 const components = {PersonalInformation, OrderHistory, FavoriteProducts, ChangePassword, Logout};
 
 const {t} = useI18n();
 
-const localizedList = computed(() => [
-  {title: t('menu.personalInformation'), icon: PersonalInformationIcon, component: 'PersonalInformation'},
-  {title: t('menu.orderHistory'), icon: OrderHistoryIcon, component: 'OrderHistory'},
-  {title: t('menu.favoriteProducts'), icon: FavoriteProductsIcon, component: 'FavoriteProducts'},
-  {title: t('menu.changePassword'), icon: ChangePasswordIcon, component: 'ChangePassword'},
-  {title: t('menu.logout'), icon: LogoutIcon, component: 'Logout'},
-]);
+const { $eventBus } = useNuxtApp();
 
-const currentTab = ref('OrderHistory')
+const { logUserOut } = useAuthStore();
+
+const currentTab = ref('PersonalInformation')
+
+const logout = () => {
+  logUserOut();
+  navigateTo('/')
+}
+
+const localizedList = computed(() => [
+  {title: t('menu.personalInformation'), icon: PersonalInformationIcon, component: 'PersonalInformation', command: () => selectComponent('PersonalInformation')},
+  {title: t('menu.orderHistory'), icon: OrderHistoryIcon, component: 'OrderHistory', command: () => selectComponent('OrderHistory')},
+  {title: t('menu.favoriteProducts'), icon: FavoriteProductsIcon, component: 'FavoriteProducts', command: () => selectComponent('FavoriteProducts')},
+  {title: t('menu.changePassword'), icon: ChangePasswordIcon, component: 'ChangePassword', command: () => selectComponent('ChangePassword')},
+  {title: t('menu.logout'), icon: LogoutIcon, component: 'Logout', command: () => logout()},
+]);
 
 const selectComponent = (component) => {
   currentTab.value = component;
 };
+
+onMounted(() => {
+  $eventBus.on('show-order-history', () => {
+    currentTab.value = 'OrderHistory'
+  })
+})
+
+onBeforeUnmount(() => {
+  $eventBus.off('show-order-history');
+});
 </script>
 
 <style scoped>

@@ -7,6 +7,10 @@
   "searchPlaceholder": "Search...",
   "auth.login": "Log In",
   "auth.register": "Register",
+  "myCabinet": "My Account",
+  "myOrders": "My Orders",
+  "logout": "Log out",
+
   "sort.title": "Sorting:",
   "sort.popular": "By Popularity",
   "sort.priceAsc": "From Cheap to Expensive",

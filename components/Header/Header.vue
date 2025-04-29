@@ -77,6 +77,8 @@
 
 <script setup>
 import LocaleSwitch from "~/components/UI/LocaleSwitch/LocaleSwitch.vue";
+import {useAuthStore} from "~/stores/auth.js";
+import {storeToRefs} from "pinia";
 
 const {$eventBus} = useNuxtApp();
 
@@ -84,27 +86,48 @@ const {t} = useI18n();
 
 const authPopup = useAuthPopup()
 
+const { logUserOut } = useAuthStore();
+
+const { authenticated } = storeToRefs(useAuthStore());
+
 const cartStore = useCartStore();
 
 const showShoppingCart = () => {
   $eventBus.emit('show-cart');
 };
 
+const redirectToUserOrderHistory = () => {
+  $eventBus.emit('show-order-history');
+}
+
+const logout = () => {
+  logUserOut()
+  navigateTo('/')
+}
+
 const menu = ref();
-const items = ref([
-  {
-    items: [
+const items = computed(() => {
+  if (authenticated.value) {
+    return [
       {
-        label: computed(() => t('auth.login')),
-        command: () => authPopup.open('login'),
-      },
+        items: [
+          { label: t('myCabinet'), command: () => navigateTo('/profile')},
+          { label: t('myOrders'), command: () => redirectToUserOrderHistory()},
+          { label: t('logout'), command: () => logout()},
+        ]
+      }
+    ]
+  } else {
+    return [
       {
-        label: computed(() => t('auth.register')),
-        command: () => authPopup.open('register'),
+        items: [
+          { label: t('auth.login'), command: () => authPopup.open('login') },
+          { label: t('auth.register'), command: () => authPopup.open('register') },
+        ]
       }
     ]
   }
-]);
+})
 
 const toggle = (event) => {
   menu.value.toggle(event);
