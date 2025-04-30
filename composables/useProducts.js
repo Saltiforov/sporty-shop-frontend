@@ -2,7 +2,7 @@ export const useProducts = () => {
     const { $api } = useNuxtApp()
 
     const router = {
-        products: '/api/products',
+        products: '/api/client/products',
     }
 
     const getAll = (params = {}) => $api.get(router.products, { params })

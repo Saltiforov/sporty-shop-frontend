@@ -9,7 +9,7 @@ export const useAuthStore = defineStore('auth', () => {
     const authenticated = ref(false)
 
     async function authenticateUser({ username, password }) {
-        return useFetch('http://localhost:3000/api/login', {
+        return useFetch('http://localhost:3000/api/admin/login', {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: {
@@ -34,7 +34,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     async function registerUser({ username, email, password, firstName, lastName, phone, address }) {
-        return useFetch('http://localhost:3000/api/signup', {
+        return useFetch('http://localhost:3000/api/admin/signup', {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: {
