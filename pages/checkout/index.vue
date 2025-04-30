@@ -7,8 +7,8 @@
         <div
             class="checkout-fields pt-[24px] pr-[45px] pb-[44px] pl-[42px] mb-[58px] rounded-lg bg-[var(--color-gray-lavender)]">
           <div class="header-fields">
-            <h1 class="title-lg mb-2">{{ t('checkoutTitle') }}</h1>
-            <p class="subtitle-lg mb-[24px] text-[var(--color-muted-gray)]">{{ t('accountText') }}</p>
+            <h1 class="title-lg mb-2">{{ t('checkout_title') }}</h1>
+            <p class="subtitle-lg mb-[24px] text-[var(--color-muted-gray)]">{{ t('account_text') }}</p>
           </div>
           <div class="fields-content">
             <FieldsBlock :config="config.fields" ref="fieldsBlock"/>
@@ -17,17 +17,17 @@
 
         <div class="checkout-payment-method pt-[24px] px-[42px]  pb-[36px] rounded-lg bg-[var(--color-gray-lavender)]">
           <h2 class="mb-[36px] flex title-lg">
-            {{ t('paymentMethodTitle') }}
-            <TooltipIcon class="ml-2" :message="t('paymentMethodTooltip')"/>
+            {{ t('payment_method_title') }}
+            <TooltipIcon class="ml-2" :message="t('payment_method_tooltip')"/>
           </h2>
           <div class="checkout-payment-method__checkboxes">
             <div class="murecho-font checkbox-wrapper">
               <CustomCheckbox v-model="checkbox"/>
-              <p class="text-[var(--color-primary-black)]">{{ t('smsText') }}</p>
+              <p class="text-[var(--color-primary-black)]">{{ t('sms_text') }}</p>
             </div>
             <div class="murecho-font checkbox-wrapper">
               <CustomCheckbox v-model="checkbox"/>
-              <p class="text-[var(--color-primary-black)]">{{ t('cashOnDeliveryText') }}</p>
+              <p class="text-[var(--color-primary-black)]">{{ t('cash_on_delivery_text') }}</p>
             </div>
 
           </div>
@@ -38,11 +38,11 @@
       <div
           class="checkout-products-list bg-[var(--color-gray-lavender)]  rounded-lg max-w-[643px] pt-[24px] pr-[46px] pl-[48px] pb-[30px] w-full">
         <div class="products-list__container max-w-[547px] w-full">
-          <h2 class="title-lg mb-[44px]">{{ t('checkoutListTitle') }}</h2>
+          <h2 class="title-lg mb-[44px]">{{ t('checkout_list_title') }}</h2>
           <ProductsOverview :products-overview="cartStore.getCartProducts"/>
           <div class="use-promocode">
             <div class="flex justify-between mb-[17px]">
-              <p class="text-[var(--color-primary-dark)]">{{ t('usePromoCode') }}</p>
+              <p class="text-[var(--color-primary-dark)]">{{ t('use_promo_code') }}</p>
               <div class="use-promocode-wrapper__btn">
                 <Button :pt="{
                   root: {
@@ -69,7 +69,7 @@
                       class: 'py-[12px]'
                     }
                   }"
-                  :placeholder="t('enterPromoCode')"
+                  :placeholder="t('enter_promo_code')"
                   class="flex-1 rounded-none border-none focus:ring-0 focus:outline-none px-4 py-2"
               />
               <Button :pt="{
@@ -84,7 +84,7 @@
           </div>
 
           <div class="comment-to-order mb-[24px]">
-            <p class="murecho-font mb-[18px]">{{ t('commentToOrder') }}</p>
+            <p class="murecho-font mb-[18px]">{{ t('comment_to_order') }}</p>
             <div class="mb-[10px] rounded-[8px]">
                 <Textarea style="resize: none" class="w-full rounded-[8px]"
                           rows="2" cols="30"/>
@@ -97,7 +97,7 @@
               root: {
                 class: 'checkout__btn'
               }
-            }"><p class="murecho-font text-[14px]">{{ t('confirmOrder') }}</p></Button>
+            }"><p class="murecho-font text-[14px]">{{ t('confirm_order') }}</p></Button>
           </div>
 
         </div>
@@ -112,13 +112,12 @@
 import TooltipIcon from "~/components/UI/TooltipIcon/TooltipIcon.vue";
 import CustomCheckbox from "~/components/UI/CustomCheckbox/CustomCheckbox.vue";
 import {useCartStore} from "~/stores/cart.js";
-import {useOrders} from "~/composables/useOrders.js";
+
+import { createOrder } from "~/services/api/order-service.js";
 
 definePageMeta({
   layout: 'breadcrumb',
 })
-
-const { create } = useOrders()
 
 const fieldsBlock = ref(null)
 
@@ -135,10 +134,10 @@ const mappedProductsForOrder = arr => arr.map(({ quantity, ...withoutQuantity })
   quantity
 }));
 
-const createOrder = async () => {
-  console.log("cartStore.getCartProducts", mappedProductsForOrder(cartStore.getCartProducts))
-  await create(mappedProductsForOrder(cartStore.getCartProducts))
-}
+// const handleCreateOrder = async () => {
+//   console.log("cartStore.getCartProducts", mappedProductsForOrder(cartStore.getCartProducts))
+//   await createOrder(mappedProductsForOrder(cartStore.getCartProducts))
+// }
 
 
 const togglePromoCodeUse = () => {
@@ -151,7 +150,7 @@ const config = {
       {
         name: 'userName',
         code: 'userName',
-        label: computed(() => t('userName')),
+        label: computed(() => t('user_name')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -175,7 +174,7 @@ const config = {
       {
         name: 'postCode',
         code: 'postCode',
-        label: computed(() => t('postCode')),
+        label: computed(() => t('post_code')),
         type: 'InputText',
         props: {
           side: 'right',
@@ -217,7 +216,7 @@ const config = {
       {
         name: 'deliveryInfo',
         code: 'deliveryInfo',
-        label: computed(() => t('deliveryInfo')),
+        label: computed(() => t('delivery_info')),
         type: 'InputText',
         props: {
           side: 'right',
@@ -228,7 +227,7 @@ const config = {
       {
         name: 'lastName',
         code: 'lastName',
-        label: computed(() => t('lastName')),
+        label: computed(() => t('last_name')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -252,7 +251,7 @@ const config = {
       {
         name: 'phoneNumber',
         code: 'phoneNumber',
-        label: computed(() => t('phoneNumber')),
+        label: computed(() => t('phone_number')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -264,11 +263,11 @@ const config = {
       {
         name: 'telegramUsername',
         code: 'telegramUsername',
-        label: computed(() => t('telegramUsername')),
+        label: computed(() => t('telegram_username')),
         tooltipComponent: defineAsyncComponent(() => import('~/components/UI/TooltipIcon/TooltipIcon.vue')),
         type: 'InputText',
         tooltipProps: {
-          message: computed(() => t('telegramTooltip'))
+          message: computed(() => t('telegram_tooltip'))
         },
         props: {
           side: 'left',
@@ -327,7 +326,7 @@ const config = {
 
 .payment-method__checkbox__box:hover {
   border-color: var(--color-primary-blue);
-  color: #9E2B24;
+  color: var(--color-primary-red);
 }
 
 .checkbox-wrapper {

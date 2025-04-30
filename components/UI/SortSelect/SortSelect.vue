@@ -25,14 +25,14 @@ import {ref} from "vue";
 
 const {t} = useI18n()
 
-const selectedOption = ref({name: computed(() => t('sort.popular')), code: 'popular'});
+const selectedOption = ref({name: computed(() => t('sort_popular')), code: 'popular'});
 
 const sortOptions = ref([
-  {code: 'popular', name: computed(() => t('sort.popular'))},
-  {code: 'price_asc', name: computed(() => t('sort.priceAsc'))},
-  {code: 'price_desc', name: computed(() => t('sort.priceDesc'))},
-  {code: 'newest', name: computed(() => t('sort.newest'))},
-  {code: 'rating', name: computed(() => t('sort.rating'))}
+  {code: 'popular', name: computed(() => t('sort_popular'))},
+  {code: 'price_asc', name: computed(() => t('sort_price_asc'))},
+  {code: 'price_desc', name: computed(() => t('sort_price_desc'))},
+  {code: 'newest', name: computed(() => t('sort_newest'))},
+  {code: 'rating', name: computed(() => t('sort_rating'))}
 ])
 </script>
 

@@ -209,16 +209,16 @@ const reviews = [
 
 const tabs = {
   description: {
-    header:  computed(() => t('tabs.description')),
+    header:  computed(() => t('tabs_description')),
   },
   delivery: {
-    header: computed(() => t('tabs.delivery'))
+    header: computed(() => t('tabs_delivery'))
   },
   reviews: {
-    header: computed(() => t('tabs.reviews')),
+    header: computed(() => t('tabs_reviews')),
   },
   characteristics: {
-    header: computed(() => t('tabs.characteristics')),
+    header: computed(() => t('tabs_characteristics')),
     list: [
       {key: "Виробник", value: "Nutrex Research"},
       {key: "Тип продукту", value: "Анаболічна добавка"},

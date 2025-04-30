@@ -8,6 +8,7 @@
     --color-primary-red: #9E2B24;
     --color-primary-pink: #EF4B4B;
     --color-primary-black: #000000;
+    --color-primary-pure-white: #FFFFFF;
 
     --color-gray-lavender: #F2F2F7;
     --color-gray-pale-lavender: #F6F6F6;
@@ -16,7 +17,7 @@
     --color-muted-gray: #8E8E93;
     --color-gray-dark-charcoal: #3D3D3D;
     --color-gray-dark-graphite: #2C2C2C;
-
+    --color-muted-light-gray: #999999;
 
     --ff-murecho: 'Murecho', sans-serif;
 

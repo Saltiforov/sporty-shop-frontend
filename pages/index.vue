@@ -10,7 +10,7 @@
           <Filters/>
         </div>
         <div class="promotional-products text-center">
-          <p class="text-[#EF4B4B] mb-[21px] fw-600 text-[20px]">{{ t('promoProducts.title') }}</p>
+          <p class="text-[var(--color-primary-pink)] mb-[21px] fw-600 text-[20px]">{{ t('promo_products_title') }}</p>
           <SwiperWrapper :items="products" :options="promotionalProductsSwiperOptions">
             <template #default="{ item }">
               <ProductCard class="mt-3 mb-3" :product="item"/>
@@ -94,8 +94,8 @@ import LoadMoreButton from "~/components/UI/LoadMoreButton/LoadMoreButton.vue";
 import ProductPaginationButton from "~/components/UI/ProductPaginationButton/ProductPaginationButton.vue";
 import Filters from "~/components/UI/Filters/Filters.vue";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
-import {useProducts} from "~/composables/useProducts.js";
 import {useQueryParams} from "~/composables/useQueryParams.js";
+import { getAllProducts } from "~/services/api/product-service.js";
 
 import {useCartStore} from "~/stores/cart.js";
 
@@ -114,9 +114,7 @@ const cartStore = useCartStore()
 
 const {$eventBus} = useNuxtApp();
 
-const {getAll} = useProducts();
-
-const sortTitle = computed(() => t('sort.title'))
+const sortTitle = computed(() => t('sort_title'))
 
 const activePage = ref(Number(route.query.page))
 
@@ -133,15 +131,15 @@ const totalPages = computed(() => Math.ceil(totalProductsRecords.value / limit.v
 const allLoaded = computed(() => products.value.length >= totalProductsRecords.value || activePage.value === totalPages.value)
 
 const loadMoreLabel = computed(() => {
-  return t('loadMore', {count: limit.value});
+  return t('load_more', {count: limit.value});
 });
 
 const showBottomRight = (product) => {
   console.log("showBottomRight", product)
   toast.add({
     severity: 'success',
-    summary: t('toast.successTitle'),
-    detail: t('toast.addedToCart', {productName: product.name}),
+    summary: t('toast_success_title'),
+    detail: t('toast_added_to_cart', {productName: product.name}),
     group: 'br',
     life: 3000
   });
@@ -175,7 +173,7 @@ const isShoppingCartShow = ref(false)
 const fetchProducts = async (shouldReplace = false) => {
   try {
     isLoading.value = true
-    const response = await getAll({...productsQueryParams.value});
+    const response = await getAllProducts({...productsQueryParams.value});
 
     if (totalProductsRecords.value === 0) {
       totalProductsRecords.value = response.count

@@ -49,7 +49,7 @@ header {
 }
 
 .link-text {
-    color: var(--link-color);
+    color: var(--color-primary-pure-white);
     font-size: var(--small-title-size);
     line-height: var(--line-height-base);
 }

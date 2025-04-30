@@ -23,7 +23,7 @@
               root: {
                 class: 'custom-border'
               }
-            }" value="register" @click="setActiveTab('register')">{{ t('registerTab') }}
+            }" value="register" @click="setActiveTab('register')">{{ t('register_tab') }}
             </Tab>
           </TabList>
         </Tabs>
@@ -59,10 +59,13 @@
 <script setup>
 const {t} = useI18n()
 
+const authComponent = ref(null)
+
 const authPopup = useAuthPopup()
 
 const setActiveTab = (activeTab) => {
   authPopup.setType(activeTab)
+
 }
 
 const isVisible = computed(() => authPopup.isShow)

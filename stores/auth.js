@@ -1,26 +1,24 @@
 import { defineStore } from 'pinia'
 
 const routes = {
-    userList: '/api/login',
-    signup: '/api/signup'
+    login: '/api/admin/login',
+    signup: '/api/admin/signup'
 }
 
 export const useAuthStore = defineStore('auth', () => {
     const authenticated = ref(false)
 
+    const { $api } = useNuxtApp()
+
     async function authenticateUser({ username, password }) {
-        return useFetch('http://localhost:3000/api/admin/login', {
-            method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            body: {
-                username,
-                password
-            }
+        return $api.post(routes.login, {
+            username,
+            password
         })
-            .then(({ data }) => {
-                if (data.value && data.value.accessToken) {
+            .then(({ token: accessToken }) => {
+                if (accessToken) {
                     const token = useCookie('token')
-                    token.value = data.value.accessToken
+                    token.value = accessToken
                     authenticated.value = true
                 } else {
                     authenticated.value = false
@@ -34,21 +32,17 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     async function registerUser({ username, email, password, firstName, lastName, phone, address }) {
-        return useFetch('http://localhost:3000/api/admin/signup', {
-            method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            body: {
-                username,
-                password,
-                email,
-                firstName,
-                lastName,
-                phone,
-                address,
-            }
+        return $api.post(routes.signup, {
+            username,
+            password,
+            email,
+            firstName,
+            lastName,
+            phone,
+            address,
         })
-            .then(async ({ data }) => {
-                if (data.value) {
+            .then(async ({ token: accessToken }) => {
+                if (accessToken) {
                     await authenticateUser({ username, password })
                 } else {
                     throw new Error('Registration failed')

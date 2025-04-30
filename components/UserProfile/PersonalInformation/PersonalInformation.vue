@@ -1,6 +1,6 @@
 <template>
   <div class="personal-information">
-    <h1 class="title-lg-20 mb-[30px]">{{ t('contactInformation') }}</h1>
+    <h1 class="title-lg-20 mb-[30px]">{{ t('contact_information') }}</h1>
     <FieldsBlock class="mb-[73px]" :config="config.fields"/>
     <div
         class="max-w-[338px] mx-auto py-[10px] px-[10px]">
@@ -25,7 +25,7 @@ const config = {
       {
         name: 'userName',
         code: 'userName',
-        label: computed(() => t('userName')),
+        label: computed(() => t('user_name')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -49,7 +49,7 @@ const config = {
       {
         name: 'postCode',
         code: 'postCode',
-        label: computed(() => t('postCode')),
+        label: computed(() => t('post_code')),
         type: 'InputText',
         props: {
           side: 'right',
@@ -80,7 +80,7 @@ const config = {
       {
         name: 'street',
         code: 'street',
-        label: computed(() => t('streetAddress')),
+        label: computed(() => t('street_address')),
         type: 'InputText',
         props: {
           side: 'right',
@@ -90,7 +90,7 @@ const config = {
       {
         name: 'deliveryComment',
         code: 'deliveryComment',
-        label: computed(() => t('noteToDelivery')),
+        label: computed(() => t('note_to_delivery')),
         type: 'InputText',
         props: {
           side: 'right',
@@ -101,7 +101,7 @@ const config = {
       {
         name: 'lastName',
         code: 'lastName',
-        label: computed(() => t('lastName')),
+        label: computed(() => t('last_name')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -126,7 +126,7 @@ const config = {
       {
         name: 'phoneNumber',
         code: 'phoneNumber',
-        label: computed(() => t('phoneNumber')),
+        label: computed(() => t('phone_number')),
         type: 'Custom',
         props: {
           side: 'left',

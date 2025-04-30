@@ -158,6 +158,8 @@
 <script setup>
 import {ref, computed, onMounted} from "vue";
 
+import { useFieldValidation } from '~/composables/useFieldValidation.js'
+
 const props = defineProps({
   data: {
     type: Object,
@@ -173,16 +175,22 @@ const props = defineProps({
   }
 });
 
+
 const formData = ref({});
 
-onMounted(() => {
-  props.config.items.forEach((field) => {
-    if (field.code && props?.data?.[field?.code]) {
-      formData.value[field.code] =
-          props.data[field.code] !== undefined ? props.data[field.code] : "";
-    }
-  });
-});
+watch(
+    () => props.config.items,
+    (val) => {
+      formData.value = {}
+      val.forEach(field => {
+        formData.value[field.code] = ''
+      })
+    },
+    { deep: true }
+)
+
+const { errors, validateFields, resetErrors, } = useFieldValidation(formData, props.config)
+
 
 const leftFullFields = computed(() =>
     props.config.items.filter(f => f.props?.side === 'left' && !f.props?.half)
@@ -210,11 +218,20 @@ function chunkArray(arr, size) {
   return chunks
 }
 
-const getData = () => {
-  return { ...formData.value };
-};
+onMounted(() => {
+  props.config.items.forEach((field) => {
+    if (field.code && props?.data?.[field?.code]) {
+      formData.value[field.code] =
+          props.data[field.code] !== undefined ? props.data[field.code] : "";
+    }
+  });
+
+});
 
 defineExpose({
-  getData
-});
+  getData: () => formData.value,
+  validateFields,
+  errors,
+  resetErrors,
+})
 </script>

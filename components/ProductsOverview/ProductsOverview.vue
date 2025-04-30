@@ -8,20 +8,20 @@
 
     <div class="final-price pr-[50px] mb-[42px]">
       <div class="flex justify-end items-center">
-        <p class="fw-600 text-[16px] text-[#999999] mr-[14px] leading-[34px]">{{ t('totalPriceLabel') }}:</p>
+        <p class="fw-600 text-[16px] text-[var(--color-muted-light-gray)] mr-[14px] leading-[34px]">{{ t('total_price_label') }}:</p>
         <p>
           {{ totalPriceWithoutDiscount }} <span class="text-[15px] text-[var(--color-primary-dark)]">{{ t('currency') }}</span>
         </p>
       </div>
       <div class="flex text-[var(--color-primary-pink)] justify-end items-center">
-        <p class="fw-600 text-[16px] mr-[14px] leading-[34px]">{{ t('discountLabel') }}:</p>
+        <p class="fw-600 text-[16px] mr-[14px] leading-[34px]">{{ t('discount_label') }}:</p>
         <p>
           {{ totalDiscount }} <span
             class="text-[15px]">{{ t('currency') }}</span>
         </p>
       </div>
       <div class="flex justify-end items-center">
-        <p class="fw-600 text-[16px] text-[#999999] mr-[14px] leading-[34px]">{{ t('amountToPayLabel') }}:</p>
+        <p class="fw-600 text-[16px] text-[var(--color-muted-light-gray)] mr-[14px] leading-[34px]">{{ t('amount_to_pay_label') }}:</p>
         <p>
           {{ finallyPrice  }} <span class="text-[15px] text-[var(--color-primary-dark)]">{{ t('currency') }}</span>
         </p>

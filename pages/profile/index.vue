@@ -38,7 +38,6 @@ import {useAuthStore} from "~/stores/auth.js";
 
 definePageMeta({
   layout: 'breadcrumb',
-  // middleware: 'auth',
 })
 
 import PersonalInformation from '~/components/UserProfile/PersonalInformation/PersonalInformation.vue'
@@ -70,11 +69,11 @@ const logout = () => {
 }
 
 const localizedList = computed(() => [
-  {title: t('menu.personalInformation'), icon: PersonalInformationIcon, component: 'PersonalInformation', command: () => selectComponent('PersonalInformation')},
-  {title: t('menu.orderHistory'), icon: OrderHistoryIcon, component: 'OrderHistory', command: () => selectComponent('OrderHistory')},
-  {title: t('menu.favoriteProducts'), icon: FavoriteProductsIcon, component: 'FavoriteProducts', command: () => selectComponent('FavoriteProducts')},
-  {title: t('menu.changePassword'), icon: ChangePasswordIcon, component: 'ChangePassword', command: () => selectComponent('ChangePassword')},
-  {title: t('menu.logout'), icon: LogoutIcon, component: 'Logout', command: () => logout()},
+  {title: t('menu_personal_information'), icon: PersonalInformationIcon, component: 'PersonalInformation', command: () => selectComponent('PersonalInformation')},
+  {title: t('menu_order_history'), icon: OrderHistoryIcon, component: 'OrderHistory', command: () => selectComponent('OrderHistory')},
+  {title: t('menu_favorite_products'), icon: FavoriteProductsIcon, component: 'FavoriteProducts', command: () => selectComponent('FavoriteProducts')},
+  {title: t('menu_change_password'), icon: ChangePasswordIcon, component: 'ChangePassword', command: () => selectComponent('ChangePassword')},
+  {title: t('menu_logout'), icon: LogoutIcon, component: 'Logout', command: () => logout()},
 ]);
 
 const selectComponent = (component) => {
@@ -97,7 +96,7 @@ onBeforeUnmount(() => {
 .active {
   transform: scale(1.05);
   transition: transform 0.3s ease, background 0.3s ease;
-  background: linear-gradient(to left, #D6D6EB, #FFFFFF);
+  background: linear-gradient(to left, var(--color-gray-light-lavender),  var(--color-primary-pure-white));
 }
 
 .layout {

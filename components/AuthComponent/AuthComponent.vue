@@ -1,8 +1,8 @@
 <template>
   <div class="auth-component">
-    <FieldsBlock :config="fieldsConfig.fields" ref="fieldsBlock"/>
+    <FieldsBlock :config="fieldsConfig.fields" :errors="fieldErrors" ref="fieldsBlock"/>
     <div v-if="isLogin" class="reset-password justify-end mb-[27px] flex">
-      <NuxtLink><p class="text-[var(--color-muted-gray)]">{{ t('forgotPassword') }}</p></NuxtLink>
+      <NuxtLink><p class="text-[var(--color-muted-gray)]">{{ t('forgot_password') }}</p></NuxtLink>
     </div>
     <div :class="[
         'mx-auto mb-[37px]',
@@ -11,17 +11,17 @@
       <Button @click="handleAuth" :pt="{ root: { class: 'auth-button' } }">{{ buttonLabel }}</Button>
     </div>
     <div class="flex mb-[16px] items-center justify-center gap-4">
-      <div class="max-w-[196px] w-full h-px bg-[var(--link-color)]"></div>
+      <div class="max-w-[196px] w-full h-px bg-[var(--color-primary-pure-white)]"></div>
       <h2 class="murecho-font text-[12px] fw-400">{{ t('or') }}</h2>
-      <div class="max-w-[196px] w-full h-px bg-[var(--link-color)]"></div>
+      <div class="max-w-[196px] w-full h-px bg-[var(--color-primary-pure-white)]"></div>
     </div>
     <div :class="[
         'login-with mb-6 flex flex-col items-center justify-center',
-        isLogin ? 'border-b border-[var(--link-color)]' : ''
+        isLogin ? 'border-b border-[var(--color-primary-pure-white)]' : ''
     ]">
       <div class="mb-[14px]">
         <NuxtLink><p class="murecho-font text-[12px] text-[var(--color-muted-gray)]">
-          {{ isLogin ? t('loginWith') : t('registerWith') }}</p></NuxtLink>
+          {{ isLogin ? t('login_with') : t('register_with') }}</p></NuxtLink>
       </div>
 
       <div class="login-with-wrapper mb-6">
@@ -33,15 +33,15 @@
     <div class="login-with-footer">
       <div class="flex text-[12px] justify-center">
         <div v-if="isLogin" class="flex">
-          <p class="mr-[17px]">{{ t('newClient') }}</p>
+          <p class="mr-[17px]">{{ t('new_client') }}</p>
           <p>
             <NuxtLink @click="authPopup.setType('register')"
-                      class="text-[var(--color-primary-dark-red)] cursor-pointer">{{ t('registerButton') }}
+                      class="text-[var(--color-primary-dark-red)] cursor-pointer">{{ t('register_button') }}
             </NuxtLink>
-            {{ t('forGoodOffers') }}
+            {{ t('for_good_offers') }}
           </p>
         </div>
-        <p v-else class="text-[var(--color-muted-gray)]">{{ t('userAgreement') }}</p>
+        <p v-else class="text-[var(--color-muted-gray)]">{{ t('user_agreement') }}</p>
       </div>
     </div>
   </div>
@@ -53,28 +53,32 @@ import {InputGroup, InputGroupAddon, InputText, Password} from "primevue";
 
 import {storeToRefs} from 'pinia';
 import {useAuthStore} from '~/stores/auth';
+import {useFieldValidation} from "~/composables/useFieldValidation.js";
+
+const fieldsBlock = ref(null);
+
+const fieldErrors = computed(() => fieldsBlock.value?.errors || {})
 
 const {authenticateUser, registerUser} = useAuthStore();
 
 const {authenticated} = storeToRefs(useAuthStore());
 
 const user = ref({
-  username: 'emilys2',
-  password: 'emilyspass2',
-  email: '@gmail.com.emilyspass2',
-  firstName: 'emilyspass1',
-  lastName: 'emilyspass1',
+  username: 'rusiktest4',
+  password: 'rusik228',
+  email: 'test4mail@ukr.net',
+  firstName: 'Ruslan',
+  lastName: 'Voropay',
   phone: 35435436,
-  address: {emilyspass: "emilyspass1"},
+  address: {emilyspass: "emi2yspass1"},
 });
 // const user = ref({
-//   username: 'emilys',
-//   password: 'emilyspass',
+//   username: 'rusik228',
+//   password: 'rusik228',
 // });
 
 const {t} = useI18n();
 
-const fieldsBlock = ref(null);
 
 const authPopup = useAuthPopup()
 
@@ -86,13 +90,16 @@ const {isLogin} = defineProps({
 })
 
 const handleAuth = async () => {
-  await registerUser(user.value);
+
+  const isValid = fieldsBlock.value?.validateFields()
+  // await registerUser(user.value);
+  // // await authenticateUser(user.value)
   // if (authenticated) {
-  //   navigateTo('/profile')
+  //   await router.push('/profile')
   // }
 }
 
-const buttonLabel = computed(() => isLogin ? t('login') : t('registerButton'))
+const buttonLabel = computed(() => isLogin ? t('login') : t('register_button'))
 
 const fieldsConfig = computed(() => isLogin ? loginFields : registerFields)
 
@@ -102,7 +109,7 @@ const loginFields = {
       {
         name: 'username',
         code: 'username',
-        label: computed(() => t('authPhoneOrEmail')),
+        label: computed(() => t('auth_phone_or_email')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -110,12 +117,16 @@ const loginFields = {
           placeholder: "",
           required: true
         },
+        validators: [
+          (value) => (value ? true : "Username is required"),
+          (value) => (value.length >= 3 ? true : "Username must be at least 3 characters"),
+        ],
       },
 
       {
         name: 'password',
         code: 'password',
-        label: computed(() => t('authPassword')),
+        label: computed(() => t('auth_password')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -123,6 +134,9 @@ const loginFields = {
           placeholder: "",
           required: true
         },
+        validators: [
+          (value) => (value ? true : "Password is required"),
+        ],
       },
     ]
   }
@@ -134,7 +148,7 @@ const registerFields = {
       {
         name: 'firstName',
         code: 'firstName',
-        label: computed(() => t('authFirstName')),
+        label: computed(() => t('auth_first_name')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -142,12 +156,15 @@ const registerFields = {
           placeholder: "",
           required: true
         },
+        validators: [
+          (value) => (value ? true : "First Name is required"),
+        ],
       },
 
       {
         name: 'lastName',
         code: 'lastName',
-        label: computed(() => t('authLastName')),
+        label: computed(() => t('auth_last_name')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -155,15 +172,21 @@ const registerFields = {
           placeholder: "",
           required: true
         },
+        validators: [
+          (value) => (value ? true : "Last Name is required"),
+        ],
       },
       {
         name: 'phoneNumber',
         code: 'phoneNumber',
-        label: computed(() => t('authPhoneNumber')),
+        label: computed(() => t('auth_phone_number')),
         type: 'Custom',
         props: {
           side: 'left',
         },
+        validators: [
+          (value) => (value ? true : "Phone Number Name is required"),
+        ],
         render: () =>
             h(InputGroup, {}, {
               default: () => [
@@ -184,7 +207,7 @@ const registerFields = {
       {
         name: 'email',
         code: 'email',
-        label: computed(() => t('authEmail')),
+        label: computed(() => t('auth_email')),
         type: 'InputText',
         props: {
           side: 'left',
@@ -192,15 +215,21 @@ const registerFields = {
           placeholder: "",
           required: true
         },
+        validators: [
+          (value) => (value ? true : "Email is required"),
+        ],
       },
       {
         name: 'password',
         code: 'password',
-        label: computed(() => t('authPassword')),
+        label: computed(() => t('auth_password')),
         type: 'Custom',
         props: {
           side: 'left',
         },
+        validators: [
+          (value) => (value ? true : "Password Name is required"),
+        ],
         render: () =>
             h(InputGroup, {}, {
               default: () => [

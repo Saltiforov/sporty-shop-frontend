@@ -1,6 +1,6 @@
 <template>
   <div class="price-range-filter p-[8px_36px]">
-    <div class="range-title mb-[17px]">{{ t('priceRange.title') }}</div>
+    <div class="range-title mb-[17px]">{{ t('price_range_title') }}</div>
     <div class="range-fields-wrapper  flex">
       <div class="range-fields w-full flex justify-between">
 
@@ -29,7 +29,7 @@
                 root: {
                   class: 'range-button w-[100px] max-w-[68px]'
                 }
-              }" :label="t('priceRange.okButton')"/>
+              }" :label="t('price_range_ok_button')"/>
         </div>
 
       </div>

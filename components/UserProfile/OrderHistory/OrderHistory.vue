@@ -1,6 +1,6 @@
 <template>
   <div class="order-history">
-    <h1 class="title-lg-20 mb-[30px]">{{ t('contactInformation') }}</h1>
+    <h1 class="title-lg-20 mb-[30px]">{{ t('contact_information') }}</h1>
     <OrderHistoryItem/>
   </div>
 </template>

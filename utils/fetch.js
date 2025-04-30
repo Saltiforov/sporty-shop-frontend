@@ -4,9 +4,6 @@ export class Fetch {
         this.defaultHeaders = defaultHeaders
     }
 
-    /**
-     * Внутренний метод, реализующий "интерцепторы"
-     */
     async request(method, url, { params = {}, data = {}, headers = {}, ...config } = {}) {
         // const token = localStorage.getItem('authToken')
         const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcklkIjoiNjdhNGYxMGVjZTMzNDg0MjE5OTUzZTkwIiwiaWF0IjoxNzQ1OTM3MDI0LCJleHAiOjE3NDYwMjM0MjR9.mT62LyT7uJbGq6E7n2N5Na2sdLB75Ob-SLhbQz00NMU'

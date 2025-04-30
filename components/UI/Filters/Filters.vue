@@ -108,56 +108,56 @@ const updateChildrenSelection = (children, isChecked) => {
 const nodes = ref([
   {
     key: '0',
-    label: computed(() => t('filters.sportsNutrition')),
+    label: computed(() => t('filters_sports_nutrition')),
     icon: SportsNutritionIcon,
     children: [
       {
         key: '0-0',
-        label: computed(() => t('filters.protein')),
+        label: computed(() => t('filters_protein')),
         modelValue: false,
         children: [
           {
             key: '0-0-1',
-            label: computed(() => t('filters.aminoAcids')),
+            label: computed(() => t('filters_amino_acids')),
             modelValue: false,
           },
         ]
       },
       {
         key: '0-1',
-        label: computed(() => t('filters.aminoAcids')),
+        label: computed(() => t('filters_amino_acids')),
         modelValue: false,
       },
       {
         key: '0-2',
-        label: computed(() => t('filters.creatine')),
+        label: computed(() => t('filters_creatine')),
         modelValue: true,
       },
       {
         key: '0-3',
-        label: computed(() => t('filters.collagen')),
+        label: computed(() => t('filters_collagen')),
         modelValue: false,
       },
     ]
   },
   {
     key: '1',
-    label: computed(() => t('filters.injections')),
+    label: computed(() => t('filters_injections')),
     icon: InjectionsIcon,
     children: [
       {
         key: '1-0',
-        label: computed(() => t('filters.protein')),
+        label: computed(() => t('filters_protein')),
         modelValue: false,
       },
       {
         key: '1-1',
-        label: computed(() => t('filters.aminoAcids')),
+        label: computed(() => t('filters_amino_acids')),
         modelValue: false,
       },
       {
         key: '1-2',
-        label: computed(() => t('filters.creatine')),
+        label: computed(() => t('filters_creatine')),
         modelValue: true,
       },
     ]

@@ -45,6 +45,8 @@
 <script setup>
 import {ref, computed} from 'vue'
 
+const PAGE_STEP = 1
+
 const props = defineProps({
   modelValue: {type: Number, default: 1},
   maxPages: {type: Number, required: true},
@@ -75,10 +77,10 @@ const nextPage = ref(2)
 const activePageType = ref('first')
 
 const isNoNextAvailablePageToRight = computed(() => {
-  return lastPage.value - 1 === nextPage.value && activePageType.value !== 'first'
+  return lastPage.value - PAGE_STEP === nextPage.value && activePageType.value !== 'first'
 })
 const isNoNextAvailablePageToLeft = computed(() => {
-  return firstPage.value + 1 === nextPage.value && activePageType.value === 'next' || activePageType.value === 'first'
+  return firstPage.value + PAGE_STEP === nextPage.value && activePageType.value === 'next' || activePageType.value === 'first'
 })
 
 const pageNumberToEmit = ref({
@@ -127,7 +129,7 @@ onMounted(() => {
     setPageState(numberOfPageFromQuery.value, 'next')
   }
   if (numberOfPageFromQuery.value === lastPage.value) {
-    setPageState(numberOfPageFromQuery.value - 1, 'last')
+    setPageState(numberOfPageFromQuery.value - PAGE_STEP, 'last')
   }
 })
 

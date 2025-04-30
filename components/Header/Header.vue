@@ -111,8 +111,8 @@ const items = computed(() => {
     return [
       {
         items: [
-          { label: t('myCabinet'), command: () => navigateTo('/profile')},
-          { label: t('myOrders'), command: () => redirectToUserOrderHistory()},
+          { label: t('my_cabinet'), command: () => navigateTo('/profile')},
+          { label: t('my_orders'), command: () => redirectToUserOrderHistory()},
           { label: t('logout'), command: () => logout()},
         ]
       }
@@ -121,8 +121,8 @@ const items = computed(() => {
     return [
       {
         items: [
-          { label: t('auth.login'), command: () => authPopup.open('login') },
-          { label: t('auth.register'), command: () => authPopup.open('register') },
+          { label: t('auth_login'), command: () => authPopup.open('login') },
+          { label: t('auth_register'), command: () => authPopup.open('register') },
         ]
       }
     ]
@@ -133,31 +133,31 @@ const toggle = (event) => {
   menu.value.toggle(event);
 };
 
-const searchFieldPlaceholder = computed(() => t('searchPlaceholder'))
+const searchFieldPlaceholder = computed(() => t('search_placeholder'))
 
 const links = ref([
   {
-    label: computed(() => t('header.catalog')),
+    label: computed(() => t('header_catalog')),
     icon: "pi pi-filter",
     page: "catalog",
   },
   {
-    label: computed(() => t('header.promotions')),
+    label: computed(() => t('header_promotions')),
     icon: "pi pi-shopping-cart",
     page: "promotions",
   },
   {
-    label: computed(() => t('header.new')),
+    label: computed(() => t('header_new')),
     icon: "pi pi-user",
     page: "new",
   },
   {
-    label: computed(() => t('header.shippingAndPayment')),
+    label: computed(() => t('header_shipping_and_payment')),
     icon: "pi pi-user",
     page: "shipping-and-payment",
   },
   {
-    label: computed(() => t('header.aboutUs')),
+    label: computed(() => t('header_about_us')),
     icon: "pi pi-user",
     page: "about-us",
   },

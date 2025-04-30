@@ -11,7 +11,7 @@
           }
         }" >
           <div class="flex w-full items-center justify-between">
-            <p class="title-lg-20">{{ t('orderNumber', { number: item.orderNumber }) }}</p>
+            <p class="title-lg-20">{{ t('order_number', { number: item.orderNumber }) }}</p>
             <div class="order-status  text-white px-[12px] bg-[var(--color-primary-purple)] rounded-[var(--default-rounded)] py-[10px] mx-[20px]">
               {{ t(localizeStatus(item.status)) }}
             </div>
@@ -55,23 +55,23 @@ const finalPrice = computed(() => calculateTotal(shoppingCartItems.value, true))
 const { t } = useI18n();
 
 const userInfoLabels = [
-  'userInfo.firstName',
-  'userInfo.lastName',
-  'userInfo.email',
-  'userInfo.phone',
-  'userInfo.address',
-  'userInfo.deliveryComment'
+  'user_info_first_name',
+  'user_info_last_name',
+  'user_info_email',
+  'user_info_phone',
+  'user_info_address',
+  'user_info_delivery_comment'
 ];
 
 const statusLocalization = {
-  'Відправлено': 'status.sent',
-  'В обробці': 'status.processing',
-  'Доставлено': 'status.delivered',
-  'Скасовано': 'status.cancelled',
-  'Очікує обробки': 'status.pending',
-  'Відправлений': 'status.shipped',
-  'Завершено': 'status.completed',
-  'Повернуто': 'status.returned'
+  'Відправлено': 'status_sent',
+  'В обробці': 'status_processing',
+  'Доставлено': 'status_delivered',
+  'Скасовано': 'status_cancelled',
+  'Очікує обробки': 'status_pending',
+  'Відправлений': 'status_shipped',
+  'Завершено': 'status_completed',
+  'Повернуто': 'status_returned'
 };
 
 const localizeStatus = (status) => {

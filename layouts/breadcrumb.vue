@@ -27,10 +27,10 @@ const { t } = useI18n();
 
 const home = ref({ icon: 'pi pi-home' });
 const items = [
-  { label: computed(() => t('navigation.home')), to: '/' },
-  { label: computed(() => t('navigation.catalog')), to: '/catalog' },
-  { label: computed(() => t('navigation.sportNutrition')), to: '/catalog/sport-nutrition' },
-  { label: computed(() => t('navigation.boosters')), to: '/catalog/sport-nutrition/boosters' }
+  { label: computed(() => t('navigation_home')), to: '/' },
+  { label: computed(() => t('navigation_catalog')), to: '/catalog' },
+  { label: computed(() => t('navigation_sport_nutrition')), to: '/catalog/sport-nutrition' },
+  { label: computed(() => t('navigation_boosters')), to: '/catalog/sport-nutrition/boosters' }
 ]
 
 </script>
