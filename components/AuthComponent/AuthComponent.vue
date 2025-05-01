@@ -1,6 +1,6 @@
 <template>
   <div class="auth-component">
-    <FieldsBlock :config="fieldsConfig.fields" :errors="fieldErrors" ref="fieldsBlock"/>
+    <FieldsBlock :config="fieldsConfig.fields" ref="fieldsBlock"/>
     <div v-if="isLogin" class="reset-password justify-end mb-[27px] flex">
       <NuxtLink><p class="text-[var(--color-muted-gray)]">{{ t('forgot_password') }}</p></NuxtLink>
     </div>
@@ -53,32 +53,16 @@ import {InputGroup, InputGroupAddon, InputText, Password} from "primevue";
 
 import {storeToRefs} from 'pinia';
 import {useAuthStore} from '~/stores/auth';
-import {useFieldValidation} from "~/composables/useFieldValidation.js";
 
 const fieldsBlock = ref(null);
-
-const fieldErrors = computed(() => fieldsBlock.value?.errors || {})
 
 const {authenticateUser, registerUser} = useAuthStore();
 
 const {authenticated} = storeToRefs(useAuthStore());
 
-const user = ref({
-  username: 'rusiktest4',
-  password: 'rusik228',
-  email: 'test4mail@ukr.net',
-  firstName: 'Ruslan',
-  lastName: 'Voropay',
-  phone: 35435436,
-  address: {emilyspass: "emi2yspass1"},
-});
-// const user = ref({
-//   username: 'rusik228',
-//   password: 'rusik228',
-// });
-
 const {t} = useI18n();
 
+const router = useRouter();
 
 const authPopup = useAuthPopup()
 
@@ -90,14 +74,20 @@ const {isLogin} = defineProps({
 })
 
 const handleAuth = async () => {
-
   const isValid = fieldsBlock.value?.validateFields()
-  // await registerUser(user.value);
-  // // await authenticateUser(user.value)
-  // if (authenticated) {
-  //   await router.push('/profile')
-  // }
+  const user = fieldsBlock.value?.getData()
+
+  const action = isLogin ? authenticateUser : registerUser;
+
+  if (isValid) {
+    await action(user)
+    if (authenticated) {
+      authPopup.close()
+      router.push('/profile')
+    }
+  }
 }
+
 
 const buttonLabel = computed(() => isLogin ? t('login') : t('register_button'))
 
@@ -127,12 +117,13 @@ const loginFields = {
         name: 'password',
         code: 'password',
         label: computed(() => t('auth_password')),
-        type: 'InputText',
+        type: 'Password',
         props: {
           side: 'left',
           type: 'text',
-          placeholder: "",
-          required: true
+          feedback: false,
+          required: true,
+          toggleMask: true,
         },
         validators: [
           (value) => (value ? true : "Password is required"),
@@ -145,6 +136,21 @@ const loginFields = {
 const registerFields = {
   fields: {
     items: [
+      {
+        name: 'username',
+        code: 'username',
+        label: 'Username',
+        type: 'InputText',
+        props: {
+          side: 'left',
+          type: 'text',
+          placeholder: "",
+          required: true
+        },
+        validators: [
+          (value) => (value ? true : "First Name is required"),
+        ],
+      },
       {
         name: 'firstName',
         code: 'firstName',

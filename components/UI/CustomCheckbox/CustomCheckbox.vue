@@ -1,8 +1,7 @@
 <template>
-  <div
+  <label
       class="custom-checkbox"
       :class="{ 'is-checked': isChecked, 'is-disabled': disabled }"
-      @click="toggle"
   >
     <input
         type="checkbox"
@@ -14,9 +13,9 @@
     <div
         class="checkbox-box"
         :style="{
-          borderColor: isChecked ? props.checkedBorderColor : props.uncheckedBorderColor,
-          borderRadius: props.borderRadius
-        }"
+        borderColor: isChecked ? props.checkedBorderColor : props.uncheckedBorderColor,
+        borderRadius: props.borderRadius
+      }"
     >
       <svg v-if="isChecked" class="check-icon" viewBox="0 0 24 24" fill="none">
         <path d="M5 13l6 5L19 6" :stroke="strokeColor" stroke-width="3" />
@@ -25,11 +24,12 @@
     <span class="label">
       <slot />
     </span>
-  </div>
+  </label>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+
 const props = defineProps({
   modelValue: [Boolean, String, Number],
   trueValue: {
@@ -62,6 +62,7 @@ const props = defineProps({
     default: '0px',
   }
 })
+
 const emit = defineEmits(['update:modelValue'])
 
 const isChecked = computed(() => props.modelValue === props.trueValue)

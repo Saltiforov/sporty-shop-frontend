@@ -44,7 +44,9 @@ export const useAuthStore = defineStore('auth', () => {
             .then(async ({ token: accessToken }) => {
                 if (accessToken) {
                     await authenticateUser({ username, password })
+                    authenticated.value = true
                 } else {
+                    authenticated.value = false
                     throw new Error('Registration failed')
                 }
             })

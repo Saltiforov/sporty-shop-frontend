@@ -34,11 +34,16 @@ export default defineNuxtConfig({
     primevue: {
         options: {
             pt: {
-              button: {
-                  root: {
-                      class: 'btn-primary',
-                   }
-              }
+                inputtext: {
+                    root: {
+                        class: 'w-full'
+                    }
+                },
+                password: {
+                    input: {
+                        class: 'w-full'
+                    }
+                },
             },
             theme: {
                 preset: Noir,

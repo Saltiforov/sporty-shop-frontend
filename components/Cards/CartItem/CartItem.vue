@@ -81,7 +81,7 @@
             class: 'cart-item__delete-btn'
           }
         }"
-          @click="deleteProduct(cartProduct._id)"
+          @click="handleRemoveProduct(cartProduct._id)"
       >
         <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -97,14 +97,13 @@
 
 <script setup>
 import AmountSelector from "~/components/UI/AmountSelector/AmountSelector.vue";
-import {useCartStore} from "~/stores/cart.js";
-
-const cartStore = useCartStore();
 
 const { t } = useI18n();
 
-const deleteProduct = (id) => {
-  cartStore.removeFromCart(id)
+const emit = defineEmits(["remove-product"]);
+
+const handleRemoveProduct = (id) => {
+  emit('remove-product', id);
 }
 
 const {cartProduct} = defineProps({

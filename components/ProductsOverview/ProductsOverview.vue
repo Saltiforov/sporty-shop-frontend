@@ -3,7 +3,7 @@
     <div
         :class="['cart-items-wrapper', { 'scrollable-items': isScrollable }]"
     >
-      <CartItem v-for="item in productsOverview" :cart-product="item" :key="item.id" @delete="handleDelete"/>
+      <CartItem v-for="item in productsOverview" :cart-product="item" :key="item.id" @remove-product="confirmDelete"/>
     </div>
 
     <div class="final-price pr-[50px] mb-[42px]">
@@ -29,15 +29,22 @@
 
     </div>
   </div>
+  <ConfirmDialog></ConfirmDialog>
+  <Toast />
 </template>
 
 <script setup>
 import CartItem from "~/components/Cards/CartItem/CartItem.vue";
 import {calculateTotal} from "~/utils/index.js";
+import {useConfirmWithToast} from "~/composables/useConfirmWithToast.js";
+import {useCartStore} from "~/stores/cart.js";
 
-const { $eventBus } = useNuxtApp()
+const { confirmAction } = useConfirmWithToast()
+
 
 const { t } = useI18n()
+
+const cartStore = useCartStore();
 
 const {productsOverview, scrollAfter} = defineProps({
   productsOverview: {
@@ -51,13 +58,27 @@ const {productsOverview, scrollAfter} = defineProps({
   }
 });
 
+const deleteProduct = (id) => {
+  cartStore.removeFromCart(id)
+}
+
+const confirmDelete = (id) => {
+  confirmAction({
+    message: 'Are you sure you want to delete this product?',
+    header: 'Delete Confirmation',
+    acceptLabel: 'Delete',
+    rejectLabel: 'Cancel',
+    acceptAction: () => deleteProduct(id),
+    toastMessages: {
+      accept: { severity: 'success', summary: 'Deleted', detail: 'Product deleted', life: 3000 },
+      reject: { severity: 'error', summary: 'Cancelled', detail: 'Deletion cancelled', life: 3000 },
+    }
+  })
+};
+
 const isScrollable = computed(() => {
   return productsOverview.length > scrollAfter;
 });
-
-const handleDelete = (product) => {
-  $eventBus.emit("handle-delete-cart-item", product);
-}
 
 const totalPriceWithoutDiscount = computed(() => calculateTotal(productsOverview, false))
 

@@ -33,6 +33,10 @@ export const useCartStore = defineStore('cart', () => {
         cartProducts.value = cartProducts.value.filter((p) => p._id !== productId)
     }
 
+     const clearCart = () => {
+        cartProducts.value = []
+     }
+
 
     return {
         cartProducts,
@@ -40,6 +44,7 @@ export const useCartStore = defineStore('cart', () => {
         cartTotalPrice,
         addToCart,
         getCartProducts,
-        removeFromCart
+        removeFromCart,
+        clearCart
     }
 })

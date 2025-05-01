@@ -3,10 +3,14 @@ import { reactive } from 'vue'
 export function useFieldValidation(formData, config) {
     const errors = reactive({})
 
+
+
     function validateFields() {
         let isValid = true
+        config.value.items.forEach(field => {
 
-        config.items.forEach(field => {
+            console.log(field.validators)
+
             const code = field.code
             const value = formData.value[code]
 
@@ -27,7 +31,7 @@ export function useFieldValidation(formData, config) {
         return isValid
     }
 
-    config.items.forEach(field => {
+    config.value.items.forEach(field => {
         const code = field.code
         if (!code) return
 
@@ -36,6 +40,10 @@ export function useFieldValidation(formData, config) {
                 delete errors[code]
             }
         })
+    })
+
+    watch(() =>  config.value.items, (newValue) => {
+        resetErrors()
     })
 
     function resetErrors() {

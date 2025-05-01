@@ -1,5 +1,6 @@
 <template>
   <div class="checkout-page">
+    <LoadingOverlay :visible="isLoading"/>
     <div class="checkout-content mb-[101px] flex items-start">
 
       <div class=" w-full max-w-[1064px] mr-[71px]">
@@ -21,13 +22,17 @@
             <TooltipIcon class="ml-2" :message="t('payment_method_tooltip')"/>
           </h2>
           <div class="checkout-payment-method__checkboxes">
-            <div class="murecho-font checkbox-wrapper">
-              <CustomCheckbox v-model="checkbox"/>
-              <p class="text-[var(--color-primary-black)]">{{ t('sms_text') }}</p>
+            <div class="murecho-font checkbox-content">
+              <CustomCheckbox
+                  v-model="isSendSmsWithFormData"
+              >
+                <p class="text-[var(--color-primary-black)]">{{ t('sms_text') }}</p>
+              </CustomCheckbox>
             </div>
-            <div class="murecho-font checkbox-wrapper">
-              <CustomCheckbox v-model="checkbox"/>
-              <p class="text-[var(--color-primary-black)]">{{ t('cash_on_delivery_text') }}</p>
+            <div class="murecho-font checkbox-content">
+              <CustomCheckbox v-model="isPaymentOnDelivery">
+                <p class="text-[var(--color-primary-black)]">{{ t('cash_on_delivery_text') }}</p>
+              </CustomCheckbox>
             </div>
 
           </div>
@@ -64,6 +69,7 @@
             <div v-if="isUsePromoCode"
                  class="use-promocode__field mb-[36px] bg-white flex rounded-[var(--default-rounded)] overflow-hidden border w-full">
               <InputText
+                  v-model="promoCodeValue"
                   :pt="{
                     root: {
                       class: 'py-[12px]'
@@ -86,14 +92,14 @@
           <div class="comment-to-order mb-[24px]">
             <p class="murecho-font mb-[18px]">{{ t('comment_to_order') }}</p>
             <div class="mb-[10px] rounded-[8px]">
-                <Textarea style="resize: none" class="w-full rounded-[8px]"
+                <Textarea v-model="commentForOrder" style="resize: none" class="w-full rounded-[8px]"
                           rows="2" cols="30"/>
             </div>
           </div>
 
           <div
               class="checkout__wrapper-btn rounded-[8px] w-full">
-            <Button @click="createOrder" :pt="{
+            <Button @click="handleCreateOrder" :pt="{
               root: {
                 class: 'checkout__btn'
               }
@@ -106,14 +112,15 @@
 
     </div>
   </div>
+  <Toast group="tl"/>
 </template>
 
 <script setup>
 import TooltipIcon from "~/components/UI/TooltipIcon/TooltipIcon.vue";
 import CustomCheckbox from "~/components/UI/CustomCheckbox/CustomCheckbox.vue";
 import {useCartStore} from "~/stores/cart.js";
-
-import { createOrder } from "~/services/api/order-service.js";
+import {createOrder} from "~/services/api/order-service.js";
+import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 
 definePageMeta({
   layout: 'breadcrumb',
@@ -121,24 +128,87 @@ definePageMeta({
 
 const fieldsBlock = ref(null)
 
+const isLoading = ref(false)
+
 const {t} = useI18n()
+
+const toast = useToast();
 
 const cartStore = useCartStore()
 
-const checkbox = ref(false)
-
 const isUsePromoCode = ref(false)
 
-const mappedProductsForOrder = arr => arr.map(({ quantity, ...withoutQuantity }) => ({
+const promoCodeValue = ref(null)
+
+const commentForOrder = ref('')
+
+const isPaymentOnDelivery = ref(false)
+
+const isSendSmsWithFormData = ref(false)
+
+const showTopRight = () => {
+  toast.add({severity: 'success', summary: 'Info Message', detail: 'Message Content', group: 'tl', life: 3000});
+};
+
+const showError = () => {
+  toast.add({severity: 'error', summary: 'Error Message', detail: 'Message Content', group: 'tl', life: 3000});
+};
+
+const mappedProductsForOrder = arr => arr.map(({quantity, ...withoutQuantity}) => ({
   product: withoutQuantity,
   quantity
 }));
 
-// const handleCreateOrder = async () => {
-//   console.log("cartStore.getCartProducts", mappedProductsForOrder(cartStore.getCartProducts))
-//   await createOrder(mappedProductsForOrder(cartStore.getCartProducts))
-// }
+const mappedUserDataForOrder = (data) => {
+  const {street, city, postalCode, country, firstName, lastName, phone, email, telegramUsername} = data
+  return {
+    shippingAddress: {
+      street,
+      city,
+      postalCode,
+      country,
+      firstName,
+      lastName,
+      phone,
+      email,
+      telegramUsername
+    },
+    paymentMethod: isPaymentOnDelivery ? 'true' : 'false'
+  }
+}
 
+const handleCreateOrder = async () => {
+  isLoading.value = true
+  const data = {
+    products: [...mappedProductsForOrder(cartStore.getCartProducts)],
+    ...mappedUserDataForOrder(fieldsBlock.value.getData()),
+  }
+
+  const isValid = fieldsBlock.value?.validateFields()
+
+  if (isValid && data.products) {
+    await createOrder(data)
+        .then(() => {
+          clearCreateOrderForm()
+          showTopRight()
+        }).catch(() => {
+          showError()
+        })
+        .finally(() => isLoading.value = false)
+  } else {
+    isLoading.value = false
+  }
+
+}
+
+const clearCreateOrderForm = () => {
+  fieldsBlock.value.clearFormData()
+  cartStore.clearCart()
+  isPaymentOnDelivery.value = false
+  isSendSmsWithFormData.value = false
+  promoCodeValue.value = null
+  commentForOrder.value = ''
+}
 
 const togglePromoCodeUse = () => {
   isUsePromoCode.value = !isUsePromoCode.value
@@ -148,8 +218,8 @@ const config = {
   fields: {
     items: [
       {
-        name: 'userName',
-        code: 'userName',
+        name: 'firstName',
+        code: 'firstName',
         label: computed(() => t('user_name')),
         type: 'InputText',
         props: {
@@ -158,29 +228,36 @@ const config = {
           placeholder: "",
           required: true
         },
+        validators: [
+          (value) => (value ? true : "First Name is required"),
+        ],
       },
 
       {
         name: 'country',
         code: 'country',
         label: computed(() => t('country')),
-        type: 'Select',
+        type: 'InputText',
         props: {
           side: 'right',
           half: true,
           placeholder: ''
-        }
+        },
+        validators: [
+          (value) => (value ? true : "Country is required"),
+        ],
       },
+
       {
-        name: 'postCode',
-        code: 'postCode',
+        name: 'postalCode',
+        code: 'postalCode',
         label: computed(() => t('post_code')),
         type: 'InputText',
         props: {
           side: 'right',
           half: true,
           placeholder: ''
-        }
+        },
       },
       {
         name: 'state',
@@ -190,9 +267,12 @@ const config = {
         props: {
           side: 'right',
           placeholder: ''
-        }
+        },
+        validators: [
+          (value) => (value ? true : "State is required"),
+        ],
       },
-       {
+      {
         name: 'street',
         code: 'street',
         label: computed(() => t('street')),
@@ -200,7 +280,10 @@ const config = {
         props: {
           side: 'right',
           placeholder: ''
-        }
+        },
+        validators: [
+          (value) => (value ? true : "Street is required"),
+        ],
       },
 
       {
@@ -211,7 +294,10 @@ const config = {
         props: {
           side: 'right',
           placeholder: ''
-        }
+        },
+        validators: [
+          (value) => (value ? true : "City is required"),
+        ],
       },
       {
         name: 'deliveryInfo',
@@ -235,6 +321,9 @@ const config = {
           placeholder: "",
           required: true
         },
+        validators: [
+          (value) => (value ? true : "Last Name is required"),
+        ],
       },
       {
         name: 'email',
@@ -247,10 +336,13 @@ const config = {
           placeholder: "",
           required: true
         },
+        validators: [
+          (value) => (value ? true : "Email is required"),
+        ],
       },
       {
-        name: 'phoneNumber',
-        code: 'phoneNumber',
+        name: 'phone',
+        code: 'phone',
         label: computed(() => t('phone_number')),
         type: 'InputText',
         props: {
@@ -259,6 +351,9 @@ const config = {
           placeholder: "",
           required: true
         },
+        validators: [
+          (value) => (value ? true : "Phone is required"),
+        ],
       },
       {
         name: 'telegramUsername',
@@ -329,7 +424,7 @@ const config = {
   color: var(--color-primary-red);
 }
 
-.checkbox-wrapper {
+.checkbox-content {
   font-weight: 500;
   font-size: 16px;
   display: flex;

@@ -135,7 +135,6 @@ const loadMoreLabel = computed(() => {
 });
 
 const showBottomRight = (product) => {
-  console.log("showBottomRight", product)
   toast.add({
     severity: 'success',
     summary: t('toast_success_title'),

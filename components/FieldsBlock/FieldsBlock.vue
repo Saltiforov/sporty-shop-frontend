@@ -12,12 +12,12 @@
           <template v-for="field in leftFullFields" :key="field.name">
             <div class="form-group">
               <p class="form__title mb-[11px] flex items-center gap-2">
-                {{ field.label }}:
+                <span class="whitespace-nowrap">{{ field.label }}:</span>
                 <component
                     v-if="field.tooltipComponent"
                     :is="field.tooltipComponent"
                     v-bind="field.tooltipProps"
-                    class="self-start"
+                    class="self-start w-full"
                 />
               </p>
               <div>
@@ -46,12 +46,12 @@
               <template v-for="field in pair" :key="field.name">
                 <div class="form-group w-1/2">
                   <p class="form__title mb-[11px] flex items-center gap-2">
-                    {{ field.label }}:
+                    <span class="whitespace-nowrap">{{ field.label }}:</span>
                     <component
                         v-if="field.tooltipComponent"
                         :is="field.tooltipComponent"
                         v-bind="field.tooltipProps"
-                        class="self-start"
+                        class="self-start w-full"
                     />
                   </p>
                   <div>
@@ -85,12 +85,12 @@
               <template v-for="field in pair" :key="field.name">
                 <div class="form-group w-1/2">
                   <p class="form__title mb-[11px] flex items-center gap-2">
-                    {{ field.label }}:
+                    <span class="whitespace-nowrap">{{ field.label }}:</span>
                     <component
                         v-if="field.tooltipComponent"
                         :is="field.tooltipComponent"
                         v-bind="field.tooltipProps"
-                        class="self-start"
+                        class="self-start w-full"
                     />
                   </p>
                   <div>
@@ -119,12 +119,12 @@
           <template v-for="field in rightFullFields" :key="field.name">
             <div class="form-group">
               <p class="form__title mb-[11px] flex items-center gap-2">
-                {{ field.label }}:
+                <span class="whitespace-nowrap">{{ field.label }}:</span>
                 <component
                     v-if="field.tooltipComponent"
                     :is="field.tooltipComponent"
                     v-bind="field.tooltipProps"
-                    class="self-start"
+                    class="self-start w-full"
                 />
               </p>
               <div>
@@ -177,6 +177,7 @@ const props = defineProps({
 
 
 const formData = ref({});
+const configRef = toRef(props, 'config')
 
 watch(
     () => props.config.items,
@@ -189,8 +190,7 @@ watch(
     { deep: true }
 )
 
-const { errors, validateFields, resetErrors, } = useFieldValidation(formData, props.config)
-
+const { errors, validateFields, resetErrors, } = useFieldValidation(formData, configRef)
 
 const leftFullFields = computed(() =>
     props.config.items.filter(f => f.props?.side === 'left' && !f.props?.half)
@@ -223,6 +223,10 @@ onMounted(() => {
     if (field.code && props?.data?.[field?.code]) {
       formData.value[field.code] =
           props.data[field.code] !== undefined ? props.data[field.code] : "";
+    } else {
+      props.config.items.forEach(field => {
+        formData.value[field.code] = ''
+      })
     }
   });
 
@@ -230,8 +234,7 @@ onMounted(() => {
 
 defineExpose({
   getData: () => formData.value,
+  clearFormData: () => formData.value = {},
   validateFields,
-  errors,
-  resetErrors,
 })
 </script>
