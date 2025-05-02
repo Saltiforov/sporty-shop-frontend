@@ -16,14 +16,14 @@
 
       <button
           @click="swipeToLeft"
-          class="swiper-btn -left-6"
+          class="swiper-btn btn-hover-default -left-6"
       >
         <img src="@/assets/images/arrow-left.svg" alt="arrow-left.svg" />
       </button>
 
       <button
           @click="swipeToRight"
-          class="swiper-btn -right-6"
+          class="swiper-btn btn-hover-default -right-6"
       >
         <img src="@/assets/images/arrow-right.svg" alt="arrow-right.svg" />
       </button>

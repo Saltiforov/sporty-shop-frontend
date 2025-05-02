@@ -79,14 +79,18 @@
                             :input-styles="{ width: '53px', height: '60px' }"/>
           </div>
           <div class="action-button text-[var(--color-gray-pale-lavender)]">
-            <button class="bg-[var(--color-primary-green)] rounded-2xl max-w-[456px] w-full h-[59px] flex justify-center items-center">
+            <Button @click="addToCart(product)" :pt="{
+              root: {
+                class: 'product-buy-now__btn'
+              }
+            }" class="bg-[var(--color-primary-green)] hover:bg-[var(--color-primary-green)] rounded-2xl max-w-[456px] w-full h-[59px] flex justify-center items-center">
               <p class="mr-1">{{ t('product_buy_now') }}</p>
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M1 1H1.26835C1.74213 1 1.97943 1 2.17267 1.08548C2.34304 1.16084 2.48871 1.28218 2.59375 1.43604C2.71269 1.61026 2.75564 1.8429 2.84137 2.30727L5.00004 14L15.4218 14C15.875 14 16.1023 14 16.29 13.9199C16.4559 13.8492 16.5989 13.7346 16.7051 13.5889C16.8252 13.4242 16.8761 13.2037 16.9777 12.7631L16.9785 12.76L18.5477 5.95996L18.5481 5.95854C18.7023 5.29016 18.7796 4.95515 18.6947 4.69238C18.6202 4.46182 18.4635 4.26634 18.2556 4.14192C18.0184 4 17.6758 4 16.9887 4H3.5M16 19C15.4477 19 15 18.5523 15 18C15 17.4477 15.4477 17 16 17C16.5523 17 17 17.4477 17 18C17 18.5523 16.5523 19 16 19ZM6 19C5.44772 19 5 18.5523 5 18C5 17.4477 5.44772 17 6 17C6.55228 17 7 17.4477 7 18C7 18.5523 6.55228 19 6 19Z"
                     stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -131,7 +135,7 @@
       </SwiperWrapper>
     </div>
 
-
+    <Toast position="bottom-right" group="br"/>
   </div>
 </template>
 
@@ -149,8 +153,13 @@ import FavoriteButton from "~/components/UI/FavoriteButton/FavoriteButton.vue";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 
 import { getProduct } from "~/services/api/product-service.js";
+import {useCartStore} from "~/stores/cart.js";
 
 const { t } = useI18n()
+
+const toast = useToast();
+
+const cartStore = useCartStore()
 
 const route = useRoute()
 const id = route.params.id
@@ -162,6 +171,21 @@ const images = ref([])
 const isLoading = ref(true)
 
 const selectedImage = ref(null)
+
+const showBottomRight = (product) => {
+  toast.add({
+    severity: 'success',
+    summary: t('toast_success_title'),
+    detail: t('toast_added_to_cart', {productName: product.name}),
+    group: 'br',
+    life: 3000
+  });
+};
+
+const addToCart = (product) => {
+  cartStore.addToCart(product);
+  showBottomRight(product);
+}
 
 const swiperOptions = {
   effect: 'cards',
@@ -242,5 +266,13 @@ onMounted(async () => {
 
 .nav-panel:hover {
   color: darkred;
+}
+
+.product-buy-now__btn:hover {
+  background: var(--color-primary-green);
+  border: none;
+}
+.product-buy-now__btn {
+  border: none;
 }
 </style>

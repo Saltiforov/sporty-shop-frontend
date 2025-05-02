@@ -33,6 +33,7 @@ export function useFieldValidation(formData, config) {
 
     config.value.items.forEach(field => {
         const code = field.code
+
         if (!code) return
 
         watch(() => formData.value[code], (newValue) => {

@@ -1,9 +1,14 @@
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import {defineStore} from 'pinia'
+import {ref, computed, watch, onMounted} from 'vue'
 
 export const useCartStore = defineStore('cart', () => {
-
     const cartProducts = ref([])
+
+    onMounted(() => {
+        if (typeof window !== 'undefined' && sessionStorage.getItem('cartProducts')) {
+            cartProducts.value = JSON.parse(sessionStorage.getItem('cartProducts'))
+        }
+    })
 
     const cartCount = computed(() => {
         return cartProducts.value.reduce((acc, item) => {
@@ -21,22 +26,33 @@ export const useCartStore = defineStore('cart', () => {
     )
 
     const addToCart = (product) => {
-        const existingProduct =  cartProducts.value.find(item => item._id === product._id)
+        const existingProduct = cartProducts.value.find(item => item._id === product._id)
         if (!existingProduct) {
             cartProducts.value.push({...product, quantity: 1})
-            return;
+        } else {
+            existingProduct.quantity += 1
         }
-        existingProduct.quantity += 1
+
+        if (typeof window !== 'undefined') {
+            sessionStorage.setItem('cartProducts', JSON.stringify(cartProducts.value))
+        }
     }
 
     function removeFromCart(productId) {
         cartProducts.value = cartProducts.value.filter((p) => p._id !== productId)
+
+        if (typeof window !== 'undefined') {
+            sessionStorage.setItem('cartProducts', JSON.stringify(cartProducts.value))
+        }
     }
 
-     const clearCart = () => {
+    const clearCart = () => {
         cartProducts.value = []
-     }
 
+        if (typeof window !== 'undefined') {
+            sessionStorage.removeItem('cartProducts')
+        }
+    }
 
     return {
         cartProducts,

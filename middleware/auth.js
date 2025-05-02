@@ -9,10 +9,13 @@ export default defineNuxtRouteMiddleware((to, from) => {
     if (token.value) {
 
         authenticated.value = true;
-
+        console.log("token.value",token.value)
     }
 
-    if (!token.value) {
+    if (!token.value && to?.name !== '/') {
 
+        abortNavigation();
+
+        return navigateTo('/')
     }
 })

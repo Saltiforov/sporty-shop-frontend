@@ -82,6 +82,14 @@
 
   "save": "Save",
 
+  "new_review": "New Review",
+  "your_name": "Your Name",
+  "share_your_impressions": "Share your impressions",
+  "rate_product": "Rate the product",
+  "submit_review": "Submit review",
+  "purchase_confirmed": "Purchase confirmed!",
+  "purchase_not_confirmed": "Purchase not confirmed!",
+
   "checkout_title": "Checkout",
   "account_text": "Already have an account? Log in",
   "payment_method_title": "Payment Method",

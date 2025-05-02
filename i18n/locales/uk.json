@@ -82,6 +82,14 @@
 
   "save": "Зберегти",
 
+  "new_review": "Новий відгук",
+  "your_name": "Ваше ім’я",
+  "share_your_impressions": "Поділіться вашими враженнями",
+  "rate_product": "Оцініть товар",
+  "submit_review": "Надіслати відгук",
+  "purchase_confirmed": "Покупка підтверджена!",
+  "purchase_not_confirmed": "Покупка не підтверджена!",
+
   "checkout_title": "Оформлення замовлення",
   "account_text": "Вже маєте акаунт? Увійдіть",
   "payment_method_title": "Спосіб оплати",

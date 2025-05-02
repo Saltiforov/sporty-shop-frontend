@@ -34,6 +34,21 @@ export default defineNuxtConfig({
     primevue: {
         options: {
             pt: {
+                button: {
+                    root: {
+                        class: [
+                            'w-full',
+                            'px-4 py-2',
+                            'border-none',
+                            'hover:bg-transparent',
+                            'hover:border-none',
+                            'hover:text-inherit',
+                            'focus:ring-0',
+                            'focus:shadow-none',
+                            'transition-none'
+                        ].join(' ')
+                    }
+                },
                 inputtext: {
                     root: {
                         class: 'w-full'

@@ -26,9 +26,6 @@
 </template>
 
 <script setup>
-
-import LoadMoreButton from "~/components/UI/LoadMoreButton/LoadMoreButton.vue";
-
 const images = ref([
   'https://wallpapers.com/images/high/fitness-gym-with-equipment-iovhjg9dwfy87bzf.webp',
   'https://wallpapers.com/images/high/home-gym-with-barbell-r4xvbh7jalyuhdme.webp',

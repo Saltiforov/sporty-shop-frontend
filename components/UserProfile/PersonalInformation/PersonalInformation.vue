@@ -1,12 +1,12 @@
 <template>
   <div class="personal-information">
     <h1 class="title-lg-20 mb-[30px]">{{ t('contact_information') }}</h1>
-    <FieldsBlock class="mb-[73px]" :config="config.fields"/>
+    <FieldsBlock class="mb-[73px]" :config="config.fields" ref="fieldsBlock"/>
     <div
         class="max-w-[338px] mx-auto py-[10px] px-[10px]">
-      <Button :pt="{
+      <Button @click="savePersonalInformation" :pt="{
         root: {
-          class: 'personal-information__btn'
+          class: 'personal-information__btn btn-hover-default'
         }
       }">{{ t('save') }}
       </Button>
@@ -15,9 +15,15 @@
 </template>
 
 <script setup >
-import {InputGroup, InputGroupAddon, InputText} from "primevue";
+import {InputGroup, InputGroupAddon, InputNumber} from "primevue";
 
 const { t } = useI18n();
+
+const fieldsBlock = ref(null)
+
+const savePersonalInformation = async () => {
+  const isValid = fieldsBlock.value?.validateFields()
+}
 
 const config = {
   fields: {
@@ -33,6 +39,9 @@ const config = {
           placeholder: "",
           required: true
         },
+        validators: [
+          (value) => (value ? true : "Username is required"),
+        ],
       },
 
       {
@@ -44,8 +53,12 @@ const config = {
           side: 'right',
           half: true,
           placeholder: ''
-        }
+        },
+        validators: [
+          (value) => (value ? true : "Country is required"),
+        ],
       },
+
       {
         name: 'postCode',
         code: 'postCode',
@@ -55,7 +68,10 @@ const config = {
           side: 'right',
           half: true,
           placeholder: ''
-        }
+        },
+        validators: [
+          (value) => (value ? true : "Postal Code is required"),
+        ],
       },
       {
         name: 'state',
@@ -65,7 +81,10 @@ const config = {
         props: {
           side: 'right',
           placeholder: ''
-        }
+        },
+        validators: [
+          (value) => (value ? true : "State is required"),
+        ],
       },
       {
         name: 'city',
@@ -75,7 +94,10 @@ const config = {
         props: {
           side: 'right',
           placeholder: ''
-        }
+        },
+        validators: [
+          (value) => (value ? true : "City is required"),
+        ],
       },
       {
         name: 'street',
@@ -85,7 +107,10 @@ const config = {
         props: {
           side: 'right',
           placeholder: ''
-        }
+        },
+        validators: [
+          (value) => (value ? true : "Street is required"),
+        ],
       },
       {
         name: 'deliveryComment',
@@ -95,7 +120,7 @@ const config = {
         props: {
           side: 'right',
           placeholder: ''
-        }
+        },
       },
 
       {
@@ -109,6 +134,9 @@ const config = {
           placeholder: "",
           required: true
         },
+        validators: [
+          (value) => (value ? true : "Last Name is required"),
+        ],
       },
       {
         name: 'email',
@@ -121,17 +149,23 @@ const config = {
           placeholder: "",
           required: true
         },
+        validators: [
+          (value) => (value ? true : "Email is required"),
+        ],
       },
 
       {
-        name: 'phoneNumber',
-        code: 'phoneNumber',
+        name: 'phone',
+        code: 'phone',
         label: computed(() => t('phone_number')),
         type: 'Custom',
         props: {
           side: 'left',
         },
-        render: () =>
+        validators: [
+          (value) => (value ? true : "Phone is required"),
+        ],
+        render: ({modelValue, 'onUpdate:modelValue': update}) =>
             h(InputGroup, {}, {
               default: () => [
                 h(InputGroupAddon, {
@@ -144,7 +178,13 @@ const config = {
                     }
                   }
                 }, () => '+380'),
-                h(InputText, {placeholder: ''})
+                h(InputNumber, {
+                  modelValue,
+                  'onUpdate:modelValue': update,
+                  useGrouping: false,
+                  placeholder: '',
+                  defaultValue: null
+                })
               ]
             })
       },

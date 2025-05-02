@@ -1,5 +1,6 @@
 <template>
   <div class="auth-component">
+    <LoadingOverlay :visible="isLoading"/>
     <FieldsBlock :config="fieldsConfig.fields" ref="fieldsBlock"/>
     <div v-if="isLogin" class="reset-password justify-end mb-[27px] flex">
       <NuxtLink><p class="text-[var(--color-muted-gray)]">{{ t('forgot_password') }}</p></NuxtLink>
@@ -8,7 +9,7 @@
         'mx-auto mb-[37px]',
         isLogin ? 'max-w-[320px]' : 'max-w-[386px]'
     ]" class="auth-button-wrapper">
-      <Button @click="handleAuth" :pt="{ root: { class: 'auth-button' } }">{{ buttonLabel }}</Button>
+      <Button @click="handleAuth" :pt="{ root: { class: 'auth-button btn-hover-default' } }">{{ buttonLabel }}</Button>
     </div>
     <div class="flex mb-[16px] items-center justify-center gap-4">
       <div class="max-w-[196px] w-full h-px bg-[var(--color-primary-pure-white)]"></div>
@@ -49,10 +50,11 @@
 
 
 <script setup>
-import {InputGroup, InputGroupAddon, InputText, Password} from "primevue";
+import {InputGroup, InputGroupAddon, InputNumber, Password} from "primevue";
 
 import {storeToRefs} from 'pinia';
 import {useAuthStore} from '~/stores/auth';
+import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 
 const fieldsBlock = ref(null);
 
@@ -66,6 +68,8 @@ const router = useRouter();
 
 const authPopup = useAuthPopup()
 
+const isLoading = ref(false);
+
 const {isLogin} = defineProps({
   isLogin: {
     type: Boolean,
@@ -74,6 +78,7 @@ const {isLogin} = defineProps({
 })
 
 const handleAuth = async () => {
+  isLoading.value = true;
   const isValid = fieldsBlock.value?.validateFields()
   const user = fieldsBlock.value?.getData()
 
@@ -84,8 +89,12 @@ const handleAuth = async () => {
     if (authenticated) {
       authPopup.close()
       router.push('/profile')
+      isLoading.value = false;
     }
+  } else {
+    isLoading.value = false;
   }
+
 }
 
 
@@ -183,17 +192,17 @@ const registerFields = {
         ],
       },
       {
-        name: 'phoneNumber',
-        code: 'phoneNumber',
+        name: 'phone',
+        code: 'phone',
         label: computed(() => t('auth_phone_number')),
         type: 'Custom',
         props: {
           side: 'left',
         },
         validators: [
-          (value) => (value ? true : "Phone Number Name is required"),
+          (value) => (value ? true : "Phone Number is required"),
         ],
-        render: () =>
+        render: ({modelValue, 'onUpdate:modelValue': update}) =>
             h(InputGroup, {}, {
               default: () => [
                 h(InputGroupAddon, {
@@ -206,7 +215,12 @@ const registerFields = {
                     }
                   }
                 }, () => '+380'),
-                h(InputText, {placeholder: ''})
+                h(InputNumber, {
+                  modelValue,
+                  'onUpdate:modelValue': update,
+                  useGrouping: false,
+                  placeholder: '',
+                })
               ]
             })
       },
@@ -234,13 +248,15 @@ const registerFields = {
           side: 'left',
         },
         validators: [
-          (value) => (value ? true : "Password Name is required"),
+          (value) => (value ? true : "Password is required"),
         ],
-        render: () =>
+        render: ({modelValue, 'onUpdate:modelValue': update}) =>
             h(InputGroup, {}, {
               default: () => [
                 h(Password, {
                   placeholder: '',
+                  modelValue,
+                  'onUpdate:modelValue': update,
                   toggleMask: true,
                   feedback: false,
                   pt: {
@@ -250,8 +266,6 @@ const registerFields = {
               ]
             })
       }
-
-
     ]
   }
 }
@@ -264,7 +278,6 @@ const registerFields = {
 }
 
 .auth-button:hover {
-  background: var(--color-primary-dark);
   width: 100%;
 }
 

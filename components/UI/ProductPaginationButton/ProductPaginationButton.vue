@@ -14,15 +14,15 @@
           </svg>
         </Button>
         <div class="text-[15px] w-full justify-between flex">
-          <p :class="{ 'active-page': activePageType === 'first' }"
+          <p :class="{ 'active-page btn-hover-default': activePageType === 'first' }"
              @click="handleClickPageType('first')"
              class="page-count  max-w-[32px]">{{ firstPage }}</p>
 
-          <p :class="{ 'active-page': activePageType === 'next' }"
+          <p :class="{ 'active-page btn-hover-default': activePageType === 'next' }"
              @click="handleClickPageType('next')"
              class="page-count max-w-[32px]">{{ nextPage }}</p>
 
-          <p :class="{ 'active-page': activePageType === 'last' }"
+          <p :class="{ 'active-page btn-hover-default': activePageType === 'last' }"
              @click="handleClickPageType('last')"
              class="page-count max-w-[32px]">{{ lastPage }}</p>
         </div>
@@ -62,10 +62,11 @@ watch(() => props.maxPages, (val) => lastPage.value = val)
 const numberOfPageFromQuery = computed(() => Number(route.query.page))
 
 const nextPageAfterFirstPage = computed(() => {
-  return activePageType.value === 'first' ? 2 : 2
+  return activePageType.value === 'first' ? firstPage.value + PAGE_STEP : firstPage.value + PAGE_STEP
 })
 
 const previousPageBeforeLastPage = computed(() => {
+  return activePageType.value === 'last' ? lastPage.value - PAGE_STEP : lastPage.value - PAGE_STEP
 })
 
 const firstPage = ref(1)
@@ -108,8 +109,8 @@ const setPageState = (pageNumber, type) => {
 const handlePageChange = (direction = 'right') => {
   const from = activePageType.value
 
-  const pageToRight = from === 'first' ? nextPage.value : nextPage.value + 1
-  const pageToLeft = from === 'last' ? nextPage.value : nextPage.value - 1
+  const pageToRight = from === 'first' ? firstPage.value + PAGE_STEP : nextPage.value + PAGE_STEP
+  const pageToLeft = from === 'last' ? lastPage.value - PAGE_STEP : nextPage.value - PAGE_STEP
 
   activePageType.value = 'next'
 

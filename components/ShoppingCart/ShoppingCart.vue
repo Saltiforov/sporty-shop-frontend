@@ -31,7 +31,7 @@
           <NuxtLink to="/checkout">
             <Button :pt="{
             root: {
-              class: 'make-order-button',
+              class: 'make-order-button btn-hover-default',
             }
           }"><p class="fw-400 murecho-font text-[#FFFFFF] text-[14px] leading-[22px]">
               {{ t('make_order') }}</p></Button>

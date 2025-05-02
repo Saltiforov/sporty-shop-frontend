@@ -38,6 +38,7 @@ import {useAuthStore} from "~/stores/auth.js";
 
 definePageMeta({
   layout: 'breadcrumb',
+  middleware: ['auth'],
 })
 
 import PersonalInformation from '~/components/UserProfile/PersonalInformation/PersonalInformation.vue'

@@ -10,6 +10,34 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.btn-hover-default {
+    position: relative;
+    overflow: hidden;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+}
+
+.btn-hover-default::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+            rgba(95, 89, 119, 0.26),
+            rgba(95, 89, 119, 0.26)
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.btn-hover-default:hover {
+    background-color: #24242A;
+}
+
+.btn-hover-default:hover::before {
+    opacity: 1;
+}
+
 footer {
     background: var(--color-primary-dark);
 }

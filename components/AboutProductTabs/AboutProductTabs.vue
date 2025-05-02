@@ -131,8 +131,8 @@
                 </Rating>
               </div>
               <div class="review-card__confirmed text-[#ADADAD] fw-400">
-                <p v-if="review.purchaseConfirmed">Покупка підтверджена!</p>
-                <p v-else>Покупка не підтверджена!</p>
+                <p v-if="review.purchaseConfirmed">{{ t('purchase_confirmed') }}</p>
+                <p v-else>{{ t('purchase_not_confirmed') }}</p>
               </div>
             </div>
 
@@ -142,18 +142,18 @@
 
         <div class="review-form max-w-[642px] w-full">
           <div class="mb-4">
-            <h2 class="form-title fw-500">Новий відгук</h2>
+            <h2 class="form-title fw-500">{{ t('new_review') }}</h2>
           </div>
           <div class="mb-4 rounded-[8px] max-w-[354px]">
-            <InputText class="w-full h-[42px] py-[10px] rounded-[8px]" placeholder="Ваше ім’я"/>
+            <InputText class="w-full h-[42px] py-[10px] rounded-[8px]" :placeholder="t('your_name')"/>
           </div>
           <div class="mb-[10px] rounded-[8px]">
-                <Textarea style="resize: none" class="w-full rounded-[8px]" placeholder="Поділіться вашими враженнями"
+                <Textarea style="resize: none" class="w-full rounded-[8px]" :placeholder="t('share_your_impressions')"
                           rows="5" cols="30"/>
           </div>
 
           <div class="rate-product mb-[27px] flex items-center">
-            <p class="mr-[10px] text-[14px]">Оцініть товар</p>
+            <p class="mr-[10px] text-[14px]">{{ t('rate_product') }}</p>
             <Rating>
               <template #onicon>
                 <img src="@/assets/icons/star-filled.svg" class="mr-1"/>
@@ -168,9 +168,9 @@
               class="rounded-[8px] max-w-[386px]">
             <Button :pt="{
                   root: {
-                    class: 'send-review__btn'
+                    class: 'send-review__btn btn-hover-default'
                   }
-                }"><p class="text-[14px]">Надіслати відгук</p></Button>
+                }"><p class="text-[14px]">{{ t('submit_review') }}</p></Button>
           </div>
 
         </div>
@@ -238,5 +238,8 @@ const tabs = {
 </script>
 
 <style scoped>
-
+.send-review__btn {
+  background: var(--color-primary-dark);
+  width: 100%;
+}
 </style>

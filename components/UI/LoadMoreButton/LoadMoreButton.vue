@@ -5,7 +5,7 @@
         :label="''"
         :pt="{
         root: {
-          class: 'load-more-button  flex items-center gap-2'
+          class: 'load-more-button btn-hover-default  flex items-center gap-2'
         },
         label: {
           class: 'flex items-center gap-2'
@@ -43,9 +43,6 @@ defineProps({
   background: var(--color-primary-dark);
   border-radius: 24px;
   padding: 12px 23px;
-}
-.load-more-button:hover {
-  background: var(--color-primary-dark);
 }
 
 </style>

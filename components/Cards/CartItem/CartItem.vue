@@ -3,14 +3,14 @@
     <div class="flex flex-1">
       <div
           :class="[
-          'card-image shadow-xl rounded-[16px] shrink-0',
-          isHistoryView ? 'max-w-[145px] mb-[22px] h-[210px] mr-[36px]' : 'h-[156px] max-w-[156px] mr-[22px]'
+          'card-image  rounded-[16px] shrink-0',
+          isHistoryView ? 'max-w-[145px] mb-[22px] h-[210px] mr-[36px]' : 'h-[156px] max-w-[156px] w-full mr-[22px]'
         ]"
       >
         <img
             :class="[
             'rounded-[16px]',
-            isHistoryView ? 'h-[210px] object-cover' : ''
+            isHistoryView ? 'h-[210px] object-cover' : 'h-[156px] max-w-[156px] w-full'
           ]"
             :src="imageSource"
             alt="product-image.png"
