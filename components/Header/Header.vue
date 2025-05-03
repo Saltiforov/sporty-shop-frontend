@@ -86,18 +86,23 @@ const {t} = useI18n();
 
 const authPopup = useAuthPopup()
 
-const { logUserOut } = useAuthStore();
+const router = useRouter();
 
-const { authenticated } = storeToRefs(useAuthStore());
+const {logUserOut} = useAuthStore();
+
+const {authenticated, currentUser} = storeToRefs(useAuthStore());
 
 const cartStore = useCartStore();
+
+const userId = computed(() => currentUser.value._id)
 
 const showShoppingCart = () => {
   $eventBus.emit('show-cart');
 };
 
 const redirectToUserOrderHistory = () => {
-  $eventBus.emit('show-order-history');
+  $eventBus.emit('show-order-history')
+  router.push(`/profile/${userId.value}`)
 }
 
 const logout = () => {
@@ -111,9 +116,9 @@ const items = computed(() => {
     return [
       {
         items: [
-          { label: t('my_cabinet'), command: () => navigateTo('/profile')},
-          { label: t('my_orders'), command: () => redirectToUserOrderHistory()},
-          { label: t('logout'), command: () => logout()},
+          {label: t('my_cabinet'), command: () => router.push(`/profile/${userId.value}`)},
+          {label: t('my_orders'), command: () => redirectToUserOrderHistory()},
+          {label: t('logout'), command: () => logout()},
         ]
       }
     ]
@@ -121,8 +126,8 @@ const items = computed(() => {
     return [
       {
         items: [
-          { label: t('auth_login'), command: () => authPopup.open('login') },
-          { label: t('auth_register'), command: () => authPopup.open('register') },
+          {label: t('auth_login'), command: () => authPopup.open('login')},
+          {label: t('auth_register'), command: () => authPopup.open('register')},
         ]
       }
     ]

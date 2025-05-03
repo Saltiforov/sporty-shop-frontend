@@ -1,6 +1,8 @@
 <template>
   <div class="layout justify-between">
 
+    <LoadingOverlay :visible="isLoading"/>
+
     <div class="sidebar max-w-[277px] w-full">
       <div class="sidebar-header flex pb-[24px] items-center border-b border-[var(--color-gray-light-lavender)]">
         <div class="w-[44px] mr-3">
@@ -26,7 +28,7 @@
 
     <div class="content">
       <main>
-        <component :is="components[currentTab]"/>
+        <component v-if="!isLoading" :is="components[currentTab]" v-bind="userData"/>
       </main>
     </div>
 
@@ -38,7 +40,6 @@ import {useAuthStore} from "~/stores/auth.js";
 
 definePageMeta({
   layout: 'breadcrumb',
-  middleware: ['auth'],
 })
 
 import PersonalInformation from '~/components/UserProfile/PersonalInformation/PersonalInformation.vue'
@@ -53,14 +54,20 @@ import FavoriteProductsIcon from '~/assets/icons/user-profile-favorite-products-
 import ChangePasswordIcon from '~/assets/icons/user-profile-change-passwrd-icon.svg'
 import LogoutIcon from '~/assets/icons/user-profile-logout-icon.svg'
 import {onMounted} from "vue";
+import {getCurrentUser} from "~/services/api/user-service.js";
+import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 
 const components = {PersonalInformation, OrderHistory, FavoriteProducts, ChangePassword, Logout};
 
 const {t} = useI18n();
 
-const { $eventBus } = useNuxtApp();
+const {$eventBus} = useNuxtApp();
 
-const { logUserOut } = useAuthStore();
+const {logUserOut} = useAuthStore();
+
+const userData = ref({})
+
+const isLoading = ref(false);
 
 const currentTab = ref('PersonalInformation')
 
@@ -70,10 +77,30 @@ const logout = () => {
 }
 
 const localizedList = computed(() => [
-  {title: t('menu_personal_information'), icon: PersonalInformationIcon, component: 'PersonalInformation', command: () => selectComponent('PersonalInformation')},
-  {title: t('menu_order_history'), icon: OrderHistoryIcon, component: 'OrderHistory', command: () => selectComponent('OrderHistory')},
-  {title: t('menu_favorite_products'), icon: FavoriteProductsIcon, component: 'FavoriteProducts', command: () => selectComponent('FavoriteProducts')},
-  {title: t('menu_change_password'), icon: ChangePasswordIcon, component: 'ChangePassword', command: () => selectComponent('ChangePassword')},
+  {
+    title: t('menu_personal_information'),
+    icon: PersonalInformationIcon,
+    component: 'PersonalInformation',
+    command: () => selectComponent('PersonalInformation')
+  },
+  {
+    title: t('menu_order_history'),
+    icon: OrderHistoryIcon,
+    component: 'OrderHistory',
+    command: () => selectComponent('OrderHistory')
+  },
+  {
+    title: t('menu_favorite_products'),
+    icon: FavoriteProductsIcon,
+    component: 'FavoriteProducts',
+    command: () => selectComponent('FavoriteProducts')
+  },
+  {
+    title: t('menu_change_password'),
+    icon: ChangePasswordIcon,
+    component: 'ChangePassword',
+    command: () => selectComponent('ChangePassword')
+  },
   {title: t('menu_logout'), icon: LogoutIcon, component: 'Logout', command: () => logout()},
 ]);
 
@@ -81,10 +108,26 @@ const selectComponent = (component) => {
   currentTab.value = component;
 };
 
-onMounted(() => {
+const loadUserData = async () => {
+  isLoading.value = true
+  try {
+    userData.value = await getCurrentUser()
+  } catch (e) {
+    console.error('Ошибка при загрузке пользователя', e)
+  } finally {
+    setTimeout(() => {
+      isLoading.value = false
+    }, 500)
+  }
+}
+
+onMounted(async () => {
   $eventBus.on('show-order-history', () => {
     currentTab.value = 'OrderHistory'
   })
+
+  await loadUserData()
+
 })
 
 onBeforeUnmount(() => {
@@ -97,7 +140,7 @@ onBeforeUnmount(() => {
 .active {
   transform: scale(1.05);
   transition: transform 0.3s ease, background 0.3s ease;
-  background: linear-gradient(to left, var(--color-gray-light-lavender),  var(--color-primary-pure-white));
+  background: linear-gradient(to left, var(--color-gray-light-lavender), var(--color-primary-pure-white));
 }
 
 .layout {

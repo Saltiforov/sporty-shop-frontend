@@ -1,4 +1,5 @@
-import { defineStore } from 'pinia'
+import {defineStore} from 'pinia'
+import {getCurrentUser} from "~/services/api/user-service.js";
 
 const routes = {
     login: '/api/admin/login',
@@ -8,18 +9,42 @@ const routes = {
 export const useAuthStore = defineStore('auth', () => {
     const authenticated = ref(false)
 
-    const { $api } = useNuxtApp()
+    const currentUser = ref({})
 
-    async function authenticateUser({ username, password }) {
+    const {$api} = useNuxtApp()
+
+    async function fetchUserData() {
+        try {
+            const storedUserData = localStorage.getItem('currentUser');
+            if (storedUserData) {
+                currentUser.value = JSON.parse(storedUserData);
+                authenticated.value = true;
+            } else {
+                const user = await getCurrentUser();
+                currentUser.value = user;
+                authenticated.value = true;
+
+                localStorage.setItem('currentUser', JSON.stringify(user));
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+            throw error;
+        }
+    }
+
+    async function authenticateUser({username, password}) {
         return $api.post(routes.login, {
             username,
             password
         })
-            .then(({ token: accessToken }) => {
+            .then(({token: accessToken}) => {
                 if (accessToken) {
                     const token = useCookie('token')
                     token.value = accessToken
                     authenticated.value = true
+                    setTimeout(() => {
+                        fetchUserData()
+                    })
                 } else {
                     authenticated.value = false
                     throw new Error('Invalid login credentials')
@@ -31,7 +56,7 @@ export const useAuthStore = defineStore('auth', () => {
             })
     }
 
-    async function registerUser({ username, email, password, firstName, lastName, phone, address }) {
+    async function registerUser({username, email, password, firstName, lastName, phone, address}) {
         return $api.post(routes.signup, {
             username,
             password,
@@ -41,9 +66,9 @@ export const useAuthStore = defineStore('auth', () => {
             phone,
             address,
         })
-            .then(async ({ token: accessToken }) => {
+            .then(async ({token: accessToken}) => {
                 if (accessToken) {
-                    await authenticateUser({ username, password })
+                    await authenticateUser({username, password})
                     authenticated.value = true
                 } else {
                     authenticated.value = false
@@ -60,12 +85,15 @@ export const useAuthStore = defineStore('auth', () => {
         const token = useCookie('token')
         token.value = null
         authenticated.value = false
+
+        localStorage.removeItem('currentUser');
     }
 
     return {
         authenticated,
         authenticateUser,
         registerUser,
-        logUserOut
+        logUserOut,
+        currentUser
     }
 })

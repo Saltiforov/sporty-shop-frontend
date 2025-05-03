@@ -37,6 +37,7 @@ export function useFieldValidation(formData, config) {
         if (!code) return
 
         watch(() => formData.value[code], (newValue) => {
+
             if (errors[code]) {
                 delete errors[code]
             }

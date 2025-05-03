@@ -1,7 +1,7 @@
 <template>
   <div class="personal-information">
     <h1 class="title-lg-20 mb-[30px]">{{ t('contact_information') }}</h1>
-    <FieldsBlock class="mb-[73px]" :config="config.fields" ref="fieldsBlock"/>
+    <FieldsBlock class="mb-[73px]" :config="config.fields" :data="$attrs" ref="fieldsBlock"/>
     <div
         class="max-w-[338px] mx-auto py-[10px] px-[10px]">
       <Button @click="savePersonalInformation" :pt="{
@@ -23,14 +23,17 @@ const fieldsBlock = ref(null)
 
 const savePersonalInformation = async () => {
   const isValid = fieldsBlock.value?.validateFields()
+
+  console.log("savePersonalInformation", fieldsBlock.value?.getData())
+
 }
 
 const config = {
   fields: {
     items: [
       {
-        name: 'userName',
-        code: 'userName',
+        name: 'firstName',
+        code: 'firstName',
         label: computed(() => t('user_name')),
         type: 'InputText',
         props: {

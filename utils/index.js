@@ -23,3 +23,13 @@ export function fullImageUrls(imagesRef) {
         /^https?:\/\//.test(url) ? url : "http://localhost:3000" + url
     )
 }
+
+export function formatDateToDMY(isoDate) {
+    const date = new Date(isoDate)
+
+    const day = String(date.getDate()).padStart(2, '0')
+    const month = String(date.getMonth() + 1).padStart(2, '0') // Месяцы от 0 до 11
+    const year = date.getFullYear()
+
+    return `${day}.${month}.${year}`
+}

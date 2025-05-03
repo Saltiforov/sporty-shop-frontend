@@ -12,7 +12,8 @@
             <p class="subtitle-lg mb-[24px] text-[var(--color-muted-gray)]">{{ t('account_text') }}</p>
           </div>
           <div class="fields-content">
-            <FieldsBlock :config="config.fields" ref="fieldsBlock"/>
+            <FieldsBlock v-if="userData && userData._id" :config="config.fields" ref="fieldsBlock" :data="userData"/>
+            <FieldsBlock v-else :config="config.fields" ref="fieldsBlock"/>
           </div>
         </div>
 
@@ -121,6 +122,7 @@ import CustomCheckbox from "~/components/UI/CustomCheckbox/CustomCheckbox.vue";
 import {useCartStore} from "~/stores/cart.js";
 import {createOrder} from "~/services/api/order-service.js";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
+import {getCurrentUser} from "~/services/api/user-service.js";
 
 definePageMeta({
   layout: 'breadcrumb',
@@ -136,6 +138,8 @@ const toast = useToast();
 
 const cartStore = useCartStore()
 
+const token = useCookie('token')
+
 const isUsePromoCode = ref(false)
 
 const promoCodeValue = ref(null)
@@ -145,6 +149,8 @@ const commentForOrder = ref('')
 const isPaymentOnDelivery = ref(false)
 
 const isSendSmsWithFormData = ref(false)
+
+const userData = ref({})
 
 const showTopRight = () => {
   toast.add({severity: 'success', summary: 'Info Message', detail: 'Message Content', group: 'tl', life: 3000});
@@ -198,7 +204,6 @@ const handleCreateOrder = async () => {
   } else {
     isLoading.value = false
   }
-
 }
 
 const clearCreateOrderForm = () => {
@@ -213,6 +218,12 @@ const clearCreateOrderForm = () => {
 const togglePromoCodeUse = () => {
   isUsePromoCode.value = !isUsePromoCode.value
 }
+
+onMounted(async () => {
+  if(token.value) {
+    userData.value = await getCurrentUser()
+  }
+})
 
 const config = {
   fields: {

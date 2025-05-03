@@ -48,6 +48,7 @@
 
 <script setup>
 import CartItem from "~/components/Cards/CartItem/CartItem.vue";
+import ProductImage from "~/assets/images/product-image.png"
 import {calculateTotal} from "~/utils/index.js";
 
 const finalPrice = computed(() => calculateTotal(shoppingCartItems.value, true))
@@ -119,7 +120,7 @@ const orderList = [
 const
     shoppingCartItems = ref([
       {
-        image: '@/assets/images/product-image.png',
+        image: ProductImage,
         name: 'Nutrex Research Anabol Hardcore - 60 капс',
         quantity: 3,
         price: 1121,
@@ -127,7 +128,7 @@ const
         discountPrice: 999
       },
       {
-        image: '@/assets/images/product-image.png',
+        image: ProductImage,
         name: 'Nutrex Research Anabol Hardcore - 60 капс',
         quantity: 3,
         price: 1121,

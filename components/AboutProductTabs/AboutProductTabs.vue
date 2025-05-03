@@ -115,13 +115,13 @@
     <TabPanel :header="tabs.reviews.header">
       <div class="reviews-content  murecho-font flex justify-between">
 
-        <div class="review-list pt-[26px] justify-self-start">
+        <div v-if="reviews.length" class="review-list pt-[26px] justify-self-start">
           <div class="review-card mb-[23px] last:mb-0 max-w-[518px]" v-for="review in reviews">
-            <div class="flex justify-between items-center">
-              <p class="review-card__name fw-600">{{ review.name }}</p>
-              <div class="review-card__date text-[14px]">{{ review.date }}</div>
-              <div class="review-card__stars">
-                <Rating v-model="review.stars" readonly>
+            <div class="flex mb-2 items-center">
+              <strong class="mr-4"><p class="review-card__name fw-600">{{ fullReviewerName(review.user) }}</p></strong>
+              <div class="review-card__date mr-2 text-[14px]">{{ formatDateToDMY(review.createdAt) }}</div>
+              <div class="review-card__stars mr-3">
+                <Rating v-model="review.rating" readonly>
                   <template #onicon>
                     <img src="@/assets/icons/star-filled.svg" class="mr-1"/>
                   </template>
@@ -140,7 +140,13 @@
           </div>
         </div>
 
-        <div class="review-form max-w-[642px] w-full">
+        <div v-else class="flex w-full items-center justify-center"><p class="text-[var(--color-primary-black)] text-[26px] italic">
+          {{
+            t('no_reviews_yet')
+          }}</p></div>
+
+
+        <div v-if="token" class="review-form max-w-[642px] w-full">
           <div class="mb-4">
             <h2 class="form-title fw-500">{{ t('new_review') }}</h2>
           </div>
@@ -148,13 +154,13 @@
             <InputText class="w-full h-[42px] py-[10px] rounded-[8px]" :placeholder="t('your_name')"/>
           </div>
           <div class="mb-[10px] rounded-[8px]">
-                <Textarea style="resize: none" class="w-full rounded-[8px]" :placeholder="t('share_your_impressions')"
+                <Textarea v-model="textareaValue" style="resize: none" class="w-full rounded-[8px]"
+                          :placeholder="t('share_your_impressions')"
                           rows="5" cols="30"/>
           </div>
-
           <div class="rate-product mb-[27px] flex items-center">
             <p class="mr-[10px] text-[14px]">{{ t('rate_product') }}</p>
-            <Rating>
+            <Rating v-model="rating">
               <template #onicon>
                 <img src="@/assets/icons/star-filled.svg" class="mr-1"/>
               </template>
@@ -166,7 +172,7 @@
 
           <div
               class="rounded-[8px] max-w-[386px]">
-            <Button :pt="{
+            <Button @click="leaveProductReview" :pt="{
                   root: {
                     class: 'send-review__btn btn-hover-default'
                   }
@@ -181,35 +187,43 @@
 
 <script setup>
 
-const { t } = useI18n()
+import {leaveReview, getReviewByProduct} from "~/services/api/reviews-service.js";
+import {formatDateToDMY} from "~/utils/index.js";
 
-const reviews = [
-  {
-    name: "Огірковий Огірок",
-    comment: "Чудовий товар! Взяв всю партію!",
-    date: "07.07.2024",
-    stars: 2,
-    purchaseConfirmed: true
-  },
-  {
-    name: "Огірковий Огірок",
-    comment: "Протестував Nutrex Research Anabol Hardcore для набору м’язової маси та збільшення сили. Вже через тиждень помітив поліпшення: м’язи стали щільнішими, зросли робочі ваги, а відновлення після тренувань значно прискорилося.",
-    date: "07.07.2024",
-    stars: 5,
-    purchaseConfirmed: true
-  },
-  {
-    name: "Огірковий Огірок",
-    comment: "Чудовий товар! Взяв всю партію!",
-    date: "07.07.2024",
-    stars: 3,
-    purchaseConfirmed: true
-  },
-]
+const route = useRoute()
+const productId = computed(() => route.params.id)
+
+const {t} = useI18n()
+
+const token = useCookie('token')
+
+const rating = ref(null)
+
+const textareaValue = ref('')
+
+const reviews = ref([])
+
+const leaveProductReview = async () => {
+  await leaveReview(productId.value, rating.value, textareaValue.value)
+  clearFields()
+}
+
+const clearFields = () => {
+  rating.value = null
+  textareaValue.value = ''
+}
+
+const fullReviewerName = ({firstName, lastName}) => {
+  return `${firstName} ${lastName}`
+}
+
+onMounted(async () => {
+  reviews.value = await getReviewByProduct(productId.value)
+})
 
 const tabs = {
   description: {
-    header:  computed(() => t('tabs_description')),
+    header: computed(() => t('tabs_description')),
   },
   delivery: {
     header: computed(() => t('tabs_delivery'))

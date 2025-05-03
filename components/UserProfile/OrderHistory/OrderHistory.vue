@@ -8,7 +8,8 @@
 <script setup lang="ts">
 
 import OrderHistoryItem from "~/components/UserProfile/OrderHistory/OrderHistoryItem/OrderHistoryItem.vue";
-const { t } = useI18n();
+
+const {t} = useI18n();
 
 </script>
 

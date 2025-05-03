@@ -97,7 +97,7 @@
     </div>
 
     <div class="tabs-wrapper pt-[24px] pr-[55px] pb-[32px] pl-[55px] rounded-md bg-[var(--color-gray-lavender)]">
-      <AboutProductTabs/>
+      <AboutProductTabs />
     </div>
 
     <div class="recommended-products">

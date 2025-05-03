@@ -9,7 +9,10 @@
         'mx-auto mb-[37px]',
         isLogin ? 'max-w-[320px]' : 'max-w-[386px]'
     ]" class="auth-button-wrapper">
-      <Button @click="handleAuth" :pt="{ root: { class: 'auth-button btn-hover-default' } }">{{ buttonLabel }}</Button>
+      <Button @click="handleAuth":pt="{ root: { class: 'auth-button btn-hover-default' } }">{{
+          buttonLabel
+        }}
+      </Button>
     </div>
     <div class="flex mb-[16px] items-center justify-center gap-4">
       <div class="max-w-[196px] w-full h-px bg-[var(--color-primary-pure-white)]"></div>
@@ -60,7 +63,7 @@ const fieldsBlock = ref(null);
 
 const {authenticateUser, registerUser} = useAuthStore();
 
-const {authenticated} = storeToRefs(useAuthStore());
+const {authenticated, currentUser} = storeToRefs(useAuthStore());
 
 const {t} = useI18n();
 
@@ -79,22 +82,29 @@ const {isLogin} = defineProps({
 
 const handleAuth = async () => {
   isLoading.value = true;
+
   const isValid = fieldsBlock.value?.validateFields()
   const user = fieldsBlock.value?.getData()
 
   const action = isLogin ? authenticateUser : registerUser;
 
   if (isValid) {
-    await action(user)
-    if (authenticated) {
-      authPopup.close()
-      router.push('/profile')
+    try {
+      await action(user);
+
+      if (authenticated) {
+        authPopup.close();
+
+        router.push(`/profile/${currentUser.value._id}`);
+      }
+    } catch (error) {
+      console.error("Ошибка при аутентификации:", error);
+    } finally {
       isLoading.value = false;
     }
   } else {
     isLoading.value = false;
   }
-
 }
 
 
