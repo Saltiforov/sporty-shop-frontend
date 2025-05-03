@@ -146,21 +146,21 @@
           }}</p></div>
 
 
-        <div v-if="token" class="review-form max-w-[642px] w-full">
+        <div  class="review-form max-w-[642px] w-full">
           <div class="mb-4">
             <h2 class="form-title fw-500">{{ t('new_review') }}</h2>
           </div>
           <div class="mb-4 rounded-[8px] max-w-[354px]">
-            <InputText class="w-full h-[42px] py-[10px] rounded-[8px]" :placeholder="t('your_name')"/>
+            <InputText :disabled="!token" class="w-full h-[42px] py-[10px] rounded-[8px]" :placeholder="t('your_name')"/>
           </div>
           <div class="mb-[10px] rounded-[8px]">
-                <Textarea v-model="textareaValue" style="resize: none" class="w-full rounded-[8px]"
+                <Textarea :disabled="!token" v-model="textareaValue" style="resize: none" class="w-full rounded-[8px]"
                           :placeholder="t('share_your_impressions')"
                           rows="5" cols="30"/>
           </div>
           <div class="rate-product mb-[27px] flex items-center">
             <p class="mr-[10px] text-[14px]">{{ t('rate_product') }}</p>
-            <Rating v-model="rating">
+            <Rating :disabled="!token" v-model="rating">
               <template #onicon>
                 <img src="@/assets/icons/star-filled.svg" class="mr-1"/>
               </template>
@@ -172,7 +172,7 @@
 
           <div
               class="rounded-[8px] max-w-[386px]">
-            <Button @click="leaveProductReview" :pt="{
+            <Button :disabled="!token" v-tooltip.top="{ value: t('review_auth_tooltip'), autoHide: false }" @click="leaveProductReview" :pt="{
                   root: {
                     class: 'send-review__btn btn-hover-default'
                   }

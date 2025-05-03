@@ -27,7 +27,8 @@
           </div>
         </div>
         <div v-if="products.length"
-             class="grid  gap-[30px] mb-[45px] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 max-w-full w-full">
+             class="grid
+              gap-[30px] mb-[45px] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 max-w-full w-full">
           <ProductCard
               v-for="product in products"
               :key="product.id"

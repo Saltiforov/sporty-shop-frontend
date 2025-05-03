@@ -77,6 +77,7 @@
   "phone_number": "Номер телефону*",
   "telegram_username": "Telegram нікнейм",
   "telegram_tooltip": "Потрібен для звʼязку щодо подальшої оплати",
+  "review_auth_tooltip": "Лише зареєстровані користувачі можуть залишати відгуки",
   "note_to_delivery": "Додати примітку до доставки",
   "street_address": "Вулиця, будинок, квартира",
 
