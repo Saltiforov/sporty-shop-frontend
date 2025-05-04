@@ -10,7 +10,7 @@ export const calculateTotal = (items, useDiscount = true) => {
 }
 
 export const addProductToCart = (array, product) => {
-    const existItem =  array.value.find(item => item._id === product._id)
+    const existItem = array.value.find(item => item._id === product._id)
     if (!existItem) {
         array.value.push({...product, quantity: 1})
         return;
@@ -32,4 +32,53 @@ export function formatDateToDMY(isoDate) {
     const year = date.getFullYear()
 
     return `${day}.${month}.${year}`
+}
+
+export function mapOrdersToSummaries(orders) {
+    return orders.map(order => {
+        const shipping = order.shippingAddress || {}
+
+        const products = (order.products || []).map(item => {
+            const product = item.product || {}
+
+            return {
+                image: fullImageUrls(product.images)[0] || '',
+                name: product.name || '',
+                quantity: item.quantity || 0,
+                price: product.price || 0,
+                id: product._id || '',
+                discountPrice: product.discount || product.price || 0
+            }
+        })
+
+
+        return {
+            id: order._id || '',
+            orderNumber: order.orderNumber || '',
+            status: order.orderStatus || '',
+            firstName: shipping.firstName || '',
+            lastName: shipping.lastName || '',
+            phone: shipping.phone || '',
+            email: shipping.email || '',
+            userInfo: {
+                firstName: shipping.firstName || '',
+                lastName: shipping.lastName || '',
+                email: shipping.email || '',
+                phone: shipping.phone || '',
+                address: formatAddress(shipping),
+                deliveryComment: shipping.note || ''
+            },
+            products
+        }
+    })
+}
+
+function formatAddress(address) {
+    const parts = [address.street, address.city, address.country].filter(Boolean)
+    return parts.join(', ')
+}
+
+export function capitalizeFirstLetter(str) {
+    if (!str) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
 }

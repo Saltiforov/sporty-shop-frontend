@@ -172,7 +172,7 @@
 
           <div
               class="rounded-[8px] max-w-[386px]">
-            <Button :disabled="!token" v-tooltip.top="{ value: t('review_auth_tooltip'), autoHide: false }" @click="leaveProductReview" :pt="{
+            <Button :disabled="!token" v-tooltip.top="!token ? { value: t('review_auth_tooltip'), autoHide: false } : null" @click="leaveProductReview" :pt="{
                   root: {
                     class: 'send-review__btn btn-hover-default'
                   }

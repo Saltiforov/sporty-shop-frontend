@@ -26,16 +26,23 @@
             <SortSelect/>
           </div>
         </div>
-        <div v-if="products.length"
-             class="grid
-              gap-[30px] mb-[45px] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 max-w-full w-full">
-          <ProductCard
-              v-for="product in products"
-              :key="product.id"
-              :product="product"
-              @add-to-cart="showBottomRight"
-          />
+
+        <div class="grid gap-[30px] mb-[45px] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 max-w-full w-full">
+
+          <template v-if="!hydrated">
+            <ProductSkeleton v-for="i in 10" :key="'loading-skeleton-' + i" />
+          </template>
+
+          <template v-else>
+            <ProductCard
+                v-for="product in products"
+                :key="product.id"
+                :product="product"
+                @add-to-cart="showBottomRight"
+            />
+          </template>
         </div>
+
         <div class="products-pagination-actions mb-[72px]">
           <div class="load-more-wrapper mb-3 flex justify-center">
             <LoadMoreButton :disabled="allLoaded" @click="fetchProducts(false)" :label="loadMoreLabel">
@@ -73,10 +80,12 @@
     </transition>
 
   </div>
-
 </template>
 
+
 <script setup>
+import ProductSkeleton from '~/components/Cards/ProductSkeleton/ProductSkeleton.vue'
+
 definePageMeta({
   layout: 'default',
 })
@@ -104,6 +113,8 @@ const promotionalProductsSwiperOptions = {
   slidesPerView: 1,
   loop: true,
 }
+
+const hydrated = ref(false)
 
 const {t} = useI18n();
 
@@ -196,6 +207,8 @@ onMounted(async () => {
   syncFromRoute()
 
   await fetchProducts()
+
+  hydrated.value = true
 
   $eventBus.on('show-cart', () => {
     isShoppingCartShow.value = true

@@ -16,15 +16,23 @@
 
 <script setup >
 import {InputGroup, InputGroupAddon, InputNumber} from "primevue";
+import {updateInfoAboutUser} from "~/services/api/user-service.js";
+import {storeToRefs} from "pinia";
+import {useAuthStore} from "~/stores/auth.js";
 
 const { t } = useI18n();
+
+const {currentUser} = storeToRefs(useAuthStore());
 
 const fieldsBlock = ref(null)
 
 const savePersonalInformation = async () => {
   const isValid = fieldsBlock.value?.validateFields()
+  const userInfo = fieldsBlock.value?.getData()
 
-  console.log("savePersonalInformation", fieldsBlock.value?.getData())
+  if (isValid) {
+    updateInfoAboutUser(currentUser.value._id, userInfo)
+  }
 
 }
 
@@ -51,7 +59,7 @@ const config = {
         name: 'country',
         code: 'country',
         label: computed(() => t('country')),
-        type: 'Select',
+        type: 'InputText',
         props: {
           side: 'right',
           half: true,

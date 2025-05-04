@@ -38,7 +38,7 @@
           </NuxtLink>
         </div>
         <div>
-          <NuxtLink to="/product">
+          <NuxtLink to="/">
             <p class="text-[#A3A3A7] murecho-font">{{ t('continue_shopping') }}</p>
           </NuxtLink>
         </div>

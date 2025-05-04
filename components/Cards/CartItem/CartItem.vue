@@ -56,7 +56,7 @@
                   : 'text-[16px]'
               ]"
             >
-              {{ cartProduct?.price || '1121' }} {{ t('currency') }}
+              {{ cartProduct?.price * cartProduct.quantity || '1121' }} {{ t('currency') }}
             </div>
 
             <div
@@ -118,7 +118,7 @@ const {cartProduct} = defineProps({
   }
 })
 
-const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] || cartProduct.image)
+const  imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] || cartProduct.image)
 
 const discountPrice = computed(() => cartProduct?.price - cartProduct?.discount)
 

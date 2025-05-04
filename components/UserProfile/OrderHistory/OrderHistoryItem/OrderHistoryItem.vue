@@ -13,7 +13,7 @@
           <div class="flex w-full items-center justify-between">
             <p class="title-lg-20">{{ t('order_number', { number: item.orderNumber }) }}</p>
             <div class="order-status  text-white px-[12px] bg-[var(--color-primary-purple)] rounded-[var(--default-rounded)] py-[10px] mx-[20px]">
-              {{ t(localizeStatus(item.status)) }}
+              {{ capitalizeFirstLetter(item?.status) }}
             </div>
           </div>
         </AccordionHeader>
@@ -21,14 +21,14 @@
           <div class="order-item-content-wrapper px-[48px] pb-[46px]">
             <div class="card-item grid gap-7 mb-[27px]">
               <CartItem
-                  v-for="item in shoppingCartItems"
+                  v-for="item in item?.products"
                   :cart-product="item"
                   :key="item.id"
                   :is-history-view="true"
               />
               <div class="history-view-price justify-end text-[var(--color-primary-red)] title-lg-20 flex">
                 <p class="mr-5">{{ t('total') }}:</p>
-                <p>{{ finalPrice }} {{ t('currency') }}</p>
+                <p>{{ calculateTotal(item?.products, true) }} {{ t('currency') }}</p>
               </div>
             </div>
             <div class="flex text-[var(--color-gray-dark-charcoal)] max-w-[890px] justify-between">
@@ -49,11 +49,17 @@
 <script setup>
 import CartItem from "~/components/Cards/CartItem/CartItem.vue";
 import ProductImage from "~/assets/images/product-image.png"
-import {calculateTotal} from "~/utils/index.js";
-
-const finalPrice = computed(() => calculateTotal(shoppingCartItems.value, true))
+import {calculateTotal, capitalizeFirstLetter} from "~/utils/index.js";
 
 const { t } = useI18n();
+
+defineProps({
+  orderList: {
+    type: Array,
+    required: true,
+    default: () => []
+  }
+})
 
 const userInfoLabels = [
   'user_info_first_name',
@@ -79,42 +85,42 @@ const localizeStatus = (status) => {
   return statusLocalization[status];
 }
 
-const orderList = [
-  {
-    id: 1,
-    orderNumber: 1111115,
-    status: 'Відправлено',
-    firstName: 'Іван',
-    lastName: 'Петренко',
-    phone: '+380 99 765 55 55',
-    email: 'qwerty@gmail.com',
-    userInfo: {
-      firstName: 'Огірок',
-      lastName: 'Огірковий',
-      email: 'qwerty@gmail.com',
-      phone: '+380 99 765 55 55',
-      address: 'Київ',
-      deliveryComment: 'Відділення НП №60'
-    }
-  },
-  {
-    id: 2,
-    orderNumber: 1532415,
-    status: 'В обробці',
-    firstName: 'Марія',
-    lastName: 'Шевченко',
-    phone: '+380 97 123 45 67',
-    email: 'maria@example.com',
-    userInfo: {
-      firstName: 'Огірок',
-      lastName: 'Огірковий',
-      email: 'qwerty@gmail.com',
-      phone: '+380 99 765 55 55',
-      address: 'Київ',
-      deliveryComment: 'Відділення НП №60'
-    }
-  }
-];
+// const orderList = [
+//   {
+//     id: 1,
+//     orderNumber: 1111115,
+//     status: 'Відправлено',
+//     firstName: 'Іван',
+//     lastName: 'Петренко',
+//     phone: '+380 99 765 55 55',
+//     email: 'qwerty@gmail.com',
+//     userInfo: {
+//       firstName: 'Огірок',
+//       lastName: 'Огірковий',
+//       email: 'qwerty@gmail.com',
+//       phone: '+380 99 765 55 55',
+//       address: 'Київ',
+//       deliveryComment: 'Відділення НП №60'
+//     }
+//   },
+//   {
+//     id: 2,
+//     orderNumber: 1532415,
+//     status: 'В обробці',
+//     firstName: 'Марія',
+//     lastName: 'Шевченко',
+//     phone: '+380 97 123 45 67',
+//     email: 'maria@example.com',
+//     userInfo: {
+//       firstName: 'Огірок',
+//       lastName: 'Огірковий',
+//       email: 'qwerty@gmail.com',
+//       phone: '+380 99 765 55 55',
+//       address: 'Київ',
+//       deliveryComment: 'Відділення НП №60'
+//     }
+//   }
+// ];
 
 
 const

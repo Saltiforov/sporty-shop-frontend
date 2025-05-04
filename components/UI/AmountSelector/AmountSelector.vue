@@ -43,7 +43,7 @@ const props = defineProps({
   inputStyles: { type: Object },
   min: { type: Number, default: 1 },
   max: { type: Number, default: 10 },
-  modelValue: { type: Number, required: true, default: 5 }
+  modelValue: { type: Number, required: true, default: 1 }
 })
 
 const emit = defineEmits(['update:modelValue'])

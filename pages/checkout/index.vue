@@ -123,6 +123,7 @@ import {useCartStore} from "~/stores/cart.js";
 import {createOrder} from "~/services/api/order-service.js";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 import {getCurrentUser} from "~/services/api/user-service.js";
+import router from "#app/plugins/router.js";
 
 definePageMeta({
   layout: 'breadcrumb',
@@ -197,7 +198,11 @@ const handleCreateOrder = async () => {
         .then(() => {
           clearCreateOrderForm()
           showTopRight()
-        }).catch(() => {
+          setTimeout(() => {
+            navigateTo('/')
+          },500)
+        })
+        .catch(() => {
           showError()
         })
         .finally(() => isLoading.value = false)
@@ -220,7 +225,7 @@ const togglePromoCodeUse = () => {
 }
 
 onMounted(async () => {
-  if(token.value) {
+  if (token.value) {
     userData.value = await getCurrentUser()
   }
 })

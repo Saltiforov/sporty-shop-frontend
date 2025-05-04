@@ -15,8 +15,6 @@
       </div>
     </div>
 
-
-
     <main class="flex-1 p-4">
       <NuxtPage/>
     </main>
@@ -26,11 +24,7 @@
 </template>
 
 <script setup>
-const images = ref([
-  'https://wallpapers.com/images/high/fitness-gym-with-equipment-iovhjg9dwfy87bzf.webp',
-  'https://wallpapers.com/images/high/home-gym-with-barbell-r4xvbh7jalyuhdme.webp',
-  'https://wallpapers.com/images/high/gym-motivation-picture-8rog1fmrp8zbmfkm.webp',
-])
+const { data: images } = await useFetch('/api/images');
 
 const swiperOptions = {
   effect: 'cards',

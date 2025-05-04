@@ -1,5 +1,6 @@
 const router = {
     orders: '/api/client/orders',
+    ordersByID: '/api/client/orders/user'
 }
 
 export const createOrder = (product) => {
@@ -7,7 +8,13 @@ export const createOrder = (product) => {
     return $api.post(router.orders, product)
 }
 
-export const getAllOrders = (id) => {
+export const getOrdersByUserId = (userId, { limit = 10, skip = 0 } = {}) => {
     const { $api } = useNuxtApp()
-    return $api.get(`${router.orders}/${id}`)
+
+    return $api.get(`${router.ordersByID}/${userId}`, {
+        params: {
+            limit,
+            skip
+        }
+    })
 }
