@@ -10,6 +10,13 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.base-container {
+    width: 100%;
+    max-width: 1690px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
 .btn-hover-default {
     position: relative;
     overflow: hidden;

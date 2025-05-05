@@ -16,6 +16,7 @@
 </template>
 
 <script setup>
+definePageMeta({layout: 'profile'})
 import {InputGroup, Password} from "primevue";
 
 const {t} = useI18n()

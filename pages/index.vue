@@ -13,7 +13,7 @@
           <p class="text-[var(--color-primary-pink)] mb-[21px] fw-600 text-[20px]">{{ t('promo_products_title') }}</p>
           <SwiperWrapper :items="products" :options="promotionalProductsSwiperOptions">
             <template #default="{ item }">
-              <ProductCard class="mt-3 mb-3" :product="item"/>
+              <ProductCard class="mt-3 mb-3" :product="item" @add-to-cart="showBottomRightToast"/>
             </template>
           </SwiperWrapper>
         </div>
@@ -38,7 +38,7 @@
                 v-for="product in products"
                 :key="product.id"
                 :product="product"
-                @add-to-cart="showBottomRight"
+                @add-to-cart="showBottomRightToast"
             />
           </template>
         </div>
@@ -63,39 +63,16 @@
       </div>
     </div>
 
-    <AuthWrapper/>
-
-    <Toast position="bottom-right" group="br"/>
-
-    <transition v-if="isShoppingCartShow">
-      <div class="overlay"/>
-    </transition>
-
-    <transition @click="handleCartOverlayClick" name="slide-right">
-      <ShoppingCart
-          :is-open="isShoppingCartShow"
-          :cart-items="cartStore.getCartProducts"
-          @close="isShoppingCartShow = false"
-      />
-    </transition>
-
   </div>
 </template>
 
 
 <script setup>
-import ProductSkeleton from '~/components/Cards/ProductSkeleton/ProductSkeleton.vue'
+import ProductSkeleton from '~/components/Skeletons/ProductSkeleton/ProductSkeleton.vue'
 
 definePageMeta({
   layout: 'default',
 })
-
-const handleCartOverlayClick = (event) => {
-  const clickedElement = event.target
-  if (clickedElement.classList.contains('overlay')) {
-    isShoppingCartShow.value = false
-  }
-}
 
 import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
 import AuthWrapper from "~/wrappers/AuthWrapper.vue";
@@ -122,10 +99,6 @@ const toast = useToast();
 
 const route = useRoute()
 
-const cartStore = useCartStore()
-
-const {$eventBus} = useNuxtApp();
-
 const sortTitle = computed(() => t('sort_title'))
 
 const activePage = ref(Number(route.query.page))
@@ -146,7 +119,7 @@ const loadMoreLabel = computed(() => {
   return t('load_more', {count: limit.value});
 });
 
-const showBottomRight = (product) => {
+const showBottomRightToast = (product) => {
   toast.add({
     severity: 'success',
     summary: t('toast_success_title'),
@@ -179,8 +152,6 @@ const products = ref([])
 
 const isLoading = ref(true)
 
-const isShoppingCartShow = ref(false)
-
 const fetchProducts = async (shouldReplace = false) => {
   try {
     isLoading.value = true
@@ -209,14 +180,6 @@ onMounted(async () => {
   await fetchProducts()
 
   hydrated.value = true
-
-  $eventBus.on('show-cart', () => {
-    isShoppingCartShow.value = true
-  });
-});
-
-onBeforeUnmount(() => {
-  $eventBus.off('show-cart');
 });
 </script>
 

@@ -1,8 +1,10 @@
 <template>
   <div class="personal-information">
+    <LoadingOverlay :visible="isLoading"/>
     <h1 class="title-lg-20 mb-[30px]">{{ t('contact_information') }}</h1>
-    <FieldsBlock class="mb-[73px]" :config="config.fields" :data="$attrs" ref="fieldsBlock"/>
-    <div
+    <FieldsBlock v-if="userData && userData._id" class="mb-[73px]" :config="config.fields" ref="fieldsBlock" :data="userData"/>
+    <FieldsBlockSkeleton v-else/>
+      <div
         class="max-w-[338px] mx-auto py-[10px] px-[10px]">
       <Button @click="savePersonalInformation" :pt="{
         root: {
@@ -14,17 +16,27 @@
   </div>
 </template>
 
-<script setup >
+<script setup>
+import FieldsBlockSkeleton from "~/components/Skeletons/FieldsBlockSkeleton/FieldsBlockSkeleton.vue";
+
+definePageMeta({layout: 'profile'})
+
+import {onMounted} from "vue";
 import {InputGroup, InputGroupAddon, InputNumber} from "primevue";
-import {updateInfoAboutUser} from "~/services/api/user-service.js";
+import {getCurrentUser, updateInfoAboutUser} from "~/services/api/user-service.js";
 import {storeToRefs} from "pinia";
 import {useAuthStore} from "~/stores/auth.js";
+import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 
-const { t } = useI18n();
+const {t} = useI18n();
 
 const {currentUser} = storeToRefs(useAuthStore());
 
+const userData = ref({})
+
 const fieldsBlock = ref(null)
+
+const isLoading = ref(false);
 
 const savePersonalInformation = async () => {
   const isValid = fieldsBlock.value?.validateFields()
@@ -33,8 +45,26 @@ const savePersonalInformation = async () => {
   if (isValid) {
     updateInfoAboutUser(currentUser.value._id, userInfo)
   }
-
 }
+
+const loadUserData = async () => {
+  isLoading.value = true
+  try {
+    userData.value = await getCurrentUser()
+  } catch (e) {
+    console.error('Ошибка при загрузке пользователя', e)
+  } finally {
+    setTimeout(() => {
+      isLoading.value = false
+    }, 500)
+  }
+}
+
+onMounted(async () => {
+
+  await loadUserData()
+
+})
 
 const config = {
   fields: {

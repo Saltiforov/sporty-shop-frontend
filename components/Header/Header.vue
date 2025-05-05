@@ -28,7 +28,7 @@
         <LocaleSwitch/>
       </div>
       <div class="action-panel max-w-[144px] w-full h-[36px] flex justify-between">
-        <Button :pt="{ root: { class: 'action-panel-icon' } }">
+        <Button @click="navigateTo('/profile/favorite')" :pt="{ root: { class: 'action-panel-icon' } }">
           <img src="~/assets/icons/favorite-icon-heart.svg" alt="favorite-icon-heart.svg"/>
         </Button>
         <div class="relative flex inline-block" @click="toggle">
@@ -50,7 +50,7 @@
               :pt="{
       root: {
         class: `
-          absolute left-1/2 translate-x-[15%] top-full mt-20 z-500
+          absolute left-1/2 translate-x-[15%] translate-y-[10%] top-full mt-20 z-500
           bg-[var(--color-gray-light-lavender)]
           before:content-[''] before:absolute before:top-[-26px]
           before:right-[40px] before:border-[13px] before:border-transparent
@@ -58,7 +58,7 @@
         `
       },
       submenuLabel: { class: 'p-0' },
-      itemLink: { class: 'border-b border-[var(--color-gray-light-lavender)] last:border-b-0' }
+      itemLink: { class: 'border-b border-[var(--color-primary-pure-white)] last:pb-[10px]' }
     }"
           />
         </div>
@@ -73,14 +73,29 @@
 
     </div>
   </header>
+
+  <AuthWrapper/>
+
+  <transition v-if="isShoppingCartShow">
+    <div class="overlay"/>
+  </transition>
+
+  <transition @click="handleOverlayClick" name="slide-right">
+    <ShoppingCart
+        :is-open="isShoppingCartShow"
+        :cart-items="cartStore.getCartProducts"
+        @close="isShoppingCartShow = false"
+        @continue-shopping="handleContinueShopping"
+    />
+  </transition>
+
 </template>
 
 <script setup>
 import LocaleSwitch from "~/components/UI/LocaleSwitch/LocaleSwitch.vue";
 import {useAuthStore} from "~/stores/auth.js";
 import {storeToRefs} from "pinia";
-
-const {$eventBus} = useNuxtApp();
+import AuthWrapper from "~/wrappers/AuthWrapper.vue";
 
 const {t} = useI18n();
 
@@ -92,12 +107,22 @@ const {authenticated, currentUser} = storeToRefs(useAuthStore());
 
 const cartStore = useCartStore();
 
+const isShoppingCartShow = ref(false)
+
+const handleOverlayClick = (event) => {
+  const clickedElement = event.target
+  if (clickedElement.classList.contains('overlay')) {
+    isShoppingCartShow.value = false
+  }
+}
+
 const showShoppingCart = () => {
-  $eventBus.emit('show-cart');
+  isShoppingCartShow.value = true
 };
 
-const redirectToUserOrderHistory = () => {
-  $eventBus.emit('show-order-history')
+const handleContinueShopping = () => {
+  isShoppingCartShow.value = false
+  navigateTo('/')
 }
 
 const logout = () => {
@@ -111,8 +136,8 @@ const items = computed(() => {
     return [
       {
         items: [
-          {label: t('my_cabinet'), command: () => navigateTo('/profile')},
-          {label: t('my_orders'), command: () => redirectToUserOrderHistory()},
+          {label: t('my_cabinet'), command: () => navigateTo('/profile/personal-information')},
+          {label: t('my_orders'), command: () => navigateTo('/profile/orders')},
           {label: t('logout'), command: () => logout()},
         ]
       }

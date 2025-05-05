@@ -1,6 +1,5 @@
 <template>
   <div class="min-h-screen flex flex-col">
-    <Header/>
 
     <div class="w-full px-4 mx-auto mt-[98px] mb-[53px]">
       <div class="mx-auto w-full max-w-[1756px]">
@@ -19,7 +18,6 @@
       <NuxtPage/>
     </main>
 
-    <Footer/>
   </div>
 </template>
 

@@ -1,13 +1,17 @@
 <template>
   <div class="auth-component">
     <LoadingOverlay :visible="isLoading"/>
-    <FieldsBlock :config="fieldsConfig.fields" ref="fieldsBlock"/>
+    <FieldsBlock
+        class="scrollable-fields-block"
+        :config="fieldsConfig.fields"
+        ref="fieldsBlock"
+    />
     <div v-if="isLogin" class="reset-password justify-end mb-[27px] flex">
       <NuxtLink><p class="text-[var(--color-muted-gray)]">{{ t('forgot_password') }}</p></NuxtLink>
     </div>
     <div :class="[
-        'mx-auto mb-[37px]',
-        isLogin ? 'max-w-[320px]' : 'max-w-[386px]'
+        'mx-auto  mb-[37px]',
+        isLogin ? 'max-w-[320px]' : 'max-w-[386px] pt-[15px]'
     ]" class="auth-button-wrapper">
       <Button @click="handleAuth":pt="{ root: { class: 'auth-button btn-hover-default' } }">{{
           buttonLabel
@@ -63,7 +67,7 @@ const fieldsBlock = ref(null);
 
 const {authenticateUser, registerUser} = useAuthStore();
 
-const {authenticated, currentUser} = storeToRefs(useAuthStore());
+const {authenticated} = storeToRefs(useAuthStore());
 
 const {t} = useI18n();
 
@@ -94,8 +98,7 @@ const handleAuth = async () => {
 
       if (authenticated) {
         authPopup.close();
-
-        router.push(`/profile/${currentUser.value._id}`);
+        navigateTo('/profile/personal-information')
       }
     } catch (error) {
       console.error("Ошибка при аутентификации:", error);
@@ -106,7 +109,6 @@ const handleAuth = async () => {
     isLoading.value = false;
   }
 }
-
 
 const buttonLabel = computed(() => isLogin ? t('login') : t('register_button'))
 
@@ -299,5 +301,30 @@ const registerFields = {
 .login-with__img:hover {
   background: transparent;
   border: none;
+}
+
+.scrollable-fields-block {
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.scrollable-fields-block::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable-fields-block::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.scrollable-fields-block::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.scrollable-fields-block::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
 }
 </style>

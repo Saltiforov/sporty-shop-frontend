@@ -120,7 +120,7 @@ const {cartProduct} = defineProps({
 
 const  imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] || cartProduct.image)
 
-const discountPrice = computed(() => cartProduct?.price - cartProduct?.discount)
+const discountPrice = computed(() => (cartProduct?.price - cartProduct?.discount) * cartProduct?.quantity)
 
 </script>
 
