@@ -3,7 +3,7 @@
     <div class="relative w-full mx-auto">
       <swiper-container
           ref="containerRef"
-          class="w-full"
+          class="w-full bg-[var(--color-primary-pure-white)]"
       >
         <swiper-slide
             v-for="(item, idx) in items"

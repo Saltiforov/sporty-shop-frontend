@@ -71,8 +71,6 @@ const {authenticated} = storeToRefs(useAuthStore());
 
 const {t} = useI18n();
 
-const router = useRouter();
-
 const authPopup = useAuthPopup()
 
 const isLoading = ref(false);

@@ -128,10 +128,10 @@
               <div class="review-card__stars mr-3">
                 <Rating v-model="review.rating" readonly>
                   <template #onicon>
-                    <img src="@/assets/icons/star-filled.svg" class="mr-1" />
+                    <img src="@/assets/icons/star-filled.svg" class="mr-1"/>
                   </template>
                   <template #officon>
-                    <img src="@/assets/icons/star-empty.svg" class="mr-1" />
+                    <img src="@/assets/icons/star-empty.svg" class="mr-1"/>
                   </template>
                 </Rating>
               </div>
@@ -141,7 +141,14 @@
               </div>
             </div>
 
-            <p class="review-card__comment">{{ review.comment }}</p>
+            <p class="review-card__comment">{{ getSlicedReview(review) }}</p>
+            <p
+                v-if="isShowMoreButton(review.comment)"
+                class="flex cursor-pointer justify-end text-[12px] text-[var(--color-muted-light-gray)] fw-500"
+                @click="toggleComment(review._id)"
+            >
+              {{ expandedComments.has(review._id) ? 'Hide' : 'Read more' }}
+            </p>
           </div>
           <div class="pagination-wrapper flex justify-end">
             <div class="pagination flex justify-between items-center  max-w-[80px] w-full">
@@ -196,26 +203,33 @@
             <h2 class="form-title fw-500">{{ t('new_review') }}</h2>
           </div>
           <div class="mb-4 rounded-[8px] max-w-[354px]">
-            <InputText :disabled="!token" class="w-full h-[42px] py-[10px] rounded-[8px]" :placeholder="t('your_name')" />
+            <InputText :disabled="!token" v-model="reviewerInputValue" class="w-full h-[42px] py-[10px] rounded-[8px]"
+                       :placeholder="t('your_name')"/>
           </div>
-          <div class="mb-[10px] rounded-[8px]">
-          <Textarea :disabled="!token" v-model="textareaValue" style="resize: none" class="w-full rounded-[8px]"
-                    :placeholder="t('share_your_impressions')" rows="5" cols="30" />
+          <div class="rounded-[8px]">
+          <Textarea :disabled="!token" :maxlength="MAX_REVIEW_LENGTH" v-model="textareaValue" style="resize: none"
+                    class="w-full rounded-[8px]"
+                    :placeholder="t('share_your_impressions')" rows="5" cols="30"/>
+          </div>
+          <div class="mb-[10px] text-[var(--color-muted-light-gray)] flex justify-end">
+            {{ getReviewLength }} / {{ MAX_REVIEW_LENGTH }}
           </div>
           <div class="rate-product mb-[27px] flex items-center">
             <p class="mr-[10px] text-[14px]">{{ t('rate_product') }}</p>
             <Rating :disabled="!token" v-model="rating">
               <template #onicon>
-                <img src="@/assets/icons/star-filled.svg" class="mr-1" />
+                <img src="@/assets/icons/star-filled.svg" class="mr-1"/>
               </template>
               <template #officon>
-                <img src="@/assets/icons/star-empty.svg" class="mr-1" />
+                <img src="@/assets/icons/star-empty.svg" class="mr-1"/>
               </template>
             </Rating>
           </div>
 
           <div class="rounded-[8px] max-w-[386px]">
-            <Button :disabled="!token" v-tooltip.top="!token ? { value: t('review_auth_tooltip'), autoHide: false } : null" @click="leaveProductReview" :pt="{
+            <Button :disabled="!token"
+                    v-tooltip.top="!token ? { value: t('review_auth_tooltip'), autoHide: false } : null"
+                    @click="leaveProductReview" :pt="{
             root: {
               class: 'send-review__btn btn-hover-default'
             }
@@ -234,6 +248,10 @@
 import {leaveReview, getReviewByProduct} from "~/services/api/reviews-service.js";
 import {formatDateToDMY} from "~/utils/index.js";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
+import {storeToRefs} from "pinia";
+import {useAuthStore} from "~/stores/auth.js";
+
+const MAX_REVIEW_LENGTH = 300;
 
 const route = useRoute()
 const productId = computed(() => route.params.id)
@@ -242,7 +260,35 @@ const {t} = useI18n()
 
 const token = useCookie('token')
 
+const {currentUser} = storeToRefs(useAuthStore());
+
+const fullNameOfUser = computed(() => `${currentUser.value.firstName} ${currentUser.value.lastName}`);
+
+const getReviewLength = computed(() => textareaValue.value.length);
+
+const expandedComments = ref(new Set())
+
+const isShowMoreButton = (comment) => {
+  return comment.length >= 200
+}
+
+const getSlicedReview = (review) => {
+  const isExpanded = expandedComments.value.has(review._id)
+  if (isExpanded || review.comment.length <= 150) return review.comment;
+  return review.comment.slice(0, 150) + '...'
+}
+
+const toggleComment = (reviewId) => {
+  if (expandedComments.value.has(reviewId)) {
+    expandedComments.value.delete(reviewId)
+  } else {
+    expandedComments.value.add(reviewId)
+  }
+}
+
 const rating = ref(null)
+
+const reviewerInputValue = ref(fullNameOfUser.value || '')
 
 const textareaValue = ref('')
 

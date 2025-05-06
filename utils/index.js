@@ -1,7 +1,7 @@
 export const calculateTotal = (items, useDiscount = true) => {
     if (Array.isArray(items)) {
         return items.reduce((total, item) => {
-            const price = useDiscount ? item.discount : item.price
+            const price = useDiscount ? item.discount || item.discountPrice : item.price
             return total + price * item.quantity
         }, 0)
     }

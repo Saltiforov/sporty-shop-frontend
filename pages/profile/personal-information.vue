@@ -104,11 +104,12 @@ const config = {
         name: 'postCode',
         code: 'postCode',
         label: computed(() => t('post_code')),
-        type: 'InputText',
+        type: 'InputNumber',
         props: {
           side: 'right',
           half: true,
-          placeholder: ''
+          placeholder: '',
+          useGrouping: false,
         },
         validators: [
           (value) => (value ? true : "Postal Code is required"),
@@ -205,6 +206,7 @@ const config = {
         },
         validators: [
           (value) => (value ? true : "Phone is required"),
+          (value) => (value?.toString().length <= 11 ? true : "Phone number must be no more than 11 digits")
         ],
         render: ({modelValue, 'onUpdate:modelValue': update}) =>
             h(InputGroup, {}, {

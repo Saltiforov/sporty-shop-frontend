@@ -124,6 +124,7 @@ import {createOrder} from "~/services/api/order-service.js";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 import {getCurrentUser} from "~/services/api/user-service.js";
 import router from "#app/plugins/router.js";
+import {InputGroup, InputGroupAddon, InputNumber} from "primevue";
 
 definePageMeta({
   layout: 'breadcrumb',
@@ -360,16 +361,36 @@ const config = {
         name: 'phone',
         code: 'phone',
         label: computed(() => t('phone_number')),
-        type: 'InputText',
+        type: 'Custom',
         props: {
           side: 'left',
-          type: 'text',
-          placeholder: "",
-          required: true
         },
         validators: [
           (value) => (value ? true : "Phone is required"),
+          (value) => (value?.toString().length <= 11 ? true : "Phone number must be no more than 11 digits")
         ],
+        render: ({modelValue, 'onUpdate:modelValue': update}) =>
+            h(InputGroup, {}, {
+              default: () => [
+                h(InputGroupAddon, {
+                  pt: {
+                    root: {
+                      style: {
+                        backgroundColor: 'white',
+                        color: 'var(--color-primary-dark)',
+                      }
+                    }
+                  }
+                }, () => '+380'),
+                h(InputNumber, {
+                  modelValue,
+                  'onUpdate:modelValue': update,
+                  useGrouping: false,
+                  placeholder: '',
+                  defaultValue: null
+                })
+              ]
+            })
       },
       {
         name: 'telegramUsername',

@@ -73,8 +73,19 @@
             <p class="text-[20px] fw-400 leading-[34px]">{{ t('product_developer') }} {{ product.developer }}</p>
           </div>
           <div class="price mb-10 flex items-center">
-            <div class="fw-600 mr-[57px] text-[var(--color-primary-black)] text-[36px] leading-[34px]">{{ product.price }} <span>{{ t('currency') }}</span>
+            <div class="mr-[57px]">
+              <div :class="[product.discount ? 'text-[16px] line-through text-[#999]' : 'text-[36px]']"
+                   class="fw-600 mr-[57px] text-[var(--color-primary-black)] leading-[34px]">
+                {{ product.price }}
+                <span>{{ t('currency') }}</span>
+              </div>
+
+              <p v-if="product.discount"
+                 class="text-[#EF4B4B] text-[24px] leading-[22px] fw-500">
+                {{ product.price - product.discount }} {{ t('currency') }}
+              </p>
             </div>
+
             <AmountSelector v-model="product.quantity" :style="{ width: '129px' }"
                             :input-styles="{ width: '53px', height: '60px' }"/>
           </div>
