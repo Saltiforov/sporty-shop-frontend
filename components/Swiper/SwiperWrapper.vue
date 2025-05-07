@@ -3,14 +3,14 @@
     <div class="relative w-full mx-auto">
       <swiper-container
           ref="containerRef"
-          class="w-full bg-[var(--color-primary-pure-white)]"
+          class="w-full"
       >
         <swiper-slide
             v-for="(item, idx) in items"
             :key="idx"
             class="flex items-center justify-center"
         >
-          <slot :item="item" :index="idx" />
+          <slot :item="item" :index="idx"/>
         </swiper-slide>
       </swiper-container>
 
@@ -18,14 +18,14 @@
           @click="swipeToLeft"
           class="swiper-btn btn-hover-default -left-6"
       >
-        <img src="@/assets/images/arrow-left.svg" alt="arrow-left.svg" />
+        <img src="@/assets/images/arrow-left.svg" alt="arrow-left.svg"/>
       </button>
 
       <button
           @click="swipeToRight"
           class="swiper-btn btn-hover-default -right-6"
       >
-        <img src="@/assets/images/arrow-right.svg" alt="arrow-right.svg" />
+        <img src="@/assets/images/arrow-right.svg" alt="arrow-right.svg"/>
       </button>
     </div>
   </ClientOnly>

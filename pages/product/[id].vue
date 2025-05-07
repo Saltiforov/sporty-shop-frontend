@@ -60,7 +60,8 @@
                    xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M1.75122 6.75258C1.51628 6.53531 1.6439 6.14254 1.96167 6.10487L6.46436 5.5708C6.59387 5.55544 6.70636 5.47411 6.76099 5.35569L8.66016 1.23835C8.79419 0.947769 9.20728 0.947714 9.34131 1.23829L11.2405 5.3556C11.2951 5.47403 11.4069 5.55558 11.5364 5.57093L16.0393 6.10487C16.3571 6.14254 16.4843 6.53543 16.2494 6.75269L12.9208 9.83143C12.8251 9.91998 12.7824 10.0518 12.8079 10.1797L13.6913 14.627C13.7536 14.9408 13.4196 15.184 13.1404 15.0277L9.18386 12.8125C9.07006 12.7488 8.9318 12.7491 8.818 12.8128L4.86108 15.0271C4.58185 15.1834 4.24721 14.9408 4.30957 14.627L5.19311 10.18C5.21852 10.0521 5.176 9.91995 5.08025 9.8314L1.75122 6.75258Z"
-                    stroke="var(--color-primary-yellow)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    stroke="var(--color-primary-yellow)" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round"/>
               </svg>
               <p class="product-grade text-[16px] text-[var(--color-muted-gray)] fw-500">{{ product.rating }}
                 <span>({{ product.reviewCount }})</span></p>
@@ -94,7 +95,8 @@
               root: {
                 class: 'product-buy-now__btn'
               }
-            }" class="bg-[var(--color-primary-green)] hover:bg-[var(--color-primary-green)] rounded-2xl max-w-[456px] w-full h-[59px] flex justify-center items-center">
+            }"
+                    class="bg-[var(--color-primary-green)] hover:bg-[var(--color-primary-green)] rounded-2xl max-w-[456px] w-full h-[59px] flex justify-center items-center">
               <p class="mr-1">{{ t('product_buy_now') }}</p>
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -108,7 +110,7 @@
     </div>
 
     <div class="tabs-wrapper pt-[24px] pr-[55px] pb-[32px] pl-[55px] rounded-md bg-[var(--color-gray-lavender)]">
-      <AboutProductTabs />
+      <AboutProductTabs/>
     </div>
 
     <div class="recommended-products">
@@ -139,20 +141,19 @@
 
     <div
         class="viewed-products__content mx-auto max-w-[1500px] pb-[70px] p-4">
-      <SwiperWrapper :items="products" :options="recommendedProductsSwiperOptions">
+      <SwiperWrapper :items="viewed" :options="recommendedProductsSwiperOptions">
         <template #default="{ item }">
-          <ProductCard class="mt-3 mb-3" :product="item"/>
+          <ProductCard class="mt-3 mb-3" :product="item" @add-to-cart="showProductAddedToast"/>
         </template>
       </SwiperWrapper>
     </div>
-
-    <Toast position="bottom-right" group="br"/>
   </div>
 </template>
 
 
 <script setup>
 import {fullImageUrls} from "~/utils/index.js";
+import ProductGalleria from "~/components/UI/ProductGalleria/ProductGalleria.vue";
 
 definePageMeta({
   layout: 'breadcrumb',
@@ -163,14 +164,20 @@ import AmountSelector from "~/components/UI/AmountSelector/AmountSelector.vue";
 import FavoriteButton from "~/components/UI/FavoriteButton/FavoriteButton.vue";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 
-import { getProduct } from "~/services/api/product-service.js";
+import {getProduct} from "~/services/api/product-service.js";
 import {useCartStore} from "~/stores/cart.js";
 
-const { t } = useI18n()
+import {useViewedProducts} from "~/composables/useViewedProducts.js";
 
-const toast = useToast();
+import {useToastManager} from "~/composables/useToastManager.js";
+
+const {t} = useI18n()
 
 const cartStore = useCartStore()
+
+const {showProductAddedToast} = useToastManager()
+
+const {viewed} = useViewedProducts()
 
 const route = useRoute()
 const id = route.params.id
@@ -183,23 +190,13 @@ const isLoading = ref(true)
 
 const selectedImage = ref(null)
 
-const showBottomRight = (product) => {
-  toast.add({
-    severity: 'success',
-    summary: t('toast_success_title'),
-    detail: t('toast_added_to_cart', {productName: product.name}),
-    group: 'br',
-    life: 3000
-  });
-};
-
 const addToCart = (product) => {
   cartStore.addToCart(product);
-  showBottomRight(product);
+  showProductAddedToast(product);
 }
 
 const swiperOptions = {
-  effect: 'cards',
+  effect: 'creative',
   loop: true,
   autoplay: {
     delay: 1000,
@@ -283,6 +280,7 @@ onMounted(async () => {
   background: var(--color-primary-green);
   border: none;
 }
+
 .product-buy-now__btn {
   border: none;
 }

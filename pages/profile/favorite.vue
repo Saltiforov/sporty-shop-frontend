@@ -15,10 +15,15 @@
 </template>
 
 <script setup lang="ts">
-import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
-
 definePageMeta({layout: 'profile'})
+
 import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
+import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
+import {useToastManager} from "~/composables/useToastManager";
+
+
+
+const { showProductAddedToast } = useToastManager()
 
 const { t } = useI18n()
 
@@ -29,19 +34,9 @@ const isLoading = ref(false)
 const cartStore = useCartStore();
 
 const addToCart = (product) => {
-  showBottomRightToast(product)
+  showProductAddedToast(product)
   cartStore.addToCart(product);
 }
-
-const showBottomRightToast = (product) => {
-  toast.add({
-    severity: 'success',
-    summary: t('toast_success_title'),
-    detail: t('toast_added_to_cart', {productName: product.name}),
-    group: 'br',
-    life: 3000
-  });
-};
 
 const products = ref([
   {

@@ -75,12 +75,16 @@
 
 <script setup>
 import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
+import {useToastManager} from "~/composables/useToastManager.js";
+
 
 const emit = defineEmits(["continue-shopping"]);
 
 const cartStore = useCartStore();
 
 const authPopup = useAuthPopup()
+
+const { showProductAddedToast } = useToastManager()
 
 const {t} = useI18n()
 
@@ -99,23 +103,13 @@ const props = defineProps({
 })
 
 const addToCart = (product) => {
-  showBottomRightToast(product)
+  showProductAddedToast(product)
   cartStore.addToCart(product);
 }
 
 const handleContinueShopping = () => {
   emit("continue-shopping");
 }
-
-const showBottomRightToast = (product) => {
-  toast.add({
-    severity: 'success',
-    summary: t('toast_success_title'),
-    detail: t('toast_added_to_cart', {productName: product.name}),
-    group: 'br',
-    life: 3000
-  });
-};
 
 watch(() => props.isOpen, (newVal) => {
   if (newVal) {

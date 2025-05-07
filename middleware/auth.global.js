@@ -1,5 +1,8 @@
+import {useAuthStore} from "~/stores/auth.js";
+
 export default defineNuxtRouteMiddleware((to, from) => {
     const { authenticated, currentUser } = storeToRefs(useAuthStore());
+    const {logUserOut} = useAuthStore();
     const token = useCookie('token');
 
     if (process.client) {
@@ -12,7 +15,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
         }
     }
 
-    if (!token.value && to?.name !== '/') {
+    if (!token.value) {
         abortNavigation();
+        logUserOut()
     }
 });

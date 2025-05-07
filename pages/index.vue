@@ -1,6 +1,5 @@
 <template>
   <div class="">
-    <Toast position="bottom-right" group="br"/>
 
     <LoadingOverlay :visible="isLoading"/>
 
@@ -13,7 +12,12 @@
           <p class="text-[var(--color-primary-pink)] mb-[21px] fw-600 text-[20px]">{{ t('promo_products_title') }}</p>
           <SwiperWrapper :items="products" :options="promotionalProductsSwiperOptions">
             <template #default="{ item }">
-              <ProductCard class="mt-3 mb-3" :product="item" @add-to-cart="showBottomRightToast"/>
+              <ProductCard
+                  class="mt-3 mb-3"
+                  :product="item"
+                  @add-to-cart="showProductAddedToast"
+                  @click="addProductToViewed(item)"
+              />
             </template>
           </SwiperWrapper>
         </div>
@@ -38,14 +42,20 @@
                 v-for="product in products"
                 :key="product.id"
                 :product="product"
-                @add-to-cart="showBottomRightToast"
+                @add-to-cart="showProductAddedToast"
+                @click="addProductToViewed(product)"
+
             />
           </template>
         </div>
 
         <div class="products-pagination-actions mb-[72px]">
           <div class="load-more-wrapper mb-3 flex justify-center">
-            <LoadMoreButton :disabled="allLoaded" @click="fetchProducts(false)" :label="loadMoreLabel">
+            <LoadMoreButton
+                :disabled="allLoaded"
+                :label="loadMoreLabel"
+                @click="fetchProducts(false)"
+            >
               <template #icon>
                 <img src="~/assets/icons/load-more-icon.svg" alt="load-more-icon">
               </template>
@@ -75,7 +85,6 @@ definePageMeta({
 })
 
 import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
-import AuthWrapper from "~/wrappers/AuthWrapper.vue";
 import SortSelect from "~/components/UI/SortSelect/SortSelect.vue";
 import LoadMoreButton from "~/components/UI/LoadMoreButton/LoadMoreButton.vue";
 import ProductPaginationButton from "~/components/UI/ProductPaginationButton/ProductPaginationButton.vue";
@@ -84,18 +93,21 @@ import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 import {useQueryParams} from "~/composables/useQueryParams.js";
 import { getAllProducts } from "~/services/api/product-service.js";
 
-import {useCartStore} from "~/stores/cart.js";
+import { useToastManager } from "~/composables/useToastManager.js";
+import {useViewedProducts} from "~/composables/useViewedProducts.js";
 
 const promotionalProductsSwiperOptions = {
   slidesPerView: 1,
   loop: true,
 }
 
+const { addProductToViewed } = useViewedProducts()
+
 const hydrated = ref(false)
 
 const {t} = useI18n();
 
-const toast = useToast();
+const { showProductAddedToast } = useToastManager()
 
 const route = useRoute()
 
@@ -118,16 +130,6 @@ const allLoaded = computed(() => products.value.length >= totalProductsRecords.v
 const loadMoreLabel = computed(() => {
   return t('load_more', {count: limit.value});
 });
-
-const showBottomRightToast = (product) => {
-  toast.add({
-    severity: 'success',
-    summary: t('toast_success_title'),
-    detail: t('toast_added_to_cart', {productName: product.name}),
-    group: 'br',
-    life: 3000
-  });
-};
 
 const productsQueryParams = computed(() => {
   return {

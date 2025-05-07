@@ -96,12 +96,11 @@ const finallyPrice = computed(() => totalPriceWithoutDiscount.value - totalDisco
 }
 
 .scrollable-items {
-  max-height: 345px; /* Можно настроить под размер карточек */
+  max-height: 345px;
   overflow-y: auto;
   padding-right: 10px;
 }
 
-/* Кастомизация скролла по желанию */
 .scrollable-items::-webkit-scrollbar {
   width: 8px;
 }
