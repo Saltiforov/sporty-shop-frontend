@@ -262,7 +262,7 @@ const token = useCookie('token')
 
 const {currentUser} = storeToRefs(useAuthStore());
 
-const fullNameOfUser = computed(() => `${currentUser.value.firstName} ${currentUser.value.lastName}`);
+const fullNameOfUser = computed(() => token.value ? `${currentUser.value.firstName} ${currentUser.value.lastName}` : '');
 
 const getReviewLength = computed(() => textareaValue.value.length);
 
@@ -288,7 +288,7 @@ const toggleComment = (reviewId) => {
 
 const rating = ref(null)
 
-const reviewerInputValue = ref(fullNameOfUser.value || '')
+const reviewerInputValue = ref(fullNameOfUser.value)
 
 const textareaValue = ref('')
 

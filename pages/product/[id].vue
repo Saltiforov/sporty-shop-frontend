@@ -39,7 +39,7 @@
           </div>
 
           <div class="flex gap-[40px] justify-center">
-            <img class="max-w-[100px] cursor-pointer rounded-sm shadow-md object-cover h-[100px]"
+            <img class="max-w-[100px] border cursor-pointer rounded-[4px] shadow-md object-cover h-[100px]"
                  v-for="(img, idx) in images"
                  @click="handleGalleryClick(idx)" :src="img" :key="idx" alt="image.png">
           </div>
@@ -123,7 +123,7 @@
       </div>
 
       <div class="recommended-products__content mx-auto max-w-[1500px] pb-[70px] p-4">
-        <SwiperWrapper :items="products" :options="recommendedProductsSwiperOptions">
+        <SwiperWrapper v-if="recommended" :items="products" :options="recommendedProductsSwiperOptions">
           <template #default="{ item }">
             <ProductCard class="mt-3 mb-3" :product="item"/>
           </template>
@@ -153,7 +153,6 @@
 
 <script setup>
 import {fullImageUrls} from "~/utils/index.js";
-import ProductGalleria from "~/components/UI/ProductGalleria/ProductGalleria.vue";
 
 definePageMeta({
   layout: 'breadcrumb',

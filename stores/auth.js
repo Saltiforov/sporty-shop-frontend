@@ -86,7 +86,7 @@ export const useAuthStore = defineStore('auth', () => {
         token.value = null
         authenticated.value = false
 
-        localStorage.removeItem('currentUser');
+        // localStorage.removeItem('currentUser');
     }
 
     return {

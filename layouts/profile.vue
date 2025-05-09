@@ -8,7 +8,7 @@
 
     <div class="flex flex-1">
       <div class="base-container  justify-between flex-1 ">
-        <div class="pb-[100px] flex ">
+        <div class="pb-[100px]  h-full flex ">
           <aside class="sidebar max-w-[277px] mr-[116px] w-full">
             <div class="sidebar-header flex pb-[24px] items-center border-b border-[var(--color-gray-light-lavender)]">
               <div class="w-[44px] mr-3">
