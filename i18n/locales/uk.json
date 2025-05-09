@@ -93,7 +93,8 @@
   "purchase_not_confirmed": "Покупка не підтверджена!",
 
   "checkout_title": "Оформлення замовлення",
-  "account_text": "Вже маєте акаунт? Увійдіть",
+  "account_text": "Вже маєте акаунт?",
+  "sign_in" : "Увійдіть",
   "payment_method_title": "Спосіб оплати",
   "payment_method_tooltip": "При оплаті через Telegram менеджер звʼяжеться з вами",
   "sms_text": "Надіслати SMS за вказаними даними",

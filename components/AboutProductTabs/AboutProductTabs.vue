@@ -46,10 +46,10 @@
           перерва.</p>
       </p>
     </TabPanel>
-    <TabPanel :header="tabs.characteristics.header">
+    <TabPanel v-if="product" :header="tabs.characteristics.header">
       <div class="characteristics-list max-w-[1030px] w-full">
         <div
-            v-for="characteristic in tabs.characteristics.list"
+            v-for="characteristic in product?.attributes "
             :key="characteristic.key"
             class="flex items-center gap-4 py-2"
         >
@@ -250,6 +250,16 @@ import {formatDateToDMY} from "~/utils/index.js";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 import {storeToRefs} from "pinia";
 import {useAuthStore} from "~/stores/auth.js";
+
+const props = defineProps({
+  product: {
+    type: Object,
+    required: true,
+    default: () => ({}),
+  }
+})
+
+console.log("AboutProductTabs" , props.product)
 
 const MAX_REVIEW_LENGTH = 300;
 

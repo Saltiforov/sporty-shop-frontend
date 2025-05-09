@@ -52,22 +52,21 @@ export function mapOrdersToSummaries(orders) {
             }
         })
 
-
         return {
             id: order._id || '',
             orderNumber: order.orderNumber || '',
             status: order.orderStatus || '',
-            firstName: shipping.firstName || '',
-            lastName: shipping.lastName || '',
-            phone: shipping.phone || '',
-            email: shipping.email || '',
+            firstName: order.user.firstName || '',
+            lastName: order.user.lastName || '',
+            phone: order.user.phone || '',
+            email: order.user.email || '',
             userInfo: {
-                firstName: shipping.firstName || '',
-                lastName: shipping.lastName || '',
-                email: shipping.email || '',
-                phone: shipping.phone || '',
+                firstName: order.user.firstName || '',
+                lastName: order.user.lastName || '',
+                email: order.user.email || '',
+                phone: order.user.phone || '',
                 address: formatAddress(shipping),
-                deliveryComment: shipping.note || ''
+                deliveryComment: order.description || ''
             },
             products
         }

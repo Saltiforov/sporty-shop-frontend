@@ -110,10 +110,10 @@
     </div>
 
     <div class="tabs-wrapper pt-[24px] pr-[55px] pb-[32px] pl-[55px] rounded-md bg-[var(--color-gray-lavender)]">
-      <AboutProductTabs/>
+      <AboutProductTabs :product/>
     </div>
 
-    <div class="recommended-products">
+    <div v-if="recommended.length" class="recommended-products">
       <div class="flex items-center justify-center mb-[70px] gap-6 my-8">
         <div class="h-px w-[56px] bg-[var(--color-primary-purple)]"></div>
         <h2 class="text-xl font-semibold text-center whitespace-nowrap">
@@ -123,7 +123,7 @@
       </div>
 
       <div class="recommended-products__content mx-auto max-w-[1500px] pb-[70px] p-4">
-        <SwiperWrapper v-if="recommended" :items="products" :options="recommendedProductsSwiperOptions">
+        <SwiperWrapper  :items="products" :options="recommendedProductsSwiperOptions">
           <template #default="{ item }">
             <ProductCard class="mt-3 mb-3" :product="item"/>
           </template>
@@ -140,6 +140,7 @@
     </div>
 
     <div
+        v-if="viewed.length"
         class="viewed-products__content mx-auto max-w-[1500px] pb-[70px] p-4">
       <SwiperWrapper :items="viewed" :options="recommendedProductsSwiperOptions">
         <template #default="{ item }">
@@ -177,6 +178,8 @@ const cartStore = useCartStore()
 const {showProductAddedToast} = useToastManager()
 
 const {viewed} = useViewedProducts()
+
+const recommended = ref([])
 
 const route = useRoute()
 const id = route.params.id

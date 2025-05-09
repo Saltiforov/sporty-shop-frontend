@@ -9,7 +9,10 @@
             class="checkout-fields pt-[24px] pr-[45px] pb-[44px] pl-[42px] mb-[58px] rounded-lg bg-[var(--color-gray-lavender)]">
           <div class="header-fields">
             <h1 class="title-lg mb-2">{{ t('checkout_title') }}</h1>
-            <p class="subtitle-lg mb-[24px] text-[var(--color-muted-gray)]">{{ t('account_text') }}</p>
+            <div class="flex subtitle-lg mb-[24px] text-[var(--color-muted-gray)]">
+              <p class="mr-1">{{ t('account_text') }}</p>
+              <button @click="authPopup.open('login')">{{ t('sign_in') }}</button>
+            </div>
           </div>
           <div class="fields-content">
             <FieldsBlock v-if="userData && userData._id" :config="config.fields" ref="fieldsBlock" :data="userData"/>
@@ -26,16 +29,19 @@
             <div class="murecho-font checkbox-content">
               <CustomCheckbox
                   v-model="isSendSmsWithFormData"
+                  @update:modelValue="onSelectPaymentMethod('sms')"
               >
                 <p class="text-[var(--color-primary-black)]">{{ t('sms_text') }}</p>
               </CustomCheckbox>
             </div>
             <div class="murecho-font checkbox-content">
-              <CustomCheckbox v-model="isPaymentOnDelivery">
+              <CustomCheckbox
+                  v-model="isPaymentOnDelivery"
+                  @update:modelValue="onSelectPaymentMethod('cash')"
+              >
                 <p class="text-[var(--color-primary-black)]">{{ t('cash_on_delivery_text') }}</p>
               </CustomCheckbox>
             </div>
-
           </div>
         </div>
       </div>
@@ -123,7 +129,7 @@ import {useCartStore} from "~/stores/cart.js";
 import {createOrder} from "~/services/api/order-service.js";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 import {getCurrentUser} from "~/services/api/user-service.js";
-import router from "#app/plugins/router.js";
+import {useAuthPopup} from "~/stores/authPopup.js";
 import {InputGroup, InputGroupAddon, InputNumber} from "primevue";
 
 definePageMeta({
@@ -137,6 +143,8 @@ const isLoading = ref(false)
 const {t} = useI18n()
 
 const toast = useToast();
+
+const authPopup = useAuthPopup();
 
 const cartStore = useCartStore()
 
@@ -162,6 +170,16 @@ const showError = () => {
   toast.add({severity: 'error', summary: 'Error Message', detail: 'Message Content', group: 'tl', life: 3000});
 };
 
+const onSelectPaymentMethod = (option) => {
+  if (option === 'sms') {
+    isSendSmsWithFormData.value = true
+    isPaymentOnDelivery.value = false
+  } else if (option === 'cash') {
+    isSendSmsWithFormData.value = false
+    isPaymentOnDelivery.value = true
+  }
+}
+
 const mappedProductsForOrder = arr => arr.map(({quantity, ...withoutQuantity}) => ({
   product: withoutQuantity,
   quantity
@@ -181,7 +199,15 @@ const mappedUserDataForOrder = (data) => {
       email,
       telegramUsername
     },
-    paymentMethod: isPaymentOnDelivery ? 'true' : 'false'
+    paymentMethod: isSendSmsWithFormData.value || isPaymentOnDelivery.value,
+    ...(!token.value && { guest: {
+        firstName,
+        lastName,
+        phone,
+        email,
+        telegramUsername
+      } }),
+    description: commentForOrder.value
   }
 }
 

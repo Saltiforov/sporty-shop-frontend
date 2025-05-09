@@ -94,6 +94,7 @@
 
   "checkout_title": "Checkout",
   "account_text": "Already have an account? Log in",
+  "sign_in": "Log in",
   "payment_method_title": "Payment Method",
   "payment_method_tooltip": "When paying via Telegram, our manager will contact you",
   "sms_text": "Send SMS to the provided data",
