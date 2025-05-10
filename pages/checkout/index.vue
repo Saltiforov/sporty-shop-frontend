@@ -193,11 +193,6 @@ const mappedUserDataForOrder = (data) => {
       city,
       postalCode,
       country,
-      firstName,
-      lastName,
-      phone,
-      email,
-      telegramUsername
     },
     paymentMethod: isSendSmsWithFormData.value || isPaymentOnDelivery.value,
     ...(!token.value && { guest: {

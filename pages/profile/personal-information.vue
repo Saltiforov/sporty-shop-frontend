@@ -208,7 +208,7 @@ const config = {
           (value) => (value ? true : "Phone is required"),
           (value) => (value?.toString().length <= 11 ? true : "Phone number must be no more than 11 digits")
         ],
-        render: ({modelValue, 'onUpdate:modelValue': update}) =>
+        render: ({modelValue, 'onUpdate:modelValue': update, disabled }) =>
             h(InputGroup, {}, {
               default: () => [
                 h(InputGroupAddon, {
@@ -226,7 +226,8 @@ const config = {
                   'onUpdate:modelValue': update,
                   useGrouping: false,
                   placeholder: '',
-                  defaultValue: null
+                  defaultValue: null,
+                  disabled
                 })
               ]
             })

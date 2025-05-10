@@ -3,10 +3,13 @@
     <LoadingOverlay :visible="isLoading"/>
     <h1 class="title-lg-20 mb-[30px]">{{ t('contact_information') }}</h1>
     <OrderHistoryItem v-if="!isLoading" :order-list="orderList"/>
+    <OrderSkeletonItem v-else v-for="i in 8" :key="'loading-skeleton-' + i"/>
   </div>
 </template>
 
 <script setup>
+import OrderSkeletonItem from "~/components/Skeletons/OrderItemSkeleton/OrderSkeletonItem.vue";
+
 definePageMeta({layout: 'profile'})
 import OrderHistoryItem from "~/components/UserProfile/OrderHistory/OrderHistoryItem/OrderHistoryItem.vue";
 import {getOrdersByUserId} from "~/services/api/order-service";
