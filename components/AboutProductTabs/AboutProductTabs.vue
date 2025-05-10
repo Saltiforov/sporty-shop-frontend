@@ -115,7 +115,7 @@
     </TabPanel>
     <TabPanel :header="tabs.reviews.header">
       <div class="reviews-content murecho-font flex justify-between">
-        <div v-if="paginatedReviews.length" class="review-list pt-[26px] justify-self-start">
+        <div v-if="paginatedReviews.length" class="review-list max-w-[550px] w-full pt-[26px] justify-self-start">
 
           <div
               class="review-card mb-[23px] last:mb-0 max-w-[518px]"
@@ -306,7 +306,8 @@ const isLoading = ref(false)
 
 const currentPage = ref(1);
 const itemsPerPage = ref(2);
-const reviews = ref([])
+
+const reviews = ref(props.product?.reviews?.list || [])
 
 const paginatedReviews = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value;

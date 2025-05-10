@@ -63,8 +63,9 @@
                     stroke="var(--color-primary-yellow)" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round"/>
               </svg>
-              <p class="product-grade text-[16px] text-[var(--color-muted-gray)] fw-500">{{ product.rating }}
-                <span>({{ product.reviewCount }})</span></p>
+              <p class="product-grade text-[16px] text-[var(--color-muted-gray)] fw-500">
+                {{ Number(product.reviews?.averageRating.toFixed(1)) || '0' }}
+                <span>({{ product.reviews?.reviewCount || '0' }})</span></p>
             </div>
           </div>
           <div class="description">
@@ -110,7 +111,7 @@
     </div>
 
     <div class="tabs-wrapper pt-[24px] pr-[55px] pb-[32px] pl-[55px] rounded-md bg-[var(--color-gray-lavender)]">
-      <AboutProductTabs :product/>
+      <AboutProductTabs :product :reviews/>
     </div>
 
     <div v-if="recommended.length" class="recommended-products">
@@ -123,7 +124,7 @@
       </div>
 
       <div class="recommended-products__content mx-auto max-w-[1500px] pb-[70px] p-4">
-        <SwiperWrapper  :items="products" :options="recommendedProductsSwiperOptions">
+        <SwiperWrapper :items="products" :options="recommendedProductsSwiperOptions">
           <template #default="{ item }">
             <ProductCard class="mt-3 mb-3" :product="item"/>
           </template>
@@ -238,10 +239,6 @@ const slideChange = (direction) => {
   }
 }
 
-// const getSelectedImage = (selected, item) => {
-//   console.log("getSelectedImage")
-//   return selected || item
-// }
 const getSelectedImage = computed(() => selectedImage.value)
 
 const handleGalleryClick = (index) => {

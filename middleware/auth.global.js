@@ -20,8 +20,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
         return navigateTo('/')
     }
 
-    if (!token.value) {
-        abortNavigation();
-        logUserOut()
-    }
+    // if (!token.value) {
+    //     logUserOut()
+    // }
 });
