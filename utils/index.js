@@ -82,3 +82,8 @@ export function capitalizeFirstLetter(str) {
     if (!str) return str;
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+export const formatRating = (rating) => {
+    const num = Number(rating ?? 0);
+    return Number.isInteger(num) ? String(num) : num.toFixed(1);
+};

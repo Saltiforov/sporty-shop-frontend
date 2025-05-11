@@ -6,11 +6,17 @@
     <div class="grid grid-cols-1 lg:grid-cols-[390px_1fr] gap-[30px]">
       <aside class="p-4 rounded-md">
         <div class="filters mb-[91px] w-full max-w-[354px] h-[554px] border rounded-[var(--default-rounded)]">
-          <Filters/>
+          <Filters v-if="hydrated"/>
+          <FiltersSkeleton v-else/>
         </div>
+
         <div class="promotional-products text-center">
           <p class="text-[var(--color-primary-pink)] mb-[21px] fw-600 text-[20px]">{{ t('promo_products_title') }}</p>
-          <SwiperWrapper :items="products" :options="promotionalProductsSwiperOptions">
+          <SwiperWrapper
+              v-if="hydrated"
+              :items="promotionalProducts"
+              :options="promotionalProductsSwiperOptions"
+          >
             <template #default="{ item }">
               <ProductCard
                   class="mt-3 mb-3"
@@ -20,6 +26,12 @@
               />
             </template>
           </SwiperWrapper>
+
+          <div v-else class="flex gap-4 overflow-x-auto">
+            <ProductSkeleton
+                class="min-w-[180px]"
+            />
+          </div>
         </div>
       </aside>
 
@@ -31,10 +43,11 @@
           </div>
         </div>
 
-        <div class="grid gap-[30px] mb-[45px] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 max-w-full w-full">
+        <div
+            class="grid gap-[30px] mb-[45px] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 max-w-full w-full">
 
           <template v-if="!hydrated">
-            <ProductSkeleton v-for="i in 10" :key="'loading-skeleton-' + i" />
+            <ProductSkeleton v-for="i in 10" :key="'loading-skeleton-' + i"/>
           </template>
 
           <template v-else>
@@ -64,7 +77,7 @@
           <div class="product-pagination-wrapper flex justify-center">
             <ProductPaginationButton
                 v-model="activePage"
-                :max-pages="5"
+                :max-pages="totalPages"
                 :all-loaded="allLoaded"
                 @update:model-value="getProductsByPage"
             />
@@ -91,23 +104,24 @@ import ProductPaginationButton from "~/components/UI/ProductPaginationButton/Pro
 import Filters from "~/components/UI/Filters/Filters.vue";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 import {useQueryParams} from "~/composables/useQueryParams.js";
-import { getAllProducts } from "~/services/api/product-service.js";
+import {getAllProducts, getProductsOnSale} from "~/services/api/product-service.js";
 
-import { useToastManager } from "~/composables/useToastManager.js";
+import {useToastManager} from "~/composables/useToastManager.js";
 import {useViewedProducts} from "~/composables/useViewedProducts.js";
+import FiltersSkeleton from "~/components/Skeletons/FiltersSkeleton/FiltersSkeleton.vue";
 
 const promotionalProductsSwiperOptions = {
   slidesPerView: 1,
   loop: true,
 }
 
-const { addProductToViewed } = useViewedProducts()
+const {addProductToViewed} = useViewedProducts()
 
 const hydrated = ref(false)
 
 const {t} = useI18n();
 
-const { showProductAddedToast } = useToastManager()
+const {showProductAddedToast} = useToastManager()
 
 const route = useRoute()
 
@@ -122,6 +136,8 @@ const limit = ref(Number(route.query.limit) || 10)
 const skip = computed(() => (page.value - 1) * limit.value)
 
 const totalProductsRecords = ref(0)
+
+const promotionalProducts = ref([])
 
 const totalPages = computed(() => Math.ceil(totalProductsRecords.value / limit.value))
 
@@ -139,13 +155,24 @@ const productsQueryParams = computed(() => {
   }
 })
 
+const getPromotionalProducts = async () => {
+  const response = await getProductsOnSale()
+  promotionalProducts.value = response.list
+}
+
 const getProductsByPage = async (newPage) => {
   page.value = newPage
   await fetchProducts(true)
 }
 
 const syncFromRoute = () => {
-  page.value = Number(route.query.page) || 1
+  const pageFromQuery = Number(route.query.page) || 1
+  if (page.value !== pageFromQuery) {
+    page.value = pageFromQuery
+  }
+
+  productsQueryParams.value = { ...productsQueryParams.value, page: page.value }
+  updateQueryParams()
 }
 
 const {updateQueryParams} = useQueryParams(productsQueryParams);
@@ -157,63 +184,39 @@ const isLoading = ref(true)
 const fetchProducts = async (shouldReplace = false) => {
   try {
     isLoading.value = true
-    const response = await getAllProducts({...productsQueryParams.value});
+
+    if (!shouldReplace) {
+      page.value += 1
+    }
+
+    const response = await getAllProducts({ ...productsQueryParams.value })
 
     if (totalProductsRecords.value === 0) {
       totalProductsRecords.value = response.count
     }
 
-    updateQueryParams()
-
     if (shouldReplace) {
       products.value = [...response.list]
     } else {
       products.value.push(...response.list)
-      page.value += 1
     }
+
+    updateQueryParams()
+
   } finally {
     isLoading.value = false
   }
 }
 
+
+
 onMounted(async () => {
   syncFromRoute()
 
-  await fetchProducts()
+  await getPromotionalProducts()
+
+  await fetchProducts(true)
 
   hydrated.value = true
 });
 </script>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.fade-enter-to,
-.fade-leave-from {
-  opacity: 1;
-}
-
-/* Sidebar slide */
-.slide-right-enter-active,
-.slide-right-leave-active {
-  transition: transform 0.3s ease;
-}
-
-.slide-right-enter-from,
-.slide-right-leave-to {
-  transform: translateX(100%);
-}
-
-.slide-right-enter-to,
-.slide-right-leave-from {
-  transform: translateX(0);
-}
-</style>

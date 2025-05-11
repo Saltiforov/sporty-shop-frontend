@@ -14,9 +14,10 @@
       <div class="image relative w-full lg:max-w-[678px]">
         <div class="absolute z-[100] top-2 -right-4">
           <FavoriteButton
+              v-if="token"
               inactive-color="var(--color-primary-dark-red)"
               :is-favorite="product.isFavorite"
-              :toggle-favorite="() => toggleFavorite(product)"
+              :product="product"
               :icon-size="{ width: 36, height: 32 }"
           />
         </div>
@@ -64,13 +65,21 @@
                     stroke-linejoin="round"/>
               </svg>
               <p class="product-grade text-[16px] text-[var(--color-muted-gray)] fw-500">
-                {{ Number(product.reviews?.averageRating.toFixed(1)) || '0' }}
-                <span>({{ product.reviews?.reviewCount || '0' }})</span></p>
+                {{
+                  formatRating(product.reviews?.averageRating)
+                }}
+                <span>({{ product.reviews?.reviewCount ?? '0' }})</span>
+              </p>
             </div>
           </div>
           <div class="description">
-            <p class="fw-500 text-[18px] leading-[34px] text-[var(--color-primary-dark)]">{{ product.description }}</p>
+<!--            <p class="fw-500 text-[18px] leading-[34px] text-[var(&#45;&#45;color-primary-dark)]">{{ product.description }}</p>-->
+            <p
+                class="fw-500 text-[18px] leading-[34px] truncate-6-lines text-[var(--color-primary-dark)]"
+                v-html="product.description"
+            />
           </div>
+
           <div class="developer mb-[24px]">
             <p class="text-[20px] fw-400 leading-[34px]">{{ t('product_developer') }} {{ product.developer }}</p>
           </div>
@@ -165,7 +174,7 @@ import AmountSelector from "~/components/UI/AmountSelector/AmountSelector.vue";
 import FavoriteButton from "~/components/UI/FavoriteButton/FavoriteButton.vue";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 
-import {getProduct} from "~/services/api/product-service.js";
+import {getProduct, addProductToFavorites, deleteProductFromFavorites} from "~/services/api/product-service.js";
 import {useCartStore} from "~/stores/cart.js";
 
 import {useViewedProducts} from "~/composables/useViewedProducts.js";
@@ -175,6 +184,8 @@ import {useToastManager} from "~/composables/useToastManager.js";
 const {t} = useI18n()
 
 const cartStore = useCartStore()
+
+const token = useCookie('token')
 
 const {showProductAddedToast} = useToastManager()
 
@@ -245,9 +256,8 @@ const handleGalleryClick = (index) => {
   selectedImage.value = images.value[index]
 }
 
-const toggleFavorite = (product) => {
-  product.isFavorite = !product.isFavorite;
-}
+
+
 
 onMounted(async () => {
   try {
@@ -282,5 +292,11 @@ onMounted(async () => {
 
 .product-buy-now__btn {
   border: none;
+}
+.truncate-6-lines {
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style>

@@ -11,17 +11,22 @@
       <div class="absolute flex items-center justify-center h-[31px] w-[31px] z-10 -top-3 right-1">
         <FavoriteButton
             :is-favorite="product.isFavorite"
-            :toggle-favorite="() => toggleFavorite(product)"
+            :product="product"
             :icon-size="iconSize"
         />
       </div>
       <NuxtLink :to="`/product/${product._id}`" :style="{ marginBottom: variant === 'small' ? '4px' : '' }"
                 class="block mb-6">
-        <img :class="[
-              'rounded-lg',
-               variant === 'small' ? 'max-w-[137px] max-h-[137px]' : 'max-w-[180px] max-h-[180px]'
-                  ]"
-             :src="productImage" alt="Product image">
+        <img
+            :class="[
+    'rounded-lg w-full h-auto object-contain',
+    variant === 'small'
+      ? 'max-w-[137px] sm:max-w-[100px] md:max-w-[120px]'
+      : 'max-w-[180px] sm:max-w-[120px] md:max-w-[150px]'
+  ]"
+            :src="productImage"
+            alt="Product image"
+        />
       </NuxtLink>
       <div class="product-name min-h-[44px]">
         <p :style="{ fontSize: variant === 'small' ? '16px' : '' }"
@@ -35,7 +40,8 @@
             d="M1.75122 6.75258C1.51628 6.53531 1.6439 6.14254 1.96167 6.10487L6.46436 5.5708C6.59387 5.55544 6.70636 5.47411 6.76099 5.35569L8.66016 1.23835C8.79419 0.947769 9.20728 0.947714 9.34131 1.23829L11.2405 5.3556C11.2951 5.47403 11.4069 5.55558 11.5364 5.57093L16.0393 6.10487C16.3571 6.14254 16.4843 6.53543 16.2494 6.75269L12.9208 9.83143C12.8251 9.91998 12.7824 10.0518 12.8079 10.1797L13.6913 14.627C13.7536 14.9408 13.4196 15.184 13.1404 15.0277L9.18386 12.8125C9.07006 12.7488 8.9318 12.7491 8.818 12.8128L4.86108 15.0271C4.58185 15.1834 4.24721 14.9408 4.30957 14.627L5.19311 10.18C5.21852 10.0521 5.176 9.91995 5.08025 9.8314L1.75122 6.75258Z"
             stroke="#FFCC00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      <p class="product-grade text-[16px] text-[#8E8E93] fw-500">{{ Number(product.reviews?.averageRating?.toFixed(1)) || '0' }}
+      <p class="product-grade text-[16px] text-[#8E8E93] fw-500">
+        {{ Number(product.reviews?.averageRating?.toFixed(1)) || '0' }}
         <span>({{ product.reviews?.reviewCount || '0' }})</span></p>
     </div>
     <div class="flex relative items-center justify-between">
@@ -77,6 +83,7 @@ import FavoriteButton from "~/components/UI/FavoriteButton/FavoriteButton.vue";
 
 import DefaultProductImage from '~/assets/images/product-image.png'
 import {useCartStore} from "~/stores/cart.js";
+import {addProductToFavorites, deleteProductFromFavorites} from "~/services/api/product-service.js";
 
 const {product, variant} = defineProps({
   product: {
@@ -95,9 +102,14 @@ const emit = defineEmits(['add-to-cart'])
 
 const cartStore = useCartStore()
 
-const { t } = useI18n()
+const {t} = useI18n()
 
-const toggleFavorite = (product) => {
+const toggleFavorite = async (product) => {
+
+  product.isFavorite
+      ? await deleteProductFromFavorites(product._id)
+      : await addProductToFavorites(product._id)
+
   product.isFavorite = !product.isFavorite;
 }
 

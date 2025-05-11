@@ -3,7 +3,7 @@
 
     <div class="w-full px-4 mx-auto mt-[98px] mb-[53px]">
       <div class="mx-auto w-full max-w-[1756px]">
-        <SwiperWrapper :items="images" :options="swiperOptions">
+        <SwiperWrapper v-if="hydrated" :items="images" :options="swiperOptions">
           <template #default="{ item }">
             <img
                 :src="item"
@@ -11,6 +11,7 @@
             />
           </template>
         </SwiperWrapper>
+        <MainBannerSkeleton v-else/>
       </div>
     </div>
 
@@ -22,7 +23,11 @@
 </template>
 
 <script setup>
+import MainBannerSkeleton from "~/components/Skeletons/MainBannerSkeleton/MainBannerSkeleton.vue";
+
 const { data: images } = await useFetch('/api/images');
+
+const hydrated = ref(false)
 
 const swiperOptions = {
   effect: 'cards',
@@ -35,4 +40,9 @@ const swiperOptions = {
     clickable: true,
   },
 }
+
+onMounted( () => {
+  hydrated.value = true
+})
+
 </script>

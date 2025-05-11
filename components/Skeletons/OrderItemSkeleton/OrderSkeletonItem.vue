@@ -3,7 +3,6 @@
     <div class="flex justify-between items-center">
       <div class="bg-gray-200 h-10 w-2/5 rounded" />
       <div class="bg-gray-200 h-10 w-[120px] rounded-full" />
-
     </div>
 
   </div>

@@ -35,6 +35,8 @@
 
 <script setup>
 
+import {addProductToFavorites, deleteProductFromFavorites} from "~/services/api/product-service.js";
+
 const props = defineProps({
   isFavorite: {
     type: Boolean,
@@ -48,15 +50,25 @@ const props = defineProps({
       height: '23',
     }),
   },
-  toggleFavorite: {
-    type: Function,
+  product: {
+    type: Object,
     required: true,
+    default: () => ({}),
   },
   inactiveColor: {
     type: String,
     default: "gray"
   }
 })
+
+const toggleFavorite = async () => {
+
+  props.product.isFavorite
+      ? await deleteProductFromFavorites(props.product._id)
+      : await addProductToFavorites(props.product._id)
+
+  props.product.isFavorite = !props.product.isFavorite;
+}
 
 const strokeColor = computed(() =>
     props.isFavorite ? '#B3261E' : props.inactiveColor

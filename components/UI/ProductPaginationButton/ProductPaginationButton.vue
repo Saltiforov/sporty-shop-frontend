@@ -61,14 +61,6 @@ watch(() => props.maxPages, (val) => lastPage.value = val)
 
 const numberOfPageFromQuery = computed(() => Number(route.query.page))
 
-const nextPageAfterFirstPage = computed(() => {
-  return activePageType.value === 'first' ? firstPage.value + PAGE_STEP : firstPage.value + PAGE_STEP
-})
-
-const previousPageBeforeLastPage = computed(() => {
-  return activePageType.value === 'last' ? lastPage.value - PAGE_STEP : lastPage.value - PAGE_STEP
-})
-
 const firstPage = ref(1)
 
 const lastPage = ref(props.maxPages)
@@ -126,11 +118,12 @@ const handlePageChange = (direction = 'right') => {
 }
 
 onMounted(() => {
-  if (numberOfPageFromQuery.value > firstPage.value) {
-    setPageState(numberOfPageFromQuery.value, 'next')
-  }
   if (numberOfPageFromQuery.value === lastPage.value) {
+    console.log(numberOfPageFromQuery.value === lastPage.value)
     setPageState(numberOfPageFromQuery.value - PAGE_STEP, 'last')
+  }
+  if (numberOfPageFromQuery.value > firstPage.value && numberOfPageFromQuery.value < lastPage.value) {
+    setPageState(numberOfPageFromQuery.value, 'next')
   }
 })
 
