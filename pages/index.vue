@@ -117,6 +117,8 @@ const promotionalProductsSwiperOptions = {
 
 const {addProductToViewed} = useViewedProducts()
 
+const { $eventBus } = useNuxtApp()
+
 const hydrated = ref(false)
 
 const {t} = useI18n();
@@ -148,11 +150,12 @@ const loadMoreLabel = computed(() => {
 });
 
 const productsQueryParams = computed(() => {
-  return {
+  const query = {
     page: page.value,
     limit: limit.value,
-    skip: skip.value
+    skip: skip.value,
   }
+  return query
 })
 
 const getPromotionalProducts = async () => {
@@ -179,9 +182,13 @@ const {updateQueryParams} = useQueryParams(productsQueryParams);
 
 const products = ref([])
 
+const paginationProducts = ref([])
+
+const foundProducts = ref([])
+
 const isLoading = ref(true)
 
-const fetchProducts = async (shouldReplace = false) => {
+const fetchProducts = async (shouldReplace = false, params = {}) => {
   try {
     isLoading.value = true
 
@@ -189,7 +196,11 @@ const fetchProducts = async (shouldReplace = false) => {
       page.value += 1
     }
 
-    const response = await getAllProducts({ ...productsQueryParams.value })
+    const queryWithoutPage = Object.fromEntries(
+        Object.entries(productsQueryParams.value).filter(([key]) => key !== 'page')
+    )
+
+    const response = await getAllProducts({...queryWithoutPage, ...params})
 
     if (totalProductsRecords.value === 0) {
       totalProductsRecords.value = response.count
@@ -197,21 +208,58 @@ const fetchProducts = async (shouldReplace = false) => {
 
     if (shouldReplace) {
       products.value = [...response.list]
+      updateQueryParams()
     } else {
       products.value.push(...response.list)
     }
 
-    updateQueryParams()
 
   } finally {
     isLoading.value = false
   }
 }
 
+watch(
+    () => route.query.q,
+    async (newSearch, oldSearch) => {
+      if (!newSearch || newSearch.trim() === '') {
+        foundProducts.value = []
 
+        $eventBus.emit('products-found', [])
+        return
+      }
+
+      if (newSearch !== oldSearch) {
+        page.value = 1
+        products.value = []
+        totalProductsRecords.value = 0
+
+        const query = {}
+
+        if (route.query.q && route.query.q.trim() !== '') {
+          query.q = route.query.q
+        }
+
+        await fetchProducts(true, query)
+
+        foundProducts.value = [...products.value]
+        $eventBus.emit('products-found', foundProducts.value)
+      }
+    },
+    { immediate: true }
+)
+
+const searchStore = useSearchStore()
 
 onMounted(async () => {
   syncFromRoute()
+
+
+  searchStore.setSearchCallback(async (query) => {
+    // Вся логика поиска, без query-параметров
+    console.log('🔍 Поиск снаружи:', query)
+    // await fetchProducts(false, { q: query })
+  })
 
   await getPromotionalProducts()
 
@@ -219,4 +267,7 @@ onMounted(async () => {
 
   hydrated.value = true
 });
+
+onBeforeUnmount(() => {
+})
 </script>

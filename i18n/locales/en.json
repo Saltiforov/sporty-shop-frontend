@@ -99,6 +99,7 @@
   "payment_method_tooltip": "When paying via Telegram, our manager will contact you",
   "sms_text": "Send SMS to the provided data",
   "cash_on_delivery_text": "Cash on Delivery",
+  "empty_search_message": "You haven't entered anything yet - try searching for the product you're looking for",
 
   "checkout_list_title": "Order List",
   "use_promo_code": "Use Promo Code",

@@ -57,13 +57,13 @@ const emit = defineEmits(['update:modelValue'])
 
 const route = useRoute()
 
-watch(() => props.maxPages, (val) => lastPage.value = val)
+// watch(() => props.maxPages, (val) => lastPage.value = val)
 
 const numberOfPageFromQuery = computed(() => Number(route.query.page))
 
 const firstPage = ref(1)
 
-const lastPage = ref(props.maxPages)
+const lastPage = computed(() => props.maxPages)
 
 const nextPage = ref(2)
 
@@ -77,9 +77,9 @@ const isNoNextAvailablePageToLeft = computed(() => {
 })
 
 const pageNumberToEmit = ref({
-  first: firstPage.value,
+  first: computed(() => firstPage.value),
   next: computed(() => nextPage.value),
-  last: lastPage.value,
+  last: computed(() => lastPage.value),
 })
 
 const handleClickPageType = (type) => {
@@ -119,12 +119,12 @@ const handlePageChange = (direction = 'right') => {
 
 onMounted(() => {
   if (numberOfPageFromQuery.value === lastPage.value) {
-    console.log(numberOfPageFromQuery.value === lastPage.value)
-    setPageState(numberOfPageFromQuery.value - PAGE_STEP, 'last')
+    activePageType.value = 'last'
+    console.log("activePageType.value", activePageType.value)
   }
-  if (numberOfPageFromQuery.value > firstPage.value && numberOfPageFromQuery.value < lastPage.value) {
-    setPageState(numberOfPageFromQuery.value, 'next')
-  }
+  // if (numberOfPageFromQuery.value > firstPage.value && numberOfPageFromQuery.value < lastPage.value) {
+  //   setPageState(numberOfPageFromQuery.value, 'next')
+  // }
 })
 
 </script>

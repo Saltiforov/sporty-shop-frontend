@@ -9,19 +9,26 @@
           :parent-classes="['flex', 'flex-wrap', 'gap-x-[16px]', 'md:gap-x-[32px]', 'w-full', 'max-w-[815px]']"
           :link-class="['mr-[32px]', 'text-[#F6F6F6]', 'sm:mr-[32px]', 'md:mr-[53px]', 'last:mr-0', 'font-semibold']"
       />
-      <div class="search-field  max-w-[425px] w-full">
+      <div class="search-field max-w-[425px] w-full relative">
         <IconField>
-          <InputText :pt="{
-          root: {
-            class: 'header-search-field'
-          }
-        }" :placeholder="searchFieldPlaceholder"/>
-          <InputIcon :pt="{
-            root: {
-              class: 'text-[var(--color-primary-black)]'
-            }
-          }" class="pi pi-search"/>
+          <InputText
+              @focus="searchIsFocused = true"
+              @blur="handleBlur"
+              v-model="searchFieldValue"
+              :pt="{ root: { class: 'header-search-field' } }"
+              :placeholder="searchFieldPlaceholder"
+          />
+          <InputIcon
+              :pt="{ root: { class: 'text-[var(--color-primary-black)]' } }"
+              class="pi pi-search"
+          />
         </IconField>
+
+        <SearchDropdownMenu
+            :show="searchIsFocused"
+            :items="receivedProducts"
+            @selected="dropdownItemSelect"
+        />
       </div>
 
       <div class="locale-switch">
@@ -96,8 +103,11 @@ import LocaleSwitch from "~/components/UI/LocaleSwitch/LocaleSwitch.vue";
 import {useAuthStore} from "~/stores/auth.js";
 import {storeToRefs} from "pinia";
 import AuthWrapper from "~/wrappers/AuthWrapper.vue";
+import SearchDropdownMenu from "~/components/UI/SearchDropdownMenu/SearchDropdownMenu.vue";
 
 const {t} = useI18n();
+
+const {$eventBus} = useNuxtApp()
 
 const authPopup = useAuthPopup()
 
@@ -105,15 +115,42 @@ const {logUserOut} = useAuthStore();
 
 const {authenticated, currentUser} = storeToRefs(useAuthStore());
 
+const isMainPage = computed(() => route.name === 'index')
+
+const router = useRouter()
+
+const route = useRoute()
+
 const cartStore = useCartStore();
 
 const isShoppingCartShow = ref(false)
+
+const searchIsFocused = ref(false)
+
+const receivedProducts = ref([])
+
+const searchFieldValue = ref('')
 
 const handleOverlayClick = (event) => {
   const clickedElement = event.target
   if (clickedElement.classList.contains('overlay')) {
     isShoppingCartShow.value = false
   }
+}
+
+const handleBlur = () => {
+  setTimeout(() => {
+    searchIsFocused.value = false
+  }, 150)
+}
+
+const dropdownItemSelect = () => {
+  searchIsFocused.value = false
+  receivedProducts.value = []
+}
+
+const handleSearchField = () => {
+  if (!isMainPage.value) $eventBus.emit('search', searchFieldValue.value)
 }
 
 const showShoppingCart = () => {
@@ -187,6 +224,42 @@ const links = ref([
     page: "about-us",
   },
 ])
+
+const searchStore = useSearchStore()
+
+watch(searchFieldValue, (val) => {
+  if (!isMainPage.value) {
+    searchStore.emitSearch(searchFieldValue.value)
+    return
+  }
+
+  const currentQuery = { ...route.query }
+  const updatedQuery = {
+    ...currentQuery,
+    q: val?.trim() || undefined,
+  }
+
+  router.push({ path: route.path, query: updatedQuery })
+})
+
+
+watch(() => route.query.q, (val) => {
+  if (!val) {
+    searchFieldValue.value = ''
+  }
+})
+
+onMounted(() => {
+  $eventBus.on('products-found', (products) => {
+    receivedProducts.value = products
+  })
+})
+
+onBeforeUnmount(() => {
+  $eventBus.off('products-found', (products) => {
+    receivedProducts.value = products
+  })
+})
 
 
 </script>

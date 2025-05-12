@@ -99,6 +99,7 @@
   "payment_method_tooltip": "При оплаті через Telegram менеджер звʼяжеться з вами",
   "sms_text": "Надіслати SMS за вказаними даними",
   "cash_on_delivery_text": "Оплата при отриманні",
+  "empty_search_message": "Ви ще нічого не ввели - спробуйте знайти потрібний товар",
 
   "checkout_list_title": "Список замовлення",
   "use_promo_code": "Використати промокод",

@@ -91,82 +91,86 @@
     </TabPanel>
     <TabPanel :header="tabs.reviews.header">
       <div class="reviews-content murecho-font flex justify-between">
-        <div v-if="paginatedReviews.length" class="review-list max-w-[550px] w-full pt-[26px] justify-self-start">
+        <div v-if="paginatedReviews.length" class="review-list max-w-[650px] w-full pt-[26px] justify-self-start">
 
-          <div
-              class="review-card mb-[23px] last:mb-0 max-w-[518px]"
-              v-for="review in paginatedReviews"
-              :key="review.id"
-          >
-            <div class="flex mb-2 items-center">
-              <strong class="mr-4"><p class="review-card__name fw-600">{{ fullReviewerName(review.user) }}</p></strong>
-              <div class="review-card__date mr-2 text-[14px]">{{ formatDateToDMY(review.createdAt) }}</div>
-              <div class="review-card__stars mr-3">
-                <Rating v-model="review.rating" readonly>
-                  <template #onicon>
-                    <img src="@/assets/icons/star-filled.svg" class="mr-1"/>
-                  </template>
-                  <template #officon>
-                    <img src="@/assets/icons/star-empty.svg" class="mr-1"/>
-                  </template>
-                </Rating>
-              </div>
-              <div class="review-card__confirmed text-[#ADADAD] fw-400">
-                <p v-if="review.purchaseConfirmed">{{ t('purchase_confirmed') }}</p>
-                <p v-else>{{ t('purchase_not_confirmed') }}</p>
-              </div>
-            </div>
-
-            <p class="review-card__comment">{{ getSlicedReview(review) }}</p>
-            <p
-                v-if="isShowMoreButton(review.comment)"
-                class="flex cursor-pointer justify-end text-[12px] text-[var(--color-muted-light-gray)] fw-500"
-                @click="toggleComment(review._id)"
+          <div class="min-h-[270px] flex flex-col justify-between">
+            <div
+                class="review-card mb-[23px] last:mb-0 max-w-[618px]"
+                v-for="review in paginatedReviews"
+                :key="review.id"
             >
-              {{ expandedComments.has(review._id) ? 'Hide' : 'Read more' }}
-            </p>
-          </div>
-          <div class="pagination-wrapper flex justify-end">
-            <div class="pagination flex justify-between items-center  max-w-[80px] w-full">
-              <button
-                  @click="changePage(currentPage - 1)"
-                  :disabled="currentPage === 1"
-                  :class="{ 'is-disabled': currentPage === 1 }"
+              <div class="flex mb-2 items-center">
+                <strong class="mr-4"><p class="review-card__name fw-600">{{ fullReviewerName(review.user) }}</p></strong>
+                <div class="review-card__date mr-2 text-[14px]">{{ formatDateToDMY(review.createdAt) }}</div>
+                <div class="review-card__stars mr-3">
+                  <Rating v-model="review.rating" readonly>
+                    <template #onicon>
+                      <img src="@/assets/icons/star-filled.svg" class="mr-1"/>
+                    </template>
+                    <template #officon>
+                      <img src="@/assets/icons/star-empty.svg" class="mr-1"/>
+                    </template>
+                  </Rating>
+                </div>
+                <div class="review-card__confirmed text-[#ADADAD] fw-400">
+                  <p v-if="review.purchaseConfirmed">{{ t('purchase_confirmed') }}</p>
+                  <p v-else>{{ t('purchase_not_confirmed') }}</p>
+                </div>
+              </div>
+
+              <p class="review-card__comment">{{ getSlicedReview(review) }}</p>
+              <p
+                  v-if="isShowMoreButton(review.comment)"
+                  class="flex cursor-pointer justify-end text-[12px] text-[var(--color-muted-light-gray)] fw-500"
+                  @click="toggleComment(review._id)"
               >
-                <svg
-                    width="21"
-                    height="21"
-                    viewBox="0 0 21 21"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+                {{ expandedComments.has(review._id) ? 'Hide' : 'Read more' }}
+              </p>
+            </div>
+            <div class="pagination-wrapper flex justify-end">
+              <div class="pagination flex justify-between items-center  max-w-[80px] w-full">
+                <button
+                    @click="changePage(currentPage - 1)"
+                    :disabled="currentPage === 1"
+                    :class="{ 'is-disabled': currentPage === 1 }"
                 >
-                  <path
-                      class="arrow-path"
-                      d="M11.5 13.5L8.5 10.5L11.5 7.5M19.5 10.5C19.5 5.52944 15.4706 1.5 10.5 1.5C5.52944 1.5 1.5 5.52944 1.5 10.5C1.5 15.4706 5.52944 19.5 10.5 19.5C15.4706 19.5 19.5 15.4706 19.5 10.5Z"
-                  />
-                </svg>
-              </button>
-              <span>{{ currentPage }}</span>
-              <button
-                  @click="changePage(currentPage + 1)"
-                  :disabled="currentPage * itemsPerPage >= reviews.length"
-                  :class="{ 'is-disabled': currentPage * itemsPerPage >= reviews.length }"
-              >
-                <svg
-                    width="21"
-                    height="21"
-                    viewBox="0 0 21 21"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+                  <svg
+                      width="21"
+                      height="21"
+                      viewBox="0 0 21 21"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                        class="arrow-path"
+                        d="M11.5 13.5L8.5 10.5L11.5 7.5M19.5 10.5C19.5 5.52944 15.4706 1.5 10.5 1.5C5.52944 1.5 1.5 5.52944 1.5 10.5C1.5 15.4706 5.52944 19.5 10.5 19.5C15.4706 19.5 19.5 15.4706 19.5 10.5Z"
+                    />
+                  </svg>
+                </button>
+                <span>{{ currentPage }}</span>
+                <button
+                    @click="changePage(currentPage + 1)"
+                    :disabled="currentPage * itemsPerPage >= reviews.length"
+                    :class="{ 'is-disabled': currentPage * itemsPerPage >= reviews.length }"
                 >
-                  <path
-                      class="arrow-path"
-                      d="M9.5 7.5L12.5 10.5L9.5 13.5M19.5 10.5C19.5 5.52944 15.4706 1.5 10.5 1.5C5.52944 1.5 1.5 5.52944 1.5 10.5C1.5 15.4706 5.52944 19.5 10.5 19.5C15.4706 19.5 19.5 15.4706 19.5 10.5Z"
-                  />
-                </svg>
-              </button>
+                  <svg
+                      width="21"
+                      height="21"
+                      viewBox="0 0 21 21"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                        class="arrow-path"
+                        d="M9.5 7.5L12.5 10.5L9.5 13.5M19.5 10.5C19.5 5.52944 15.4706 1.5 10.5 1.5C5.52944 1.5 1.5 5.52944 1.5 10.5C1.5 15.4706 5.52944 19.5 10.5 19.5C15.4706 19.5 19.5 15.4706 19.5 10.5Z"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
+
+
 
         </div>
 
