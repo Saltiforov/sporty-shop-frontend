@@ -5,6 +5,3 @@
     <div class="absolute top-1/2 right-4 -translate-y-1/2 h-10 w-10 rounded-full bg-gray-300" />
   </div>
 </template>
-
-<script setup lang="ts">
-</script>

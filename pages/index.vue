@@ -65,6 +65,7 @@
         <div class="products-pagination-actions mb-[72px]">
           <div class="load-more-wrapper mb-3 flex justify-center">
             <LoadMoreButton
+                v-if="!isLoading"
                 :disabled="allLoaded"
                 :label="loadMoreLabel"
                 @click="fetchProducts(false)"
@@ -73,14 +74,17 @@
                 <img src="~/assets/icons/load-more-icon.svg" alt="load-more-icon">
               </template>
             </LoadMoreButton>
+            <LoadMoreButtonSkeleton v-else/>
           </div>
           <div class="product-pagination-wrapper flex justify-center">
             <ProductPaginationButton
+                v-if="!isLoading"
                 v-model="activePage"
                 :max-pages="totalPages"
                 :all-loaded="allLoaded"
                 @update:model-value="getProductsByPage"
             />
+            <PaginationButtonSkeleton v-else/>
           </div>
         </div>
       </div>
@@ -109,6 +113,8 @@ import {getAllProducts, getProductsOnSale} from "~/services/api/product-service.
 import {useToastManager} from "~/composables/useToastManager.js";
 import {useViewedProducts} from "~/composables/useViewedProducts.js";
 import FiltersSkeleton from "~/components/Skeletons/FiltersSkeleton/FiltersSkeleton.vue";
+import PaginationButtonSkeleton from "~/components/Skeletons/PaginationButtonSkeleton/PaginationButtonSkeleton.vue";
+import LoadMoreButtonSkeleton from "~/components/Skeletons/LoadMoreButtonSkeleton/LoadMoreButtonSkeleton.vue";
 
 const promotionalProductsSwiperOptions = {
   slidesPerView: 1,

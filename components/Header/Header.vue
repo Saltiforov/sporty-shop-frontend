@@ -31,8 +31,9 @@
         />
       </div>
 
-      <div class="locale-switch">
+      <div class="locale-switch flex">
         <LocaleSwitch/>
+        <CurrencySwitch/>
       </div>
       <div class="action-panel max-w-[144px] w-full h-[36px] flex justify-between">
         <Button @click="navigateTo('/profile/favorite')" :pt="{ root: { class: 'action-panel-icon' } }">
@@ -104,6 +105,7 @@ import {useAuthStore} from "~/stores/auth.js";
 import {storeToRefs} from "pinia";
 import AuthWrapper from "~/wrappers/AuthWrapper.vue";
 import SearchDropdownMenu from "~/components/UI/SearchDropdownMenu/SearchDropdownMenu.vue";
+import CurrencySwitch from "~/components/UI/CurrencySwitch/CurrencySwitch.vue";
 
 const {t} = useI18n();
 

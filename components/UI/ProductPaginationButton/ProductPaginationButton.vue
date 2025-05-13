@@ -117,7 +117,10 @@ const handlePageChange = (direction = 'right') => {
   }
 }
 
+
 onMounted(() => {
+  console.log("numberOfPageFromQuery.value ,lastPage",lastPage.value)
+  console.log("numberOfPageFromQuery.value",numberOfPageFromQuery.value)
   if (numberOfPageFromQuery.value === lastPage.value) {
     activePageType.value = 'last'
     console.log("activePageType.value", activePageType.value)
