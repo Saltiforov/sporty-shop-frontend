@@ -93,7 +93,7 @@
           <div>
             <div class="developer mb-[24px]">
               <p class="text-[20px] fw-400 leading-[34px]">
-                {{ t('product_developer') }} {{ product.developer }}
+                {{ t('product_developer') }} {{ product.vendor }}
               </p>
             </div>
 
@@ -101,13 +101,13 @@
               <div class="mr-[57px] price_and_discount">
                 <div :class="[product.discount ? 'text-[16px] line-through text-[#999]' : 'text-[36px]']"
                      class="fw-600 discount mr-[57px] text-[var(--color-primary-black)] leading-[34px]">
-                  {{ product.price }}
-                  <span>{{ t('currency') }}</span>
+                  {{ priceByCurrency }}
+                  <span>{{ t(currencyStore.label) }}</span>
                 </div>
 
                 <p v-if="product.discount"
                    class="text-[#EF4B4B] text-[24px] leading-[22px] fw-500">
-                  {{ product.price - product.discount }} {{ t('currency') }}
+                  {{ priceWithDiscount }} {{ t(currencyStore.label) }}
                 </p>
               </div>
 
@@ -234,6 +234,8 @@ const {showProductAddedToast} = useToastManager()
 
 const {viewed} = useViewedProducts()
 
+const currencyStore = useCurrencyStore()
+
 const recommended = ref([])
 
 const route = useRoute()
@@ -246,6 +248,14 @@ const images = ref([])
 const isLoading = ref(true)
 
 const selectedImage = ref(null)
+
+const priceByCurrency = computed(() => {
+  return Math.floor(currencyStore.getCurrency === 'uah' ? product.value.price_uah : product.value.price_usd)
+})
+
+const priceWithDiscount = computed(() => {
+  return Math.floor(priceByCurrency.value * (1 - product.value.discount / 100))
+})
 
 const addToCart = (product) => {
   cartStore.addToCart(product);

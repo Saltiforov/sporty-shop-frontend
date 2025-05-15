@@ -6,7 +6,8 @@
           style: 'background-color: transparent; border: none;'
         },
         label: {
-          style: 'color: var(--color-primary-dark); margin-right: 0.5rem; padding: 0; line-height: 22px; font-weight: 500; font-size: 16px;'
+          style: 'color: var(--color-primary-dark); margin-right: 0.5rem; padding: 0; line-height: 22px; font-weight: 500; font-size: 15px;',
+          class: 'select-label'
         },
         dropdown: {
           style: 'width: 0.75rem; color: var(--color-gray-dark-charcoal);'

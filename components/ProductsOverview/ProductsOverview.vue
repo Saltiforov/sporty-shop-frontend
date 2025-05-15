@@ -3,34 +3,39 @@
     <div
         :class="['cart-items-wrapper', { 'scrollable-items': isScrollable }]"
     >
-      <CartItem v-for="item in productsOverview" :cart-product="item" :key="item.id" @remove-product="confirmDelete"/>
+      <CartItem  v-for="item in productsOverview" :cart-product="item" :key="item.id" @remove-product="confirmDelete"/>
     </div>
 
     <div class="final-price pr-[50px] mb-[42px]">
       <div class="flex justify-end items-center">
-        <p class="fw-600 text-[16px] text-[var(--color-muted-light-gray)] mr-[14px] leading-[34px]">{{ t('total_price_label') }}:</p>
+        <p class="fw-600 text-[16px] text-[var(--color-muted-light-gray)] mr-[14px] leading-[34px]">
+          {{ t('total_price_label') }}:</p>
         <p>
-          {{ totalPriceWithoutDiscount }} <span class="text-[15px] text-[var(--color-primary-dark)]">{{ t('currency') }}</span>
+          {{ totalPriceWithoutDiscount }} <span
+            class="text-[15px] text-[var(--color-primary-dark)]">{{ t(currencyStore.label) }}</span>
         </p>
       </div>
       <div class="flex text-[var(--color-primary-pink)] justify-end items-center">
         <p class="fw-600 text-[16px] mr-[14px] leading-[34px]">{{ t('discount_label') }}:</p>
         <p>
           {{ totalDiscount }} <span
-            class="text-[15px]">{{ t('currency') }}</span>
+            class="text-[15px]">{{ t(currencyStore.label) }}</span>
         </p>
       </div>
       <div class="flex justify-end items-center">
-        <p class="fw-600 text-[16px] text-[var(--color-muted-light-gray)] mr-[14px] leading-[34px]">{{ t('amount_to_pay_label') }}:</p>
+        <p class="fw-600 text-[16px] text-[var(--color-muted-light-gray)] mr-[14px] leading-[34px]">
+          {{ t('amount_to_pay_label') }}:</p>
         <p>
-          {{ finallyPrice  }} <span class="text-[15px] text-[var(--color-primary-dark)]">{{ t('currency') }}</span>
+          {{ finallyPrice }} <span class="text-[15px] text-[var(--color-primary-dark)]">{{
+            t(currencyStore.label)
+          }}</span>
         </p>
       </div>
 
     </div>
   </div>
   <ConfirmDialog></ConfirmDialog>
-  <Toast />
+  <Toast/>
 </template>
 
 <script setup>
@@ -39,12 +44,14 @@ import {calculateTotal} from "~/utils/index.js";
 import {useConfirmWithToast} from "~/composables/useConfirmWithToast.js";
 import {useCartStore} from "~/stores/cart.js";
 
-const { confirmAction } = useConfirmWithToast()
+const {confirmAction} = useConfirmWithToast()
 
 
-const { t } = useI18n()
+const {t} = useI18n()
 
 const cartStore = useCartStore();
+
+const currencyStore = useCurrencyStore();
 
 const {productsOverview, scrollAfter} = defineProps({
   productsOverview: {
@@ -70,8 +77,8 @@ const confirmDelete = (id) => {
     rejectLabel: 'Cancel',
     acceptAction: () => deleteProduct(id),
     toastMessages: {
-      accept: { severity: 'success', summary: 'Deleted', detail: 'Product deleted', life: 3000 },
-      reject: { severity: 'error', summary: 'Cancelled', detail: 'Deletion cancelled', life: 3000 },
+      accept: {severity: 'success', summary: 'Deleted', detail: 'Product deleted', life: 3000},
+      reject: {severity: 'error', summary: 'Cancelled', detail: 'Deletion cancelled', life: 3000},
     }
   })
 };
@@ -80,9 +87,11 @@ const isScrollable = computed(() => {
   return productsOverview.length > scrollAfter;
 });
 
-const totalPriceWithoutDiscount = computed(() => calculateTotal(productsOverview, false))
+const currency = computed(() => currencyStore.isUAHSelected ? 'uah' : 'usd')
 
-const totalDiscount = computed(() => calculateTotal(productsOverview, true))
+const totalPriceWithoutDiscount = computed(() => calculateTotal(productsOverview, currency.value, false))
+
+const totalDiscount = computed(() => totalPriceWithoutDiscount.value - calculateTotal(productsOverview, currency.value, true))
 
 const finallyPrice = computed(() => totalPriceWithoutDiscount.value - totalDiscount.value)
 
@@ -104,6 +113,7 @@ const finallyPrice = computed(() => totalPriceWithoutDiscount.value - totalDisco
 .scrollable-items::-webkit-scrollbar {
   width: 8px;
 }
+
 .scrollable-items::-webkit-scrollbar-thumb {
   background: var(--color-primary-dark);
   border-radius: 8px;

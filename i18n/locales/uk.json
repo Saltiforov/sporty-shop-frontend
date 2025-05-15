@@ -59,6 +59,8 @@
   "product_developer": "Виробник:",
   "product_buy_now": "Купити зараз",
   "currency": "грн",
+  "currency_uah": "грн",
+  "currency_usd": "доллар",
 
   "tabs_description": "Опис",
   "tabs_characteristics": "Характеристики",
@@ -91,6 +93,8 @@
   "submit_review": "Надіслати відгук",
   "purchase_confirmed": "Покупка підтверджена!",
   "purchase_not_confirmed": "Покупка не підтверджена!",
+  "menu_label": "Меню",
+  "account_label": "Обліковий запис",
 
   "checkout_title": "Оформлення замовлення",
   "account_text": "Вже маєте акаунт?",
@@ -163,6 +167,7 @@
   "auth_phone_or_email": "Телефон або email*",
   "auth_password": "Пароль*",
   "auth_first_name": "Імʼя*",
+  "auth_username": "Логін*",
   "auth_last_name": "Прізвище*",
   "auth_phone_number": "Номер телефону*",
   "auth_email": "Email адреса*"

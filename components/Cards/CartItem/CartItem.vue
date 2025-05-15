@@ -58,7 +58,7 @@
                   : 'text-[16px]'
               ]"
             >
-              {{ cartProduct?.price * cartProduct.quantity || '1121' }} {{ t('currency') }}
+              {{ priceByCurrency * cartProduct.quantity || '1121' }} {{ t(currencyStore.label) }}
             </div>
 
             <div
@@ -68,7 +68,7 @@
                 ]"
                 class="discount-price text-[var(--color-primary-pink)]"
             >
-              {{ discountPrice || '600' }} <span class="text-[18px]">{{ t('currency') }}</span>
+              {{ priceWithDiscount || '600' }} <span class="text-[18px]">{{ t(currencyStore.label) }}</span>
             </div>
           </div>
 
@@ -99,13 +99,12 @@
 
 <script setup>
 import AmountSelector from "~/components/UI/AmountSelector/AmountSelector.vue";
-import {useCartStore} from "~/stores/cart.js";
 
 const {t} = useI18n();
 
-const emit = defineEmits(["remove-product"]);
+const emit = defineEmits(["remove-product", 'handle-cart-item']);
 
-const cartStore = useCartStore()
+const currencyStore = useCurrencyStore()
 
 const router = useRouter();
 
@@ -128,12 +127,18 @@ const {cartProduct} = defineProps({
 const redirectToProduct = (cartProduct) => {
   if (!cartProduct?.id) return
   router.replace(`/product/${cartProduct.id}`)
-  cartStore.c
+  emit('handle-cart-item')
 }
 
-const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] || cartProduct.image)
+const priceByCurrency = computed(() => {
+  return Math.floor(currencyStore.isUAHSelected ? cartProduct.price_uah :cartProduct.price_usd)
+})
 
-const discountPrice = computed(() => (cartProduct?.price - cartProduct?.discount) * cartProduct?.quantity)
+const priceWithDiscount = computed(() => {
+  return Math.floor(priceByCurrency.value * (1 - cartProduct.discount / 100))
+})
+
+const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] || cartProduct.image)
 
 </script>
 

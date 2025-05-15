@@ -21,7 +21,8 @@
         </div>
         <CheckoutFieldsSkeleton class="mb-[65px]" v-else/>
 
-        <div v-if="hydrated" class="checkout-payment-method pt-[24px] px-[42px]  pb-[36px] rounded-lg bg-[var(--color-gray-lavender)]">
+        <div v-if="hydrated"
+             class="checkout-payment-method pt-[24px] px-[42px]  pb-[36px] rounded-lg bg-[var(--color-gray-lavender)]">
           <h2 class="mb-[36px] flex title-lg">
             {{ t('payment_method_title') }}
             <TooltipIcon class="ml-2" :message="t('payment_method_tooltip')"/>
@@ -55,6 +56,7 @@
         <div class="products-list__container max-w-[547px] w-full">
           <h2 class="title-lg mb-[44px]">{{ t('checkout_list_title') }}</h2>
           <ProductsOverview :products-overview="cartStore.getCartProducts"/>
+          {{ currency }}
           <div class="use-promocode">
             <div class="flex justify-between mb-[17px]">
               <p class="text-[var(--color-primary-dark)]">{{ t('use_promo_code') }}</p>
@@ -135,10 +137,12 @@ import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 import {getCurrentUser} from "~/services/api/user-service.js";
 import {useAuthPopup} from "~/stores/authPopup.js";
 import {InputGroup, InputGroupAddon, InputNumber} from "primevue";
-import CheckoutOrderListSkeleton from "~/components/Skeletons/Checkout/CheckoutOrderListSkeleton/CheckoutOrderListSkeleton.vue";
+import CheckoutOrderListSkeleton
+  from "~/components/Skeletons/Checkout/CheckoutOrderListSkeleton/CheckoutOrderListSkeleton.vue";
 import CheckoutFieldsSkeleton from "~/components/Skeletons/Checkout/CheckoutFieldsSkeleton/CheckoutFieldsSkeleton.vue";
 import CheckoutPaymentMethodSkeleton
   from "~/components/Skeletons/Checkout/CheckoutPaymentMethodSkeleton/CheckoutPaymentMethodSkeleton.vue";
+import {useCurrencyStore} from "~/stores/currency.js";
 
 definePageMeta({
   layout: 'breadcrumb',
@@ -155,6 +159,8 @@ const toast = useToast();
 const authPopup = useAuthPopup();
 
 const cartStore = useCartStore()
+
+const currencyStore = useCurrencyStore()
 
 const token = useCookie('token')
 
@@ -195,6 +201,8 @@ const mappedProductsForOrder = arr => arr.map(({quantity, ...withoutQuantity}) =
   quantity
 }));
 
+const currency = computed(() => currencyStore.isUAHSelected ? 'uah' : 'usd')
+
 const mappedUserDataForOrder = (data) => {
   const {street, city, postalCode, country, firstName, lastName, phone, email, telegramUsername} = data
   return {
@@ -205,14 +213,17 @@ const mappedUserDataForOrder = (data) => {
       country,
     },
     paymentMethod: isSendSmsWithFormData.value || isPaymentOnDelivery.value,
-    ...(!token.value && { guest: {
+    ...(!token.value && {
+      guest: {
         firstName,
         lastName,
         phone,
         email,
         telegramUsername
-      } }),
-    description: commentForOrder.value
+      }
+    }),
+    description: commentForOrder.value,
+    currency: currency.value
   }
 }
 
@@ -224,6 +235,8 @@ const handleCreateOrder = async () => {
   }
 
   const isValid = fieldsBlock.value?.validateFields()
+
+  console.log("data", data)
 
   if (isValid && data.products) {
     await createOrder(data)

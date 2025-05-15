@@ -6,7 +6,11 @@
         :class="linkClass"
         class="link"
     >
-      <NuxtLink :to="item.page">{{ item.label }}</NuxtLink>
+      <NuxtLink :to="item.page">
+        <p :style="labelStyle" :class="labelClass">
+          {{ item.label }}
+        </p>
+      </NuxtLink>
     </li>
   </ul>
 </template>
@@ -26,7 +30,16 @@ const props = defineProps({
   linkClass: {
     type: [Array, String],
     required: false
-  }
+  },
+  labelClass: {
+    type: [Array, String],
+    required: false
+  },
+  labelStyle: {
+    type: [Array, String],
+    required: false
+  },
+
 })
 
 const parentClasses = computed(() => {
@@ -35,6 +48,14 @@ const parentClasses = computed(() => {
 
 const linkClass = computed(() => {
   return Array.isArray(props.linkClass) ? props.linkClass.join(' ') : props.linkClass
+})
+
+const labelClass = computed(() => {
+  return Array.isArray(props.labelClass) ? props.labelClass.join(' ') : props.labelClass
+})
+
+const labelStyle = computed(() => {
+  return Array.isArray(props.labelStyle) ? props.labelStyle.join(' ') : props.labelStyle
 })
 
 </script>

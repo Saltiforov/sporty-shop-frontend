@@ -25,6 +25,10 @@
 import { ref, computed, watch } from 'vue'
 import Select from 'primevue/select'
 
+import { useCurrencyStore } from "~/stores/currency.js";
+
+const currencyStore = useCurrencyStore();
+
 const currencyOptions = [
   { label: 'UAH (₴)', code: 'UAH' },
   { label: 'USD ($)', code: 'USD' },
@@ -39,6 +43,7 @@ const selectedCurrency = ref(
 
 const switchCurrency = () => {
   localStorage.setItem('currency', selectedCurrency.value.code)
+  currencyStore.setCurrency(selectedCurrency.value.code)
 }
 
 watch(selectedCurrency, () => {

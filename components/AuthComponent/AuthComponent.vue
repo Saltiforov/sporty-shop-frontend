@@ -13,7 +13,7 @@
         'mx-auto  mb-[37px]',
         isLogin ? 'max-w-[320px]' : 'max-w-[386px] pt-[15px]'
     ]" class="auth-button-wrapper">
-      <Button @click="handleAuth":pt="{ root: { class: 'auth-button btn-hover-default' } }">{{
+      <Button @click="handleAuth" :pt="{ root: { class: 'auth-button btn-hover-default' } }">{{
           buttonLabel
         }}
       </Button>
@@ -39,7 +39,7 @@
       </div>
     </div>
     <div class="login-with-footer">
-      <div class="flex text-[12px] justify-center">
+      <div v-if="!responsive" class="flex text-[12px] justify-center">
         <div v-if="isLogin" class="flex">
           <p class="mr-[17px]">{{ t('new_client') }}</p>
           <p>
@@ -50,6 +50,20 @@
           </p>
         </div>
         <p v-else class="text-[var(--color-muted-gray)]">{{ t('user_agreement') }}</p>
+      </div>
+      <div v-if="responsive && authPopup.popupType === 'login'" class="responsive-register-button" :class="[
+        'mx-auto  mb-[37px]',
+        isLogin ? 'max-w-[320px]' : 'max-w-[386px] pt-[15px]'
+           ]">
+        <p class="murecho-font title-lg-20 text-center mb-6">{{ t('new_client') }}</p>
+        <Button
+            @click="authPopup.setType('register')"
+            :pt="{ root: { class: 'auth-button btn-hover-default' } }"
+        >
+          {{
+            t('register_button')
+          }}
+        </Button>
       </div>
     </div>
   </div>
@@ -79,6 +93,10 @@ const {isLogin} = defineProps({
   isLogin: {
     type: Boolean,
     default: true
+  },
+  responsive: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -158,7 +176,7 @@ const registerFields = {
       {
         name: 'username',
         code: 'username',
-        label: 'Username',
+        label: computed(() => t('auth_username')),
         type: 'InputText',
         props: {
           side: 'left',

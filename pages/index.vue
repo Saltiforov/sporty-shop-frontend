@@ -5,7 +5,7 @@
     <div class="max-w-[1756px] mx-auto ">
       <div class="sort-select flex w-full justify-end">
         <div class="min-w-[320px] p-1 flex">
-          <p class="mr-5">{{ sortTitle }}</p>
+          <p class="mr-5 sort-title">{{ sortTitle }}</p>
           <SortSelect/>
         </div>
       </div>
@@ -120,6 +120,7 @@ import PaginationButtonSkeleton from "~/components/Skeletons/PaginationButtonSke
 import LoadMoreButtonSkeleton from "~/components/Skeletons/LoadMoreButtonSkeleton/LoadMoreButtonSkeleton.vue";
 import {getStaticPagesInfo} from "~/services/api/static-info.js";
 import {useStaticPages} from "~/stores/staticPages.js";
+import { useCurrencyStore } from "~/stores/currency.js";
 
 const promotionalProductsSwiperOptions = {
   slidesPerView: 1,
@@ -131,6 +132,8 @@ const {addProductToViewed} = useViewedProducts()
 const {$eventBus} = useNuxtApp()
 
 const staticPagesStore = useStaticPages()
+
+const currencyStore = useCurrencyStore()
 
 const hydrated = ref(false)
 
@@ -232,11 +235,6 @@ const fetchProducts = async (shouldReplace = false, params = {}) => {
   }
 }
 
-const fetchStaticPages = async () => {
-  const response = await getStaticPagesInfo()
-  staticPagesStore.setPages(response)
-}
-
 watch(
     () => route.query.q,
     async (newSearch, oldSearch) => {
@@ -272,14 +270,9 @@ const searchStore = useSearchStore()
 onMounted(async () => {
   syncFromRoute()
 
-
   searchStore.setSearchCallback(async (query) => {
-    // Вся логика поиска, без query-параметров
     console.log('🔍 Поиск снаружи:', query)
-    // await fetchProducts(false, { q: query })
   })
-
-  await fetchStaticPages()
 
   await getPromotionalProducts()
 
@@ -340,6 +333,16 @@ onBeforeUnmount(() => {
 @media (max-width: 800px) {
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+@media (max-width: 750px) {
+  .sort-select {
+    margin-top: 30px;
+  }
+  .sort-title {
+    font-size: 15px;
   }
 }
 

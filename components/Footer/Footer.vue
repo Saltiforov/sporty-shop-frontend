@@ -71,5 +71,53 @@ const links = ref([
 </script>
 
 <style scoped>
+@media (max-width: 1300px) {
+  .links-list {
+    justify-content: space-around;
+  }
+}
+
+@media (max-width: 1130px) {
+  .footer-container {
+    flex-direction: column;
+  }
+  .left-side {
+    margin-bottom: 10px;
+  }
+
+  footer {
+    padding-top: 12px;
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+}
+
+@media (max-width: 671px) {
+  footer {
+    display: none;
+  }
+}
+
+@media (max-width: 650px) {
+  .footer-container {
+    flex-direction: column-reverse;
+  }
+  .left-side {
+    flex-direction: column-reverse;
+  }
+  .right-side {
+    max-width: 100%;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+  }
+  .contacts {
+    margin-left: 0px;
+  }
+  .links-list {
+    max-width: 100%;
+    justify-content: space-around;
+  }
+}
+
 
 </style>

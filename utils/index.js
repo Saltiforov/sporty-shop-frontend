@@ -1,15 +1,20 @@
-export const calculateTotal = (items, useDiscount = true) => {
-    console.log("calculateTotal", items)
+export const calculateTotal = (items, currency = 'uah', useDiscount = true) => {
+    const getPriceWithDiscount = (item) => {
+        const price = currency === 'usd' ? item.price_usd : item.price_uah
+        if (useDiscount && item.discount) {
+            return price - (price * item.discount / 100)
+        }
+        return price
+    }
+
     if (Array.isArray(items)) {
         return items.reduce((total, item) => {
-            const price = useDiscount ? (item.discountPrice || item.discount) ?? item.price : item.price
-            return total + price * item.quantity
+            return total + getPriceWithDiscount(item) * item.quantity
         }, 0)
     }
-    const price = useDiscount ? items.discount ?? items.price : items.price
-    return price * items.quantity
-}
 
+    return getPriceWithDiscount(items) * items.quantity
+}
 export const addProductToCart = (array, product) => {
     const existItem = array.value.find(item => item._id === product._id)
     if (!existItem) {
@@ -43,12 +48,14 @@ export function mapOrdersToSummaries(orders) {
             const product = item.product || {}
 
             return {
-                image: fullImageUrls(product.images)[0] || '',
+                image: fullImageUrls(product.images || [])[0] || '',
                 name: product.name || '',
                 quantity: item.quantity || 0,
                 price: product.price || 0,
                 id: product._id || '',
-                discountPrice: product.discount || product.price || 0
+                price_uah: product.price_uah || '',
+                price_usd: product.price_usd || '',
+                discount: product.discount || product.price || 0
             }
         })
 
@@ -68,6 +75,7 @@ export function mapOrdersToSummaries(orders) {
                 address: formatAddress(shipping),
                 deliveryComment: order.description || ''
             },
+            pricing: order.pricing || '',
             products
         }
     })
@@ -87,3 +95,7 @@ export const formatRating = (rating) => {
     const num = Number(rating ?? 0);
     return Number.isInteger(num) ? String(num) : num.toFixed(1);
 };
+
+export const toInteger = (number) => {
+    return Math.floor(number);
+}

@@ -46,3 +46,11 @@ onMounted( () => {
 })
 
 </script>
+
+<style scoped>
+@media (max-width: 750px) {
+  .main-banner {
+    display: none;
+  }
+}
+</style>

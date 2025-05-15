@@ -47,11 +47,11 @@
     <div class="flex relative items-center justify-between">
       <div>
         <p v-if="product.discount" class="discount-price absolute -top-3 left-0 fw-500 text-[15px] line-through">
-          {{ product.price }} {{ t('currency') }}
+          {{  priceByCurrency }} {{ t(currencyStore.label) }}
         </p>
         <p :class="{ 'text-[#EF4B4B]': product?.discount }"
            :style="{ fontSize: variant === 'small' ? '16px' : '' }" class="text-[24px] leading-[22px] fw-500">
-          {{ product.price - product.discount || product.price }} {{ t('currency') }}</p>
+          {{ priceWithDiscount || priceByCurrency }} {{ t(currencyStore.label) }}</p>
       </div>
 
 
@@ -85,7 +85,7 @@ import DefaultProductImage from '~/assets/images/product-image.png'
 import {useCartStore} from "~/stores/cart.js";
 import {addProductToFavorites, deleteProductFromFavorites} from "~/services/api/product-service.js";
 
-const {product, variant} = defineProps({
+const props = defineProps({
   product: {
     type: Object,
     required: true,
@@ -102,6 +102,8 @@ const emit = defineEmits(['add-to-cart'])
 
 const cartStore = useCartStore()
 
+const currencyStore = useCurrencyStore()
+
 const {t} = useI18n()
 
 const token = useCookie('token')
@@ -111,12 +113,20 @@ const addToCart = (product) => {
   cartStore.addToCart(product);
 }
 
+const priceByCurrency = computed(() => {
+  return Math.floor(currencyStore.isUAHSelected ? props.product.price_uah : props.product.price_usd)
+})
+
+const priceWithDiscount = computed(() => {
+  return Math.floor(priceByCurrency.value * (1 - props.product.discount / 100))
+})
+
 const productImage = computed(() => {
-  return product?.images?.length ? fullImageUrls(product.images)[0] : DefaultProductImage
+  return props.product?.images?.length ? fullImageUrls(props.product.images)[0] : DefaultProductImage
 })
 
 const iconSize = computed(() => {
-  return variant === 'small'
+  return props.variant === 'small'
       ? {width: 19, height: 17}
       : {width: 26, height: 23}
 })
@@ -139,8 +149,6 @@ const iconSize = computed(() => {
     padding: 20px 16px 15px 16px;
   }
 }
-
-
 
 
 </style>

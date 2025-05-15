@@ -4,6 +4,19 @@ import {ref, computed, watch, onMounted} from 'vue'
 export const useCartStore = defineStore('cart', () => {
     const cartProducts = ref([])
 
+    const isOpen = ref(false)
+
+    const isCartVisible = computed(() => isOpen.value)
+
+    const close = () => {
+        isOpen.value = false
+    }
+
+     const open = () => {
+         isOpen.value = open
+    }
+
+
     onMounted(() => {
         if (typeof window !== 'undefined' && sessionStorage.getItem('cartProducts')) {
             cartProducts.value = JSON.parse(sessionStorage.getItem('cartProducts'))
@@ -65,6 +78,10 @@ export const useCartStore = defineStore('cart', () => {
         addToCart,
         getCartProducts,
         removeFromCart,
-        clearCart
+        clearCart,
+        isCartVisible,
+        isOpen,
+        close,
+        open
     }
 })

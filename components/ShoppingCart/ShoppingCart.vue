@@ -1,90 +1,94 @@
 <template>
-  <div v-if="isOpen" class="overlay">
-    <div class="shopping-cart pt-[36px] pb-[28px] pl-[46px] pr-[30px] rounded-tl-[32px] rounded-bl-[32px]">
-      <div class="header flex justify-between pb-[49px] items-center">
-        <div class="flex">
-          <h1 class="large-title mr-[25px]">{{ t('cart_title') }}</h1>
-          <p class="large-title" style="color: var(--color-muted-light-gray)">({{ cartStore.cartCount }})</p>
+  <transition name="cart-slide">
+    <div v-if="isOpen" class="overlay" @click="$emit('close')">
+      <div @click.stop class="shopping-cart  pt-[36px] pb-[28px] pl-[46px] pr-[30px] rounded-tl-[32px] rounded-bl-[32px]">
+        <div class="header flex justify-between pb-[49px] items-center">
+          <div class="flex">
+            <h1 class="large-title mr-[25px]">{{ t('cart_title') }}</h1>
+            <p class="large-title" style="color: var(--color-muted-light-gray)">({{ cartStore.cartCount }})</p>
+          </div>
+          <div class="pr-[8px]">
+            <Button :pt="{ root: { class: 'close-cart' } }" @click="$emit('close')">
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
+                   xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M1.63597 1.63649L7.51465 7.51517M7.51465 7.51517L13.3933 13.3938M7.51465 7.51517L1.63597 13.3938M7.51465 7.51517L13.3933 1.63649"
+                    stroke="#9E2B24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </Button>
+          </div>
         </div>
-        <div class="pr-[8px]">
-          <Button :pt="{
-            root: {
-              class: 'close-cart'
-            }
-          }" @click="$emit('close')">
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                  d="M1.63597 1.63649L7.51465 7.51517M7.51465 7.51517L13.3933 13.3938M7.51465 7.51517L1.63597 13.3938M7.51465 7.51517L13.3933 1.63649"
-                  stroke="#9E2B24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </Button>
-        </div>
-      </div>
 
-      <div v-if="!cartItems.length" class="cart-empty-title">
-        <h2 class="text-center text-[var(--color-gray-dark-charcoal)] text-[24px] py-[50px]">{{
-            t('empty_cart_text')
-          }}</h2>
-      </div>
+        <div v-if="!cartItems.length" class="cart-empty-title">
+          <h2 class="text-center text-[var(--color-gray-dark-charcoal)] text-[24px] py-[50px]">
+            {{ t('empty_cart_text') }}
+          </h2>
+        </div>
 
-      <ProductsOverview :products-overview="cartItems"/>
-      <div class="make-order-block flex flex-col items-center ">
-        <div class="mb-[10px] w-full max-w-[423px]">
-          <NuxtLink to="/checkout">
-            <Button @click="$emit('close')" :pt="{
-            root: {
-              class: 'make-order-button btn-hover-default',
-            }
-          }"><p class="fw-400 murecho-font text-[#FFFFFF] text-[14px] leading-[22px]">
-              {{ t('make_order') }}</p></Button>
-          </NuxtLink>
-        </div>
-        <div>
-          <Button @click="handleContinueShopping" class="continue-shopping__bnt" to="/">
-            <p class="text-[#A3A3A7] murecho-font">{{ t('continue_shopping') }}</p>
-          </Button>
-        </div>
-      </div>
-      <div class="recommended-products mt-[50px]">
-        <div class="flex items-center gap-4">
-          <div class="w-[152px] h-px bg-white"></div>
-          <h2 class="h2-title text-center whitespace-nowrap">{{ t('recommended_products') }}</h2>
-          <div class="w-[152px] h-px bg-white"></div>
-        </div>
-        <div class="recommended-products-cards mt-[22px] grid grid-cols-2 gap-[30px]">
-          <ProductCard v-for="product in products" variant="small" :key="product.id" :product="product">
-            <template #buy-button>
-              <Button @click="addToCart(product)" :pt="{
-                root: {
-                  class: 'card-buy__small__btn',
-                }
-              }" class="flex justify-center items-center w-[29px] h-[29px]">
-                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M1.5 7.5H7.5M7.5 7.5H13.5M7.5 7.5V13.5M7.5 7.5V1.5" stroke="white" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+        <ProductsOverview :products-overview="cartItems"/>
+        <div class="make-order-block flex flex-col items-center">
+          <div class="mb-[10px] w-full max-w-[423px]">
+            <NuxtLink to="/checkout">
+              <Button @click="$emit('close')" :pt="{ root: { class: 'make-order-button btn-hover-default' } }">
+                <p class="fw-400 murecho-font text-[#FFFFFF] text-[14px] leading-[22px]">
+                  {{ t('make_order') }}
+                </p>
               </Button>
-            </template>
-          </ProductCard>
+            </NuxtLink>
+          </div>
+          <div>
+            <Button @click="handleContinueShopping" class="continue-shopping__bnt" to="/">
+              <p class="text-[#A3A3A7] murecho-font">{{ t('continue_shopping') }}</p>
+            </Button>
+          </div>
+        </div>
+
+        <div class="recommended-products mt-[50px]">
+          <div class="flex items-center gap-4">
+            <div class="w-[152px] h-px bg-white"></div>
+            <h2 class="h2-title text-center whitespace-nowrap">{{ t('recommended_products') }}</h2>
+            <div class="w-[152px] h-px bg-white"></div>
+          </div>
+          <div class="recommended-products-cards mt-[22px] grid grid-cols-2 gap-[30px]">
+            <ProductCard
+                v-for="product in products"
+                :key="product.id"
+                variant="small"
+                :product="product"
+                @click="handleRecommendedProduct"
+            >
+              <template #buy-button>
+                <Button
+                    @click="addToCart(product)"
+                    :pt="{ root: { class: 'card-buy__small__btn' } }"
+                    class="flex justify-center items-center w-[29px] h-[29px]"
+                >
+                  <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1.5 7.5H7.5M7.5 7.5H13.5M7.5 7.5V13.5M7.5 7.5V1.5"
+                          stroke="white" stroke-width="2"
+                          stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </Button>
+              </template>
+            </ProductCard>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </transition>
   <Toast position="bottom-right" group="br"/>
 </template>
 
 <script setup>
 import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
-import {useToastManager} from "~/composables/useToastManager.js";
+import { useToastManager } from "~/composables/useToastManager.js";
 
-
-const emit = defineEmits(["continue-shopping"]);
+const emit = defineEmits(["continue-shopping", "handle-recommended-product"]);
 
 const cartStore = useCartStore();
-
-const {showProductAddedToast} = useToastManager()
-
-const {t} = useI18n()
+const { showProductAddedToast } = useToastManager();
+const { t } = useI18n();
 
 const props = defineProps({
   isOpen: {
@@ -93,26 +97,25 @@ const props = defineProps({
   },
   cartItems: {
     type: Array,
-    required: false,
     default: () => [],
-  }
-})
+  },
+});
 
 const addToCart = (product) => {
-  showProductAddedToast(product)
+  showProductAddedToast(product);
   cartStore.addToCart(product);
-}
+};
 
 const handleContinueShopping = () => {
   emit("continue-shopping");
-}
+};
+
+const handleRecommendedProduct = () => {
+  cartStore.close();
+};
 
 watch(() => props.isOpen, (newVal) => {
-  if (newVal) {
-    document.body.style.overflow = 'hidden';
-  } else {
-    document.body.style.overflow = '';
-  }
+  document.body.style.overflow = newVal ? 'hidden' : '';
 });
 
 onUnmounted(() => {
@@ -124,6 +127,8 @@ const products = ref([
     _id: '680be0d6e0a2df86dc64154e',
     name: "Енергетичний напій MOXY Power+",
     rating: '4.6',
+    price_uah: 65,
+    price_usd: 1.63,
     price: 70,
     images: [
       "/uploads/icons/581f66ac553b0d4f31d43869575c76c391c2876f6cf2258a842d97f7affd4722.webp",
@@ -138,6 +143,8 @@ const products = ref([
     _id: "680bdf7fe0a2df86dc6414ec",
     name: "Креатин моногідрат - OstroVit",
     rating: '4.1',
+    price_uah: 895,
+    price_usd: 18,
     images: [
       "/uploads/icons/0a0773098658f21b18b20988c7c04d04eae01210a0dd55452dff452dce6ef68a.webp",
       "/uploads/icons/3d0b0070887319eb85f0a5704918dbedace22f615db060b8c6fb874b894b1e78.webp",
@@ -148,9 +155,7 @@ const products = ref([
     price: 699,
     isFavorite: true,
   },
-])
-
-
+]);
 </script>
 
 <style scoped>
@@ -171,7 +176,6 @@ const products = ref([
 }
 
 .make-order-button:hover {
-  width: 100%;
   background: var(--color-primary-dark);
 }
 
@@ -186,7 +190,6 @@ const products = ref([
 .card-buy__small__btn:hover {
   background: var(--color-primary-green);
   border: none;
-  padding: 0;
 }
 
 .close-cart {
@@ -197,8 +200,6 @@ const products = ref([
 
 .close-cart:hover {
   background: transparent;
-  border: none;
-  padding: 0;
 }
 
 .shopping-cart {
@@ -211,5 +212,29 @@ const products = ref([
   z-index: 1000;
   box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.2);
   overflow-y: auto;
+}
+
+/* Transition анимация корзины */
+.cart-slide-enter-from {
+  transform: translateX(100%);
+  opacity: 0;
+}
+.cart-slide-enter-active {
+  transition: transform 0.4s ease, opacity 0.3s ease;
+}
+.cart-slide-enter-to {
+  transform: translateX(0%);
+  opacity: 1;
+}
+.cart-slide-leave-from {
+  transform: translateX(0%);
+  opacity: 1;
+}
+.cart-slide-leave-active {
+  transition: transform 0.4s ease, opacity 0.3s ease;
+}
+.cart-slide-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
 }
 </style>

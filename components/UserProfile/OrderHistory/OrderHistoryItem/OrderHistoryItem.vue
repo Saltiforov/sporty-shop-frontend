@@ -28,7 +28,8 @@
               />
               <div class="history-view-price justify-end text-[var(--color-primary-red)] title-lg-20 flex">
                 <p class="mr-5">{{ t('total') }}:</p>
-                <p>{{ calculateTotal(item?.products, true) }} {{ t('currency') }}</p>
+                <p>{{ calculateTotal(item?.products, true) }} {{ t(currencyStore.label) }}</p>
+                <p>{{ item.pricing?.totalOrderPrice }} {{ t(currencyStore.label) }}</p>
               </div>
             </div>
             <div class="flex text-[var(--color-gray-dark-charcoal)] max-w-[890px] justify-between">
@@ -52,6 +53,8 @@ import ProductImage from "~/assets/images/product-image.png"
 import {calculateTotal, capitalizeFirstLetter} from "~/utils/index.js";
 
 const { t } = useI18n();
+
+const currencyStore = useCurrencyStore()
 
 defineProps({
   orderList: {
@@ -84,64 +87,6 @@ const statusLocalization = {
 const localizeStatus = (status) => {
   return statusLocalization[status];
 }
-
-// const orderList = [
-//   {
-//     id: 1,
-//     orderNumber: 1111115,
-//     status: 'Відправлено',
-//     firstName: 'Іван',
-//     lastName: 'Петренко',
-//     phone: '+380 99 765 55 55',
-//     email: 'qwerty@gmail.com',
-//     userInfo: {
-//       firstName: 'Огірок',
-//       lastName: 'Огірковий',
-//       email: 'qwerty@gmail.com',
-//       phone: '+380 99 765 55 55',
-//       address: 'Київ',
-//       deliveryComment: 'Відділення НП №60'
-//     }
-//   },
-//   {
-//     id: 2,
-//     orderNumber: 1532415,
-//     status: 'В обробці',
-//     firstName: 'Марія',
-//     lastName: 'Шевченко',
-//     phone: '+380 97 123 45 67',
-//     email: 'maria@example.com',
-//     userInfo: {
-//       firstName: 'Огірок',
-//       lastName: 'Огірковий',
-//       email: 'qwerty@gmail.com',
-//       phone: '+380 99 765 55 55',
-//       address: 'Київ',
-//       deliveryComment: 'Відділення НП №60'
-//     }
-//   }
-// ];
-
-
-const
-    shoppingCartItems = ref([
-      {
-        image: ProductImage,
-        name: 'Nutrex Research Anabol Hardcore - 60 капс',
-        quantity: 3,
-        price: 1121,
-        id: 1,
-        discountPrice: 999
-      },
-      {
-        image: ProductImage,
-        name: 'Nutrex Research Anabol Hardcore - 60 капс',
-        quantity: 3,
-        price: 1121,
-        id: 1,
-        discountPrice: 999
-      },
-    ])
 
 </script>
 

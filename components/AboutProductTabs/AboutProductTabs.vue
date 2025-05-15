@@ -44,49 +44,7 @@
     </TabPanel>
     <TabPanel :header="tabs.delivery.header">
       <div class="delivery-and-payment">
-        <div class="mb-4">
-          <strong class="fw-600 leading-[33px]">Оплата</strong>
-        </div>
-        <p class="mb-4">Оплата здійснюється через <strong>Telegram</strong>. Після оформлення замовлення наш
-          менеджер зв’яжеться з вами у Telegram для підтвердження замовлення та надасть реквізити для оплати.</p>
-        <div class="mb-4">
-          <strong>Доступні методи оплати:</strong>
-          <ul class="list-disc pl-6">
-            <li>Банківський переказ (Monobank, ПриватБанк та інші)</li>
-            <li>Переказ на картку</li>
-            <li>Криптовалюта (за запитом)</li>
-          </ul>
-        </div>
-
-        <div class="mb-4">
-          <strong>Доставка</strong>
-          <div>
-            <p>По Україні:</p>
-            <ul class="list-disc pl-6">
-              <li>Нова Пошта – 1-3 дні, згідно з тарифами перевізника</li>
-              <li>Укрпошта – 3-7 днів</li>
-            </ul>
-          </div>
-          <div>
-            <p>Міжнародна доставка:</p>
-            <ul class="list-disc pl-6">
-              <li>Доставка в інші країни здійснюється через міжнародні поштові сервіси</li>
-              <li>Терміни та вартість доставки залежать від країни одержувача та вибраного перевізника</li>
-              <li>Після відправки ви отримаєте номер для відстеження посилки</li>
-            </ul>
-          </div>
-
-        </div>
-
-        <div>
-          <div>
-            <p>📌 Важливо!</p>
-            <ul class="list-disc pl-6">
-              <li>Відправка здійснюється тільки після повної передоплати</li>
-              <li>Точну вартість міжнародної доставки уточнюйте у менеджера в Telegram</li>
-            </ul>
-          </div>
-        </div>
+        <p v-html="deliveryAndPaymentInfo.content"></p>
       </div>
     </TabPanel>
     <TabPanel :header="tabs.reviews.header">
@@ -230,6 +188,7 @@ import {formatDateToDMY} from "~/utils/index.js";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 import {storeToRefs} from "pinia";
 import {useAuthStore} from "~/stores/auth.js";
+import {useStaticPages} from "~/stores/staticPages.js";
 
 const props = defineProps({
   product: {
@@ -239,16 +198,18 @@ const props = defineProps({
   }
 })
 
-console.log("AboutProductTabs", props.product)
 
 const MAX_REVIEW_LENGTH = 300;
 
 const route = useRoute()
+
 const productId = computed(() => route.params.id)
 
 const {t} = useI18n()
 
 const token = useCookie('token')
+
+const staticPagesStore = useStaticPages()
 
 const {currentUser} = storeToRefs(useAuthStore());
 
@@ -257,6 +218,8 @@ const fullNameOfUser = computed(() => token.value ? `${currentUser.value.firstNa
 const getReviewLength = computed(() => textareaValue.value.length);
 
 const expandedComments = ref(new Set())
+
+const deliveryAndPaymentInfo = computed(() => staticPagesStore.getCurrentPage('delivery-and-payment-product'))
 
 const isShowMoreButton = (comment) => {
   return comment.length >= 200
