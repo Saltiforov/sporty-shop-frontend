@@ -3,40 +3,54 @@
     <div class="popup murecho-font w-full">
       <div class="popup-header">
         <Tabs v-model:value="activeTab">
-          <TabList :pt="{
-            tabList: {
-              class: 'bg-transparent',
-            },
-            activeBar: {
-              root: {
-                class: 'bg-transparent',
+          <TabList
+              :pt="{
+              tabList: {
+                style: 'background-color: transparent;'
+              },
+              activeBar: {
+                root: {
+                  style: 'background-color: transparent;'
+                }
               }
-            }
-          }">
-            <Tab :pt="{
-              root: {
-                class: 'custom-border'
-              }
-            }" value="login" @click="setActiveTab('login')">{{ t('login') }}
+            }"
+          >
+            <Tab
+                :pt="{
+                root: {
+                  style: 'border-bottom: 1px solid var(--color-gray-lavender);'
+                }
+              }"
+                value="login"
+                @click="setActiveTab('login')"
+            >
+              {{ t('login') }}
             </Tab>
-            <Tab :pt="{
-              root: {
-                class: 'custom-border'
-              }
-            }" value="register" @click="setActiveTab('register')">{{ t('register_tab') }}
+            <Tab
+                :pt="{
+                root: {
+                  style: 'border-bottom: 1px solid var(--color-gray-lavender);'
+                }
+              }"
+                value="register"
+                @click="setActiveTab('register')"
+            >
+              {{ t('register_tab') }}
             </Tab>
           </TabList>
         </Tabs>
       </div>
 
       <div class="popup-content">
-        <TabPanels :pt="{
-          root: {
-            class: 'bg-transparent p-0',
-          }
-        }">
+        <TabPanels
+            :pt="{
+            root: {
+              style: 'background-color: transparent; padding: 0;'
+            }
+          }"
+        >
           <TabPanel>
-            <AuthComponent :is-login="isLogin"/>
+            <AuthComponent :is-login="isLogin" />
           </TabPanel>
         </TabPanels>
       </div>
@@ -56,6 +70,8 @@
   </div>
 </template>
 
+
+
 <script setup>
 const {t} = useI18n()
 
@@ -65,7 +81,6 @@ const authPopup = useAuthPopup()
 
 const setActiveTab = (activeTab) => {
   authPopup.setType(activeTab)
-
 }
 
 const isVisible = computed(() => authPopup.isShow)
@@ -101,10 +116,6 @@ const isLogin = computed(() => activeTab.value === 'login')
 
 .popup-header {
   margin-bottom: 1rem;
-}
-
-.custom-border {
-  border-bottom: 1px solid var(--color-gray-lavender) !important;
 }
 
 .close-btn {

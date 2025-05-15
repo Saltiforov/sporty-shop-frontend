@@ -1,93 +1,96 @@
 <template>
-  <div class="">
-
+  <div>
     <LoadingOverlay :visible="isLoading"/>
 
-    <div class="grid grid-cols-1 lg:grid-cols-[390px_1fr] gap-[30px]">
-      <aside class="p-4 rounded-md">
-        <div class="filters mb-[91px] w-full max-w-[354px] h-[554px] border rounded-[var(--default-rounded)]">
-          <Filters v-if="hydrated"/>
-          <FiltersSkeleton v-else/>
+    <div class="max-w-[1756px] mx-auto ">
+      <div class="sort-select flex w-full justify-end">
+        <div class="min-w-[320px] p-1 flex">
+          <p class="mr-5">{{ sortTitle }}</p>
+          <SortSelect/>
         </div>
+      </div>
 
-        <div class="promotional-products text-center">
-          <p class="text-[var(--color-primary-pink)] mb-[21px] fw-600 text-[20px]">{{ t('promo_products_title') }}</p>
-          <SwiperWrapper
-              v-if="hydrated"
-              :items="promotionalProducts"
-              :options="promotionalProductsSwiperOptions"
-          >
-            <template #default="{ item }">
+      <div class="main-content-container grid-cols-1 grid lg:grid-cols-[390px_1fr] gap-[30px]">
+        <aside class="p-4 rounded-md">
+          <div class="filters mb-[91px] w-full max-w-[354px] h-[554px] border rounded-[var(--default-rounded)]">
+            <Filters v-if="hydrated"/>
+            <FiltersSkeleton v-else/>
+          </div>
+
+          <div class="promotional-products text-center">
+            <p class="text-[var(--color-primary-pink)] mb-[21px] fw-600 text-[20px]">{{ t('promo_products_title') }}</p>
+            <SwiperWrapper
+                v-if="hydrated"
+                :items="promotionalProducts"
+                :options="promotionalProductsSwiperOptions"
+            >
+              <template #default="{ item }">
+                <ProductCard
+                    class="mt-3 mb-3"
+                    :product="item"
+                    @add-to-cart="showProductAddedToast"
+                    @click="addProductToViewed(item)"
+                />
+              </template>
+            </SwiperWrapper>
+
+            <div v-else class="flex gap-4 overflow-x-auto">
+              <ProductSkeleton
+                  class="min-w-[180px]"
+              />
+            </div>
+          </div>
+        </aside>
+
+        <div>
+          <div
+              class="product-grid">
+
+            <template v-if="!hydrated">
+              <ProductSkeleton v-for="i in 10" :key="'loading-skeleton-' + i"/>
+            </template>
+
+            <template v-else>
               <ProductCard
-                  class="mt-3 mb-3"
-                  :product="item"
+                  v-for="product in products"
+                  :key="product.id"
+                  :product="product"
                   @add-to-cart="showProductAddedToast"
-                  @click="addProductToViewed(item)"
+                  @click="addProductToViewed(product)"
+
               />
             </template>
-          </SwiperWrapper>
-
-          <div v-else class="flex gap-4 overflow-x-auto">
-            <ProductSkeleton
-                class="min-w-[180px]"
-            />
           </div>
-        </div>
-      </aside>
 
-      <div class="">
-        <div class="sort-select flex max-w-[1340px] w-full justify-end mb-5">
-          <div class="min-w-[310px] flex">
-            <p class="mr-5">{{ sortTitle }}</p>
-            <SortSelect/>
-          </div>
-        </div>
-
-        <div
-            class="grid gap-[30px] mb-[45px] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 max-w-full w-full">
-
-          <template v-if="!hydrated">
-            <ProductSkeleton v-for="i in 10" :key="'loading-skeleton-' + i"/>
-          </template>
-
-          <template v-else>
-            <ProductCard
-                v-for="product in products"
-                :key="product.id"
-                :product="product"
-                @add-to-cart="showProductAddedToast"
-                @click="addProductToViewed(product)"
-
-            />
-          </template>
-        </div>
-
-        <div class="products-pagination-actions mb-[72px]">
-          <div class="load-more-wrapper mb-3 flex justify-center">
-            <LoadMoreButton
-                v-if="!isLoading"
-                :disabled="allLoaded"
-                :label="loadMoreLabel"
-                @click="fetchProducts(false)"
-            >
-              <template #icon>
-                <img src="~/assets/icons/load-more-icon.svg" alt="load-more-icon">
-              </template>
-            </LoadMoreButton>
-            <LoadMoreButtonSkeleton v-else/>
-          </div>
-          <div class="product-pagination-wrapper flex justify-center">
-            <ProductPaginationButton
-                v-if="!isLoading"
-                v-model="activePage"
-                :max-pages="totalPages"
-                :all-loaded="allLoaded"
-                @update:model-value="getProductsByPage"
-            />
-            <PaginationButtonSkeleton v-else/>
+          <div class="products-pagination-actions mb-[72px]">
+            <div class="load-more-wrapper mb-3 flex justify-center">
+              <LoadMoreButton
+                  v-if="!isLoading"
+                  :disabled="allLoaded"
+                  :label="loadMoreLabel"
+                  @click="fetchProducts(false)"
+              >
+                <template #icon>
+                  <img src="~/assets/icons/load-more-icon.svg" alt="load-more-icon">
+                </template>
+              </LoadMoreButton>
+              <LoadMoreButtonSkeleton v-else/>
+            </div>
+            <div class="product-pagination-wrapper flex justify-center">
+              <ProductPaginationButton
+                  v-if="!isLoading"
+                  v-model="activePage"
+                  :max-pages="totalPages"
+                  :all-loaded="allLoaded"
+                  @update:model-value="getProductsByPage"
+              />
+              <PaginationButtonSkeleton v-else/>
+            </div>
           </div>
         </div>
       </div>
+
+
     </div>
 
   </div>
@@ -115,6 +118,8 @@ import {useViewedProducts} from "~/composables/useViewedProducts.js";
 import FiltersSkeleton from "~/components/Skeletons/FiltersSkeleton/FiltersSkeleton.vue";
 import PaginationButtonSkeleton from "~/components/Skeletons/PaginationButtonSkeleton/PaginationButtonSkeleton.vue";
 import LoadMoreButtonSkeleton from "~/components/Skeletons/LoadMoreButtonSkeleton/LoadMoreButtonSkeleton.vue";
+import {getStaticPagesInfo} from "~/services/api/static-info.js";
+import {useStaticPages} from "~/stores/staticPages.js";
 
 const promotionalProductsSwiperOptions = {
   slidesPerView: 1,
@@ -123,7 +128,9 @@ const promotionalProductsSwiperOptions = {
 
 const {addProductToViewed} = useViewedProducts()
 
-const { $eventBus } = useNuxtApp()
+const {$eventBus} = useNuxtApp()
+
+const staticPagesStore = useStaticPages()
 
 const hydrated = ref(false)
 
@@ -180,7 +187,7 @@ const syncFromRoute = () => {
     page.value = pageFromQuery
   }
 
-  productsQueryParams.value = { ...productsQueryParams.value, page: page.value }
+  productsQueryParams.value = {...productsQueryParams.value, page: page.value}
   updateQueryParams()
 }
 
@@ -225,6 +232,11 @@ const fetchProducts = async (shouldReplace = false, params = {}) => {
   }
 }
 
+const fetchStaticPages = async () => {
+  const response = await getStaticPagesInfo()
+  staticPagesStore.setPages(response)
+}
+
 watch(
     () => route.query.q,
     async (newSearch, oldSearch) => {
@@ -252,7 +264,7 @@ watch(
         $eventBus.emit('products-found', foundProducts.value)
       }
     },
-    { immediate: true }
+    {immediate: true}
 )
 
 const searchStore = useSearchStore()
@@ -267,6 +279,8 @@ onMounted(async () => {
     // await fetchProducts(false, { q: query })
   })
 
+  await fetchStaticPages()
+
   await getPromotionalProducts()
 
   await fetchProducts(true)
@@ -277,3 +291,63 @@ onMounted(async () => {
 onBeforeUnmount(() => {
 })
 </script>
+
+<style scoped>
+.product-grid {
+  display: grid;
+  gap: 30px;
+  padding: 16px;
+  margin-bottom: 45px;
+  max-width: 100%;
+  width: 100%;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+
+@media (max-width: 1670px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1610px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1355px) {
+  .product-grid {
+    padding: 16px 0px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .promotional-products {
+    display: none;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  aside {
+    display: none;
+  }
+}
+
+@media (max-width: 800px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 664px) {
+  .product-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+
+</style>

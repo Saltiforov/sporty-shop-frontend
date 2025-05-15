@@ -1,13 +1,13 @@
 <template>
-  <header class="flex items-end pt-[13px] pr-[24px] pb-[8px] pl-[71px]">
+  <header class="flex header items-end pt-[13px] pr-[24px] pb-[8px] pl-[71px]">
     <div class="logo mr-[67px]">
       <NuxtLink to="/"><img src="../../assets/images/header-logo.svg" alt="header-logo"></NuxtLink>
     </div>
     <div class="pb-[24px] justify-between items-center flex w-full items-end">
       <LinksList
           :links="links"
-          :parent-classes="['flex', 'flex-wrap', 'gap-x-[16px]', 'md:gap-x-[32px]', 'w-full', 'max-w-[815px]']"
-          :link-class="['mr-[32px]', 'text-[#F6F6F6]', 'sm:mr-[32px]', 'md:mr-[53px]', 'last:mr-0', 'font-semibold']"
+          parent-classes="links-container"
+          link-class="link-item text-[var(--color-gray-pale-lavender)] mr-[32px] text-[#F6F6F6] sm:mr-[32px] md:mr-[53px] last:mr-0"
       />
       <div class="search-field max-w-[425px] w-full relative">
         <IconField>
@@ -36,8 +36,13 @@
         <CurrencySwitch/>
       </div>
       <div class="action-panel max-w-[144px] w-full h-[36px] flex justify-between">
-        <Button @click="navigateTo('/profile/favorite')" :pt="{ root: { class: 'action-panel-icon' } }">
-          <img src="~/assets/icons/favorite-icon-heart.svg" alt="favorite-icon-heart.svg"/>
+        <Button :disabled="!canUseFavorite" @click="navigateTo('/profile/favorite')"
+                :pt="{ root: { class: 'action-panel-icon' } }">
+          <svg width="29" height="25" viewBox="0 0 29 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M25.3559 3.35597C27.6759 5.67593 27.7647 9.40902 25.5578 11.8367L14.4992 24.0001L3.44218 11.8367C1.23519 9.40898 1.32407 5.67585 3.64404 3.35588C6.23441 0.765507 10.5006 1.00221 12.7891 3.8628L14.5 6.00068L16.2095 3.86256C18.4979 1.00197 22.7656 0.76559 25.3559 3.35597Z"
+                :stroke="canUseFavorite" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </Button>
         <div class="relative flex inline-block" @click="toggle">
           <Button
@@ -46,7 +51,11 @@
               aria-controls="overlay_menu"
               :pt="{ root: { class: 'action-panel-icon' } }"
           >
-            <img src="~/assets/icons/user-icon.svg" alt="user-icon.svg"/>
+            <svg width="27" height="30" viewBox="0 0 27 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                  d="M25.5 28.5C25.5 24.3579 20.1274 21 13.5 21C6.87258 21 1.5 24.3579 1.5 28.5M13.5 16.5C9.35786 16.5 6 13.1421 6 9C6 4.85786 9.35786 1.5 13.5 1.5C17.6421 1.5 21 4.85786 21 9C21 13.1421 17.6421 16.5 13.5 16.5Z"
+                  :stroke="isUserLogin" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </Button>
 
           <Menu
@@ -111,6 +120,8 @@ const {t} = useI18n();
 
 const {$eventBus} = useNuxtApp()
 
+const token = useCookie('token')
+
 const authPopup = useAuthPopup()
 
 const {logUserOut} = useAuthStore();
@@ -132,6 +143,10 @@ const searchIsFocused = ref(false)
 const receivedProducts = ref([])
 
 const searchFieldValue = ref('')
+
+const isUserLogin = computed(() => token.value ? 'var(--color-primary-green)' : 'var(--color-gray-pale-lavender)')
+
+const canUseFavorite = computed(() => token.value ? 'var(--color-gray-pale-lavender)' : 'var(--color-muted-gray)')
 
 const handleOverlayClick = (event) => {
   const clickedElement = event.target
@@ -235,13 +250,13 @@ watch(searchFieldValue, (val) => {
     return
   }
 
-  const currentQuery = { ...route.query }
+  const currentQuery = {...route.query}
   const updatedQuery = {
     ...currentQuery,
     q: val?.trim() || undefined,
   }
 
-  router.push({ path: route.path, query: updatedQuery })
+  router.push({path: route.path, query: updatedQuery})
 })
 
 
@@ -300,4 +315,21 @@ onBeforeUnmount(() => {
   transform: translate(20%, -20%);
   z-index: 100;
 }
+
+.links-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 16px;
+  width: 100%;
+  max-width: 815px;
+}
+
+
+.link-item {
+  margin-right: 32px;
+  color: #F6F6F6;
+  font-weight: 600;
+  font-size: 20px;
+}
+
 </style>

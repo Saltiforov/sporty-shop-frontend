@@ -6,7 +6,7 @@
     <FieldsBlockSkeleton v-else/>
       <div
         class="max-w-[338px] mx-auto py-[10px] px-[10px]">
-      <Button @click="savePersonalInformation" :pt="{
+      <Button v-if="userData && userData._id" @click="savePersonalInformation" :pt="{
         root: {
           class: 'personal-information__btn btn-hover-default'
         }

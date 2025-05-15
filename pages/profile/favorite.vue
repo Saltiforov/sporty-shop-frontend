@@ -5,7 +5,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
 
       <template v-if="!hydrated">
-        <ProductSkeleton v-for="i in 5" :key="'loading-skeleton-' + i" />
+        <ProductSkeleton v-for="i in 5" :key="'loading-skeleton-' + i"/>
       </template>
 
       <template v-else>
@@ -17,7 +17,6 @@
             @add-to-cart="addToCart"
         />
       </template>
-
 
 
     </div>
@@ -34,11 +33,11 @@ import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 import {useToastManager} from "~/composables/useToastManager";
 
-import { getFavorites } from "~/services/api/product-service";
+import {getFavorites} from "~/services/api/product-service";
 
-const { showProductAddedToast } = useToastManager()
+const {showProductAddedToast} = useToastManager()
 
-const { t } = useI18n()
+const {t} = useI18n()
 
 const hydrated = ref(false)
 
@@ -54,8 +53,11 @@ const addToCart = (product) => {
 }
 
 onMounted(async () => {
-  favoriteProducts.value =  await getFavorites()
+  isLoading.value = true
+  const {favorites} = await getFavorites()
+  favoriteProducts.value = favorites
   hydrated.value = true
+  isLoading.value = false
 })
 </script>
 

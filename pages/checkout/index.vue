@@ -3,10 +3,10 @@
     <LoadingOverlay :visible="isLoading"/>
     <div class="checkout-content mb-[101px] flex items-start">
 
-      <div class=" w-full max-w-[1064px] mr-[71px]">
-
+      <div class="w-full max-w-[1064px] mr-[71px]">
         <div
-            class="checkout-fields pt-[24px] pr-[45px] pb-[44px] pl-[42px] mb-[58px] rounded-lg bg-[var(--color-gray-lavender)]">
+            v-if="hydrated || userData && userData._id"
+            class="checkout-fields pt-[24px] pr-[45px] pb-[44px] pl-[42px] mb-[65px] rounded-lg bg-[var(--color-gray-lavender)]">
           <div class="header-fields">
             <h1 class="title-lg mb-2">{{ t('checkout_title') }}</h1>
             <div class="flex subtitle-lg mb-[24px] text-[var(--color-muted-gray)]">
@@ -19,8 +19,9 @@
             <FieldsBlock v-else :config="config.fields" ref="fieldsBlock"/>
           </div>
         </div>
+        <CheckoutFieldsSkeleton class="mb-[65px]" v-else/>
 
-        <div class="checkout-payment-method pt-[24px] px-[42px]  pb-[36px] rounded-lg bg-[var(--color-gray-lavender)]">
+        <div v-if="hydrated" class="checkout-payment-method pt-[24px] px-[42px]  pb-[36px] rounded-lg bg-[var(--color-gray-lavender)]">
           <h2 class="mb-[36px] flex title-lg">
             {{ t('payment_method_title') }}
             <TooltipIcon class="ml-2" :message="t('payment_method_tooltip')"/>
@@ -44,10 +45,12 @@
             </div>
           </div>
         </div>
+        <CheckoutPaymentMethodSkeleton v-else/>
       </div>
 
 
       <div
+          v-if="hydrated"
           class="checkout-products-list bg-[var(--color-gray-lavender)]  rounded-lg max-w-[643px] pt-[24px] pr-[46px] pl-[48px] pb-[30px] w-full">
         <div class="products-list__container max-w-[547px] w-full">
           <h2 class="title-lg mb-[44px]">{{ t('checkout_list_title') }}</h2>
@@ -116,6 +119,7 @@
         </div>
 
       </div>
+      <CheckoutOrderListSkeleton v-else/>
 
     </div>
   </div>
@@ -131,6 +135,10 @@ import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 import {getCurrentUser} from "~/services/api/user-service.js";
 import {useAuthPopup} from "~/stores/authPopup.js";
 import {InputGroup, InputGroupAddon, InputNumber} from "primevue";
+import CheckoutOrderListSkeleton from "~/components/Skeletons/Checkout/CheckoutOrderListSkeleton/CheckoutOrderListSkeleton.vue";
+import CheckoutFieldsSkeleton from "~/components/Skeletons/Checkout/CheckoutFieldsSkeleton/CheckoutFieldsSkeleton.vue";
+import CheckoutPaymentMethodSkeleton
+  from "~/components/Skeletons/Checkout/CheckoutPaymentMethodSkeleton/CheckoutPaymentMethodSkeleton.vue";
 
 definePageMeta({
   layout: 'breadcrumb',
@@ -151,6 +159,8 @@ const cartStore = useCartStore()
 const token = useCookie('token')
 
 const isUsePromoCode = ref(false)
+
+const hydrated = ref(false)
 
 const promoCodeValue = ref(null)
 
@@ -250,6 +260,8 @@ onMounted(async () => {
   if (token.value) {
     userData.value = await getCurrentUser()
   }
+
+  hydrated.value = true
 })
 
 const config = {

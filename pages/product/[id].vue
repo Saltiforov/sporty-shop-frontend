@@ -1,6 +1,5 @@
 <template>
-  <div class="px-4 py-6">
-
+  <div class="about-product-container px-4 py-6">
     <LoadingOverlay :visible="isLoading"/>
 
     <div class="header flex flex-col">
@@ -10,7 +9,7 @@
     </div>
 
     <div
-        class="about-product-content mb-[46px] text-[var(--color-muted-light-gray)] flex flex-col lg:flex-row flex-wrap justify-between items-center gap-8">
+        class="about-product-content mb-[46px] text-[var(--color-muted-light-gray)] flex flex-col lg:flex-row justify-between items-center gap-8">
       <div class="image relative w-full lg:max-w-[678px]">
         <div class="absolute z-[100] top-2 -right-4">
           <FavoriteButton
@@ -23,7 +22,7 @@
         </div>
 
         <div v-if="images.length">
-          <div class="max-w-[678px] h-[678px] w-full">
+          <div class="about-product__image-wrapper max-w-[678px] mx-auto h-[678px] w-full">
             <SwiperWrapper
                 :items="images"
                 :options="swiperOptions"
@@ -33,30 +32,33 @@
               <template #default="{ item }">
                 <img
                     :src="getSelectedImage || item"
-                    class="w-full h-[660px] object-cover"
+                    class="w-full about-product__image h-[660px] object-cover"
                 />
               </template>
             </SwiperWrapper>
           </div>
 
           <div class="flex gap-[40px] justify-center">
-            <img class="max-w-[100px] border cursor-pointer rounded-[4px] shadow-md object-cover h-[100px]"
-                 v-for="(img, idx) in images"
-                 @click="handleGalleryClick(idx)" :src="img" :key="idx" alt="image.png">
+            <img
+                class="max-w-[100px] gallery-image border cursor-pointer rounded-[4px] shadow-md object-cover h-[100px]"
+                v-for="(img, idx) in images"
+                @click="handleGalleryClick(idx)" :src="img" :key="idx" alt="image.png">
           </div>
         </div>
-        <AboutProductImageSkeleton v-else />
+        <AboutProductImageSkeleton v-else/>
 
       </div>
 
       <div
           v-if="!isLoading"
-          class="about-product-info w-full min-h-[625px] flex flex-col self-start max-w-full lg:max-w-[870px]"
+          class="about-product-info w-full min-h-[625px] mx-auto flex flex-col self-start max-w-full lg:max-w-[870px]"
       >
-        <div class="bg-[var(--color-gray-lavender)] h-full min-h-[625px] rounded-[8px] p-[35px_55px_65px_31px] flex flex-col justify-between">
+        <div
+            class="about-product-info__content bg-[var(--color-gray-lavender)] h-full min-h-[625px] rounded-[8px] p-[35px_55px_65px_31px] flex flex-col justify-between">
 
           <div>
-            <h1 class="text-[36px] text-[var(--color-primary-dark)] font-600 leading-[34px] mb-4">{{ product.name }}</h1>
+            <h1 class="product-name text-[36px] text-[var(--color-primary-dark)] font-600 leading-[34px] mb-4">
+              {{ product.name }}</h1>
 
             <div class="availability-grade mb-[73px] flex justify-between">
               <div class="availability">
@@ -83,7 +85,8 @@
             </div>
 
             <div class="description">
-              <p class="fw-500 text-[18px] leading-[34px] truncate-6-lines text-[var(--color-primary-dark)]" v-html="product.description" />
+              <p class="fw-500 text-[18px] leading-[34px] truncate-6-lines text-[var(--color-primary-dark)]"
+                 v-html="product.description"/>
             </div>
           </div>
 
@@ -95,9 +98,9 @@
             </div>
 
             <div class="price mb-10 flex items-center">
-              <div class="mr-[57px]">
+              <div class="mr-[57px] price_and_discount">
                 <div :class="[product.discount ? 'text-[16px] line-through text-[#999]' : 'text-[36px]']"
-                     class="fw-600 mr-[57px] text-[var(--color-primary-black)] leading-[34px]">
+                     class="fw-600 discount mr-[57px] text-[var(--color-primary-black)] leading-[34px]">
                   {{ product.price }}
                   <span>{{ t('currency') }}</span>
                 </div>
@@ -135,14 +138,17 @@
       <AboutProductInfoSkeleton v-else/>
     </div>
 
+    <AboutProductAccordion v-if="!isLoading" class="about-product-accordion" :product/>
+
     <div class="tabs-wrapper pt-[24px] pr-[55px] pb-[32px] pl-[55px] rounded-md bg-[var(--color-gray-lavender)]">
       <AboutProductTabs
           v-if="!isLoading"
           :product
           :reviews
       />
-      <AboutProductTabsSkeleton v-else />
+      <AboutProductTabsSkeleton v-else/>
     </div>
+
 
     <div v-if="recommended.length" class="recommended-products">
       <div class="flex items-center justify-center mb-[70px] gap-6 my-8">
@@ -210,10 +216,13 @@ import {useCartStore} from "~/stores/cart.js";
 import {useViewedProducts} from "~/composables/useViewedProducts.js";
 
 import {useToastManager} from "~/composables/useToastManager.js";
-import AboutProductInfoSkeleton from "~/components/Skeletons/AboutProduct/AboutProductInfoSkeleton/AboutProductInfoSkeleton.vue";
-import AboutProductImageSkeleton from "~/components/Skeletons/AboutProduct/AboutProductImageSkeleton/AboutProductImageSkeleton.vue";
+import AboutProductInfoSkeleton
+  from "~/components/Skeletons/AboutProduct/AboutProductInfoSkeleton/AboutProductInfoSkeleton.vue";
+import AboutProductImageSkeleton
+  from "~/components/Skeletons/AboutProduct/AboutProductImageSkeleton/AboutProductImageSkeleton.vue";
 import AboutProductTabsSkeleton
   from "~/components/Skeletons/AboutProduct/AboutProductTabsSkeleton/AboutProductTabsSkeleton.vue";
+import AboutProductAccordion from "~/components/UI/AboutProductAccordion/AboutProductAccordion.vue";
 
 const {t} = useI18n()
 
@@ -259,12 +268,9 @@ const recommendedProductsSwiperOptions = {
       slidesPerView: 1,
     },
     756: {
-      slidesPerView: 1,
-    },
-    1024: {
       slidesPerView: 2,
     },
-    1409: {
+    1024: {
       slidesPerView: 3,
     },
     1410: {
@@ -289,8 +295,6 @@ const getSelectedImage = computed(() => selectedImage.value)
 const handleGalleryClick = (index) => {
   selectedImage.value = images.value[index]
 }
-
-
 
 
 onMounted(async () => {
@@ -327,10 +331,129 @@ onMounted(async () => {
 .product-buy-now__btn {
   border: none;
 }
+
+.about-product-accordion {
+  display: none;
+}
+
 .truncate-6-lines {
   display: -webkit-box;
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+.amount-selector {
+  width: 53px;
+  height: 61px;
+}
+
+@media (max-width: 1200px) {
+  .about-product-content {
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+
+  .about-product-info {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 920px) {
+  .about-product-container {
+    padding: 0;
+  }
+
+  .description p {
+    font-size: 16px;
+  }
+
+  .about-product-accordion {
+    display: block;
+  }
+
+  .tabs-wrapper {
+    display: none;
+  }
+
+  .product-name {
+    font-size: 20px;
+  }
+
+  .availability-grade {
+    margin-bottom: 18px;
+  }
+
+  .price {
+    margin-bottom: 20px;
+  }
+
+  .about-product-info {
+    min-height: 500px;
+  }
+
+  .about-product-info__content {
+    min-height: 500px;
+    padding: 12px 10px 25px 10px;
+  }
+}
+
+@media (max-width: 774px) {
+  .about-product__image-wrapper {
+    height: 390px;
+  }
+
+  .image {
+    width: 390px;
+  }
+
+  .about-product__image {
+    height: 390px;
+  }
+
+  .action-button {
+    display: flex;
+    justify-content: center;
+  }
+
+  .price_and_discount {
+    display: flex;
+    align-items: center;
+  }
+
+  .price {
+    justify-content: space-around;
+  }
+
+  .discount {
+    margin-right: 20px;
+  }
+
+  .gallery-image {
+    max-width: 81px;
+    max-height: 83px;
+  }
+}
+
+@media (max-width: 600px) {
+  .about-product__image-wrapper {
+    height: 290px;
+  }
+
+  .image {
+    width: 290px;
+  }
+
+  .about-product__image {
+    height: 290px;
+  }
+
+  .gallery-image {
+    max-width: 61px;
+    max-height: 63px;
+  }
+
+}
+
+
 </style>

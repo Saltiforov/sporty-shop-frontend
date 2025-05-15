@@ -15,6 +15,7 @@
     <input
         type="text"
         :style="inputStyles"
+        :class="inputClass"
         class="w-[32px] h-[34px] bg-transparent border border-[#ADADAD] text-[#000000] text-center text-[16px] fw-400 rounded-[8px] focus:outline-none"
         v-model="inputValue"
         :min="min"
@@ -41,6 +42,7 @@ import { ref, watch } from 'vue'
 const props = defineProps({
   style: { type: Object },
   inputStyles: { type: Object },
+  inputClass: { type: String },
   min: { type: Number, default: 1 },
   max: { type: Number, default: 10 },
   modelValue: { type: Number, required: true, default: 1 }

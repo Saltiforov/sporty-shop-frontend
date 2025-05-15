@@ -2,9 +2,15 @@
   <div class="flex locale-switch items-center">
     <Select
         :pt="{
-        root: { class: 'bg-transparent border-0' },
-        label: { class: 'text-[var(--color-gray-pale-lavender)] leading-[22px] fw-600 text-[20px]' },
-        dropdown: { class: 'w-5' }
+        root: {
+          style: 'background-color: transparent; border: none;'
+        },
+        label: {
+          style: 'color: var(--color-gray-pale-lavender); line-height: 22px; font-weight: 600; font-size: 20px;'
+        },
+        dropdown: {
+          style: 'width: 1.25rem;'
+        }
       }"
         class="w-full"
         v-model="selectedLanguage"

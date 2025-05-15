@@ -1,26 +1,20 @@
-import {useAuthStore} from "~/stores/auth.js";
+import { useAuthStore } from "~/stores/auth.js";
 
-export default defineNuxtRouteMiddleware((to, from) => {
-    const {authenticated, currentUser} = storeToRefs(useAuthStore());
-    const {logUserOut} = useAuthStore();
+export default defineNuxtRouteMiddleware((to) => {
+    const { authenticated, currentUser } = storeToRefs(useAuthStore());
+    const { logUserOut } = useAuthStore();
     const token = useCookie('token');
 
-    if (process.client) {
-        if (token.value) {
-            authenticated.value = true;
-            const storedUserData = localStorage.getItem('currentUser');
-            if (storedUserData) {
-                currentUser.value = JSON.parse(storedUserData);
-            }
+    if (process.client && token.value) {
+        authenticated.value = true;
+        const storedUserData = localStorage.getItem('currentUser');
+        if (storedUserData) {
+            currentUser.value = JSON.parse(storedUserData);
         }
     }
 
-
-    if (!token.value && to.fullPath === '/profile') {
-        return navigateTo('/')
+    if (!token.value && to.path.startsWith('/profile')) {
+        return navigateTo('/');
     }
 
-    // if (!token.value) {
-    //     logUserOut()
-    // }
 });

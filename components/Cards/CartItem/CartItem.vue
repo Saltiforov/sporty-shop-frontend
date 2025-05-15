@@ -12,8 +12,10 @@
             'rounded-[16px]',
             isHistoryView ? 'h-[210px] object-cover' : 'h-[156px] max-w-[156px] w-full'
           ]"
+            class="cursor-pointer"
             :src="imageSource"
             alt="product-image.png"
+            @click="redirectToProduct(cartProduct)"
         />
       </div>
 
@@ -97,10 +99,15 @@
 
 <script setup>
 import AmountSelector from "~/components/UI/AmountSelector/AmountSelector.vue";
+import {useCartStore} from "~/stores/cart.js";
 
-const { t } = useI18n();
+const {t} = useI18n();
 
 const emit = defineEmits(["remove-product"]);
+
+const cartStore = useCartStore()
+
+const router = useRouter();
 
 const handleRemoveProduct = (id) => {
   emit('remove-product', id);
@@ -118,7 +125,13 @@ const {cartProduct} = defineProps({
   }
 })
 
-const  imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] || cartProduct.image)
+const redirectToProduct = (cartProduct) => {
+  if (!cartProduct?.id) return
+  router.replace(`/product/${cartProduct.id}`)
+  cartStore.c
+}
+
+const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] || cartProduct.image)
 
 const discountPrice = computed(() => (cartProduct?.price - cartProduct?.discount) * cartProduct?.quantity)
 

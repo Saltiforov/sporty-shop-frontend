@@ -1,14 +1,8 @@
 <template>
   <div class="min-h-screen flex flex-col">
-    <div class="w-full">
-      <div class="base-container py-4">
-        <LayoutBreadcrumb/>
-      </div>
-    </div>
-
     <div class="flex flex-1">
       <div class="base-container  justify-between flex-1 ">
-        <div class="pb-[100px]  h-full flex ">
+        <div class="pb-[100px] pt-[50px]  h-full flex ">
           <aside class="sidebar max-w-[277px] mr-[116px] w-full">
             <div class="sidebar-header flex pb-[24px] items-center border-b border-[var(--color-gray-light-lavender)]">
               <div class="w-[44px] mr-3">
@@ -63,10 +57,8 @@ import LogoutIcon from '~/assets/icons/user-profile-logout-icon.svg'
 
 import {onMounted} from "vue";
 import {getCurrentUser} from "~/services/api/user-service.js";
-import LayoutBreadcrumb from "~/components/UI/LayoutBreadcrumb/LayoutBreadcrumb.vue";
 import {storeToRefs} from "pinia";
 import {capitalizeFirstLetter} from "~/utils/index.js";
-
 
 const {t} = useI18n();
 
@@ -83,7 +75,9 @@ const route = useRoute();
 const currentTab = computed(() => route.path.split('/').pop() || 'personal-information')
 
 const fullUserName = computed(() => {
-  return `${capitalizeFirstLetter(currentUser.value.firstName)} ${capitalizeFirstLetter(currentUser.value.lastName)}`
+  const first = capitalizeFirstLetter(currentUser.value?.firstName ?? '')
+  const last = capitalizeFirstLetter(currentUser.value?.lastName ?? '')
+  return `${first} ${last}`.trim()
 })
 
 const logout = () => {

@@ -1,6 +1,6 @@
 <template>
   <div :class="{ 'max-h-[316px]' : variant === 'small' }"
-       class="w-full relative bg-white pt-[30px] pr-[30px] pb-[22px] pl-[30px] max-w-[280px] h-auto aspect-[294/426] mx-auto rounded-lg flex flex-col justify-start shadow-md">
+       class="w-full product-card relative bg-white pt-[30px] pr-[30px] pb-[22px] pl-[30px] max-w-[280px] h-auto aspect-[294/426] mx-auto rounded-lg flex flex-col justify-start shadow-md">
 
     <div v-if="product.status" class="absolute max-w-[82px] w-full -top-3 -left-5 z-100">
       <StatusBadge :label="product.status" :background-color="product.backgroundStatus"/>
@@ -8,7 +8,7 @@
 
     <div class="flex relative flex-col items-center justify-center">
 
-      <div class="absolute flex items-center justify-center h-[31px] w-[31px] z-10 -top-3 right-1">
+      <div v-if="token" class="absolute flex items-center justify-center h-[31px] w-[31px] z-10 -top-3 right-1">
         <FavoriteButton
             :is-favorite="product.isFavorite"
             :product="product"
@@ -21,8 +21,8 @@
             :class="[
     'rounded-lg w-full h-auto object-contain',
     variant === 'small'
-      ? 'max-w-[137px] sm:max-w-[100px] md:max-w-[120px]'
-      : 'max-w-[180px] sm:max-w-[120px] md:max-w-[150px]'
+      ? 'lg:max-w-[137px] sm:max-w-[100px] md:max-w-[120px]'
+      : 'lg:max-w-[180px] sm:max-w-[150px] md:max-w-[120px]'
   ]"
             :src="productImage"
             alt="Product image"
@@ -104,14 +104,7 @@ const cartStore = useCartStore()
 
 const {t} = useI18n()
 
-const toggleFavorite = async (product) => {
-
-  product.isFavorite
-      ? await deleteProductFromFavorites(product._id)
-      : await addProductToFavorites(product._id)
-
-  product.isFavorite = !product.isFavorite;
-}
+const token = useCookie('token')
 
 const addToCart = (product) => {
   emit('add-to-cart', product)
@@ -140,4 +133,14 @@ const iconSize = computed(() => {
   border: none;
   background: #28A745;
 }
+
+@media (max-width: 1669px) {
+  .product-card {
+    padding: 20px 16px 15px 16px;
+  }
+}
+
+
+
+
 </style>

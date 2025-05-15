@@ -1,5 +1,5 @@
 <template>
-  <Breadcrumb class="py-[35px]" :home="home" :model="items">
+  <Breadcrumb class="breadcrumb" :home="home" :model="items">
     <template #item="{ item }">
       <a class="cursor-pointer" :href="item.url">
         <p>{{ item.label }}</p>
@@ -24,5 +24,7 @@ const items = [
 
 
 <style scoped>
-
+.breadcrumb {
+  padding: 35px 10px;
+}
 </style>

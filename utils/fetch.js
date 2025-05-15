@@ -12,7 +12,6 @@ export class Fetch {
             ...this.defaultHeaders,
             ...headers,
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            'ngrok-skip-browser-warning': 'true',
         }
 
         try {

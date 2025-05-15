@@ -1,23 +1,24 @@
 <template>
   <div class="flex items-center">
-    <Select :pt="{
-      root: {
-        class: 'bg-transparent border-0 '
-      },
-      label: {
-        class: 'text-[var(--color-primary-dark)] mr-2 p-0 leading-[22px] fw-500 text-[16px]'
-      },
-      dropdown: {
-        class: 'w-3 text-[var(--color-gray-dark-charcoal)]'
-      },
-    }"
-            v-model="selectedOption"
-            optionLabel="name"
-            :options="sortOptions"
+    <Select
+        :pt="{
+        root: {
+          style: 'background-color: transparent; border: none;'
+        },
+        label: {
+          style: 'color: var(--color-primary-dark); margin-right: 0.5rem; padding: 0; line-height: 22px; font-weight: 500; font-size: 16px;'
+        },
+        dropdown: {
+          style: 'width: 0.75rem; color: var(--color-gray-dark-charcoal);'
+        },
+      }"
+        v-model="selectedOption"
+        optionLabel="name"
+        :options="sortOptions"
     ></Select>
   </div>
-
 </template>
+
 
 <script setup lang="ts">
 import Select from "primevue/select";
@@ -38,5 +39,20 @@ const sortOptions = ref([
 
 
 <style scoped>
-
+.select-root {
+  background: transparent;
+  border: none;
+}
+.select-label {
+  color: var(--color-primary-dark);
+  margin-right: 2px;
+  padding: 0px;
+  line-height: 22px;
+  font-weight: 500;
+  font-size: 16px;
+}
+.select-dropdown {
+  width: 12px;
+  color: var(--color-gray-dark-charcoal);
+}
 </style>

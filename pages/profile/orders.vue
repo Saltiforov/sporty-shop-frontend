@@ -2,7 +2,7 @@
   <div class="order-history">
     <LoadingOverlay :visible="isLoading"/>
     <h1 class="title-lg-20 mb-[30px]">{{ t('contact_information') }}</h1>
-    <OrderHistoryItem v-if="!isLoading" :order-list="orderList"/>
+    <OrderHistoryItem v-if="orderList.length" :order-list="orderList"/>
     <OrderSkeletonItem v-else v-for="i in 8" :key="'loading-skeleton-' + i"/>
   </div>
 </template>

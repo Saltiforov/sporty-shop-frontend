@@ -82,13 +82,9 @@ const emit = defineEmits(["continue-shopping"]);
 
 const cartStore = useCartStore();
 
-const authPopup = useAuthPopup()
-
-const { showProductAddedToast } = useToastManager()
+const {showProductAddedToast} = useToastManager()
 
 const {t} = useI18n()
-
-const toast = useToast();
 
 const props = defineProps({
   isOpen: {
@@ -125,20 +121,31 @@ onUnmounted(() => {
 
 const products = ref([
   {
-    id: 1,
-    name: "Nutrex Research Anabol Hardcore - 60 капс",
+    _id: '680be0d6e0a2df86dc64154e',
+    name: "Енергетичний напій MOXY Power+",
     rating: '4.6',
-    reviewCount: 10,
-    price: 1116,
-    discount: 768,
+    price: 70,
+    images: [
+      "/uploads/icons/581f66ac553b0d4f31d43869575c76c391c2876f6cf2258a842d97f7affd4722.webp",
+      "/uploads/icons/3382c9ae21b4f6cd49e2f42f1e0bc453bc87e3241310f8cf0aa24d5e7b2a6ded.webp",
+      "/uploads/icons/3d0f3bd3e1d69aa7db5c7eabe117eff5664a87d4c80d2c6b3434a5a5a91244d3.webp",
+      "/uploads/icons/7f784dd57f85b4fbf98d3fd0aa38abaefe40f7a7c7ae8fff53c38b4b8d35233c.webp"
+    ],
+    discount: 10,
     isFavorite: false,
   },
   {
-    id: 2,
-    name: "Nutrex Research Anabol Hardcore - 60 капс",
+    _id: "680bdf7fe0a2df86dc6414ec",
+    name: "Креатин моногідрат - OstroVit",
     rating: '4.1',
-    reviewCount: 5,
-    price: 3241,
+    images: [
+      "/uploads/icons/0a0773098658f21b18b20988c7c04d04eae01210a0dd55452dff452dce6ef68a.webp",
+      "/uploads/icons/3d0b0070887319eb85f0a5704918dbedace22f615db060b8c6fb874b894b1e78.webp",
+      "/uploads/icons/0b2b224e67639bacc9fb17209c3d36114967fb649f10d132f11e8f9e3f6254ca.webp",
+      "/uploads/icons/26e81294fed5013c4714bff7634f9438d3247b0e5558ab8c1cbde67f7bfc8233.webp"
+    ],
+    discount: 100,
+    price: 699,
     isFavorite: true,
   },
 ])

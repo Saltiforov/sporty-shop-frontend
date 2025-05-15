@@ -1,0 +1,44 @@
+/* HEADER */
+
+@media (min-width: 640px) {
+    .link-item {
+        margin-right: 32px;
+    }
+}
+
+@media (min-width: 768px) {
+    .link-item {
+        margin-right: 53px;
+    }
+}
+
+.link-item:last-child {
+    margin-right: 0;
+}
+
+@media (min-width: 768px) {
+    .links-container {
+        column-gap: 32px;
+    }
+}
+
+/* HEADER */
+
+
+/*  MAIN BANNER  */
+
+@media (max-width: 1400px) {
+    .main-banner {
+        margin-top: 30px;
+        margin-bottom: 20px;
+    }
+}
+
+/*  MAIN BANNER  */
+
+
+/* MAIN PAGE PRODUCT GRID */
+
+
+
+/* MAIN PAGE PRODUCT GRID */

@@ -1,18 +1,18 @@
 <template>
   <LoadingOverlay :visible="isLoading"/>
-  <TabView :pt="{
+        <TabView :pt="{
         panelContainer: {
-          class: 'bg-transparent'
+          style: 'background-color: transparent;'
         },
         navContainer: {
-          class: 'border-none'
+          style: 'border: none;'
         },
-         nav: {
-          class: 'bg-transparent border-[0] nav-panel'
-          },
-          inkbar: {
-           class: 'h-[4px] bg-[var(--color-primary-purple)]'
-          }
+        nav: {
+          style: 'background-color: transparent; border-width: 0;'
+        },
+        inkbar: {
+          style: 'height: 4px; background-color: var(--color-primary-purple);'
+        }
       }">
     <TabPanel :header="tabs.description.header">
       <div class="">
@@ -100,7 +100,8 @@
                 :key="review.id"
             >
               <div class="flex mb-2 items-center">
-                <strong class="mr-4"><p class="review-card__name fw-600">{{ fullReviewerName(review.user) }}</p></strong>
+                <strong class="mr-4"><p class="review-card__name fw-600">{{ fullReviewerName(review.user) }}</p>
+                </strong>
                 <div class="review-card__date mr-2 text-[14px]">{{ formatDateToDMY(review.createdAt) }}</div>
                 <div class="review-card__stars mr-3">
                   <Rating v-model="review.rating" readonly>
@@ -113,7 +114,7 @@
                   </Rating>
                 </div>
                 <div class="review-card__confirmed text-[#ADADAD] fw-400">
-                  <p v-if="review.purchaseConfirmed">{{ t('purchase_confirmed') }}</p>
+                  <p v-if="true">{{ t('purchase_confirmed') }}</p>
                   <p v-else>{{ t('purchase_not_confirmed') }}</p>
                 </div>
               </div>
@@ -169,7 +170,6 @@
               </div>
             </div>
           </div>
-
 
 
         </div>
@@ -239,7 +239,7 @@ const props = defineProps({
   }
 })
 
-console.log("AboutProductTabs" , props.product)
+console.log("AboutProductTabs", props.product)
 
 const MAX_REVIEW_LENGTH = 300;
 
@@ -321,10 +321,6 @@ const fullReviewerName = ({firstName, lastName}) => {
   return `${firstName} ${lastName}`
 }
 
-onMounted(async () => {
-  reviews.value = await getReviewByProduct(productId.value)
-})
-
 const tabs = {
   description: {
     header: computed(() => t('tabs_description')),
@@ -374,4 +370,11 @@ button.is-disabled .arrow-path {
   stroke: #D0D0D0;
   stroke-opacity: 1;
 }
+
+@media (max-width: 1550px) {
+  .reviews-content {
+    flex-wrap: wrap;
+  }
+}
+
 </style>
