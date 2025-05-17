@@ -53,7 +53,7 @@ const links = ref([
   {
     title: computed(() => t('footer_about_us')),
     links: [
-      { label: computed(() => t('footer_about_us')), page: '/page1' },
+      { label: computed(() => t('footer_about_us')), page: '/about-us' },
       { label: computed(() => t('footer_warranties')), page: '/page1' },
       { label: computed(() => t('footer_terms_of_use')), page: '/page1' },
     ]

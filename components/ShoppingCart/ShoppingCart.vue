@@ -207,14 +207,13 @@ const products = ref([
   top: 0;
   right: 0;
   height: 100vh;
-  width: 620px;
+  width: 30%;
   background-color: #E6E7F8;
   z-index: 1000;
   box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.2);
   overflow-y: auto;
 }
 
-/* Transition анимация корзины */
 .cart-slide-enter-from {
   transform: translateX(100%);
   opacity: 0;

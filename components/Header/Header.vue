@@ -241,27 +241,27 @@ const links = ref([
   {
     label: computed(() => t('header_catalog')),
     icon: "pi pi-filter",
-    page: "catalog",
+    page: "/content/catalog",
   },
   {
     label: computed(() => t('header_promotions')),
     icon: "pi pi-shopping-cart",
-    page: "promotions",
+    page: "/content/promotions",
   },
   {
     label: computed(() => t('header_new')),
     icon: "pi pi-user",
-    page: "new",
+    page: "/content/new-arrivals",
   },
   {
     label: computed(() => t('header_shipping_and_payment')),
     icon: "pi pi-user",
-    page: "shipping-and-payment",
+    page: "/content/shipping-and-payment",
   },
   {
     label: computed(() => t('header_about_us')),
     icon: "pi pi-user",
-    page: "about-us",
+    page: "/content/about-us",
   },
 ])
 

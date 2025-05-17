@@ -7,7 +7,7 @@
 
 <script setup>
 
-import {useStaticPages} from "~/stores/staticPages";
+import {useStaticPages} from "~/stores/staticPages.js";
 
 definePageMeta({
   layout: 'static',
@@ -26,7 +26,3 @@ onMounted(() => {
 })
 
 </script>
-
-<style scoped>
-
-</style>

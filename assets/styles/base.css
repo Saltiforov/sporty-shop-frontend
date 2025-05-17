@@ -89,6 +89,15 @@ header {
     line-height: var(--line-height-base);
 }
 
+.static-title {
+    margin-bottom: 1rem;
+    font-size: 1.7em;
+    font-weight: 800;
+}
+
+.static-description {
+}
+
 .murecho-font {
     font-family: var(--ff-murecho);
 }
