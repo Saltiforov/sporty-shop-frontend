@@ -38,7 +38,7 @@
             </SwiperWrapper>
           </div>
 
-          <div class="flex gap-[40px] justify-center">
+          <div class="flex gallery-container gap-[40px] justify-center">
             <img
                 class="max-w-[100px] gallery-image border cursor-pointer rounded-[4px] shadow-md object-cover h-[100px]"
                 v-for="(img, idx) in images"
@@ -106,7 +106,7 @@
                 </div>
 
                 <p v-if="product.discount"
-                   class="text-[#EF4B4B] text-[24px] leading-[22px] fw-500">
+                   class="text-[var(--color-primary-pink)] price-with-discount text-[24px] leading-[22px] fw-500">
                   {{ priceWithDiscount }} {{ t(currencyStore.label) }}
                 </p>
               </div>
@@ -358,7 +358,7 @@ onMounted(async () => {
   height: 61px;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
   .about-product-content {
     flex-wrap: wrap;
     flex-direction: column;
@@ -463,6 +463,30 @@ onMounted(async () => {
     max-height: 63px;
   }
 
+  .developer p{
+    font-size: 18px;
+  }
+  .discount {
+    font-size: 20px;
+  }
+  .price-with-discount{
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 420px) {
+  .gallery-container {
+    gap: 15px;
+  }
+  .discount {
+    font-size: 18px;
+  }
+  .price-with-discount{
+    font-size: 18px;
+  }
+  .price_and_discount {
+    margin-right: 20px;
+  }
 }
 
 

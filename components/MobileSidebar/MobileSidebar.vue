@@ -2,12 +2,12 @@
   <div>
     <div
         v-if="isOpen"
-        class="fixed inset-0 z-[100] bg-black bg-opacity-50 backdrop-blur-custom z-40"
+        class="fixed inset-0 z-[400] bg-black bg-opacity-50 backdrop-blur-custom z-40"
         @click="$emit('close')"
     ></div>
 
     <aside
-        class="fixed z-[100] border-top-radius top-0 left-0 w-[80%] h-full bg-[var(--color-gray-light-lavender)] shadow-lg transform transition-transform duration-300 z-50"
+        class="fixed z-[500] border-top-radius top-0 left-0 w-[80%] h-full bg-[var(--color-gray-light-lavender)] shadow-lg transform transition-transform duration-300 z-50"
         :class="isOpen ? 'translate-x-0' : '-translate-x-full'"
     >
       <Tabs value="0">
@@ -101,8 +101,8 @@ const links = ref([
 }
 
 .backdrop-blur-custom {
-  backdrop-filter: blur(5.9px);
-  -webkit-backdrop-filter: blur(5.9px);
+  backdrop-filter: blur(6.9px);
+  -webkit-backdrop-filter: blur(6.9px);
 }
 
 @media (max-width: 1400px) {

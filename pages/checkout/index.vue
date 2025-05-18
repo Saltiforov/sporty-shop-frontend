@@ -3,7 +3,7 @@
     <LoadingOverlay :visible="isLoading"/>
     <div class="checkout-content mb-[101px] flex items-start">
 
-      <div class="w-full max-w-[1064px] mr-[71px]">
+      <div class="w-full checkout-info-wrapper max-w-[1064px] mr-[71px]">
         <div
             v-if="hydrated || userData && userData._id"
             class="checkout-fields pt-[24px] pr-[45px] pb-[44px] pl-[42px] mb-[65px] rounded-lg bg-[var(--color-gray-lavender)]">
@@ -56,7 +56,6 @@
         <div class="products-list__container max-w-[547px] w-full">
           <h2 class="title-lg mb-[44px]">{{ t('checkout_list_title') }}</h2>
           <ProductsOverview :products-overview="cartStore.getCartProducts"/>
-          {{ currency }}
           <div class="use-promocode">
             <div class="flex justify-between mb-[17px]">
               <p class="text-[var(--color-primary-dark)]">{{ t('use_promo_code') }}</p>
@@ -514,4 +513,49 @@ const config = {
   align-items: center;
   margin-bottom: 24px;
 }
+
+@media (max-width: 1500px) {
+  .checkout-info-wrapper {
+    margin-right: 30px;
+  }
+  .checkout-fields {
+    margin-bottom: 30px;
+  }
+  .checkout-products-list {
+    padding-right: 23px;
+    padding-left: 23px;
+    max-width: 543px;
+  }
+}
+
+@media (max-width: 1300px) {
+  .checkout-content {
+    flex-direction: column;
+  }
+  .checkout-info-wrapper {
+    margin: 0 auto 20px auto;
+  }
+  .checkout-products-list {
+    max-width: 1064px;
+    margin: 0 auto;
+  }
+  .products-list__container {
+    max-width: 100%;
+  }
+}
+@media (max-width: 600px) {
+  .checkout-fields {
+    flex-direction: column;
+    padding: 24px 12px 34px 12px;
+  }
+  .checkout-products-list,
+  .checkout-payment-method {
+    padding: 24px 12px 24px 12px;
+  }
+  .checkbox-content:last-child {
+    margin-bottom: 0px;
+  }
+}
+
+
 </style>

@@ -191,7 +191,7 @@ main {
 }
 @media (max-width: 500px) {
   main {
-    padding: 15px 5 30px 5;
+    padding: 15px 5px 30px 5px;
   }
   .profile-container {
     padding: 8px;

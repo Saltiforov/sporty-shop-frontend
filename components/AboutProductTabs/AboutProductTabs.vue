@@ -43,9 +43,9 @@
       </div>
     </TabPanel>
     <TabPanel :header="tabs.delivery.header">
-      <div class="delivery-and-payment">
-        <p v-html="deliveryAndPaymentInfo.content"></p>
-      </div>
+<!--      <div class="delivery-and-payment">-->
+<!--        <p v-html="deliveryAndPaymentInfo.content"></p>-->
+<!--      </div>-->
     </TabPanel>
     <TabPanel :header="tabs.reviews.header">
       <div class="reviews-content murecho-font flex justify-between">

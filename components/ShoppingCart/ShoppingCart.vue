@@ -220,6 +220,49 @@ const products = ref([
   }
 }
 
+@media (max-width: 1200px) {
+  .shopping-cart {
+    width: 45%;
+    padding: 18px 14px 23px 15px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .shopping-cart {
+    width: 50%;
+
+  }
+}
+@media (max-width: 1000px) {
+  .shopping-cart {
+    width: 60%;
+
+  }
+}
+
+@media (max-width: 700px) {
+  .shopping-cart {
+    width: 65%;
+
+  }
+}
+
+@media (max-width: 610px) {
+  .shopping-cart {
+    width: 80%;
+
+  }
+}
+
+@media (max-width: 475px) {
+  .shopping-cart {
+    width: 90%;
+
+  }
+}
+
+
+
 .cart-slide-enter-from {
   transform: translateX(100%);
   opacity: 0;

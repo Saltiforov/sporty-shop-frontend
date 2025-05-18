@@ -198,11 +198,9 @@ const {updateQueryParams} = useQueryParams(productsQueryParams);
 
 const products = ref([])
 
-const paginationProducts = ref([])
-
 const foundProducts = ref([])
 
-const isLoading = ref(true)
+const isLoading = ref(false)
 
 const fetchProducts = async (shouldReplace = false, params = {}) => {
   try {

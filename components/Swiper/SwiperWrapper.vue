@@ -69,4 +69,10 @@ const swiper = useSwiper(containerRef, props.options)
 .swiper-btn {
   @apply absolute bg-[#24242ACC] top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full shadow-md hover:bg-[#2A2A2D];
 }
+
+@media(max-width: 650px) {
+  .swiper-btn {
+    display: none;
+  }
+}
 </style>
