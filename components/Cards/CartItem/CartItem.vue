@@ -1,5 +1,5 @@
 <template>
-  <div class="cart-product flex">
+  <div class="cart-product flex-col flex">
     <div class="flex flex-1">
       <div
           :class="[
@@ -9,6 +9,7 @@
       >
         <img
             :class="[
+            'cart-item__image',
             'rounded-[16px]',
             isHistoryView ? 'h-[210px] object-cover' : 'h-[156px] max-w-[156px] w-full'
           ]"
@@ -75,6 +76,7 @@
         </div>
       </div>
     </div>
+    <div class="responsive-card-title">{{ cartProduct.name }}</div>
 
     <div v-if="!isHistoryView" class="pl-10 flex flex-col justify-center ml-auto">
       <Button
@@ -159,6 +161,55 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
   background: transparent;
   border: none;
   padding: 0;
+}
+
+.responsive-card-title {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .responsive-card-title {
+    display: block;
+  }
+  .card-title {
+    display: none;
+  }
+  .card-quantity {
+    display: inline-flex;
+    justify-content: flex-start;
+    width: auto;
+    flex: 0 0 auto;
+  }
+}
+@media (max-width: 600px) {
+ .discount-price__history-view {
+   font-size: 13px;
+ }
+  .discount-price {
+    font-size: 16px;
+  }
+  .discount-price span{
+    font-size: 14px;
+  }
+  .card-quantity p {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 520px) {
+  .card-image {
+    max-width: 94px;
+    height: 125px;
+    object-fit: cover;
+  }
+  .cart-item__image {
+    height: 125px;
+  }
+}
+@media (max-width: 450px) {
+  .discount-price__history-view {
+    margin-right: 7px;
+  }
 }
 
 </style>

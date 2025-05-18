@@ -1,8 +1,8 @@
 <template>
   <div class="favorite-products">
     <LoadingOverlay :visible="isLoading"/>
-    <h1 class="title-lg-20 mb-8">{{ t('menu_favorite_products') }}</h1>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
+    <h1 class="profile-page-title title-lg-20 mb-8">{{ t('menu_favorite_products') }}</h1>
+    <div class="favorite-products-content grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
 
       <template v-if="!hydrated">
         <ProductSkeleton v-for="i in 5" :key="'loading-skeleton-' + i"/>
@@ -24,7 +24,7 @@
   <Toast position="bottom-right" group="br"/>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import ProductSkeleton from "~/components/Skeletons/ProductSkeleton/ProductSkeleton.vue";
 
 definePageMeta({layout: 'profile'})
@@ -63,5 +63,30 @@ onMounted(async () => {
 
 
 <style scoped>
+@media (max-width: 1500px) {
+  .favorite-products-content {
+    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 1330px) {
+  .favorite-products-content {
+    gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 1200px) {
+  .favorite-products-content {
+    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 900px) {
+  .favorite-products-content {
+    gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 
 </style>

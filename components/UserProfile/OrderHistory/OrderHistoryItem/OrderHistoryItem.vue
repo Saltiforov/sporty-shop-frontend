@@ -7,11 +7,15 @@
       }" class="mb-5" v-for="(item, idx) in orderList" :value="idx" :key="item.id">
         <AccordionHeader :pt="{
           root: {
-            class: 'pt-[14px] accordion-header-style pb-[14px] rounded-[12px]'
+            class: 'pt-[14px] accordion-header-style pb-[14px]',
+            style: {
+              borderTopRightRadius: '12px',
+              borderTopLeftRadius: '12px',
+            }
           }
         }" >
           <div class="flex w-full items-center justify-between">
-            <p class="title-lg-20">{{ t('order_number', { number: item.orderNumber }) }}</p>
+            <p class="title-lg-20 order-number">{{ t('order_number', { number: item.orderNumber }) }}</p>
             <div class="order-status  text-white px-[12px] bg-[var(--color-primary-purple)] rounded-[var(--default-rounded)] py-[10px] mx-[20px]">
               {{ capitalizeFirstLetter(item?.status) }}
             </div>
@@ -33,11 +37,11 @@
               </div>
             </div>
             <div class="flex text-[var(--color-gray-dark-charcoal)] max-w-[890px] justify-between">
-              <div class="flex flex-col gap-6 w-full max-w-[427px]">
+              <div class="flex delivery-info__item flex-col gap-6 w-full max-w-[427px]">
                 <p v-for="(labelKey, index) in userInfoLabels" :key="index">{{ t(labelKey) }}</p>
               </div>
 
-              <div class="flex flex-col gap-6 w-full max-w-[427px]">
+              <div class="flex delivery-info__item flex-col gap-6 w-full max-w-[427px]">
                 <p v-for="(value, label) in item.userInfo" :key="label">{{ value }}</p>
               </div>
             </div>
@@ -94,4 +98,30 @@ const localizeStatus = (status) => {
 .accordion-header-style {
   color: var(--color-primary-dark);
 }
+
+@media  (max-width: 1000px) {
+  .order-item-content-wrapper {
+    padding: 0;
+  }
+}
+@media  (max-width: 500px) {
+  .order-number {
+    font-size: 14px;
+  }
+  .order-status {
+    font-size: 12px;
+    margin: 0 10px;
+  }
+  .history-view-price {
+    font-size: 16px;
+  }
+  .delivery-info__item p {
+    font-size: 14px;
+  }
+  .delivery-info__item {
+    gap: 16px;
+  }
+}
+
+
 </style>

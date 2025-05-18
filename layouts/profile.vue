@@ -1,8 +1,8 @@
 <template>
   <div class="min-h-screen flex flex-col">
     <div class="flex flex-1">
-      <div class="base-container  justify-between flex-1 ">
-        <div class="pb-[100px] pt-[50px]  h-full flex ">
+      <div class="profile-container base-container  justify-between flex-1 ">
+        <div class="pb-[100px] profile-layout pt-[50px]  h-full flex ">
           <aside class="sidebar max-w-[277px] mr-[116px] w-full">
             <div class="sidebar-header flex pb-[24px] items-center border-b border-[var(--color-gray-light-lavender)]">
               <div class="w-[44px] mr-3">
@@ -178,4 +178,24 @@ main {
   padding: 20px;
   border-radius: 8px;
 }
+
+@media (max-width: 1200px) {
+  .profile-layout {
+    flex-direction: column;
+  }
+  .sidebar-nav {
+    padding-bottom: 24px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--color-gray-light-lavender);
+  }
+}
+@media (max-width: 500px) {
+  main {
+    padding: 15px 5 30px 5;
+  }
+  .profile-container {
+    padding: 8px;
+  }
+}
+
 </style>

@@ -214,6 +214,12 @@ const products = ref([
   overflow-y: auto;
 }
 
+@media (max-width: 1600px) {
+  .shopping-cart {
+    width: 40%;
+  }
+}
+
 .cart-slide-enter-from {
   transform: translateX(100%);
   opacity: 0;

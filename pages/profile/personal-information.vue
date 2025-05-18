@@ -250,4 +250,9 @@ const config = {
   background-color: var(--color-primary-dark);
 }
 
+@media (max-width: 500px) {
+  .personal-information {
+    padding: 15px;
+  }
+}
 </style>

@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <main class="flex-1 p-4">
+    <main class="flex-1  p-4">
       <NuxtPage/>
     </main>
 
@@ -53,4 +53,12 @@ onMounted( () => {
     display: none;
   }
 }
+
+@media (max-width: 500px) {
+  main {
+    padding: 0;
+  }
+}
+
+
 </style>

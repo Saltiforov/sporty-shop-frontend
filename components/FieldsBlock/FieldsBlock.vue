@@ -3,6 +3,7 @@
     <div class="container">
       <div
           :class="{
+        'fields-block-content': true,
         'form-content': true,
         'grid-cols-1': !leftFullFields.length || !rightFullFields.length,
         'grid-cols-2': leftFullFields.length && rightFullFields.length
@@ -255,3 +256,11 @@ defineExpose({
   validateFields,
 })
 </script>
+
+<style scoped>
+@media (max-width: 800px) {
+  .fields-block-content {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

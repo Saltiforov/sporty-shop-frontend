@@ -332,7 +332,7 @@ onBeforeUnmount(() => {
 
 @media (max-width: 800px) {
   .product-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -346,11 +346,19 @@ onBeforeUnmount(() => {
   }
 }
 
-@media (max-width: 664px) {
+@media (max-width: 700px) {
   .product-grid {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
+
+@media (max-width: 500px) {
+  .product-grid {
+    gap: 5px;
+  }
+}
+
+
 
 
 </style>

@@ -95,7 +95,8 @@ header {
     font-weight: 800;
 }
 
-.static-description {
+.profile-page-title {
+    padding: 0 10px;
 }
 
 .murecho-font {
