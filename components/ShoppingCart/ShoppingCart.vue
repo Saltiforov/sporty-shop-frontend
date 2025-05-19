@@ -220,10 +220,10 @@ const products = ref([
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1300px) {
   .shopping-cart {
     width: 45%;
-    padding: 18px 14px 23px 15px;
+    padding: 18px 14px 23px 14px;
   }
 }
 
@@ -236,21 +236,31 @@ const products = ref([
 @media (max-width: 1000px) {
   .shopping-cart {
     width: 60%;
+  }
+}
 
+@media (max-width: 800px) {
+  .shopping-cart {
+    width: 65%;
   }
 }
 
 @media (max-width: 700px) {
+  .recommended-products {
+    padding-bottom: 60px;
+  }
   .shopping-cart {
-    width: 65%;
-
+    width: 80%;
   }
 }
 
 @media (max-width: 610px) {
   .shopping-cart {
-    width: 80%;
-
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+  .header {
+    padding: 0 10px 20px 10px;
   }
 }
 

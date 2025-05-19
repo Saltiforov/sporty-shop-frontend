@@ -18,6 +18,10 @@ import {getStaticPagesInfo} from "~/services/api/static-info.js";
 
 const staticPagesStore = useStaticPages()
 
+const authPopup = useAuthPopup()
+
+const { $eventBus } = useNuxtApp()
+
 const isOpenMenu = ref(false)
 
 const fetchStaticPages = async () => {
@@ -30,8 +34,18 @@ const handleMobileMenu = () => {
 }
 
 onMounted(async () => {
-
+  $eventBus.on('handle-mobile-sidebar-login', () => {
+    isOpenMenu.value = true
+    $eventBus.emit('set-active-tab-mobile-sidebar')
+  })
+  $eventBus.on('user-authenticated', () => {
+    isOpenMenu.value = false
+  })
   await fetchStaticPages()
+})
 
+onBeforeUnmount( () => {
+  $eventBus.off('handle-mobile-sidebar-login')
+  $eventBus.off('user-authenticated')
 })
 </script>

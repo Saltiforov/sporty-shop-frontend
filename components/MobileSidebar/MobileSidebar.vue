@@ -10,7 +10,7 @@
         class="fixed z-[500] border-top-radius top-0 left-0 w-[80%] h-full bg-[var(--color-gray-light-lavender)] shadow-lg transform transition-transform duration-300 z-50"
         :class="isOpen ? 'translate-x-0' : '-translate-x-full'"
     >
-      <Tabs value="0">
+      <Tabs v-model:value="currentTab">
         <TabList :pt="{
           tabList: {
             style: 'background-color: var(--color-gray-light-lavender) border-top: none'
@@ -62,6 +62,10 @@ const authPopup = useAuthPopup()
 
 const {t} = useI18n();
 
+const { $eventBus } = useNuxtApp()
+
+const currentTab = ref('0')
+
 const activeTab = computed(() => authPopup.popupType)
 
 const isLogin = computed(() => activeTab.value === 'login')
@@ -70,29 +74,42 @@ const links = ref([
   {
     label: computed(() => t('header_catalog')),
     icon: "pi pi-filter",
-    page: "catalog",
+    page: "/content/catalog",
   },
   {
     label: computed(() => t('header_promotions')),
     icon: "pi pi-shopping-cart",
-    page: "promotions",
+    page: "/content/promotions",
   },
   {
     label: computed(() => t('header_new')),
     icon: "pi pi-user",
-    page: "new",
+    page: "/content/new-arrivals",
   },
   {
     label: computed(() => t('header_shipping_and_payment')),
     icon: "pi pi-user",
-    page: "shipping-and-payment",
+    page: "/content/shipping-and-payment",
   },
   {
     label: computed(() => t('header_about_us')),
     icon: "pi pi-user",
-    page: "about-us",
+    page: "/content/about-us",
   },
 ])
+
+onMounted(() => {
+  $eventBus.on('set-active-tab-mobile-sidebar', () => {
+    authPopup.setType('login')
+    currentTab.value = '1'
+  })
+})
+
+onBeforeUnmount(() => {
+  $eventBus.off('set-active-tab-mobile-sidebar')
+})
+
+
 </script>
 
 <style scoped>

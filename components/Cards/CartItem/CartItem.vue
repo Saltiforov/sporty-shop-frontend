@@ -77,7 +77,7 @@
         </div>
       </div>
 
-      <div v-if="!isHistoryView" class="pl-10 flex flex-col justify-center ml-auto">
+      <div v-if="!isHistoryView" class="remove-product-cart-wrapper pl-10 flex flex-col justify-center ml-auto">
         <Button
             :pt="{
           root: {
@@ -96,8 +96,6 @@
       </div>
 
     </div>
-    <div class="responsive-card-title">{{ cartProduct.name }}</div>
-
   </div>
 </template>
 
@@ -166,16 +164,26 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
   padding: 0;
 }
 
-.responsive-card-title {
-  display: none;
+
+@media (max-width: 1300px) {
+  .remove-product-cart-wrapper {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 1250px) {
+  .card-product-price {
+    margin-bottom: 8px;
+  }
+  .card-content__footer {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+  }
 }
 
 @media (max-width: 900px) {
-  .responsive-card-title {
-    display: block;
-  }
   .card-title {
-    display: none;
+    display: block;
   }
   .card-quantity {
     display: inline-flex;
@@ -184,6 +192,7 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
     flex: 0 0 auto;
   }
 }
+
 @media (max-width: 600px) {
  .discount-price__history-view {
    font-size: 13px;
@@ -197,11 +206,14 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
   .card-quantity p {
     font-size: 16px;
   }
+  .remove-product-cart-wrapper {
+    padding-left: 10px;
+  }
 }
 
 @media (max-width: 520px) {
   .card-image {
-    max-width: 94px;
+    max-width: 114px;
     height: 125px;
     object-fit: cover;
   }

@@ -19,12 +19,13 @@
                 :stroke="canUseFavorite" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </Button>
-        <div class="relative flex inline-block" @click="toggle">
+        <div class="relative flex inline-block" >
           <Button
               type="button"
               aria-haspopup="true"
               aria-controls="overlay_menu"
               :pt="{ root: { class: 'action-panel-icon' } }"
+              @click="redirectToProfile"
           >
             <svg width="25" height="28" viewBox="0 0 27 30" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -32,27 +33,6 @@
                   :stroke="isUserLogin" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </Button>
-
-          <Menu
-              ref="menu"
-              id="overlay_menu"
-              :model="items"
-              :popup="true"
-              :class="{ top: '90px' }"
-              :pt="{
-      root: {
-        class: `
-          absolute left-1/2 translate-x-[15%] translate-y-[10%] top-full mt-20 z-500
-          bg-[var(--color-gray-light-lavender)]
-          before:content-[''] before:absolute before:top-[-26px]
-          before:right-[40px] before:border-[13px] before:border-transparent
-          before:border-b-[var(--color-gray-light-lavender)]
-        `
-      },
-      submenuLabel: { class: 'p-0' },
-      itemLink: { class: 'border-b border-[var(--color-primary-pure-white)] last:pb-[10px]' }
-    }"
-          />
         </div>
 
         <Button @click="showShoppingCart" :pt="{ root: { class: 'action-panel-icon' } }">
@@ -81,12 +61,13 @@ defineProps({
   }
 })
 
+const { $eventBus } = useNuxtApp()
+
 const emit = defineEmits(['handle-mobile-sidebar'])
 
 const cartStore = useCartStore();
 
 const token = useCookie('token')
-
 
 const handleMobileMenu = () => {
   emit('handle-mobile-sidebar')
@@ -99,6 +80,14 @@ const canUseFavorite = computed(() => token.value ? 'var(--color-gray-pale-laven
 const showShoppingCart = () => {
   cartStore.open()
 };
+
+const redirectToProfile = () => {
+  if (token.value) {
+    return navigateTo('/profile/personal-information');
+  } else {
+    $eventBus.emit('handle-mobile-sidebar-login')
+  }
+}
 
 </script>
 

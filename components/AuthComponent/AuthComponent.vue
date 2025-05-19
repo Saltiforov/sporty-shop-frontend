@@ -13,7 +13,7 @@
         'mx-auto  mb-[37px]',
         isLogin ? 'max-w-[320px]' : 'max-w-[386px] pt-[15px]'
     ]" class="auth-button-wrapper">
-      <Button @click="handleAuth" :pt="{ root: { class: 'auth-button btn-hover-default' } }">{{
+      <Button @keyup.enter="handleAuth" @click="handleAuth" :pt="{ root: { class: 'auth-button btn-hover-default' } }">{{
           buttonLabel
         }}
       </Button>
@@ -79,6 +79,8 @@ import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 
 const fieldsBlock = ref(null);
 
+const { $eventBus } = useNuxtApp()
+
 const {authenticateUser, registerUser} = useAuthStore();
 
 const {authenticated} = storeToRefs(useAuthStore());
@@ -114,6 +116,7 @@ const handleAuth = async () => {
 
       if (authenticated) {
         authPopup.close();
+        $eventBus.emit('user-authenticated')
         navigateTo('/profile/personal-information')
       }
     } catch (error) {

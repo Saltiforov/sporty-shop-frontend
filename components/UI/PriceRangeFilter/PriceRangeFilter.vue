@@ -59,4 +59,10 @@ const max = ref(2000);
   background-color: var(--color-primary-purple);
   border: none;
 }
+
+@media(max-width: 450px) {
+  .price-range-filter {
+    padding: 8px 16px;
+  }
+}
 </style>

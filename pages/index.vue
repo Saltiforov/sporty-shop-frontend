@@ -3,7 +3,31 @@
     <LoadingOverlay :visible="isLoading"/>
 
     <div class="max-w-[1756px] mx-auto ">
-      <div class="sort-select flex w-full justify-end">
+      <div class="sort-select px-5 flex w-full justify-end">
+        <div class="responsive-filters" @click="isMobileFiltersOpen = !isMobileFiltersOpen">
+          <div class="responsive-filters-icon">
+            <svg
+                :class="isMobileFiltersOpen ? 'rotate-90' : 'rotate-0'"
+                class="transition-transform duration-300"
+                width="6"
+                height="10"
+                viewBox="0 0 6 10"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                  d="M1 1L5 5L1 9"
+                  stroke="#212094"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          <div class="responsive-filters-title">
+            <p>Фільтри</p>
+          </div>
+        </div>
         <div class="min-w-[320px] p-1 flex">
           <p class="mr-5 sort-title">{{ sortTitle }}</p>
           <SortSelect/>
@@ -13,6 +37,11 @@
       <div class="main-content-container grid-cols-1 grid lg:grid-cols-[390px_1fr] gap-[30px]">
         <aside class="p-4 rounded-md">
           <div class="filters mb-[91px] w-full max-w-[354px] h-[554px] border rounded-[var(--default-rounded)]">
+            <Filters v-if="hydrated"/>
+            <FiltersSkeleton v-else/>
+          </div>
+
+          <div  v-if="isMobileFiltersOpen" class="filters--mobile">
             <Filters v-if="hydrated"/>
             <FiltersSkeleton v-else/>
           </div>
@@ -131,8 +160,6 @@ const {addProductToViewed} = useViewedProducts()
 
 const {$eventBus} = useNuxtApp()
 
-const staticPagesStore = useStaticPages()
-
 const currencyStore = useCurrencyStore()
 
 const hydrated = ref(false)
@@ -142,6 +169,8 @@ const {t} = useI18n();
 const {showProductAddedToast} = useToastManager()
 
 const route = useRoute()
+
+const isMobileFiltersOpen = ref(false)
 
 const sortTitle = computed(() => t('sort_title'))
 
@@ -294,6 +323,20 @@ onBeforeUnmount(() => {
   grid-template-columns: repeat(4, 1fr);
 }
 
+.responsive-filters {
+  box-shadow: 0 0 2px #00000040;
+  border-radius: 8px;
+  cursor: pointer;
+  min-width: 100px;
+  padding: 5px;
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.responsive-filters-icon {
+  padding: 5px 12px;
+}
 
 @media (max-width: 1670px) {
   .product-grid {
@@ -314,17 +357,31 @@ onBeforeUnmount(() => {
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1025px) {
   .promotional-products {
     display: none;
   }
-
   .product-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 
   aside {
+    display: block;
+  }
+  .filters {
     display: none;
+  }
+  .sort-select {
+    justify-content: space-between;
+  }
+  .responsive-filters {
+    display: flex;
+  }
+  .filters--mobile {
+    max-width: 100% !important;
+    height: auto !important;
+    border: none !important;
+    margin-bottom: 10px;
   }
 }
 
@@ -338,6 +395,7 @@ onBeforeUnmount(() => {
 @media (max-width: 750px) {
   .sort-select {
     margin-top: 30px;
+    padding-top: 15px;
   }
   .sort-title {
     font-size: 15px;
@@ -348,11 +406,18 @@ onBeforeUnmount(() => {
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+  .sort-title {
+    margin-right: 4px;
+  }
 }
 
 @media (max-width: 500px) {
   .product-grid {
     gap: 5px;
+  }
+  .sort-select {
+    margin-top: 30px;
+    padding-top: 25px;
   }
 }
 

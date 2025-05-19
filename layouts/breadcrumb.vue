@@ -11,9 +11,14 @@
 </template>
 
 <script setup>
-
-
-
 import LayoutBreadcrumb from "~/components/UI/LayoutBreadcrumb/LayoutBreadcrumb.vue";
 </script>
+
+<style scoped>
+@media(max-width: 450px) {
+  main {
+    padding: 0 5px;
+  }
+}
+</style>
 

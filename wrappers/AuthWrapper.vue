@@ -1,6 +1,6 @@
 <template>
-  <div v-if="isVisible" class="overlay">
-    <div class="popup murecho-font w-full">
+  <div v-if="isVisible" class="overlay" @click="handleOverlayClick">
+    <div class="popup murecho-font w-full" ref="popupRef" @click.stop>
       <div class="popup-header">
         <Tabs v-model:value="activeTab">
           <TabList
@@ -75,9 +75,9 @@
 <script setup>
 const {t} = useI18n()
 
-const authComponent = ref(null)
-
 const authPopup = useAuthPopup()
+
+const popupRef = ref(null)
 
 const setActiveTab = (activeTab) => {
   authPopup.setType(activeTab)
@@ -88,6 +88,12 @@ const isVisible = computed(() => authPopup.isShow)
 const activeTab = computed(() => authPopup.popupType)
 
 const isLogin = computed(() => activeTab.value === 'login')
+
+const handleOverlayClick = (e) => {
+  if (!popupRef.value?.contains(e.target)) {
+    authPopup.close()
+  }
+}
 
 </script>
 

@@ -110,6 +110,7 @@ const config = {
           half: true,
           placeholder: '',
           useGrouping: false,
+          modelValue: 'postCode',
         },
         validators: [
           (value) => (value ? true : "Postal Code is required"),

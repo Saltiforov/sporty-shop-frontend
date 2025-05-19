@@ -199,6 +199,7 @@ const props = defineProps({
 
 
 const formData = ref({});
+
 const configRef = toRef(props, 'config')
 
 watch(
@@ -206,7 +207,7 @@ watch(
     (val) => {
         formData.value = {}
         val.forEach(field => {
-          formData.value[field.code] = ''
+          formData.value[field.code] = null
         })
     },
     {deep: true}
@@ -245,7 +246,7 @@ onMounted(() => {
     const code = field.code
     if (!code) return
 
-    formData.value[code] = props.data?.[code] ?? ''
+    formData.value[code] = props.data?.[code] ?? null
   })
 
 });
