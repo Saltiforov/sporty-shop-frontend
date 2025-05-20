@@ -1,6 +1,6 @@
 <template>
   <LoadingOverlay :visible="isLoading"/>
-        <TabView :pt="{
+  <TabView :pt="{
         panelContainer: {
           style: 'background-color: transparent;'
         },
@@ -43,9 +43,9 @@
       </div>
     </TabPanel>
     <TabPanel :header="tabs.delivery.header">
-<!--      <div class="delivery-and-payment">-->
-<!--        <p v-html="deliveryAndPaymentInfo.content"></p>-->
-<!--      </div>-->
+      <!--      <div class="delivery-and-payment">-->
+      <!--        <p v-html="deliveryAndPaymentInfo.content"></p>-->
+      <!--      </div>-->
     </TabPanel>
     <TabPanel :header="tabs.reviews.header">
       <div class="reviews-content murecho-font flex justify-between">
@@ -132,7 +132,7 @@
 
         </div>
 
-        <div v-else class="flex w-full items-center justify-center">
+        <div v-else class="empty-reviews-text">
           <p class="text-[var(--color-primary-black)] text-[26px] italic">{{ t('no_reviews_yet') }}</p>
         </div>
 
@@ -152,17 +152,22 @@
           <div class="mb-[10px] text-[var(--color-muted-light-gray)] flex justify-end">
             {{ getReviewLength }} / {{ MAX_REVIEW_LENGTH }}
           </div>
-          <div class="rate-product mb-[27px] flex items-center">
-            <p class="mr-[10px] text-[14px]">{{ t('rate_product') }}</p>
-            <Rating :disabled="!token" v-model="rating">
-              <template #onicon>
-                <img src="@/assets/icons/star-filled.svg" class="mr-1"/>
-              </template>
-              <template #officon>
-                <img src="@/assets/icons/star-empty.svg" class="mr-1"/>
-              </template>
-            </Rating>
+          <div class="rate-product mb-[27px] flex flex-col">
+            <div class="flex items-center">
+              <p class="mr-[10px] text-[14px]">{{ t('rate_product') }}</p>
+              <Rating :disabled="!token" v-model="rating">
+                <template #onicon>
+                  <img src="@/assets/icons/star-filled.svg" class="mr-1"/>
+                </template>
+                <template #officon>
+                  <img src="@/assets/icons/star-empty.svg" class="mr-1"/>
+                </template>
+              </Rating>
+            </div>
+            <p v-if="isEmptyRating" class="empty-rating-text text-[12px] text-[var(--color-primary-pink)]">
+              {{ t('empty_rating') }}</p>
           </div>
+
 
           <div class="rounded-[8px] max-w-[386px]">
             <Button :disabled="!token"
@@ -174,6 +179,9 @@
           }">
               <p class="text-[14px]">{{ t('submit_review') }}</p>
             </Button>
+          </div>
+          <div v-if="hasPurchasedProduct" class="purchased-product-text text-[var(--color-primary-pink)]">
+            {{ hasPurchasedProduct }}
           </div>
         </div>
       </div>
@@ -198,7 +206,6 @@ const props = defineProps({
   }
 })
 
-
 const MAX_REVIEW_LENGTH = 300;
 
 const route = useRoute()
@@ -209,8 +216,6 @@ const {t} = useI18n()
 
 const token = useCookie('token')
 
-const staticPagesStore = useStaticPages()
-
 const {currentUser} = storeToRefs(useAuthStore());
 
 const fullNameOfUser = computed(() => token.value ? `${currentUser.value.firstName} ${currentUser.value.lastName}` : '');
@@ -218,8 +223,6 @@ const fullNameOfUser = computed(() => token.value ? `${currentUser.value.firstNa
 const getReviewLength = computed(() => textareaValue.value.length);
 
 const expandedComments = ref(new Set())
-
-const deliveryAndPaymentInfo = computed(() => staticPagesStore.getCurrentPage('delivery-and-payment-product'))
 
 const isShowMoreButton = (comment) => {
   return comment.length >= 200
@@ -248,9 +251,14 @@ const textareaValue = ref('')
 const isLoading = ref(false)
 
 const currentPage = ref(1);
+
 const itemsPerPage = ref(2);
 
 const reviews = ref(props.product?.reviews?.list || [])
+
+const isEmptyRating = ref(false)
+
+const hasPurchasedProduct = ref('')
 
 const paginatedReviews = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value;
@@ -269,11 +277,27 @@ const changePage = (page) => {
 };
 
 const leaveProductReview = async () => {
+  if (!rating.value) {
+    isEmptyRating.value = true
+    return
+  }
+
   isLoading.value = true
-  await leaveReview(productId.value, rating.value, textareaValue.value)
-  clearFields()
-  isLoading.value = false
+  isEmptyRating.value = false
+
+  try {
+    const response = await leaveReview(productId.value, rating.value, textareaValue.value)
+    reviews.value.push(response)
+    hasPurchasedProduct.value = ''
+    clearFields()
+  } catch (error) {
+    hasPurchasedProduct.value = error.message
+    console.error('Error when sending feedback:', error)
+  } finally {
+    isLoading.value = false
+  }
 }
+
 
 const clearFields = () => {
   rating.value = null
@@ -281,8 +305,16 @@ const clearFields = () => {
 }
 
 const fullReviewerName = ({firstName, lastName}) => {
-  return `${firstName} ${lastName}`
+  const first = capitalizeFirstLetter(firstName ?? currentUser.value?.firstName ?? '')
+  const last = capitalizeFirstLetter(lastName ?? currentUser.value?.lastName ?? '')
+  return `${first} ${last}`.trim()
 }
+
+watch(() => rating.value, (newValue) => {
+  if (newValue) {
+    isEmptyRating.value = false
+  }
+})
 
 const tabs = {
   description: {
@@ -334,10 +366,34 @@ button.is-disabled .arrow-path {
   stroke-opacity: 1;
 }
 
+.empty-reviews-text {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
 @media (max-width: 1550px) {
+  .pagination-wrapper {
+    justify-content: flex-start;
+  }
+  .empty-reviews-text {
+    padding: 30px;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 1250px) {
   .reviews-content {
     flex-wrap: wrap;
   }
+  .review-list {
+    margin-bottom: 12px;
+  }
+  .pagination-wrapper {
+    justify-content: flex-end;
+  }
 }
+
 
 </style>

@@ -53,7 +53,7 @@
           </p>
           <p :class="{ 'text-[#EF4B4B]': product?.discount }"
              :style="{ fontSize: variant === 'small' ? '16px' : '' }" class="text-[24px] price-without-discount leading-[22px] fw-500">
-            {{ priceWithDiscount || priceByCurrency }} {{ t(currencyStore.label) }}</p>
+            {{ discountPriceByCurrency || 0 }} {{ t(currencyStore.label) }}</p>
         </div>
 
 
@@ -119,11 +119,11 @@ const addToCart = (product) => {
 }
 
 const priceByCurrency = computed(() => {
-  return Math.floor(currencyStore.isUAHSelected ? props.product.price_uah : props.product.price_usd)
+  return currencyStore.isUAHSelected ? props.product?.price?.uah : props.product?.price?.usd
 })
 
-const priceWithDiscount = computed(() => {
-  return Math.floor(priceByCurrency.value * (1 - props.product.discount / 100))
+const discountPriceByCurrency = computed(() => {
+  return currencyStore.isUAHSelected ? props.product?.priceAfterDiscount?.uah : props.product?.priceAfterDiscount?.usd
 })
 
 const productImage = computed(() => {

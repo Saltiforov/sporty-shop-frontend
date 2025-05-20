@@ -23,24 +23,26 @@ export class Fetch {
                 body: ['POST', 'PUT', 'PATCH'].includes(method.toUpperCase()) ? data : undefined,
                 ...config,
                 onRequest({ options }) {
-                    console.log('[Fetch] Запрос:', method, url)
+                    console.log('[Fetch] Запрос:', method, url);
                 },
                 onResponse({ response }) {
-                    console.log('[Fetch] Ответ:', response._data)
+                    console.log('[Fetch] Ответ:', response._data);
                 },
-                onResponseError({ response }) {
-                    console.error('[Fetch] Ошибка:', response.status)
+                onResponseError: async ({ response }) => {
+                    console.error('[Fetch] Ошибка:', response.status);
                     if (response.status === 401) {
-                        window.location.href = '/login'
+                        window.location.href = '/login';
                     }
+                    return Promise.reject(response._data);
                 }
-            })
+            });
 
-            return response
+            return response;
         } catch (error) {
-            console.error('[Fetch] Ошибка запроса:', error)
-            throw error
+            console.error('[Fetch] Ошибка запроса:', error);
+            throw error;
         }
+
     }
 
     get(url, config = {}) {

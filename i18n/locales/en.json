@@ -61,6 +61,7 @@
   "currency": "UAH",
   "currency_uah": "UAH",
   "currency_usd": "USD",
+  "empty_rating": "Rate the product before leaving a review",
 
   "tabs_description": "Description",
   "tabs_characteristics": "Characteristics",

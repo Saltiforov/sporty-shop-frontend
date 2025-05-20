@@ -200,6 +200,8 @@ const products = ref([
 
 .close-cart:hover {
   background: transparent;
+  border: none;
+  padding: 0;
 }
 
 .shopping-cart {
@@ -214,8 +216,9 @@ const products = ref([
   overflow-y: auto;
 }
 
-@media (max-width: 1600px) {
+@media (max-width: 1700px) {
   .shopping-cart {
+    padding: 18px 14px 23px 24px;
     width: 40%;
   }
 }

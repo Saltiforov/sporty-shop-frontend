@@ -41,10 +41,12 @@
             <FiltersSkeleton v-else/>
           </div>
 
-          <div  v-if="isMobileFiltersOpen" class="filters--mobile">
-            <Filters v-if="hydrated"/>
-            <FiltersSkeleton v-else/>
-          </div>
+          <transition name="fade-slide">
+            <div v-if="isMobileFiltersOpen" class="filters--mobile">
+              <Filters v-if="hydrated"/>
+              <FiltersSkeleton v-else/>
+            </div>
+          </transition>
 
           <div class="promotional-products text-center">
             <p class="text-[var(--color-primary-pink)] mb-[21px] fw-600 text-[20px]">{{ t('promo_products_title') }}</p>
@@ -149,7 +151,7 @@ import PaginationButtonSkeleton from "~/components/Skeletons/PaginationButtonSke
 import LoadMoreButtonSkeleton from "~/components/Skeletons/LoadMoreButtonSkeleton/LoadMoreButtonSkeleton.vue";
 import {getStaticPagesInfo} from "~/services/api/static-info.js";
 import {useStaticPages} from "~/stores/staticPages.js";
-import { useCurrencyStore } from "~/stores/currency.js";
+import {useCurrencyStore} from "~/stores/currency.js";
 
 const promotionalProductsSwiperOptions = {
   slidesPerView: 1,
@@ -338,6 +340,24 @@ onBeforeUnmount(() => {
   padding: 5px 12px;
 }
 
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  will-change: transform, opacity;
+}
+
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.fade-slide-enter-to,
+.fade-slide-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @media (max-width: 1670px) {
   .product-grid {
     grid-template-columns: repeat(4, 1fr);
@@ -357,26 +377,36 @@ onBeforeUnmount(() => {
   }
 }
 
-@media (max-width: 1025px) {
+@media (max-width: 1035px) {
   .promotional-products {
     display: none;
   }
+
   .product-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .main-content-container {
+    display: flex;
+    flex-direction: column;
   }
 
   aside {
     display: block;
   }
+
   .filters {
     display: none;
   }
+
   .sort-select {
     justify-content: space-between;
   }
+
   .responsive-filters {
     display: flex;
   }
+
   .filters--mobile {
     max-width: 100% !important;
     height: auto !important;
@@ -397,6 +427,7 @@ onBeforeUnmount(() => {
     margin-top: 30px;
     padding-top: 15px;
   }
+
   .sort-title {
     font-size: 15px;
   }
@@ -406,6 +437,7 @@ onBeforeUnmount(() => {
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
   .sort-title {
     margin-right: 4px;
   }
@@ -415,13 +447,12 @@ onBeforeUnmount(() => {
   .product-grid {
     gap: 5px;
   }
+
   .sort-select {
     margin-top: 30px;
     padding-top: 25px;
   }
 }
-
-
 
 
 </style>

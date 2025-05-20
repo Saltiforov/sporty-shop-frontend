@@ -60,7 +60,8 @@
   "product_buy_now": "Купити зараз",
   "currency": "грн",
   "currency_uah": "грн",
-  "currency_usd": "доллар",
+  "currency_usd": "usd",
+  "empty_rating": "Оцініть товар, перш ніж залишити відгук",
 
   "tabs_description": "Опис",
   "tabs_characteristics": "Характеристики",

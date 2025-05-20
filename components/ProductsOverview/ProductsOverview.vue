@@ -11,7 +11,7 @@
         <p class="fw-600 text-[16px] text-[var(--color-muted-light-gray)] mr-[14px] leading-[34px]">
           {{ t('total_price_label') }}:</p>
         <p>
-          {{ totalPriceWithoutDiscount }} <span
+          {{ totalPriceBeforeDiscount }} <span
             class="text-[15px] text-[var(--color-primary-dark)]">{{ t(currencyStore.label) }}</span>
         </p>
       </div>
@@ -26,7 +26,7 @@
         <p class="fw-600 text-[16px] text-[var(--color-muted-light-gray)] mr-[14px] leading-[34px]">
           {{ t('amount_to_pay_label') }}:</p>
         <p>
-          {{ finallyPrice }} <span class="text-[15px] text-[var(--color-primary-dark)]">{{
+          {{ totalPriceAfterDiscount }} <span class="text-[15px] text-[var(--color-primary-dark)]">{{
             t(currencyStore.label)
           }}</span>
         </p>
@@ -89,11 +89,11 @@ const isScrollable = computed(() => {
 
 const currency = computed(() => currencyStore.isUAHSelected ? 'uah' : 'usd')
 
-const totalPriceWithoutDiscount = computed(() => calculateTotal(productsOverview, currency.value, false))
+const totalPriceBeforeDiscount = computed(() => calculateTotal(productsOverview, currency.value, false))
 
-const totalDiscount = computed(() => totalPriceWithoutDiscount.value - calculateTotal(productsOverview, currency.value, true))
+const totalPriceAfterDiscount = computed(() => calculateTotal(productsOverview, currency.value, true))
 
-const finallyPrice = computed(() => totalPriceWithoutDiscount.value - totalDiscount.value)
+const totalDiscount = computed(() => totalPriceBeforeDiscount.value - totalPriceAfterDiscount.value)
 
 </script>
 

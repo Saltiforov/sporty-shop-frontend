@@ -1,28 +1,22 @@
 export const calculateTotal = (items, currency = 'uah', useDiscount = true) => {
-    const getPriceWithDiscount = (item) => {
-        const price = currency === 'usd' ? item.price_usd : item.price_uah
-        if (useDiscount && item.discount) {
-            return price - (price * item.discount / 100)
-        }
-        return price
-    }
+    if (!Array.isArray(items)) return 0;
 
-    if (Array.isArray(items)) {
-        return items.reduce((total, item) => {
-            return total + getPriceWithDiscount(item) * item.quantity
-        }, 0)
-    }
+    return items.reduce((total, item) => {
+        // Цена со скидкой, если нужно и если есть
+        const discountPrice = useDiscount && item.priceAfterDiscount && typeof item.priceAfterDiscount[currency] === 'number'
+            ? item.priceAfterDiscount[currency]
+            : null;
 
-    return getPriceWithDiscount(items) * items.quantity
-}
-export const addProductToCart = (array, product) => {
-    const existItem = array.value.find(item => item._id === product._id)
-    if (!existItem) {
-        array.value.push({...product, quantity: 1})
-        return;
-    }
-    existItem.quantity += 1
-}
+        // Обычная цена по валюте
+        const regularPrice = item.price && typeof item.price[currency] === 'number' ? item.price[currency] : 0;
+
+        // Итоговая цена для данного товара
+        const priceToUse = discountPrice !== null ? discountPrice : regularPrice;
+
+        return total + priceToUse * (item.quantity || 1);
+    }, 0);
+};
+
 
 export function fullImageUrls(imagesRef) {
     return imagesRef.map((url) =>
@@ -51,11 +45,10 @@ export function mapOrdersToSummaries(orders) {
                 image: fullImageUrls(product.images || [])[0] || '',
                 name: product.name || '',
                 quantity: item.quantity || 0,
-                price: product.price || 0,
+                price: product.price || {},
                 id: product._id || '',
-                price_uah: product.price_uah || '',
-                price_usd: product.price_usd || '',
-                discount: product.discount || product.price || 0
+                discount: product.discount || product.price || {},
+                priceAfterDiscount: product.priceAfterDiscount || {},
             }
         })
 
@@ -76,6 +69,7 @@ export function mapOrdersToSummaries(orders) {
                 deliveryComment: order.description || ''
             },
             pricing: order.pricing || '',
+            currency: order.currency || '',
             products
         }
     })

@@ -59,7 +59,7 @@
                   : 'text-[16px]'
               ]"
             >
-              {{ priceByCurrency * cartProduct.quantity || '1121' }} {{ t(currencyStore.label) }}
+              {{ priceByCurrency * cartProduct.quantity }} {{ t(currentCurrency) }}
             </div>
 
             <div
@@ -69,7 +69,7 @@
                 ]"
                 class="discount-price text-[var(--color-primary-pink)]"
             >
-              {{ priceWithDiscount || '600' }} <span class="text-[18px]">{{ t(currencyStore.label) }}</span>
+              {{ discountPriceByCurrency }} <span class="text-[18px]">{{ t(currentCurrency) }}</span>
             </div>
 
           </div>
@@ -115,7 +115,7 @@ const handleRemoveProduct = (id) => {
   emit('remove-product', id);
 }
 
-const {cartProduct} = defineProps({
+const {cartProduct, isHistoryView, currency} = defineProps({
   cartProduct: {
     type: Object,
     required: true,
@@ -123,6 +123,10 @@ const {cartProduct} = defineProps({
   },
   isHistoryView: {
     type: Boolean,
+    required: false,
+  },
+  currency: {
+    type: String,
     required: false,
   }
 })
@@ -133,13 +137,22 @@ const redirectToProduct = (cartProduct) => {
   emit('handle-cart-item')
 }
 
+
 const priceByCurrency = computed(() => {
-  return Math.floor(currencyStore.isUAHSelected ? cartProduct.price_uah :cartProduct.price_usd)
+  return currency
+      ? cartProduct?.price[currency]
+      : currencyStore.isUAHSelected ? cartProduct?.price?.uah : cartProduct?.price?.usd
 })
 
-const priceWithDiscount = computed(() => {
-  return Math.floor(priceByCurrency.value * (1 - cartProduct.discount / 100))
+const discountPriceByCurrency = computed(() => {
+  return currency
+      ? cartProduct?.priceAfterDiscount[currency]
+      : currencyStore.isUAHSelected ? cartProduct?.priceAfterDiscount?.uah : cartProduct?.priceAfterDiscount?.usd
 })
+
+const currentCurrency = computed(() => {
+  return isHistoryView ? currency : currencyStore.label;
+});
 
 const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] || cartProduct.image)
 
@@ -165,6 +178,12 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
 }
 
 
+@media (max-width: 1690px) {
+  .remove-product-cart-wrapper {
+    padding-left: 20px;
+  }
+}
+
 @media (max-width: 1300px) {
   .remove-product-cart-wrapper {
     justify-content: flex-start;
@@ -175,6 +194,7 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
   .card-product-price {
     margin-bottom: 8px;
   }
+
   .card-content__footer {
     flex-direction: column-reverse;
     align-items: flex-start;
@@ -185,6 +205,7 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
   .card-title {
     display: block;
   }
+
   .card-quantity {
     display: inline-flex;
     justify-content: flex-start;
@@ -194,18 +215,22 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
 }
 
 @media (max-width: 600px) {
- .discount-price__history-view {
-   font-size: 13px;
- }
+  .discount-price__history-view {
+    font-size: 13px;
+  }
+
   .discount-price {
     font-size: 16px;
   }
-  .discount-price span{
+
+  .discount-price span {
     font-size: 14px;
   }
+
   .card-quantity p {
     font-size: 16px;
   }
+
   .remove-product-cart-wrapper {
     padding-left: 10px;
   }
@@ -217,10 +242,12 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
     height: 125px;
     object-fit: cover;
   }
+
   .cart-item__image {
     height: 125px;
   }
 }
+
 @media (max-width: 450px) {
   .discount-price__history-view {
     margin-right: 7px;

@@ -107,7 +107,7 @@
 
                 <p v-if="product.discount"
                    class="text-[var(--color-primary-pink)] price-with-discount text-[24px] leading-[22px] fw-500">
-                  {{ priceWithDiscount }} {{ t(currencyStore.label) }}
+                  {{ priceByCurrencyWithDiscount }} {{ t(currencyStore.label) }}
                 </p>
               </div>
 
@@ -200,6 +200,7 @@
 
 <script setup>
 import {fullImageUrls} from "~/utils/index.js";
+import DefaultProductImage from '/assets/images/product-image.png'
 
 definePageMeta({
   layout: 'breadcrumb',
@@ -249,12 +250,18 @@ const isLoading = ref(true)
 
 const selectedImage = ref(null)
 
+const priceByCurrencyWithDiscount = computed(() => {
+  return currencyStore.getCurrency === 'uah'
+      ? product.value.price.uah - product.value.discount.uah
+      : product.value.price.usd - product.value.discount.usd
+})
+
 const priceByCurrency = computed(() => {
-  return Math.floor(currencyStore.getCurrency === 'uah' ? product.value.price_uah : product.value.price_usd)
+  return currencyStore.getCurrency === 'uah' ? product.value.price?.uah : product.value.price?.usd
 })
 
 const priceWithDiscount = computed(() => {
-  return Math.floor(priceByCurrency.value * (1 - product.value.discount / 100))
+  return priceByCurrency.value * (1 - product.value.discount / 100)
 })
 
 const addToCart = (product) => {
@@ -306,12 +313,11 @@ const handleGalleryClick = (index) => {
   selectedImage.value = images.value[index]
 }
 
-
 onMounted(async () => {
   try {
     isLoading.value = true
     product.value = await getProduct(id)
-    images.value = fullImageUrls(product.value.images)
+    images.value = product.value.images.length ? fullImageUrls(product.value.images) : [DefaultProductImage]
   } finally {
     isLoading.value = false
   }
@@ -463,13 +469,15 @@ onMounted(async () => {
     max-height: 63px;
   }
 
-  .developer p{
+  .developer p {
     font-size: 18px;
   }
+
   .discount {
     font-size: 20px;
   }
-  .price-with-discount{
+
+  .price-with-discount {
     font-size: 20px;
   }
 }
@@ -478,12 +486,15 @@ onMounted(async () => {
   .gallery-container {
     gap: 15px;
   }
+
   .discount {
     font-size: 18px;
   }
-  .price-with-discount{
+
+  .price-with-discount {
     font-size: 18px;
   }
+
   .price_and_discount {
     margin-right: 20px;
   }

@@ -27,7 +27,7 @@
               display: 'none',
             }
           }
-        }">{{ block.blockTitle }}</AccordionHeader>
+        }">{{ block.title }}</AccordionHeader>
         <AccordionContent :pt="{
           content: {
             style: {
@@ -36,7 +36,7 @@
           }
         }">
           <p class="leading-relaxed">
-            {{ block.blockContent }}
+            {{ block.content }}
           </p>
         </AccordionContent>
       </AccordionPanel>

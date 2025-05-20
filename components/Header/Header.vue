@@ -398,14 +398,14 @@ onBeforeUnmount(() => {
     margin-left: 30px;
   }
   .responsive-search-field {
-    position: absolute !important;
-    top: 124px !important;
-    right: 20px !important;
-    left: auto !important;
+    position: relative !important;
+    top: 0 !important;
+    right: 0 !important;
   }
 }
 
-@media (max-width: 900px) {
+
+@media (max-width: 950px) {
   .responsive-search-field {
     position: absolute !important;
     top: 114px !important;

@@ -4,19 +4,20 @@
     header: { class: 'border-none bg-transparent text-[18px] text-[var(--color-primary-dark)] fw-600' },
     content: { class: 'pt-2' }
   }">
-    <AccordionPanel class="accordion-item"  value="0">
+    <AccordionPanel class="accordion-item" value="0">
       <AccordionHeader :pt="{
         root: {
           class: 'accordion-header',
           style: 'background-color: var(--color-gray-lavender); border: none;'
         }
-      }">{{ tabs.description.header }}</AccordionHeader>
+      }">{{ tabs.description.header }}
+      </AccordionHeader>
       <AccordionContent :pt="{
         content : {
           style : 'background-color: var(--color-gray-lavender);'
         }
       }">
-        <p class="fw-500 text-[18px] leading-[34px] text-[var(--color-primary-dark)]" v-html="product.description" />
+        <p class="fw-500 text-[18px] leading-[34px] text-[var(--color-primary-dark)]" v-html="product.description"/>
       </AccordionContent>
     </AccordionPanel>
 
@@ -26,7 +27,8 @@
           class: 'accordion-header',
           style: 'background-color: var(--color-gray-lavender);'
         }
-      }">{{ tabs.characteristics.header }}</AccordionHeader>
+      }">{{ tabs.characteristics.header }}
+      </AccordionHeader>
       <AccordionContent :pt="{
         content : {
           style : 'background-color: var(--color-gray-lavender);'
@@ -59,7 +61,8 @@
           class: 'accordion-header',
           style: 'background-color: var(--color-gray-lavender);'
         }
-      }">{{ tabs.delivery.header }}</AccordionHeader>
+      }">{{ tabs.delivery.header }}
+      </AccordionHeader>
       <AccordionContent :pt="{
         content : {
           style : 'background-color: var(--color-gray-lavender);'
@@ -119,7 +122,8 @@
           class: 'accordion-header',
           style: 'background-color: var(--color-gray-lavender);'
         }
-      }">{{ tabs.reviews.header }}</AccordionHeader>
+      }">{{ tabs.reviews.header }}
+      </AccordionHeader>
       <AccordionContent :pt="{
         content : {
           style : 'background-color: var(--color-gray-lavender);'
@@ -214,7 +218,7 @@
 
           </div>
 
-          <div v-else class="flex w-full items-center justify-center">
+          <div v-else class="empty-reviews-text">
             <p class="text-[var(--color-primary-black)] text-[26px] italic">{{ t('no_reviews_yet') }}</p>
           </div>
 
@@ -234,16 +238,20 @@
             <div class="mb-[10px] text-[var(--color-muted-light-gray)] flex justify-end">
               {{ getReviewLength }} / {{ MAX_REVIEW_LENGTH }}
             </div>
-            <div class="rate-product mb-[27px] flex items-center">
-              <p class="mr-[10px] text-[14px]">{{ t('rate_product') }}</p>
-              <Rating :disabled="!token" v-model="rating">
-                <template #onicon>
-                  <img src="@/assets/icons/star-filled.svg" class="mr-1"/>
-                </template>
-                <template #officon>
-                  <img src="@/assets/icons/star-empty.svg" class="mr-1"/>
-                </template>
-              </Rating>
+            <div class="rate-product mb-[27px] flex flex-col">
+              <div class="flex items-center">
+                <p class="mr-[10px] text-[14px]">{{ t('rate_product') }}</p>
+                <Rating :disabled="!token" v-model="rating">
+                  <template #onicon>
+                    <img src="@/assets/icons/star-filled.svg" class="mr-1"/>
+                  </template>
+                  <template #officon>
+                    <img src="@/assets/icons/star-empty.svg" class="mr-1"/>
+                  </template>
+                </Rating>
+              </div>
+              <p v-if="isEmptyRating" class="empty-rating-text text-[12px] text-[var(--color-primary-pink)]">
+                {{ t('empty_rating') }}</p>
             </div>
 
             <div class="rounded-[8px] review-button__wrapper max-w-[386px]">
@@ -257,6 +265,9 @@
                 <p class="text-[14px]">{{ t('submit_review') }}</p>
               </Button>
             </div>
+            <div v-if="hasPurchasedProduct" class="purchased-product-text">
+              {{ hasPurchasedProduct }}
+            </div>
           </div>
         </div>
       </AccordionContent>
@@ -268,6 +279,7 @@
 import {capitalizeFirstLetter, formatDateToDMY} from "~/utils/index.js";
 import {storeToRefs} from "pinia";
 import {useAuthStore} from "~/stores/auth.js";
+import {leaveReview} from "~/services/api/reviews-service.js";
 
 const props = defineProps({
   product: {
@@ -339,6 +351,10 @@ const itemsPerPage = ref(2);
 
 const reviews = ref(props.product?.reviews?.list || [])
 
+const isEmptyRating = ref(false)
+
+const hasPurchasedProduct = ref('')
+
 const paginatedReviews = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value;
   const end = start + itemsPerPage.value;
@@ -356,17 +372,43 @@ const changePage = (page) => {
 };
 
 const leaveProductReview = async () => {
+  if (!rating.value) {
+    isEmptyRating.value = true
+    return
+  }
+
   isLoading.value = true
-  await leaveReview(productId.value, rating.value, textareaValue.value)
-  clearFields()
-  isLoading.value = false
+  isEmptyRating.value = false
+
+  try {
+    const response = await leaveReview(productId.value, rating.value, textareaValue.value)
+    reviews.value.push(response)
+    hasPurchasedProduct.value = ''
+    clearFields()
+  } catch (error) {
+    hasPurchasedProduct.value = error.message
+    console.error('Error when sending feedback:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const clearFields = () => {
+  rating.value = null
+  textareaValue.value = ''
 }
 
 const fullReviewerName = ({firstName, lastName}) => {
-  const first = capitalizeFirstLetter(firstName ?? '')
-  const last = capitalizeFirstLetter(lastName ?? '')
+  const first = capitalizeFirstLetter(firstName ?? currentUser.value?.firstName ?? '')
+  const last = capitalizeFirstLetter(lastName ?? currentUser.value?.lastName ?? '')
   return `${first} ${last}`.trim()
 }
+
+watch(() => rating.value, (newValue) => {
+  if (newValue) {
+    isEmptyRating.value = false
+  }
+})
 
 </script>
 
@@ -375,6 +417,7 @@ const fullReviewerName = ({firstName, lastName}) => {
   margin-bottom: 1.5em;
   border-bottom: none;
 }
+
 .accordion-header {
   border-radius: var(--default-rounded);
 }
@@ -403,9 +446,21 @@ button.is-disabled .arrow-path {
   stroke-opacity: 1;
 }
 
-@media(max-width: 664px) {
+.empty-reviews-text {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 664px) {
   .review-button__wrapper {
     margin: 0 auto;
+  }
+
+  .empty-reviews-text {
+    padding: 15px;
+    margin-bottom: 15px;
   }
 }
 
