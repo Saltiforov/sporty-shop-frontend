@@ -39,7 +39,7 @@
           <CurrencySwitch/>
         </div>
         <div class="action-panel max-w-[144px] w-full h-[36px] flex justify-between">
-          <Button :disabled="!canUseFavorite" @click="navigateTo('/profile/favorite')"
+          <Button :disabled="!canUseFavorite" @click="navigateTo('/profile/favorites')"
                   :pt="{ root: { class: 'action-panel-icon' } }">
             <svg width="29" height="25" viewBox="0 0 29 25" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -214,7 +214,7 @@ const items = computed(() => {
       {
         items: [
           {label: t('my_cabinet'), command: () => navigateTo('/profile/personal-information')},
-          {label: t('my_orders'), command: () => navigateTo('/profile/orders')},
+          {label: t('my_orders'), command: () => navigateTo('/profile/orders-history')},
           {label: t('logout'), command: () => logout()},
         ]
       }
@@ -239,27 +239,27 @@ const searchFieldPlaceholder = computed(() => t('search_placeholder'))
 
 const links = ref([
   {
-    label: computed(() => t('header_catalog')),
+    label: computed(() => t('catalog')),
     icon: "pi pi-filter",
     page: "/content/catalog",
   },
   {
-    label: computed(() => t('header_promotions')),
+    label: computed(() => t('promotions')),
     icon: "pi pi-shopping-cart",
     page: "/content/promotions",
   },
   {
-    label: computed(() => t('header_new')),
+    label: computed(() => t('new_arrivals')),
     icon: "pi pi-user",
     page: "/content/new-arrivals",
   },
   {
-    label: computed(() => t('header_shipping_and_payment')),
+    label: computed(() => t('shipping_and_payment')),
     icon: "pi pi-user",
     page: "/content/shipping-and-payment",
   },
   {
-    label: computed(() => t('header_about_us')),
+    label: computed(() => t('about_us')),
     icon: "pi pi-user",
     page: "/content/about-us",
   },

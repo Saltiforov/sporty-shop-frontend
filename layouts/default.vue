@@ -3,7 +3,7 @@
 
     <div class="w-full main-banner px-8 mx-auto mt-[98px] mb-[53px]">
       <div class="mx-auto w-full max-w-[1756px]">
-        <SwiperWrapper v-if="hydrated" :items="images" :options="swiperOptions">
+        <SwiperWrapper  v-if="hydrated" :items="images" :options="swiperOptions">
           <template #default="{ item }">
             <img
                 :src="item"

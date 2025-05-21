@@ -11,7 +11,7 @@
       </div>
 
       <div class="actions-wrapper w-full justify-end flex">
-        <Button :disabled="!canUseFavorite" @click="navigateTo('/profile/favorite')"
+        <Button :disabled="!canUseFavorite" @click="navigateTo('/profile/favorites')"
                 :pt="{ root: { class: 'action-panel-icon' } }">
           <svg width="27" height="23" viewBox="0 0 29 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path

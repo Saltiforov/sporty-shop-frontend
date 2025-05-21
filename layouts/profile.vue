@@ -2,7 +2,9 @@
   <div class="min-h-screen flex flex-col">
     <div class="flex flex-1">
       <div class="profile-container base-container  justify-between flex-1 ">
-        <div class="pb-[100px] profile-layout pt-[50px]  h-full flex ">
+        <LayoutBreadcrumb v-if="!isLoading"/>
+        <BreadcrumbSkeleton/>
+        <div class="pb-[100px] profile-layout h-full flex ">
           <aside class="sidebar max-w-[277px] mr-[116px] w-full">
             <div class="sidebar-header flex pb-[24px] items-center border-b border-[var(--color-gray-light-lavender)]">
               <div class="w-[44px] mr-3">
@@ -59,6 +61,8 @@ import {onMounted} from "vue";
 import {getCurrentUser} from "~/services/api/user-service.js";
 import {storeToRefs} from "pinia";
 import {capitalizeFirstLetter} from "~/utils/index.js";
+import BreadcrumbSkeleton from "~/components/Skeletons/BreadcrumbSkeleton/BreadcrumbSkeleton.vue";
+import LayoutBreadcrumb from "~/components/UI/LayoutBreadcrumb/LayoutBreadcrumb.vue";
 
 const {t} = useI18n();
 
@@ -87,37 +91,37 @@ const logout = () => {
 
 const localizedList = computed(() => [
   {
-    title: t('menu_personal_information'),
+    title: t('personal_information'),
     icon: PersonalInformationIcon,
     page: 'personal-information',
     route: '/profile/personal-information',
     command: () => setActiveTab('personal-information')
   },
   {
-    title: t('menu_order_history'),
+    title: t('orders_history'),
     icon: OrderHistoryIcon,
     component: 'OrderHistory',
     page: 'orders',
-    route: '/profile/orders',
+    route: '/profile/orders-history',
     command: () => setActiveTab('orders')
   },
   {
-    title: t('menu_favorite_products'),
+    title: t('favorites'),
     icon: FavoriteProductsIcon,
     component: 'FavoriteProducts',
     page: 'favorite',
-    route: '/profile/favorite',
+    route: '/profile/favorites',
     command: () => setActiveTab('favorite')
   },
   {
-    title: t('menu_change_password'),
+    title: t('change_password'),
     icon: ChangePasswordIcon,
     component: 'ChangePassword',
     page: 'change-password',
     route: '/profile/change-password',
     command: () => setActiveTab('change-password')
   },
-  {title: t('menu_logout'), icon: LogoutIcon, component: 'Logout', command: () => logout()},
+  {title: t('logout'), icon: LogoutIcon, component: 'Logout', command: () => logout()},
 ]);
 
 const setActiveTab = (component) => {

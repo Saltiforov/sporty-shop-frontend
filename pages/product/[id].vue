@@ -1,5 +1,7 @@
 <template>
   <div class="about-product-container px-4 py-6">
+    <LayoutBreadcrumb v-if="!isLoading" :product="{productTitle: product.name, filters: product.filters}"/>
+    <BreadcrumbSkeleton v-else/>
     <LoadingOverlay :visible="isLoading"/>
 
     <div class="header flex flex-col">
@@ -99,13 +101,13 @@
 
             <div class="price mb-10 flex items-center">
               <div class="mr-[57px] price_and_discount">
-                <div :class="[product.discount ? 'text-[16px] line-through text-[#999]' : 'text-[36px]']"
+                <div :class="[hasDiscount ? 'text-[16px] line-through text-[#999]' : 'text-[36px]']"
                      class="fw-600 discount mr-[57px] text-[var(--color-primary-black)] leading-[34px]">
                   {{ priceByCurrency }}
                   <span>{{ t(currencyStore.label) }}</span>
                 </div>
 
-                <p v-if="product.discount"
+                <p v-if="hasDiscount"
                    class="text-[var(--color-primary-pink)] price-with-discount text-[24px] leading-[22px] fw-500">
                   {{ priceByCurrencyWithDiscount }} {{ t(currencyStore.label) }}
                 </p>
@@ -224,6 +226,8 @@ import AboutProductImageSkeleton
 import AboutProductTabsSkeleton
   from "~/components/Skeletons/AboutProduct/AboutProductTabsSkeleton/AboutProductTabsSkeleton.vue";
 import AboutProductAccordion from "~/components/UI/AboutProductAccordion/AboutProductAccordion.vue";
+import LayoutBreadcrumb from "~/components/UI/LayoutBreadcrumb/LayoutBreadcrumb.vue";
+import BreadcrumbSkeleton from "~/components/Skeletons/BreadcrumbSkeleton/BreadcrumbSkeleton.vue";
 
 const {t} = useI18n()
 
@@ -260,8 +264,10 @@ const priceByCurrency = computed(() => {
   return currencyStore.getCurrency === 'uah' ? product.value.price?.uah : product.value.price?.usd
 })
 
-const priceWithDiscount = computed(() => {
-  return priceByCurrency.value * (1 - product.value.discount / 100)
+const hasDiscount = computed(() => {
+  const price = priceByCurrency.value
+  const discounted = priceByCurrencyWithDiscount.value
+  return discounted !== null && discounted !== undefined && discounted < price
 })
 
 const addToCart = (product) => {

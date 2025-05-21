@@ -48,10 +48,10 @@
       </div>
       <div class="flex relative items-center justify-between">
         <div>
-          <p v-if="product.discount" class="discount-price absolute -top-3 left-0 fw-500 text-[15px] line-through">
+          <p v-if="hasDiscount" class="discount-price absolute -top-3 left-0 fw-500 text-[15px] line-through">
             {{ priceByCurrency }} {{ t(currencyStore.label) }}
           </p>
-          <p :class="{ 'text-[#EF4B4B]': product?.discount }"
+          <p :class="{ 'text-[#EF4B4B]': hasDiscount }"
              :style="{ fontSize: variant === 'small' ? '16px' : '' }" class="text-[24px] price-without-discount leading-[22px] fw-500">
             {{ discountPriceByCurrency || 0 }} {{ t(currencyStore.label) }}</p>
         </div>
@@ -128,6 +128,12 @@ const discountPriceByCurrency = computed(() => {
 
 const productImage = computed(() => {
   return props.product?.images?.length ? fullImageUrls(props.product.images)[0] : DefaultProductImage
+})
+
+const hasDiscount = computed(() => {
+  const price = priceByCurrency.value
+  const discounted = discountPriceByCurrency.value
+  return discounted !== null && discounted !== undefined && discounted < price
 })
 
 const iconSize = computed(() => {

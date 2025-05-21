@@ -1,4 +1,6 @@
 <template>
+  <LayoutBreadcrumb v-if="!isLoading"/>
+  <BreadcrumbSkeleton v-else/>
   <div class="checkout-page">
     <LoadingOverlay :visible="isLoading"/>
     <div class="checkout-content mb-[101px] flex items-start">
@@ -7,16 +9,21 @@
         <div
             v-if="hydrated || userData && userData._id"
             class="checkout-fields pt-[24px] pr-[45px] pb-[44px] pl-[42px] mb-[65px] rounded-lg bg-[var(--color-gray-lavender)]">
-          <div class="header-fields">
-            <h1 class="title-lg mb-2">{{ t('checkout_title') }}</h1>
-            <div class="flex subtitle-lg mb-[24px] text-[var(--color-muted-gray)]">
-              <p class="mr-1">{{ t('account_text') }}</p>
-              <button @click="authPopup.open('login')">{{ t('sign_in') }}</button>
+          <div class="header-fields flex justify-between mb-7">
+            <div class="header-left">
+              <h1 class="title-lg mb-2">{{ t('checkout') }}</h1>
+              <div class="flex subtitle-lg mb-[24px] text-[var(--color-muted-gray)]">
+                <p class="mr-1">{{ t('account_text') }}</p>
+                <button @click="authPopup.open('login')">{{ t('sign_in') }}</button>
+              </div>
+            </div>
+            <div class="header-right">
+              <RegionSelect v-model="selectedRegion"/>
             </div>
           </div>
           <div class="fields-content">
-            <FieldsBlock v-if="userData && userData._id" :config="config.fields" ref="fieldsBlock" :data="userData"/>
-            <FieldsBlock v-else :config="config.fields" ref="fieldsBlock"/>
+            <FieldsBlock v-if="userData && userData._id" :config="currentRegionConfig.fields" ref="fieldsBlock" :data="userData"/>
+            <FieldsBlock v-else :config="currentRegionConfig.fields" ref="fieldsBlock"/>
           </div>
         </div>
         <CheckoutFieldsSkeleton class="mb-[65px]" v-else/>
@@ -107,7 +114,9 @@
                           rows="2" cols="30"/>
             </div>
           </div>
-
+          <div v-if="!isRegionUA" class="min-price-europe mb-6">
+            <p class="text-[var(--color-primary-pink)] text-[18px]">{{ t('minimum_amount_order_eu') }}</p>
+          </div>
           <div
               class="checkout__wrapper-btn rounded-[8px] w-full">
             <Button @click="handleCreateOrder" :pt="{
@@ -142,6 +151,9 @@ import CheckoutFieldsSkeleton from "~/components/Skeletons/Checkout/CheckoutFiel
 import CheckoutPaymentMethodSkeleton
   from "~/components/Skeletons/Checkout/CheckoutPaymentMethodSkeleton/CheckoutPaymentMethodSkeleton.vue";
 import {useCurrencyStore} from "~/stores/currency.js";
+import BreadcrumbSkeleton from "~/components/Skeletons/BreadcrumbSkeleton/BreadcrumbSkeleton.vue";
+import LayoutBreadcrumb from "~/components/UI/LayoutBreadcrumb/LayoutBreadcrumb.vue";
+import RegionSelect from "~/components/UI/RegionSelect/RegionSelect.vue";
 
 definePageMeta({
   layout: 'breadcrumb',
@@ -171,11 +183,19 @@ const promoCodeValue = ref(null)
 
 const commentForOrder = ref('')
 
+const selectedRegion = ref({label: t('checkout_region_ua'), value: 'ua'})
+
+const isRegionUA = computed(() => selectedRegion.value.value === 'ua')
+
 const isPaymentOnDelivery = ref(false)
 
 const isSendSmsWithFormData = ref(false)
 
 const userData = ref({})
+
+const uaPhoneCode = ref('+380')
+
+const euPhoneCode = ref('+31')
 
 const showTopRight = () => {
   toast.add({severity: 'success', summary: 'Info Message', detail: 'Message Content', group: 'tl', life: 3000});
@@ -235,8 +255,6 @@ const handleCreateOrder = async () => {
 
   const isValid = fieldsBlock.value?.validateFields()
 
-  console.log("data", data)
-
   if (isValid && data.products) {
     await createOrder(data)
         .then(() => {
@@ -244,13 +262,14 @@ const handleCreateOrder = async () => {
           showTopRight()
           setTimeout(() => {
             navigateTo('/')
-          },500)
+          }, 500)
         })
         .catch(() => {
           showError()
         })
         .finally(() => isLoading.value = false)
-  } else {
+  }
+  else {
     isLoading.value = false
   }
 }
@@ -275,6 +294,258 @@ onMounted(async () => {
 
   hydrated.value = true
 })
+
+const currentRegionConfig = computed(() => {
+  return isRegionUA.value
+      ? configUkraine
+      : configEurope
+})
+
+const configUkraine = {
+  fields: {
+    items: [
+      {
+        name: 'firstName',
+        code: 'firstName',
+        label: computed(() => t('user_name')),
+        type: 'InputText',
+        props: {
+          side: 'left',
+          type: 'text',
+          placeholder: "",
+          required: true
+        },
+        validators: [
+          (value) => (value ? true : "First Name is required"),
+        ],
+      },
+
+      {
+        name: 'city',
+        code: 'city',
+        label: computed(() => t('city')),
+        type: 'InputText',
+        props: {
+          side: 'right',
+          placeholder: ''
+        },
+        validators: [
+          (value) => (value ? true : "City is required"),
+        ],
+      },
+
+      {
+        name: 'deliveryInfo',
+        code: 'deliveryInfo',
+        label: computed(() => t('delivery_info')),
+        type: 'InputText',
+        props: {
+          side: 'right',
+          placeholder: ''
+        }
+      },
+
+      {
+        name: 'lastName',
+        code: 'lastName',
+        label: computed(() => t('last_name')),
+        type: 'InputText',
+        props: {
+          side: 'left',
+          type: 'text',
+          placeholder: "",
+          required: true
+        },
+        validators: [
+          (value) => (value ? true : "Last Name is required"),
+        ],
+      },
+      {
+        name: 'phone',
+        code: 'phone',
+        label: computed(() => t('phone_number')),
+        type: 'Custom',
+        props: {
+          side: 'left',
+        },
+        validators: [
+          (value) => (value ? true : "Phone is required"),
+          (value) => (value?.toString().length <= 11 ? true : "Phone number must be no more than 11 digits")
+        ],
+        render: ({modelValue, 'onUpdate:modelValue': update}) =>
+            h(InputGroup, {}, {
+              default: () => [
+                h(InputGroupAddon, {
+                  pt: {
+                    root: {
+                      style: {
+                        backgroundColor: 'white',
+                        color: 'var(--color-primary-dark)',
+                      }
+                    }
+                  }
+                }, () => uaPhoneCode.value),
+                h(InputNumber, {
+                  modelValue,
+                  'onUpdate:modelValue': update,
+                  useGrouping: false,
+                  placeholder: '',
+                  defaultValue: null
+                })
+              ]
+            })
+      },
+      {
+        name: 'telegramUsername',
+        code: 'telegramUsername',
+        label: computed(() => t('telegram_username')),
+        tooltipComponent: defineAsyncComponent(() => import('~/components/UI/TooltipIcon/TooltipIcon.vue')),
+        type: 'InputText',
+        tooltipProps: {
+          message: computed(() => t('telegram_tooltip'))
+        },
+        props: {
+          side: 'right',
+          type: 'text',
+          placeholder: "",
+          required: true,
+          class: 'w-full'
+        },
+      },
+    ]
+  }
+}
+
+const configEurope = {
+  fields: {
+    items: [
+      {
+        name: 'recipientName',
+        code: 'recipientName',
+        label: computed(() => t('recipient_name')),
+        type: 'InputText',
+        props: {
+          side: 'left',
+          type: 'text',
+          placeholder: "",
+          required: true
+        },
+        validators: [
+          (value) => (value ? true : "First Name is required"),
+        ],
+      },
+
+      {
+        name: 'country',
+        code: 'country',
+        label: computed(() => t('country')),
+        type: 'InputText',
+        props: {
+          side: 'right',
+          half: true,
+          placeholder: ''
+        },
+        validators: [
+          (value) => (value ? true : "Country is required"),
+        ],
+      },
+
+      {
+        name: 'postalCode',
+        code: 'postalCode',
+        label: computed(() => t('post_code')),
+        type: 'InputText',
+        props: {
+          side: 'right',
+          half: true,
+          placeholder: ''
+        },
+      },
+      {
+        name: 'state',
+        code: 'state',
+        label: computed(() => t('state')),
+        type: 'InputText',
+        props: {
+          side: 'right',
+          placeholder: ''
+        },
+        validators: [
+          (value) => (value ? true : "State is required"),
+        ],
+      },
+
+
+      {
+        name: 'email',
+        code: 'email',
+        label: computed(() => t('email')),
+        type: 'InputText',
+        props: {
+          side: 'left',
+          type: 'text',
+          placeholder: "",
+          required: true
+        },
+        validators: [
+          (value) => (value ? true : "Email is required"),
+        ],
+      },
+      {
+        name: 'phone',
+        code: 'phone',
+        label: computed(() => t('phone_number')),
+        type: 'Custom',
+        props: {
+          side: 'left',
+        },
+        validators: [
+          (value) => (value ? true : "Phone is required"),
+          (value) => (value?.toString().length <= 11 ? true : "Phone number must be no more than 11 digits")
+        ],
+        render: ({modelValue, 'onUpdate:modelValue': update}) =>
+            h(InputGroup, {}, {
+              default: () => [
+                h(InputGroupAddon, {
+                  pt: {
+                    root: {
+                      style: {
+                        backgroundColor: 'white',
+                        color: 'var(--color-primary-dark)',
+                      }
+                    }
+                  }
+                }, () => euPhoneCode.value),
+                h(InputNumber, {
+                  modelValue,
+                  'onUpdate:modelValue': update,
+                  useGrouping: false,
+                  placeholder: '',
+                  defaultValue: null
+                })
+              ]
+            })
+      },
+      {
+        name: 'telegramUsername',
+        code: 'telegramUsername',
+        label: computed(() => t('telegram_username')),
+        tooltipComponent: defineAsyncComponent(() => import('~/components/UI/TooltipIcon/TooltipIcon.vue')),
+        type: 'InputText',
+        tooltipProps: {
+          message: computed(() => t('telegram_tooltip'))
+        },
+        props: {
+          side: 'right',
+          type: 'text',
+          placeholder: "",
+          required: true,
+          class: 'w-full'
+        },
+      },
+    ]
+  }
+}
 
 const config = {
   fields: {
@@ -518,9 +789,11 @@ const config = {
   .checkout-info-wrapper {
     margin-right: 30px;
   }
+
   .checkout-fields {
     margin-bottom: 30px;
   }
+
   .checkout-products-list {
     padding-right: 23px;
     padding-left: 23px;
@@ -532,26 +805,32 @@ const config = {
   .checkout-content {
     flex-direction: column;
   }
+
   .checkout-info-wrapper {
     margin: 0 auto 20px auto;
   }
+
   .checkout-products-list {
     max-width: 1064px;
     margin: 0 auto;
   }
+
   .products-list__container {
     max-width: 100%;
   }
 }
+
 @media (max-width: 600px) {
   .checkout-fields {
     flex-direction: column;
     padding: 24px 12px 34px 12px;
   }
+
   .checkout-products-list,
   .checkout-payment-method {
     padding: 24px 12px 24px 12px;
   }
+
   .checkbox-content:last-child {
     margin-bottom: 0px;
   }

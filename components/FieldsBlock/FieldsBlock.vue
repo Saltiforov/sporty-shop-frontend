@@ -18,7 +18,7 @@
                     v-if="field.tooltipComponent"
                     :is="field.tooltipComponent"
                     v-bind="field.tooltipProps"
-                    class="self-start w-full"
+                    class="self-start"
                 />
               </p>
               <div>
@@ -57,7 +57,7 @@
                         v-if="field.tooltipComponent"
                         :is="field.tooltipComponent"
                         v-bind="field.tooltipProps"
-                        class="self-start w-full"
+                        class="self-start"
                     />
                   </p>
                   <div>
@@ -101,7 +101,7 @@
                         v-if="field.tooltipComponent"
                         :is="field.tooltipComponent"
                         v-bind="field.tooltipProps"
-                        class="self-start w-full"
+                        class="self-start"
                     />
                   </p>
                   <div>
@@ -140,7 +140,7 @@
                     v-if="field.tooltipComponent"
                     :is="field.tooltipComponent"
                     v-bind="field.tooltipProps"
-                    class="self-start w-full"
+                    class="self-start"
                 />
               </p>
               <div>

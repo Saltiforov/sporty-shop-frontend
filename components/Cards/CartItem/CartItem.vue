@@ -54,7 +54,7 @@
             <div
                 :class="[
                 isHistoryView ? 'discount-price__history-view' : 'fw-600 leading-[34px]',
-                cartProduct?.discount
+                hasDiscount
                   ? 'line-through text-[#8E8E93] text-[13px] mr-[14px]'
                   : 'text-[16px]'
               ]"
@@ -63,7 +63,7 @@
             </div>
 
             <div
-                v-if="cartProduct?.discount"
+                v-if="hasDiscount"
                 :class="[
                     isHistoryView ? 'text-medium-20' : 'fw-600 text-[16px] leading-[34px]',
                 ]"
@@ -153,6 +153,12 @@ const discountPriceByCurrency = computed(() => {
 const currentCurrency = computed(() => {
   return isHistoryView ? currency : currencyStore.label;
 });
+
+const hasDiscount = computed(() => {
+  const price = priceByCurrency.value
+  const discounted = discountPriceByCurrency.value
+  return discounted !== null && discounted !== undefined && discounted < price
+})
 
 const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] || cartProduct.image)
 

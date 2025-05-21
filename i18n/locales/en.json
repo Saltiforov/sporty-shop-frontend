@@ -1,15 +1,14 @@
 {
-  "header_catalog": "Catalog",
-  "header_promotions": "Promotions",
-  "header_new": "New Arrivals",
-  "header_shipping_and_payment": "Shipping & Payment",
-  "header_about_us": "About Us",
+  "catalog": "Catalog",
+  "promotions": "Promotions",
+  "new_arrivals": "New Arrivals",
+  "shipping_and_payment": "Shipping & Payment",
+  "about_us": "About Us",
   "search_placeholder": "Search...",
   "auth_login": "Log In",
   "auth_register": "Register",
   "my_cabinet": "My Account",
   "my_orders": "My Orders",
-  "logout": "Log out",
 
   "sort_title": "Sorting:",
   "sort_popular": "By Popularity",
@@ -69,10 +68,11 @@
   "tabs_reviews": "Reviews",
 
   "user_name": "First Name*",
+  "recipient_name": "Name of recipient*",
   "country": "Country*",
   "post_code": "Postal Code*",
   "street": "Street*",
-  "state": "State/Province/Region",
+  "state": "City / Region",
   "city": "City*",
   "delivery_info": "Delivery Service and Branch Number",
   "last_name": "Last Name*",
@@ -95,7 +95,7 @@
   "purchase_confirmed": "Purchase confirmed!",
   "purchase_not_confirmed": "Purchase not confirmed!",
 
-  "checkout_title": "Checkout",
+  "checkout": "Checkout",
   "account_text": "Already have an account? Log in",
   "sign_in": "Log in",
   "payment_method_title": "Payment Method",
@@ -116,13 +116,12 @@
   "discount_label": "Discount",
   "amount_to_pay_label": "Amount to Pay",
 
-  "menu_personal_information": "Personal Information",
-  "menu_order_history": "Order History",
-  "menu_favorite_products": "Favorite Products",
-  "menu_change_password": "Change Password",
-  "menu_logout": "Logout",
-
+  "personal_information": "Personal Information",
+  "orders_history": "Order History",
+  "favorites": "Favorite Products",
   "change_password": "Change Password",
+  "logout": "Logout",
+
   "change_password_button": "Change Password",
   "old_password": "Old Password*",
   "new_password": "New Password*",
@@ -146,6 +145,10 @@
   "contact_information": "Contact information",
 
   "order_number": "Order №{number}",
+  "checkout_region_label": "Order region",
+  "checkout_region_ua": "Ukraine",
+  "checkout_region_eu": "Europe",
+  "minimum_amount_order_eu" : "The minimum order amount for Europe region is 300 euros.",
 
   "user_info_first_name": "First Name",
   "user_info_last_name": "Last Name",

@@ -58,4 +58,18 @@ defineProps({
   font-weight: 200;
   font-size: 12px;
 }
+
+@media (max-width: 600px) {
+  .custom-tooltip {
+    white-space: wrap;
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 450px) {
+  .custom-tooltip {
+    max-width: 100px;
+  }
+}
+
 </style>

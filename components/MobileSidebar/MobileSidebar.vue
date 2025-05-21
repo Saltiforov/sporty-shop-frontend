@@ -72,27 +72,27 @@ const isLogin = computed(() => activeTab.value === 'login')
 
 const links = ref([
   {
-    label: computed(() => t('header_catalog')),
+    label: computed(() => t('catalog')),
     icon: "pi pi-filter",
     page: "/content/catalog",
   },
   {
-    label: computed(() => t('header_promotions')),
+    label: computed(() => t('promotions')),
     icon: "pi pi-shopping-cart",
     page: "/content/promotions",
   },
   {
-    label: computed(() => t('header_new')),
+    label: computed(() => t('new_arrivals')),
     icon: "pi pi-user",
     page: "/content/new-arrivals",
   },
   {
-    label: computed(() => t('header_shipping_and_payment')),
+    label: computed(() => t('shipping_and_payment')),
     icon: "pi pi-user",
     page: "/content/shipping-and-payment",
   },
   {
-    label: computed(() => t('header_about_us')),
+    label: computed(() => t('about_us')),
     icon: "pi pi-user",
     page: "/content/about-us",
   },

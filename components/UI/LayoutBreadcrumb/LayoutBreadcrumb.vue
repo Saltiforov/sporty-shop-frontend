@@ -1,30 +1,97 @@
 <template>
-  <Breadcrumb class="breadcrumb" :home="home" :model="items">
+  <Breadcrumb class="breadcrumb"  :model="breadcrumbItems">
     <template #item="{ item }">
-      <a class="cursor-pointer" :href="item.url">
-        <p>{{ item.label }}</p>
-      </a>
+      <NuxtLink v-if="item.to" :to="item.to" class="cursor-pointer breadcrumb-text">
+        {{ item.label }}
+      </NuxtLink>
+      <span class="breadcrumb-text" v-else>{{ item.label }}</span>
     </template>
-    <template #separator> / </template>
+    <template #separator> » </template>
   </Breadcrumb>
 </template>
 
 <script setup>
-const { t } = useI18n();
+import { useRoute } from 'vue-router'
 
-const home = ref({ icon: 'pi pi-home' });
-const items = [
-  { label: computed(() => t('navigation_home')), to: '/' },
-  { label: computed(() => t('navigation_catalog')), to: '/catalog' },
-  { label: computed(() => t('navigation_sport_nutrition')), to: '/catalog/sport-nutrition' },
-  { label: computed(() => t('navigation_boosters')), to: '/catalog/sport-nutrition/boosters' }
-]
+const props = defineProps({
+  product: {
+    type: Object,
+    default: () => ({ filters: [], productTitle: '' })
+  }
+})
+
+const { t, locale } = useI18n()
+const route = useRoute()
+
+const home = {
+  icon: 'pi pi-home',
+  to: '/'
+}
+
+const breadcrumbItems = computed(() => {
+  const mainPage = {
+    label: t('navigation_home'),
+    to: '/'
+  }
+
+  const hasProductData =
+      props.product.productTitle?.trim()
+
+  if (hasProductData) {
+    const hasFilters = props.product.filters?.length > 0
+
+    if (hasFilters) {
+      const localizedFilters = props.product.filters.map(filter => ({
+        label: filter.name?.[locale.value] || filter.name?.ru || '',
+        to: `/catalog/${filter.code}`
+      }))
+
+      return [
+        mainPage,
+        ...localizedFilters,
+        { label: props.product.productTitle, to: null }
+      ]
+    } else {
+      return [
+        mainPage,
+        { label: props.product.productTitle, to: null }
+      ]
+    }
+  }
+
+  const routeCrumbs = route.matched
+      .filter(r => r.meta?.breadcrumb !== false)
+      .map(r => {
+        let label = ''
+
+        if (r.meta?.breadcrumb) {
+          label = t(r.meta.breadcrumb)
+        } else {
+          const segments = r.path.split('/').filter(Boolean)
+          label = segments[segments.length - 1]?.replace(/-/g, '_')
+        }
+
+        return {
+          label: t(label),
+          to: null
+        }
+      })
+
+  return [mainPage, ...routeCrumbs]
+})
+
+
+
 </script>
-
-
 
 <style scoped>
 .breadcrumb {
   padding: 35px 10px;
+}
+.breadcrumb-text {
+  font-weight: 200;
+  font-size: 16px;
+  line-height: 22px;
+  color: var(--small-title-color);
 }
 </style>
