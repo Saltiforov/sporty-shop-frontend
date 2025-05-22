@@ -1,7 +1,6 @@
 <template>
   <header class="flex header flex-col items-end pt-[13px] pr-[24px] pb-[8px] pl-[71px]">
     <div class="header-content w-full items-end flex">
-
       <div class="logo mr-[67px]">
         <NuxtLink to="/"><img src="../../assets/images/header-logo.svg" alt="header-logo"></NuxtLink>
       </div>
@@ -107,19 +106,6 @@
 
   <AuthWrapper/>
 
-  <transition v-if="cartStore.isOpen">
-    <div class="overlay"/>
-  </transition>
-
-  <transition @click="handleOverlayClick" name="slide-right">
-    <ShoppingCart
-        :is-open="cartStore.isOpen"
-        :cart-items="cartStore.getCartProducts"
-        @close="cartStore.close"
-        @continue-shopping="handleContinueShopping"
-    />
-  </transition>
-
 </template>
 
 <script setup>
@@ -129,6 +115,7 @@ import {storeToRefs} from "pinia";
 import AuthWrapper from "~/wrappers/AuthWrapper.vue";
 import SearchDropdownMenu from "~/components/UI/SearchDropdownMenu/SearchDropdownMenu.vue";
 import CurrencySwitch from "~/components/UI/CurrencySwitch/CurrencySwitch.vue";
+import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
 
 defineProps({
   isOpen: {
@@ -171,13 +158,6 @@ const isUserLogin = computed(() => token.value ? 'var(--color-primary-green)' : 
 
 const canUseFavorite = computed(() => token.value ? 'var(--color-gray-pale-lavender)' : 'var(--color-muted-gray)')
 
-const handleOverlayClick = (event) => {
-  const clickedElement = event.target
-  if (clickedElement.classList.contains('overlay')) {
-    cartStore.close()
-  }
-}
-
 const handleBlur = () => {
   setTimeout(() => {
     searchIsFocused.value = false
@@ -196,11 +176,6 @@ const handleMobileMenu = () => {
 const showShoppingCart = () => {
   cartStore.open()
 };
-
-const handleContinueShopping = () => {
-  cartStore.close()
-  navigateTo('/')
-}
 
 const logout = () => {
   logUserOut()

@@ -6,6 +6,12 @@
       <NuxtPage />
     </NuxtLayout>
     <NuxtRouteAnnouncer />
+    <ShoppingCart
+        :is-open="cartStore.isOpen"
+        :cart-items="cartStore.getCartProducts"
+        @close="cartStore.close"
+        @continue-shopping="handleContinueShopping"
+    />
     <ResponsiveFooter @handle-mobile-sidebar="handleMobileMenu" :is-open="isOpenMenu"/>
     <Footer />
   </div>
@@ -18,9 +24,16 @@ import {getStaticPagesInfo} from "~/services/api/static-info.js";
 
 const staticPagesStore = useStaticPages()
 
+const cartStore = useCartStore();
+
 const { $eventBus } = useNuxtApp()
 
 const isOpenMenu = ref(false)
+
+const handleContinueShopping = () => {
+  cartStore.close()
+  navigateTo('/')
+}
 
 const fetchStaticPages = async () => {
   const response = await getStaticPagesInfo()

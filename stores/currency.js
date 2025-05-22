@@ -10,7 +10,7 @@ export const useCurrencyStore = defineStore('currency', () => {
     const isUAHSelected = computed(() => currency.value === 'uah')
 
     const label = computed(() => {
-        return isUAHSelected.value ? 'currency_uah' : 'currency_usd'
+        return isUAHSelected.value ? 'currency_uah' : 'currency_eur'
     })
 
     const setCurrency = (curr) => {

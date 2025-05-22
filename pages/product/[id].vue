@@ -257,11 +257,11 @@ const selectedImage = ref(null)
 const priceByCurrencyWithDiscount = computed(() => {
   return currencyStore.getCurrency === 'uah'
       ? product.value.price.uah - product.value.discount.uah
-      : product.value.price.usd - product.value.discount.usd
+      : product.value.price.eur - product.value.discount.eur
 })
 
 const priceByCurrency = computed(() => {
-  return currencyStore.getCurrency === 'uah' ? product.value.price?.uah : product.value.price?.usd
+  return currencyStore.getCurrency === 'uah' ? product.value.price?.uah : product.value.price?.eur
 })
 
 const hasDiscount = computed(() => {

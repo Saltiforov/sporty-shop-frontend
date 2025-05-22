@@ -1,7 +1,7 @@
 <template>
   <section>
     <h1 class="static-title">{{ data.title }}</h1>
-    <Accordion :multiple="true">
+    <Accordion :value="openedIndexes" :multiple="true"  @update:value="(val) => openedIndexes = val">
       <AccordionPanel
           class="mb-6"
           v-for="(block, index) in data.blocks"
@@ -10,28 +10,24 @@
           :pt="{
             root: {
               style: {
-                backgroundColor: 'white',
+                borderWidth: '0'
               }
             }
           }"
       >
         <AccordionHeader :pt="{
           root: {
-            style: {
-              padding: 0,
-              marginBottom: '12px',
-            }
+            style: getHeaderStyle(index)
           },
-          toggleicon: {
-            style: {
-              display: 'none',
-            }
-          }
         }">{{ block.title }}</AccordionHeader>
         <AccordionContent :pt="{
           content: {
             style: {
-              padding: 0,
+              backgroundColor: 'var(--color-gray-lavender)',
+              borderBottomRightRadius: '30px',
+              borderBottomLeftRadius: '30px',
+              borderTop: 'none',
+              padding: '12px 24px',
             }
           }
         }">
@@ -51,5 +47,25 @@ const props = defineProps({
     required: true
   }
 })
-</script>
 
+const openedIndexes = ref([])
+
+const getHeaderStyle = (index) => {
+  const isOpened = openedIndexes.value.includes(index)
+
+    return isOpened
+        ? {
+          padding: '12px 24px',
+          backgroundColor: 'var(--color-gray-lavender)',
+          borderTop: '1px solid var(--border-color)',
+          borderLeft: '1px solid var(--border-color)',
+          borderRight: '1px solid var(--border-color)',
+          borderRadius: '30px 30px 0 0'
+        }
+        : {
+          padding: '12px 24px',
+          backgroundColor: 'var(--color-gray-lavender)',
+          borderRadius: '30px'
+        }
+}
+</script>

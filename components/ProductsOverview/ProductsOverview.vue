@@ -87,7 +87,7 @@ const isScrollable = computed(() => {
   return productsOverview.length > scrollAfter;
 });
 
-const currency = computed(() => currencyStore.isUAHSelected ? 'uah' : 'usd')
+const currency = computed(() => currencyStore.isUAHSelected ? 'uah' : 'eur')
 
 const totalPriceBeforeDiscount = computed(() => calculateTotal(productsOverview, currency.value, false))
 

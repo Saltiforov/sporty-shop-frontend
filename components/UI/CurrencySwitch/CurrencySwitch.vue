@@ -22,17 +22,17 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, watch } from 'vue'
 import Select from 'primevue/select'
+import { useCurrencyStore } from '~/stores/currency.js'
 
-import { useCurrencyStore } from "~/stores/currency.js";
-
-const currencyStore = useCurrencyStore();
+const currencyStore = useCurrencyStore()
 
 const currencyOptions = [
-  { label: 'UAH (₴)', code: 'UAH' },
-  { label: 'USD ($)', code: 'USD' },
+  { label: 'Ukraine', code: 'UAH' },
+  { label: 'Europe', code: 'EUR' }
 ]
+
 const storedCurrencyCode = typeof window !== 'undefined'
     ? localStorage.getItem('currency')
     : null
@@ -46,7 +46,5 @@ const switchCurrency = () => {
   currencyStore.setCurrency(selectedCurrency.value.code)
 }
 
-watch(selectedCurrency, () => {
-  switchCurrency()
-})
+watch(selectedCurrency, switchCurrency)
 </script>

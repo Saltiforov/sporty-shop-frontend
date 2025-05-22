@@ -35,7 +35,7 @@
             <div class="history-view-price justify-end text-[var(--color-primary-red)] title-lg-20 flex">
               <p class="mr-5">{{ t('total') }}:</p>
               <p>{{ order.pricing?.totalOrderPrice }} {{
-                  t(order.currency === 'uah' ? 'currency_uah' : 'currency_usd')
+                  t(order.currency === 'uah' ? 'currency_uah' : 'currency_eur')
                 }}</p>
             </div>
           </div>

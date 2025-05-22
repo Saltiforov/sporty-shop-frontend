@@ -3,7 +3,7 @@
     <div class="flex flex-1">
       <div class="profile-container base-container  justify-between flex-1 ">
         <LayoutBreadcrumb v-if="!isLoading"/>
-        <BreadcrumbSkeleton/>
+        <BreadcrumbSkeleton v-else/>
         <div class="pb-[100px] profile-layout h-full flex ">
           <aside class="sidebar max-w-[277px] mr-[116px] w-full">
             <div class="sidebar-header flex pb-[24px] items-center border-b border-[var(--color-gray-light-lavender)]">
@@ -17,17 +17,17 @@
                 <NuxtLink
                     v-for="item in localizedList"
                     :key="item.title"
-                    @click="item.command()"
                     class="flex items-center gap-2 cursor-pointer"
                     :to="item.route"
+                    @click="item.command && item.command()"
                 >
-                  <img class="mr-3" :src="item.icon" alt=""/>
+                  <img class="mr-3" :src="item.icon" alt="" />
                   <span
                       class="py-[11px] max-w-[185.5px] w-full rounded-tr-[100px] rounded-br-[100px] pr-[18.5px]"
                       :class="{ 'active': item.page === currentTab }"
                   >
-                  {{ item.title }}
-                </span>
+    {{ item.title }}
+  </span>
                 </NuxtLink>
               </ul>
             </nav>
@@ -95,34 +95,31 @@ const localizedList = computed(() => [
     icon: PersonalInformationIcon,
     page: 'personal-information',
     route: '/profile/personal-information',
-    command: () => setActiveTab('personal-information')
   },
   {
     title: t('orders_history'),
     icon: OrderHistoryIcon,
-    component: 'OrderHistory',
-    page: 'orders',
+    page: 'orders-history',
     route: '/profile/orders-history',
-    command: () => setActiveTab('orders')
   },
   {
     title: t('favorites'),
     icon: FavoriteProductsIcon,
-    component: 'FavoriteProducts',
-    page: 'favorite',
+    page: 'favorites',
     route: '/profile/favorites',
-    command: () => setActiveTab('favorite')
   },
   {
     title: t('change_password'),
     icon: ChangePasswordIcon,
-    component: 'ChangePassword',
     page: 'change-password',
     route: '/profile/change-password',
-    command: () => setActiveTab('change-password')
   },
-  {title: t('logout'), icon: LogoutIcon, component: 'Logout', command: () => logout()},
-]);
+  {
+    title: t('logout'),
+    icon: LogoutIcon,
+    command: () => logout(),
+  }
+])
 
 const setActiveTab = (component) => {
   currentTab.value = component;
@@ -164,6 +161,10 @@ onMounted(async () => {
   text-align: center;
   font-size: 1.5rem;
   margin-bottom: 20px;
+}
+
+.profile-container {
+  padding-bottom: 100px;
 }
 
 .sidebar-nav ul {

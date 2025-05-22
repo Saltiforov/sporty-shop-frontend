@@ -22,7 +22,8 @@
             </div>
           </div>
           <div class="fields-content">
-            <FieldsBlock v-if="userData && userData._id" :config="currentRegionConfig.fields" ref="fieldsBlock" :data="userData"/>
+            <FieldsBlock v-if="userData && userData._id" :config="currentRegionConfig.fields" ref="fieldsBlock"
+                         :data="userData"/>
             <FieldsBlock v-else :config="currentRegionConfig.fields" ref="fieldsBlock"/>
           </div>
         </div>
@@ -187,6 +188,8 @@ const selectedRegion = ref({label: t('checkout_region_ua'), value: 'ua'})
 
 const isRegionUA = computed(() => selectedRegion.value.value === 'ua')
 
+const currentRegion = computed(() => selectedRegion.value.value || 'ua')
+
 const isPaymentOnDelivery = ref(false)
 
 const isSendSmsWithFormData = ref(false)
@@ -220,7 +223,7 @@ const mappedProductsForOrder = arr => arr.map(({quantity, ...withoutQuantity}) =
   quantity
 }));
 
-const currency = computed(() => currencyStore.isUAHSelected ? 'uah' : 'usd')
+const currency = computed(() => currencyStore.isUAHSelected ? 'uah' : 'eur')
 
 const mappedUserDataForOrder = (data) => {
   const {street, city, postalCode, country, firstName, lastName, phone, email, telegramUsername} = data
@@ -232,17 +235,16 @@ const mappedUserDataForOrder = (data) => {
       country,
     },
     paymentMethod: isSendSmsWithFormData.value || isPaymentOnDelivery.value,
-    ...(!token.value && {
-      guest: {
-        firstName,
-        lastName,
-        phone,
-        email,
-        telegramUsername
-      }
-    }),
+    customerInfo: {
+      firstName,
+      lastName,
+      phone,
+      email,
+      telegramUsername
+    },
     description: commentForOrder.value,
-    currency: currency.value
+    currency: currency.value,
+    region: currentRegion.value
   }
 }
 
@@ -268,8 +270,7 @@ const handleCreateOrder = async () => {
           showError()
         })
         .finally(() => isLoading.value = false)
-  }
-  else {
+  } else {
     isLoading.value = false
   }
 }
@@ -319,39 +320,13 @@ const configUkraine = {
           (value) => (value ? true : "First Name is required"),
         ],
       },
-
-      {
-        name: 'city',
-        code: 'city',
-        label: computed(() => t('city')),
-        type: 'InputText',
-        props: {
-          side: 'right',
-          placeholder: ''
-        },
-        validators: [
-          (value) => (value ? true : "City is required"),
-        ],
-      },
-
-      {
-        name: 'deliveryInfo',
-        code: 'deliveryInfo',
-        label: computed(() => t('delivery_info')),
-        type: 'InputText',
-        props: {
-          side: 'right',
-          placeholder: ''
-        }
-      },
-
       {
         name: 'lastName',
         code: 'lastName',
         label: computed(() => t('last_name')),
         type: 'InputText',
         props: {
-          side: 'left',
+          side: 'right',
           type: 'text',
           placeholder: "",
           required: true
@@ -360,6 +335,25 @@ const configUkraine = {
           (value) => (value ? true : "Last Name is required"),
         ],
       },
+
+      {
+        name: 'telegramUsername',
+        code: 'telegramUsername',
+        label: computed(() => t('telegram_username')),
+        tooltipComponent: defineAsyncComponent(() => import('~/components/UI/TooltipIcon/TooltipIcon.vue')),
+        type: 'InputText',
+        tooltipProps: {
+          message: computed(() => t('telegram_tooltip'))
+        },
+        props: {
+          side: 'right',
+          type: 'text',
+          placeholder: "",
+          required: true,
+          class: 'w-full'
+        },
+      },
+
       {
         name: 'phone',
         code: 'phone',
@@ -395,6 +389,72 @@ const configUkraine = {
               ]
             })
       },
+
+      {
+        name: 'deliveryInfo',
+        code: 'deliveryInfo',
+        label: computed(() => t('delivery_info')),
+        type: 'InputText',
+        props: {
+          side: 'left',
+          placeholder: ''
+        }
+      },
+
+
+      {
+        name: 'city',
+        code: 'city',
+        label: computed(() => t('city')),
+        type: 'InputText',
+        props: {
+          side: 'right',
+          placeholder: ''
+        },
+        validators: [
+          (value) => (value ? true : "City is required"),
+        ],
+      },
+
+    ]
+  }
+}
+
+const configEurope = {
+  fields: {
+    items: [
+      {
+        name: 'firstName',
+        code: 'firstName',
+        label: computed(() => t('user_name')),
+        type: 'InputText',
+        props: {
+          side: 'left',
+          type: 'text',
+          placeholder: "",
+          required: true
+        },
+        validators: [
+          (value) => (value ? true : "First Name is required"),
+        ],
+      },
+
+      {
+        name: 'lastName',
+        code: 'lastName',
+        label: computed(() => t('last_name')),
+        type: 'InputText',
+        props: {
+          side: 'right',
+          type: 'text',
+          placeholder: "",
+          required: true
+        },
+        validators: [
+          (value) => (value ? true : "Last Name is required"),
+        ],
+      },
+
       {
         name: 'telegramUsername',
         code: 'telegramUsername',
@@ -412,28 +472,6 @@ const configUkraine = {
           class: 'w-full'
         },
       },
-    ]
-  }
-}
-
-const configEurope = {
-  fields: {
-    items: [
-      {
-        name: 'recipientName',
-        code: 'recipientName',
-        label: computed(() => t('recipient_name')),
-        type: 'InputText',
-        props: {
-          side: 'left',
-          type: 'text',
-          placeholder: "",
-          required: true
-        },
-        validators: [
-          (value) => (value ? true : "First Name is required"),
-        ],
-      },
 
       {
         name: 'country',
@@ -442,7 +480,6 @@ const configEurope = {
         type: 'InputText',
         props: {
           side: 'right',
-          half: true,
           placeholder: ''
         },
         validators: [
@@ -457,24 +494,29 @@ const configEurope = {
         type: 'InputText',
         props: {
           side: 'right',
-          half: true,
           placeholder: ''
         },
-      },
-      {
-        name: 'state',
-        code: 'state',
-        label: computed(() => t('state')),
-        type: 'InputText',
-        props: {
-          side: 'right',
-          placeholder: ''
-        },
-        validators: [
-          (value) => (value ? true : "State is required"),
-        ],
       },
 
+
+      {
+        name: 'phone',
+        code: 'phone',
+        label: computed(() => t('phone_number')),
+        type: 'InputMask',
+        props: {
+          id: 'phone',
+          side: 'left',
+          placeholder: '(999) 999-9999',
+          mask: '(999) 999-9999',
+          unmask: true,
+          class: 'w-full'
+        },
+        validators: [
+          (value) => (value ? true : t('validation_required')),
+          (value) => (value?.length === 10 ? true : t('validation_phone_format'))
+        ]
+      },
 
       {
         name: 'email',
@@ -491,58 +533,22 @@ const configEurope = {
           (value) => (value ? true : "Email is required"),
         ],
       },
+
       {
-        name: 'phone',
-        code: 'phone',
-        label: computed(() => t('phone_number')),
-        type: 'Custom',
+        name: 'state',
+        code: 'state',
+        label: computed(() => t('state')),
+        type: 'InputText',
         props: {
           side: 'left',
+          placeholder: ''
         },
         validators: [
-          (value) => (value ? true : "Phone is required"),
-          (value) => (value?.toString().length <= 11 ? true : "Phone number must be no more than 11 digits")
+          (value) => (value ? true : "State is required"),
         ],
-        render: ({modelValue, 'onUpdate:modelValue': update}) =>
-            h(InputGroup, {}, {
-              default: () => [
-                h(InputGroupAddon, {
-                  pt: {
-                    root: {
-                      style: {
-                        backgroundColor: 'white',
-                        color: 'var(--color-primary-dark)',
-                      }
-                    }
-                  }
-                }, () => euPhoneCode.value),
-                h(InputNumber, {
-                  modelValue,
-                  'onUpdate:modelValue': update,
-                  useGrouping: false,
-                  placeholder: '',
-                  defaultValue: null
-                })
-              ]
-            })
       },
-      {
-        name: 'telegramUsername',
-        code: 'telegramUsername',
-        label: computed(() => t('telegram_username')),
-        tooltipComponent: defineAsyncComponent(() => import('~/components/UI/TooltipIcon/TooltipIcon.vue')),
-        type: 'InputText',
-        tooltipProps: {
-          message: computed(() => t('telegram_tooltip'))
-        },
-        props: {
-          side: 'right',
-          type: 'text',
-          placeholder: "",
-          required: true,
-          class: 'w-full'
-        },
-      },
+
+
     ]
   }
 }

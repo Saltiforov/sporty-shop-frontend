@@ -119,11 +119,11 @@ const addToCart = (product) => {
 }
 
 const priceByCurrency = computed(() => {
-  return currencyStore.isUAHSelected ? props.product?.price?.uah : props.product?.price?.usd
+  return currencyStore.isUAHSelected ? props.product?.price?.uah : props.product?.price?.eur
 })
 
 const discountPriceByCurrency = computed(() => {
-  return currencyStore.isUAHSelected ? props.product?.priceAfterDiscount?.uah : props.product?.priceAfterDiscount?.usd
+  return currencyStore.isUAHSelected ? props.product?.priceAfterDiscount?.uah : props.product?.priceAfterDiscount?.eur
 })
 
 const productImage = computed(() => {

@@ -101,6 +101,7 @@
 
 
 <script setup>
+import DefaultProductImage from "~/assets/images/product-image.png"
 import AmountSelector from "~/components/UI/AmountSelector/AmountSelector.vue";
 
 const {t} = useI18n();
@@ -141,13 +142,13 @@ const redirectToProduct = (cartProduct) => {
 const priceByCurrency = computed(() => {
   return currency
       ? cartProduct?.price[currency]
-      : currencyStore.isUAHSelected ? cartProduct?.price?.uah : cartProduct?.price?.usd
+      : currencyStore.isUAHSelected ? cartProduct?.price?.uah : cartProduct?.price?.eur
 })
 
 const discountPriceByCurrency = computed(() => {
   return currency
       ? cartProduct?.priceAfterDiscount[currency]
-      : currencyStore.isUAHSelected ? cartProduct?.priceAfterDiscount?.uah : cartProduct?.priceAfterDiscount?.usd
+      : currencyStore.isUAHSelected ? cartProduct?.priceAfterDiscount?.uah : cartProduct?.priceAfterDiscount?.eur
 })
 
 const currentCurrency = computed(() => {
@@ -160,7 +161,7 @@ const hasDiscount = computed(() => {
   return discounted !== null && discounted !== undefined && discounted < price
 })
 
-const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] || cartProduct.image)
+const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] || DefaultProductImage)
 
 </script>
 
