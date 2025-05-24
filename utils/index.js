@@ -2,15 +2,12 @@ export const calculateTotal = (items, currency = 'uah', useDiscount = true) => {
     if (!Array.isArray(items)) return 0;
 
     return items.reduce((total, item) => {
-        // Цена со скидкой, если нужно и если есть
         const discountPrice = useDiscount && item.priceAfterDiscount && typeof item.priceAfterDiscount[currency] === 'number'
             ? item.priceAfterDiscount[currency]
             : null;
 
-        // Обычная цена по валюте
         const regularPrice = item.price && typeof item.price[currency] === 'number' ? item.price[currency] : 0;
 
-        // Итоговая цена для данного товара
         const priceToUse = discountPrice !== null ? discountPrice : regularPrice;
 
         return total + priceToUse * (item.quantity || 1);
@@ -18,10 +15,14 @@ export const calculateTotal = (items, currency = 'uah', useDiscount = true) => {
 };
 
 
-export function fullImageUrls(imagesRef) {
-    return imagesRef.map((url) =>
-        /^https?:\/\//.test(url) ? url : "http://localhost:3000" + url
-    )
+export function fullImageUrls(imagesRef, size = 'thumb') {
+    return imagesRef.map(image => {
+        const url = image.variants?.[size];
+
+        if (!url) return null
+
+        return /^https?:\/\//.test(url) ? url : "http://localhost:3000" + url;
+    }).filter(Boolean);
 }
 
 export function formatDateToDMY(isoDate) {
@@ -40,6 +41,8 @@ export function mapOrdersToSummaries(orders) {
 
         const products = (order.products || []).map(item => {
             const product = item.product || {}
+
+            console.log("mapOrdersToSummaries", product.images)
 
             return {
                 image: fullImageUrls(product.images || [])[0] || '',

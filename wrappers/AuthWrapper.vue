@@ -6,32 +6,23 @@
           <TabList
               :pt="{
               tabList: {
-                style: 'background-color: transparent;'
+                style: 'background-color: var(--color-primary-lavender); border-top: none; border-bottom: 2px solid var(--link-color);'
               },
-              activeBar: {
-                root: {
-                  style: 'background-color: transparent;'
+            activeBar: {
+                style: {
+                  height: '2px',
+                  backgroundColor: 'var(--color-primary-purple)',
                 }
-              }
+          }
             }"
           >
             <Tab
-                :pt="{
-                root: {
-                  style: 'border-bottom: 1px solid var(--color-gray-lavender);'
-                }
-              }"
                 value="login"
                 @click="setActiveTab('login')"
             >
               {{ t('login') }}
             </Tab>
             <Tab
-                :pt="{
-                root: {
-                  style: 'border-bottom: 1px solid var(--color-gray-lavender);'
-                }
-              }"
                 value="register"
                 @click="setActiveTab('register')"
             >
@@ -50,7 +41,7 @@
           }"
         >
           <TabPanel>
-            <AuthComponent :is-login="isLogin" />
+            <AuthComponent :is-login="isLogin"/>
           </TabPanel>
         </TabPanels>
       </div>
@@ -69,7 +60,6 @@
     </div>
   </div>
 </template>
-
 
 
 <script setup>

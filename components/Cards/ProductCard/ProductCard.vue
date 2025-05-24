@@ -23,8 +23,8 @@
               :class="[
               'rounded-lg w-full h-auto object-contain',
                 variant === 'small'
-      ? 'max-w-[100px] md:max-w-[120px] lg:max-w-[137px]'
-  : 'max-w-[120px] md:max-w-[135px] lg:max-w-[180px]'
+                  ? 'max-w-[100px] max-h-[100px] md:max-w-[120px] md:h-[120px] lg:max-w-[137px] lg:h-[137px]'
+                  : 'max-w-[120px] min-h-[120px] md:max-w-[135px] md:h-[135px] lg:max-w-[180px] lg:h-[180px]'
               ]"
               :src="productImage"
               alt="Product image"
@@ -127,7 +127,7 @@ const discountPriceByCurrency = computed(() => {
 })
 
 const productImage = computed(() => {
-  return props.product?.images?.length ? fullImageUrls(props.product.images)[0] : DefaultProductImage
+  return props.product?.images?.length ? fullImageUrls(props.product.images, "thumb")[0] : DefaultProductImage
 })
 
 const hasDiscount = computed(() => {

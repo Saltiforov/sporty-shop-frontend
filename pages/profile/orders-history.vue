@@ -31,7 +31,7 @@ const orderList = ref([])
 
 const fetchOrders = async () => {
   isLoading.value = true;
-  const response = await getOrdersByUserId(userId.value, {limit: 8, skip: 0})
+  const response = await getOrdersByUserId(userId.value, {limit: 1, skip: 0})
   orderList.value = mapOrdersToSummaries(response)
   isLoading.value = false;
 }

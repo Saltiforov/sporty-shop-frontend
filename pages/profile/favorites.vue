@@ -4,6 +4,8 @@
     <h1 class="profile-page-title title-lg-20 mb-8">{{ t('favorites') }}</h1>
     <div class="favorite-products-content grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
 
+
+
       <template v-if="!hydrated">
         <ProductSkeleton v-for="i in 5" :key="'loading-skeleton-' + i"/>
       </template>

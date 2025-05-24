@@ -22,8 +22,12 @@
             </div>
           </div>
           <div class="fields-content">
-            <FieldsBlock v-if="userData && userData._id" :config="currentRegionConfig.fields" ref="fieldsBlock"
-                         :data="userData"/>
+            <FieldsBlock v-if="userData && userData._id"
+                         ref="fieldsBlock"
+                         :config="currentRegionConfig.fields"
+                         :data="userData"
+                         :shouldResetOnConfigChange="false"
+            />
             <FieldsBlock v-else :config="currentRegionConfig.fields" ref="fieldsBlock"/>
           </div>
         </div>
@@ -255,6 +259,8 @@ const handleCreateOrder = async () => {
     ...mappedUserDataForOrder(fieldsBlock.value.getData()),
   }
 
+  console.log("handleCreateOrder", data)
+
   const isValid = fieldsBlock.value?.validateFields()
 
   if (isValid && data.products) {
@@ -298,11 +304,11 @@ onMounted(async () => {
 
 const currentRegionConfig = computed(() => {
   return isRegionUA.value
-      ? configUkraine
-      : configEurope
+      ? configUkraine.value
+      : configEurope.value
 })
 
-const configUkraine = {
+const configUkraine = ref({
   fields: {
     items: [
       {
@@ -418,9 +424,9 @@ const configUkraine = {
 
     ]
   }
-}
+})
 
-const configEurope = {
+const configEurope = ref({
   fields: {
     items: [
       {
@@ -474,6 +480,20 @@ const configEurope = {
       },
 
       {
+        name: 'street',
+        code: 'street',
+        label: computed(() => t('street')),
+        type: 'InputText',
+        props: {
+          side: 'right',
+          placeholder: ''
+        },
+        validators: [
+          (value) => (value ? true : "Street is required"),
+        ],
+      },
+
+      {
         name: 'country',
         code: 'country',
         label: computed(() => t('country')),
@@ -485,17 +505,6 @@ const configEurope = {
         validators: [
           (value) => (value ? true : "Country is required"),
         ],
-      },
-
-      {
-        name: 'postalCode',
-        code: 'postalCode',
-        label: computed(() => t('post_code')),
-        type: 'InputText',
-        props: {
-          side: 'right',
-          placeholder: ''
-        },
       },
 
 
@@ -535,8 +544,8 @@ const configEurope = {
       },
 
       {
-        name: 'state',
-        code: 'state',
+        name: 'city',
+        code: 'city',
         label: computed(() => t('state')),
         type: 'InputText',
         props: {
@@ -548,10 +557,23 @@ const configEurope = {
         ],
       },
 
+      {
+        name: 'postalCode',
+        code: 'postalCode',
+        label: computed(() => t('post_code')),
+        type: 'InputText',
+        props: {
+          side: 'left',
+          placeholder: ''
+        },
+      },
+
+
+
 
     ]
   }
-}
+})
 
 const config = {
   fields: {

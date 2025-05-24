@@ -7,13 +7,13 @@
     ></div>
 
     <aside
-        class="fixed z-[500] border-top-radius top-0 left-0 w-[80%] h-full bg-[var(--color-gray-light-lavender)] shadow-lg transform transition-transform duration-300 z-50"
+        class="fixed z-[500] border-top-radius top-0 left-0 w-[80%] h-full bg-[var(--color-primary-lavender)] shadow-lg transform transition-transform duration-300 z-50"
         :class="isOpen ? 'translate-x-0' : '-translate-x-full'"
     >
       <Tabs v-model:value="currentTab">
         <TabList :pt="{
           tabList: {
-            style: 'background-color: var(--color-gray-light-lavender) border-top: none'
+            style: 'background-color: var(--color-primary-lavender) border-top: none'
           },
           activeBar: {
             style: {
@@ -32,7 +32,7 @@
           }">
           <TabPanel value="0">
             <div class="m-0">
-              <nav class="p-4 bg-[var(--color-gray-light-lavender)]">
+              <nav class="p-4 bg-[var(--color-primary-lavender)]">
                 <LinksList
                     :links="links"
                     parent-classes="links-container"
@@ -44,7 +44,7 @@
             </div>
           </TabPanel>
           <TabPanel value="1">
-            <div class="p-[26px] bg-[var(--color-gray-light-lavender)]">
+            <div class="p-[26px] bg-[var(--color-primary-lavender)]">
               <AuthComponent :is-login="isLogin" :responsive="true"/>
             </div>
           </TabPanel>

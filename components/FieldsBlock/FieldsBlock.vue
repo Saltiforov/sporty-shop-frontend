@@ -194,6 +194,11 @@ const props = defineProps({
   errors: {
     type: Object,
     required: true,
+  },
+  shouldResetOnConfigChange: {
+    type: Boolean,
+    required: true,
+    default: true,
   }
 });
 
@@ -202,16 +207,7 @@ const formData = ref({});
 
 const configRef = toRef(props, 'config')
 
-watch(
-    () => props.config.items,
-    (val) => {
-        formData.value = {}
-        val.forEach(field => {
-          formData.value[field.code] = null
-        })
-    },
-    {deep: true}
-)
+const shouldReset = toRef(props, 'shouldResetOnConfigChange')
 
 const {errors, validateFields, resetErrors,} = useFieldValidation(formData, configRef)
 
@@ -248,8 +244,19 @@ onMounted(() => {
 
     formData.value[code] = props.data?.[code] ?? null
   })
-
 });
+
+watch(
+    () => props.config.items,
+    (val) => {
+      if (!shouldReset.value) return
+      formData.value = {}
+      val.forEach(field => {
+        formData.value[field.code] = null
+      })
+    },
+    {deep: true}
+)
 
 defineExpose({
   getData: () => formData.value,

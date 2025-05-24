@@ -43,7 +43,7 @@
           <div class="flex gallery-container gap-[40px] justify-center">
             <img
                 class="max-w-[100px] gallery-image border cursor-pointer rounded-[4px] shadow-md object-cover h-[100px]"
-                v-for="(img, idx) in images"
+                v-for="(img, idx) in galleryImages"
                 @click="handleGalleryClick(idx)" :src="img" :key="idx" alt="image.png">
           </div>
         </div>
@@ -251,6 +251,8 @@ const product = ref({})
 
 const images = ref([])
 
+const galleryImages = ref([])
+
 const isLoading = ref(true)
 
 const selectedImage = ref(null)
@@ -324,7 +326,8 @@ onMounted(async () => {
   try {
     isLoading.value = true
     product.value = await getProduct(id)
-    images.value = product.value.images.length ? fullImageUrls(product.value.images) : [DefaultProductImage]
+    images.value = product.value.images.length ? fullImageUrls(product.value.images, 'small') : [DefaultProductImage]
+    galleryImages.value = product.value.images.length ? fullImageUrls(product.value.images, 'thumb') : [DefaultProductImage]
   } finally {
     isLoading.value = false
   }
