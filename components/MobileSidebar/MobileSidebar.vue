@@ -38,6 +38,7 @@
                     parent-classes="links-container"
                     link-class="link-item text-[var(--color-gray-pale-lavender)]  mb-6 mr-[32px] text-[var(--color-primary-black)] sm:mr-[32px] md:mr-[53px] last:mr-0"
                     :label-style="['font-weight: 700']"
+                    @handle-navigation="$emit('close')"
                 />
               </nav>
             </div>

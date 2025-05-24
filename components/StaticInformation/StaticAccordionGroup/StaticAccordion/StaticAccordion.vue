@@ -23,7 +23,7 @@
         <AccordionContent :pt="{
           content: {
             style: {
-              backgroundColor: 'var(--color-gray-lavender)',
+              backgroundColor: openedIndexes.includes(index) ?  'var(--color-gray-lavender)' : 'white',
               borderBottomRightRadius: '30px',
               borderBottomLeftRadius: '30px',
               borderTop: 'none',

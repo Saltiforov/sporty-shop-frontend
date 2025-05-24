@@ -4,8 +4,8 @@
     <BreadcrumbSkeleton v-else/>
     <LoadingOverlay :visible="isLoading"/>
 
-    <div class="header flex flex-col">
-      <div class="article text-[var(--color-muted-light-gray)] self-end mb-2">
+    <div class="header flex flex-col items-center mb-2 px-5">
+      <div class="article text-[var(--color-muted-light-gray)] self-end ">
         <p>{{ `${t('product_sku')}: 9876678` }}</p>
       </div>
     </div>
@@ -23,8 +23,8 @@
           />
         </div>
 
-        <div v-if="images.length">
-          <div class="about-product__image-wrapper max-w-[678px] mx-auto h-[678px] w-full">
+        <div  v-if="images.length">
+          <div  class="about-product__image-wrapper max-w-[678px] mx-auto h-[678px] w-full">
             <SwiperWrapper
                 :items="images"
                 :options="swiperOptions"
@@ -47,9 +47,10 @@
                 @click="handleGalleryClick(idx)" :src="img" :key="idx" alt="image.png">
           </div>
         </div>
-        <AboutProductImageSkeleton v-else/>
+        <AboutProductImageSkeleton class="max-w-[678px] mx-auto" v-else/>
 
       </div>
+
 
       <div
           v-if="!isLoading"

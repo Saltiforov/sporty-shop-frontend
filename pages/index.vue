@@ -162,8 +162,6 @@ const {addProductToViewed} = useViewedProducts()
 
 const {$eventBus} = useNuxtApp()
 
-const currencyStore = useCurrencyStore()
-
 const hydrated = ref(false)
 
 const {t} = useI18n();
@@ -197,12 +195,12 @@ const loadMoreLabel = computed(() => {
 });
 
 const productsQueryParams = computed(() => {
-  const query = {
+  return {
     page: page.value,
     limit: limit.value,
     skip: skip.value,
+    filters: route.query.filters,
   }
-  return query
 })
 
 const getPromotionalProducts = async () => {
@@ -303,6 +301,10 @@ onMounted(async () => {
     console.log('🔍 Поиск снаружи:', query)
   })
 
+  $eventBus.on('filters-updated', (filters) => {
+    fetchProducts(true, {filters})
+  })
+
   await getPromotionalProducts()
 
   await fetchProducts(true)
@@ -311,6 +313,7 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
+  $eventBus.off('filters-updated')
 })
 </script>
 

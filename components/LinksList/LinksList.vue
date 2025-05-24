@@ -6,7 +6,7 @@
         :class="linkClass"
         class="link"
     >
-      <NuxtLink :to="item.page">
+      <NuxtLink :to="item.page" @click="handleNavigation(item.page)" >
         <p :style="labelStyle" :class="labelClass">
           {{ item.label }}
         </p>
@@ -39,8 +39,20 @@ const props = defineProps({
     type: [Array, String],
     required: false
   },
-
 })
+
+const emit = defineEmits(['handle-navigation'])
+
+const router = useRouter()
+
+const handleNavigation = async (page) => {
+  try {
+    await router.push(page)
+    emit("handle-navigation")
+  } catch (error) {
+    console.error('Ошибка перехода:', error)
+  }
+}
 
 const parentClasses = computed(() => {
   return Array.isArray(props.parentClasses) ? props.parentClasses.join(' ') : props.parentClasses

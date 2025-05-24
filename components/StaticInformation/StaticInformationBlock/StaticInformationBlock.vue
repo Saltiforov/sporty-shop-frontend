@@ -22,4 +22,6 @@ const config = computed(() => {
     data: staticInformation.value?.content || []
   };
 });
+
+
 </script>

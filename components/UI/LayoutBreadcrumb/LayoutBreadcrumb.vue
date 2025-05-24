@@ -1,32 +1,33 @@
 <template>
-  <Breadcrumb class="breadcrumb"  :model="breadcrumbItems">
+  <Breadcrumb :pt="{
+    list: {
+      style: {
+        flexWrap: 'wrap'
+      }
+    }
+  }" class="breadcrumb" :model="breadcrumbItems">
     <template #item="{ item }">
       <NuxtLink v-if="item.to" :to="item.to" class="cursor-pointer breadcrumb-text">
         {{ item.label }}
       </NuxtLink>
       <span class="breadcrumb-text" v-else>{{ item.label }}</span>
     </template>
-    <template #separator> » </template>
+    <template #separator> »</template>
   </Breadcrumb>
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router'
+import {useRoute} from 'vue-router'
 
 const props = defineProps({
   product: {
     type: Object,
-    default: () => ({ filters: [], productTitle: '' })
+    default: () => ({filters: [], productTitle: ''})
   }
 })
 
-const { t, locale } = useI18n()
+const {t, locale} = useI18n()
 const route = useRoute()
-
-const home = {
-  icon: 'pi pi-home',
-  to: '/'
-}
 
 const breadcrumbItems = computed(() => {
   const mainPage = {
@@ -49,12 +50,12 @@ const breadcrumbItems = computed(() => {
       return [
         mainPage,
         ...localizedFilters,
-        { label: props.product.productTitle, to: null }
+        {label: props.product.productTitle, to: null}
       ]
     } else {
       return [
         mainPage,
-        { label: props.product.productTitle, to: null }
+        {label: props.product.productTitle, to: null}
       ]
     }
   }
@@ -79,15 +80,13 @@ const breadcrumbItems = computed(() => {
 
   return [mainPage, ...routeCrumbs]
 })
-
-
-
 </script>
 
 <style scoped>
 .breadcrumb {
   padding: 35px 10px;
 }
+
 .breadcrumb-text {
   font-weight: 200;
   font-size: 16px;

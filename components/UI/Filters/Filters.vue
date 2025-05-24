@@ -75,6 +75,8 @@ const {t} = useI18n()
 const route = useRoute()
 const router = useRouter()
 
+const { $eventBus } = useNuxtApp()
+
 const expandedKeys = ref({"0": true})
 
 const toggle = (node) => {
@@ -134,10 +136,20 @@ const onNodeCheckboxChange = (node, isChecked) => {
     updateChildrenSelection(node.children, isChecked)
   }
 
-  const filtersQuery = collectCheckedFilters(nodes.value).join(',')
-  router.replace({query: {...route.query, filters: filtersQuery}})
-  // fetchDataByFilters(filtersQuery)
+  const filters = collectCheckedFilters(nodes.value)
+  const query = { ...route.query }
+
+  if (filters.length > 0) {
+    query.filters = filters.join(',')
+  } else {
+    delete query.filters
+  }
+
+  router.replace({ query })
+
+  $eventBus.emit('filters-updated', filters.join(','))
 }
+
 
 
 const updateChildrenSelection = (children, isChecked) => {
