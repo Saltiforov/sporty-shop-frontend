@@ -12,7 +12,7 @@
 
     <div
         class="about-product-content mb-[46px] text-[var(--color-muted-light-gray)] flex flex-col lg:flex-row justify-between items-center gap-8">
-      <div class="image relative w-full lg:max-w-[678px]">
+      <div class="image relative w-full max-w-[678px]">
         <div class="absolute z-[100] top-2 -right-4">
           <FavoriteButton
               v-if="token"
@@ -35,6 +35,7 @@
                 <img
                     :src="getSelectedImage || item"
                     class="w-full about-product__image h-[660px] object-cover"
+                    alt="product-image"
                 />
               </template>
             </SwiperWrapper>
@@ -299,6 +300,9 @@ const recommendedProductsSwiperOptions = {
     756: {
       slidesPerView: 2,
     },
+     910: {
+      slidesPerView: 3,
+    },
     1024: {
       slidesPerView: 3,
     },
@@ -445,6 +449,7 @@ onMounted(async () => {
 @media (max-width: 774px) {
   .about-product__image-wrapper {
     height: 390px;
+    margin-bottom: 8px;
   }
 
   .image {

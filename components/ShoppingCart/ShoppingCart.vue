@@ -218,7 +218,8 @@ const products = ref([
   top: 0;
   right: 0;
   height: 100vh;
-  width: 30%;
+  max-width: 619px;
+  width: 100%;
   background-color: #E6E7F8;
   z-index: 1000;
   box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.2);
@@ -259,7 +260,6 @@ const products = ref([
 
 @media (max-width: 700px) {
   .recommended-products {
-    padding-bottom: 60px;
   }
   .shopping-cart {
     width: 80%;

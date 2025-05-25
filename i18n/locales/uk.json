@@ -23,6 +23,28 @@
   "filters_collagen": "Колаген",
   "filters_injections": "Інʼєкції",
 
+  "confirm_delete_message": "Ви впевнені, що хочете видалити {product}?",
+  "confirm_delete_header": "Підтвердження видалення",
+  "confirm_delete_accept_label": "Видалити",
+  "confirm_delete_reject_label": "Скасувати",
+  "confirm_delete_toast_accept_summary": "Видалено",
+  "confirm_delete_toast_accept_detail": "Товар {product} було видалено",
+  "confirm_delete_toast_reject_summary": "Скасовано",
+  "confirm_delete_toast_reject_detail": "Видалення скасовано",
+
+  "confirmation_order_accepted": "Ваше замовлення прийнято!",
+  "confirmation_time_expired": "⏰ Ваш час вичерпано! Замовлення буде анульовано.",
+  "confirmation_order_number": "Order #{orderNumber}",
+  "confirmation_instruction_title": "Інструкція",
+  "confirmation_instruction_step_1": "Натисніть кнопку, щоб перейти в Telegram",
+  "confirmation_instruction_step_2": "Оплатіть протягом 12 годин",
+  "confirmation_pay_button": "Оплатити через Telegram",
+  "confirmation_hint": "Підказка: якщо щось не вийшло — напишіть менеджеру в",
+
+  "payment_timer_warning": "⚠️ Завершіть оплату до закінчення часу, інакше замовлення буде скасовано.",
+  "payment_instruction_text_part1": "Перейдіть у",
+  "payment_instruction_text_part2": "та оплатіть замовлення",
+
   "price_range_title": "Ціна, грн",
   "price_range_ok_button": "ОК",
 

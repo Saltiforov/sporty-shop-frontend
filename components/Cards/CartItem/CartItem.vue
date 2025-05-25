@@ -1,19 +1,17 @@
 <template>
-  <div class="cart-product flex-col flex">
+  <div class="cart-product flex flex-col">
     <div class="flex flex-1">
       <div
           :class="[
-          'card-image  rounded-[16px] shrink-0',
-          isHistoryView ? 'max-w-[145px] mb-[22px] h-[210px] mr-[36px]' : 'h-[156px] max-w-[156px] w-full mr-[22px]'
+          'card-image shrink-0 rounded-[16px]',
+          isHistoryView ? 'mb-[22px] mr-[36px] h-[210px] max-w-[145px]' : 'mr-[22px] h-[156px] max-w-[156px] w-full'
         ]"
       >
         <img
             :class="[
-            'cart-item__image',
-            'rounded-[16px]',
+            'cart-item__image cursor-pointer rounded-[16px]',
             isHistoryView ? 'h-[210px] object-cover' : 'h-[156px] max-w-[156px] w-full'
           ]"
-            class="cursor-pointer"
             :src="imageSource"
             alt="product-image.png"
             @click="redirectToProduct(cartProduct)"
@@ -21,15 +19,11 @@
       </div>
 
       <div
-          :class="[
-          isHistoryView ? 'items-start' : 'flex-col'
-        ]"
+          :class="[isHistoryView ? 'items-start' : 'flex-col']"
           class="card-content flex flex-1 justify-between"
       >
         <p
-            :class="[
-            isHistoryView ? 'text-[20px]' : 'text-[16px]'
-          ]"
+            :class="[isHistoryView ? 'text-[20px]' : 'text-[16px]']"
             class="card-title max-w-[276px] w-full fw-500 leading-[var(--line-height-base)]"
         >
           {{ cartProduct.name }}
@@ -39,18 +33,22 @@
           <p class="text-medium-20">{{ cartProduct.quantity }} {{ t('unit') }}.</p>
         </div>
 
-        <div :class="[
+        <div
+            :class="[
+            'card-content__footer flex w-full justify-between',
             isHistoryView ? 'flex-col items-end h-full' : 'pb-4'
-        ]" class="card-content__footer flex justify-between w-full">
+          ]"
+        >
           <div v-if="!isHistoryView" class="card-product-count">
-            <AmountSelector v-model="cartProduct.quantity" min="1" max="100"/>
+            <AmountSelector v-model="cartProduct.quantity" min="1" max="100" />
           </div>
 
-
-          <div :class="[
+          <div
+              :class="[
               'card-product-price flex',
               isHistoryView ? 'items-start' : 'items-center'
-          ]">
+            ]"
+          >
             <div
                 :class="[
                 isHistoryView ? 'discount-price__history-view' : 'fw-600 leading-[34px]',
@@ -65,28 +63,31 @@
             <div
                 v-if="hasDiscount"
                 :class="[
-                    isHistoryView ? 'text-medium-20' : 'fw-600 text-[16px] leading-[34px]',
-                ]"
-                class="discount-price text-[var(--color-primary-pink)]"
+                'discount-price text-[var(--color-primary-pink)]',
+                isHistoryView ? 'text-medium-20' : 'fw-600 text-[15px] leading-[34px]'
+              ]"
             >
               {{ discountPriceByCurrency }} <span class="text-[18px]">{{ t(currentCurrency) }}</span>
             </div>
-
           </div>
-
         </div>
       </div>
 
-      <div v-if="!isHistoryView" class="remove-product-cart-wrapper pl-10 flex flex-col justify-center ml-auto">
+      <div
+          v-if="!isHistoryView"
+          class="remove-product-cart-wrapper ml-auto pl-10 flex flex-col justify-center"
+      >
         <Button
-            :pt="{
-          root: {
-            class: 'cart-item__delete-btn'
-          }
-        }"
-            @click="handleRemoveProduct(cartProduct._id)"
+            :pt="{ root: { class: 'cart-item__delete-btn' } }"
+            @click="handleRemoveProduct(cartProduct)"
         >
-          <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg
+              width="16"
+              height="18"
+              viewBox="0 0 16 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+          >
             <path
                 d="M3 18C2.45 18 1.97917 17.8042 1.5875 17.4125C1.19583 17.0208 1 16.55 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.8042 17.0208 14.4125 17.4125C14.0208 17.8042 13.55 18 13 18H3ZM13 3H3V16H13V3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
                 fill="#ADADAD"
@@ -94,27 +95,15 @@
           </svg>
         </Button>
       </div>
-
     </div>
   </div>
 </template>
 
 
+
 <script setup>
 import DefaultProductImage from "~/assets/images/product-image.png"
 import AmountSelector from "~/components/UI/AmountSelector/AmountSelector.vue";
-
-const {t} = useI18n();
-
-const emit = defineEmits(["remove-product", 'handle-cart-item']);
-
-const currencyStore = useCurrencyStore()
-
-const router = useRouter();
-
-const handleRemoveProduct = (id) => {
-  emit('remove-product', id);
-}
 
 const {cartProduct, isHistoryView, currency} = defineProps({
   cartProduct: {
@@ -131,6 +120,18 @@ const {cartProduct, isHistoryView, currency} = defineProps({
     required: false,
   }
 })
+
+const {t} = useI18n();
+
+const emit = defineEmits(["remove-product", 'handle-cart-item']);
+
+const currencyStore = useCurrencyStore()
+
+const router = useRouter();
+
+const handleRemoveProduct = ({_id, name}) => {
+  emit('remove-product', { _id, name });
+}
 
 const redirectToProduct = (cartProduct) => {
   if (!cartProduct?.id) return
@@ -167,11 +168,6 @@ const imageSource = computed(() => cartProduct.image || DefaultProductImage)
 
 
 <style scoped>
-.discount-price__history-view {
-  font-size: 17px;
-  line-height: 22px;
-}
-
 .cart-item__delete-btn {
   background: transparent;
   border: none;
@@ -184,6 +180,10 @@ const imageSource = computed(() => cartProduct.image || DefaultProductImage)
   padding: 0;
 }
 
+.discount-price__history-view {
+  font-size: 17px;
+  line-height: 22px;
+}
 
 @media (max-width: 1690px) {
   .remove-product-cart-wrapper {
@@ -198,13 +198,12 @@ const imageSource = computed(() => cartProduct.image || DefaultProductImage)
 }
 
 @media (max-width: 1250px) {
-  .card-product-price {
-    margin-bottom: 8px;
-  }
-
   .card-content__footer {
     flex-direction: column-reverse;
     align-items: flex-start;
+  }
+  .card-product-price {
+    margin-bottom: 8px;
   }
 }
 
@@ -212,7 +211,6 @@ const imageSource = computed(() => cartProduct.image || DefaultProductImage)
   .card-title {
     display: block;
   }
-
   .card-quantity {
     display: inline-flex;
     justify-content: flex-start;
@@ -225,19 +223,15 @@ const imageSource = computed(() => cartProduct.image || DefaultProductImage)
   .discount-price__history-view {
     font-size: 13px;
   }
-
   .discount-price {
     font-size: 16px;
   }
-
   .discount-price span {
     font-size: 14px;
   }
-
   .card-quantity p {
     font-size: 16px;
   }
-
   .remove-product-cart-wrapper {
     padding-left: 10px;
   }
@@ -249,7 +243,6 @@ const imageSource = computed(() => cartProduct.image || DefaultProductImage)
     height: 125px;
     object-fit: cover;
   }
-
   .cart-item__image {
     height: 125px;
   }
@@ -260,5 +253,4 @@ const imageSource = computed(() => cartProduct.image || DefaultProductImage)
     margin-right: 7px;
   }
 }
-
 </style>

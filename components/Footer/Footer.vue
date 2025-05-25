@@ -8,15 +8,12 @@
             <div class="flex mb-2 items-center">
               <h2
                   class="mr-1 cursor-pointer small-title"
-                  @click="toggle(index)"
               >
                 {{ list.title }}
               </h2>
-              <img v-if="list.expanded" src="/assets/icons/footer-icon-minus.svg" alt="footer-icon-minus">
-              <img v-else src="/assets/icons/footer-icon-plus.svg" alt="footer-icon-plus">
             </div>
 
-            <LinksList v-if="!list.expanded" :links="list.links" :parentClasses="['']"
+            <LinksList :links="list.links" :parentClasses="['']"
                        :linkClass="['text-[var(--color-primary-pure-white)]', 'last:mr-0', 'mb-[6px]', 'link-text']"
             />
           </div>
@@ -59,10 +56,6 @@
 <script setup>
 
 const { t } = useI18n()
-
-const toggle = (index) => {
-  links.value[index].expanded = !links.value[index].expanded
-}
 
 const links = ref([
   {

@@ -1,6 +1,6 @@
 <template>
   <div :class="{ 'max-h-[316px]' : variant === 'small' }"
-       class="w-full product-card relative bg-white pt-[30px] pr-[30px] pb-[22px] pl-[30px] max-w-[280px] mx-auto rounded-lg flex flex-col justify-start shadow-md"
+       class="w-full product-card relative bg-white pt-[30px] pr-[30px] pb-[22px] pl-[30px] max-w-[280px] mx-auto rounded-lg flex flex-col justify-start"
   >
 
     <div v-if="product.status" class="absolute max-w-[82px] w-full -top-3 -left-5 z-100">
@@ -156,6 +156,7 @@ const iconSize = computed(() => {
 }
 
 .product-card {
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
   height: auto;
   aspect-ratio: 294 / 426;
 }

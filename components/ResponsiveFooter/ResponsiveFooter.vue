@@ -1,5 +1,5 @@
 <template>
-  <footer class="fixed bottom-0 left-0 w-full z-[1000] responsive-footer flex h-[66px] p-4 shadow">
+  <footer class="fixed bottom-0 left-0 w-full z-[1000] responsive-footer flex flex-col p-4 shadow">
     <div class="responsive-footer-container w-full flex justify-between">
 
       <div class="menu flex items-center">
@@ -60,8 +60,6 @@ defineProps({
     default: false
   }
 })
-
-const { $eventBus } = useNuxtApp()
 
 const emit = defineEmits(['handle-mobile-sidebar'])
 

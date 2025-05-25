@@ -15,17 +15,25 @@
       </swiper-container>
 
       <button
+          class="swiper-btn  -left-6"
           @click="swipeToLeft"
-          class="swiper-btn btn-hover-default -left-6"
+          :style="buttonStyles"
+          :class="buttonClass"
       >
-        <img src="@/assets/images/arrow-left.svg" alt="arrow-left.svg"/>
+        <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 15L1 8L8 1" :stroke="arrowColor " stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </button>
 
       <button
+          class="swiper-btn -right-6"
           @click="swipeToRight"
-          class="swiper-btn btn-hover-default -right-6"
+          :style="buttonStyles"
+          :class="buttonClass"
       >
-        <img src="@/assets/images/arrow-right.svg" alt="arrow-right.svg"/>
+        <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 1L8 8L1 15" :stroke="arrowColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </button>
     </div>
   </ClientOnly>
@@ -45,10 +53,27 @@ const props = defineProps({
     required: true,
     default: () => {
     }
+  },
+  buttonStyles: {
+    type: Object,
+    required: false,
+  },
+  arrowColor: {
+    type: String,
+    required: false,
+    default: () => 'white'
+  },
+  buttonClass: {
+    type: String,
+    default: () => 'btn-hover-default'
   }
 })
 
 const emit = defineEmits(['swiper-slide-to-right'])
+
+const containerRef = ref(null)
+
+const swiper = useSwiper(containerRef, props.options)
 
 const swipeToRight = () => {
   swiper.next()
@@ -59,15 +84,11 @@ const swipeToLeft = () => {
   emit('swiper-slide-to-left')
 }
 
-const containerRef = ref(null)
-
-const swiper = useSwiper(containerRef, props.options)
-
 </script>
 
 <style scoped>
 .swiper-btn {
-  @apply absolute bg-[#24242ACC] top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full shadow-md hover:bg-[#2A2A2D];
+  @apply absolute bg-[#24242ACC] top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full shadow-md;
 }
 
 @media(max-width: 650px) {

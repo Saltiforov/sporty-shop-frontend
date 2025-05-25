@@ -65,22 +65,32 @@ const {productsOverview, scrollAfter} = defineProps({
   }
 });
 
-const deleteProduct = (id) => {
+const deleteProduct = (id, name) => {
   cartStore.removeFromCart(id)
 }
 
-const confirmDelete = (id) => {
+const confirmDelete = ({ _id, name }) => {
   confirmAction({
-    message: 'Are you sure you want to delete this product?',
-    header: 'Delete Confirmation',
-    acceptLabel: 'Delete',
-    rejectLabel: 'Cancel',
-    acceptAction: () => deleteProduct(id),
+    message: t('confirm_delete_message', { product: name }),
+    header: t('confirm_delete_header'),
+    acceptLabel: t('confirm_delete_accept_label'),
+    rejectLabel: t('confirm_delete_reject_label'),
+    acceptAction: () => deleteProduct(_id, name),
     toastMessages: {
-      accept: {severity: 'success', summary: 'Deleted', detail: 'Product deleted', life: 3000},
-      reject: {severity: 'error', summary: 'Cancelled', detail: 'Deletion cancelled', life: 3000},
+      accept: {
+        severity: 'success',
+        summary: t('confirm_delete_toast_accept_summary'),
+        detail: t('confirm_delete_toast_accept_detail', { product: name }),
+        life: 3000
+      },
+      reject: {
+        severity: 'error',
+        summary: t('confirm_delete_toast_reject_summary'),
+        detail: t('confirm_delete_toast_reject_detail'),
+        life: 3000
+      }
     }
-  })
+  });
 };
 
 const isScrollable = computed(() => {

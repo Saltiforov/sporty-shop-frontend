@@ -3,122 +3,134 @@
     <LoadingOverlay :visible="isLoading"/>
 
     <div class="max-w-[1756px] mx-auto ">
-      <div class="sort-select px-5 flex w-full justify-end">
-        <div class="responsive-filters" @click="isMobileFiltersOpen = !isMobileFiltersOpen">
-          <div class="responsive-filters-icon">
-            <svg
-                :class="isMobileFiltersOpen ? 'rotate-90' : 'rotate-0'"
-                class="transition-transform duration-300"
-                width="6"
-                height="10"
-                viewBox="0 0 6 10"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                  d="M1 1L5 5L1 9"
-                  stroke="#212094"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-              />
-            </svg>
+
+      <div class="main-content-container ">
+
+        <div class="select-filters mb-3 flex w-full px-3 justify-end">
+          <div class="responsive-filters" @click="isMobileFiltersOpen = !isMobileFiltersOpen">
+            <div class="responsive-filters-icon">
+              <svg
+                  :class="isMobileFiltersOpen ? 'rotate-90' : 'rotate-0'"
+                  class="transition-transform duration-300"
+                  width="6"
+                  height="10"
+                  viewBox="0 0 6 10"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                    d="M1 1L5 5L1 9"
+                    stroke="#212094"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <div class="responsive-filters-title">
+              <p>Фільтри</p>
+            </div>
           </div>
-          <div class="responsive-filters-title">
-            <p>Фільтри</p>
+          <div class="sort-select min-w-[320px] p-1 flex">
+            <p class="mr-5 sort-title">{{ sortTitle }}</p>
+            <SortSelect/>
           </div>
         </div>
-        <div class="min-w-[320px] p-1 flex">
-          <p class="mr-5 sort-title">{{ sortTitle }}</p>
-          <SortSelect/>
-        </div>
-      </div>
 
-      <div class="main-content-container grid-cols-1 grid lg:grid-cols-[390px_1fr] gap-[30px]">
-        <aside class="p-4 rounded-md">
-          <div class="filters mb-[91px] w-full max-w-[354px] h-[554px] border rounded-[var(--default-rounded)]">
-            <Filters v-if="hydrated"/>
-            <FiltersSkeleton v-else/>
-          </div>
 
-          <transition name="fade-slide">
-            <div v-if="isMobileFiltersOpen" class="filters--mobile">
+        <div class="grid-cols-1 grid lg:grid-cols-[390px_1fr] gap-[30px]">
+          <aside class="rounded-md">
+            <div class="filters mb-[91px] w-full max-w-[354px] h-[554px] border rounded-[var(--default-rounded)]">
               <Filters v-if="hydrated"/>
               <FiltersSkeleton v-else/>
             </div>
-          </transition>
 
-          <div class="promotional-products text-center">
-            <p class="text-[var(--color-primary-pink)] mb-[21px] fw-600 text-[20px]">{{ t('promo_products_title') }}</p>
-            <SwiperWrapper
-                v-if="hydrated"
-                :items="promotionalProducts"
-                :options="promotionalProductsSwiperOptions"
-            >
-              <template #default="{ item }">
+            <transition name="fade-slide">
+              <div v-if="isMobileFiltersOpen" class="filters--mobile">
+                <Filters v-if="hydrated"/>
+                <FiltersSkeleton v-else/>
+              </div>
+            </transition>
+
+            <div class="promotional-products text-center">
+              <p class="text-[var(--color-primary-pink)] mb-[21px] fw-600 text-[20px]">{{ t('promo_products_title') }}</p>
+              <SwiperWrapper
+                  v-if="hydrated"
+                  arrow-color="var(--color-muted-light-gray)"
+                  button-class="promo-slider-btn"
+                  :items="promotionalProducts"
+                  :options="promotionalProductsSwiperOptions"
+                  :button-styles="{
+                  background: 'transparent',
+                  boxShadow: 'none'
+                }"
+              >
+                <template #default="{ item }">
+                  <ProductCard
+                      class="mt-3 mb-3"
+                      :product="item"
+                      @add-to-cart="showToast"
+                      @click="addProductToViewed(item)"
+                  />
+                </template>
+              </SwiperWrapper>
+
+              <div v-else class="flex gap-4 overflow-x-auto">
+                <ProductSkeleton
+                    class="min-w-[180px]"
+                />
+              </div>
+            </div>
+          </aside>
+
+          <div>
+            <div
+                class="product-grid">
+
+              <template v-if="!hydrated">
+                <ProductSkeleton v-for="i in 10" :key="'loading-skeleton-' + i"/>
+              </template>
+
+              <template v-else>
                 <ProductCard
-                    class="mt-3 mb-3"
-                    :product="item"
+                    v-for="product in products"
+                    :key="product.id"
+                    :product="product"
                     @add-to-cart="showToast"
-                    @click="addProductToViewed(item)"
+                    @click="addProductToViewed(product)"
+
                 />
               </template>
-            </SwiperWrapper>
-
-            <div v-else class="flex gap-4 overflow-x-auto">
-              <ProductSkeleton
-                  class="min-w-[180px]"
-              />
             </div>
-          </div>
-        </aside>
 
-        <div>
-          <div
-              class="product-grid">
-
-            <template v-if="!hydrated">
-              <ProductSkeleton v-for="i in 10" :key="'loading-skeleton-' + i"/>
-            </template>
-
-            <template v-else>
-              <ProductCard
-                  v-for="product in products"
-                  :key="product.id"
-                  :product="product"
-                  @add-to-cart="showToast"
-                  @click="addProductToViewed(product)"
-
-              />
-            </template>
-          </div>
-
-          <div class="products-pagination-actions mb-[72px]">
-            <div class="load-more-wrapper mb-3 flex justify-center">
-              <LoadMoreButton
-                  v-if="!isLoading"
-                  :disabled="allLoaded"
-                  :label="loadMoreLabel"
-                  @click="fetchProducts(false)"
-              >
-                <template #icon>
-                  <img src="~/assets/icons/load-more-icon.svg" alt="load-more-icon">
-                </template>
-              </LoadMoreButton>
-              <LoadMoreButtonSkeleton v-else/>
-            </div>
-            <div class="product-pagination-wrapper flex justify-center">
-              <ProductPaginationButton
-                  v-if="!isLoading"
-                  v-model="activePage"
-                  :max-pages="totalPages"
-                  :all-loaded="allLoaded"
-                  @update:model-value="getProductsByPage"
-              />
-              <PaginationButtonSkeleton v-else/>
+            <div class="products-pagination-actions mb-[72px]">
+              <div class="load-more-wrapper mb-3 flex justify-center">
+                <LoadMoreButton
+                    v-if="!isLoading"
+                    :disabled="allLoaded"
+                    :label="loadMoreLabel"
+                    @click="fetchProducts(false)"
+                >
+                  <template #icon>
+                    <img src="~/assets/icons/load-more-icon.svg" alt="load-more-icon">
+                  </template>
+                </LoadMoreButton>
+                <LoadMoreButtonSkeleton v-else/>
+              </div>
+              <div class="product-pagination-wrapper flex justify-center">
+                <ProductPaginationButton
+                    v-if="!isLoading"
+                    v-model="activePage"
+                    :max-pages="totalPages"
+                    :all-loaded="allLoaded"
+                    @update:model-value="getProductsByPage"
+                />
+                <PaginationButtonSkeleton v-else/>
+              </div>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -146,9 +158,6 @@ import {useViewedProducts} from "~/composables/useViewedProducts.js";
 import FiltersSkeleton from "~/components/Skeletons/FiltersSkeleton/FiltersSkeleton.vue";
 import PaginationButtonSkeleton from "~/components/Skeletons/PaginationButtonSkeleton/PaginationButtonSkeleton.vue";
 import LoadMoreButtonSkeleton from "~/components/Skeletons/LoadMoreButtonSkeleton/LoadMoreButtonSkeleton.vue";
-import {getStaticPagesInfo} from "~/services/api/static-info.js";
-import {useStaticPages} from "~/stores/staticPages.js";
-import {useCurrencyStore} from "~/stores/currency.js";
 
 const promotionalProductsSwiperOptions = {
   slidesPerView: 1,
@@ -321,12 +330,15 @@ onBeforeUnmount(() => {
 <style scoped>
 .product-grid {
   display: grid;
-  gap: 30px;
-  padding: 16px;
+  max-width: 1264px;
+  gap: 48px;
   margin-bottom: 45px;
-  max-width: 100%;
   width: 100%;
   grid-template-columns: repeat(4, 1fr);
+}
+
+.promo-slider-btn:hover {
+  background-color: transparent;
 }
 
 .responsive-filters {
@@ -365,6 +377,10 @@ onBeforeUnmount(() => {
 @media (max-width: 1670px) {
   .product-grid {
     grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .sort-select {
+    min-width: auto;
   }
 }
 
@@ -376,12 +392,11 @@ onBeforeUnmount(() => {
 
 @media (max-width: 1355px) {
   .product-grid {
-    padding: 16px 0px;
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 1035px) {
+@media (max-width: 1022px) {
   .promotional-products {
     display: none;
   }
@@ -397,13 +412,14 @@ onBeforeUnmount(() => {
 
   aside {
     display: block;
+    border: none;
   }
 
   .filters {
     display: none;
   }
 
-  .sort-select {
+  .select-filters {
     justify-content: space-between;
   }
 
@@ -427,13 +443,16 @@ onBeforeUnmount(() => {
 
 
 @media (max-width: 750px) {
-  .sort-select {
+  .select-filters {
     margin-top: 30px;
-    padding-top: 15px;
+    padding-top: 10px;
+    justify-content: space-between;
   }
-
   .sort-title {
     font-size: 15px;
+  }
+  .product-grid {
+    gap: 24px;
   }
 }
 
@@ -451,10 +470,17 @@ onBeforeUnmount(() => {
   .product-grid {
     gap: 5px;
   }
-
+  .responsive-filters {
+    justify-content: center;
+  }
   .sort-select {
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+  .select-filters {
     margin-top: 30px;
     padding-top: 25px;
+    flex-direction: column-reverse;
   }
 }
 

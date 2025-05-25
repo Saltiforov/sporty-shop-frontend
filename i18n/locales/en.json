@@ -23,6 +23,28 @@
   "filters_collagen": "Collagen",
   "filters_injections": "Injections",
 
+  "confirm_delete_message": "Are you sure you want to delete {product}?",
+  "confirm_delete_header": "Delete Confirmation",
+  "confirm_delete_accept_label": "Delete",
+  "confirm_delete_reject_label": "Cancel",
+  "confirm_delete_toast_accept_summary": "Deleted",
+  "confirm_delete_toast_accept_detail": "Product {product} deleted",
+  "confirm_delete_toast_reject_summary": "Cancelled",
+  "confirm_delete_toast_reject_detail": "Deletion cancelled",
+
+  "confirmation_order_accepted": "Your order has been received!",
+  "confirmation_time_expired": "⏰ Time’s up! The order will be cancelled.",
+  "confirmation_order_number": "Order #{orderNumber}",
+  "confirmation_instruction_title": "Instruction",
+  "confirmation_instruction_step_1": "Click the button to open Telegram",
+  "confirmation_instruction_step_2": "Pay within 12 hours",
+  "confirmation_pay_button": "Pay via Telegram",
+  "confirmation_hint": "Hint: if something went wrong — contact the manager on",
+
+  "payment_timer_warning": "⚠️ Complete the payment before the timer ends, otherwise the order will be cancelled.",
+  "payment_instruction_text_part1": "Go to",
+  "payment_instruction_text_part2": "and complete the payment",
+
   "price_range_title": "Price, UAH",
   "price_range_ok_button": "OK",
 

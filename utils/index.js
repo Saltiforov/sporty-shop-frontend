@@ -71,6 +71,7 @@ export function mapOrdersToSummaries(orders) {
             },
             pricing: order.pricing || '',
             currency: order.currency || '',
+            createdAt: order.createdAt || '',
             products
         }
     })

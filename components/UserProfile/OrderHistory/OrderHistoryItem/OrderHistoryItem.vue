@@ -25,6 +25,29 @@
       <AccordionContent>
         <div class="order-item-content-wrapper px-[48px] pb-[46px]">
           <div class="card-item grid gap-7 mb-[27px]">
+            <div class="flex items-center justify-between">
+              <div class="">
+                <h2 class="timer-title text-[var(--color-primary-pink)] mb-2 title-lg-20 p-2">{{ t('payment_timer_warning') }}</h2>
+                <div class="confirmation-hint text-[14px]">
+                  <p class="text-[var(--color-muted-gray)] text-center">
+                    {{ t('payment_instruction_text_part1') }}
+                    <a
+                        href="https://t.me/your_bot"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-[#007AFF] hover:underline"
+                    >
+                      @your_bot
+                    </a>
+                    {{ t('payment_instruction_text_part2') }}
+                  </p>
+                </div>
+              </div>
+              <CountdownTimer
+                  :orderCreatedAt="new Date(order.createdAt)"
+              />
+            </div>
+
             <CartItem
                 v-for="item in order?.products"
                 :cart-product="item"
@@ -57,6 +80,7 @@
 <script setup>
 import CartItem from "~/components/Cards/CartItem/CartItem.vue";
 import {calculateTotal, capitalizeFirstLetter} from "~/utils/index.js";
+import CountdownTimer from "~/components/UI/CountdownTimer/CountdownTimer.vue";
 
 const {t} = useI18n();
 

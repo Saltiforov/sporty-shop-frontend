@@ -39,22 +39,26 @@
             {{ t('payment_method_title') }}
             <TooltipIcon class="ml-2" :message="t('payment_method_tooltip')"/>
           </h2>
-          <div class="checkout-payment-method__checkboxes">
-            <div class="murecho-font checkbox-content">
-              <CustomCheckbox
-                  v-model="isSendSmsWithFormData"
-                  @update:modelValue="onSelectPaymentMethod('sms')"
-              >
-                <p class="text-[var(--color-primary-black)]">{{ t('sms_text') }}</p>
-              </CustomCheckbox>
+          <div class="payment-method-content murecho-font">
+            <div class="flex mb-2 items-center">
+              <div class="mr-3" >
+                <img class="w-[36px] h-[36px]" src="/assets/icons/telegram-black-icon.png" alt="">
+              </div>
+              <p class="font-medium ">Повна передоплата через Telegram</p>
             </div>
-            <div class="murecho-font checkbox-content">
-              <CustomCheckbox
-                  v-model="isPaymentOnDelivery"
-                  @update:modelValue="onSelectPaymentMethod('cash')"
-              >
-                <p class="text-[var(--color-primary-black)]">{{ t('cash_on_delivery_text') }}</p>
-              </CustomCheckbox>
+            <div class="confirmation-hint text-[14px]">
+              <p class="text-[var(--color-muted-gray)]">
+                {{ t('payment_instruction_text_part1') }}
+                <a
+                    href="https://t.me/your_bot"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-[#007AFF] hover:underline"
+                >
+                  @your_bot
+                </a>
+                {{ t('payment_instruction_text_part2') }}
+              </p>
             </div>
           </div>
         </div>

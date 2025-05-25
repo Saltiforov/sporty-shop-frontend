@@ -53,7 +53,6 @@ const isExpired = ref(false)
 
 function handleEnd() {
   isExpired.value = true
-
 }
 
 function splitDigits(value) {

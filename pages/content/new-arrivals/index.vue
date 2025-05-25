@@ -1,4 +1,7 @@
 <template>
+  <ClientOnly>
+    <OrderConfirmationPopup/>
+  </ClientOnly>
 </template>
 
 <script setup>
