@@ -161,7 +161,7 @@ const hasDiscount = computed(() => {
   return discounted !== null && discounted !== undefined && discounted < price
 })
 
-const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] || DefaultProductImage)
+const imageSource = computed(() => cartProduct.image || DefaultProductImage)
 
 </script>
 

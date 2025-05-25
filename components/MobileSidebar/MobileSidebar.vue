@@ -23,7 +23,6 @@
           }
         }">
           <Tab value="0">{{ t('menu_label') }}</Tab>
-          <Tab value="1">{{ t('account_label') }}</Tab>
         </TabList>
         <TabPanels :pt="{
             root: {
@@ -43,11 +42,6 @@
               </nav>
             </div>
           </TabPanel>
-          <TabPanel value="1">
-            <div class="p-[26px] bg-[var(--color-primary-lavender)]">
-              <AuthComponent :is-login="isLogin" :responsive="true"/>
-            </div>
-          </TabPanel>
         </TabPanels>
       </Tabs>
     </aside>
@@ -63,13 +57,7 @@ const authPopup = useAuthPopup()
 
 const {t} = useI18n();
 
-const { $eventBus } = useNuxtApp()
-
 const currentTab = ref('0')
-
-const activeTab = computed(() => authPopup.popupType)
-
-const isLogin = computed(() => activeTab.value === 'login')
 
 const links = ref([
   {
@@ -98,19 +86,6 @@ const links = ref([
     page: "/content/about-us",
   },
 ])
-
-onMounted(() => {
-  $eventBus.on('set-active-tab-mobile-sidebar', () => {
-    authPopup.setType('login')
-    currentTab.value = '1'
-  })
-})
-
-onBeforeUnmount(() => {
-  $eventBus.off('set-active-tab-mobile-sidebar')
-})
-
-
 </script>
 
 <style scoped>

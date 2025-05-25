@@ -238,13 +238,16 @@ const token = useCookie('token')
 
 const {showProductAddedToast} = useToastManager()
 
-const {viewed} = useViewedProducts()
+const {viewed, removeProductFromViewedAndRedirect} = useViewedProducts()
 
 const currencyStore = useCurrencyStore()
 
 const recommended = ref([])
 
 const route = useRoute()
+
+const router = useRouter()
+
 const id = route.params.id
 
 const product = ref({})
@@ -322,17 +325,32 @@ const handleGalleryClick = (index) => {
   selectedImage.value = images.value[index]
 }
 
+const getProductImages = (product, size) => {
+  return product.images.length
+      ? fullImageUrls(product.images, size)
+      : [DefaultProductImage]
+}
+
+const fetchProduct = async (id) => {
+  product.value = await getProduct(id)
+  images.value = getProductImages(product.value, 'small')
+  galleryImages.value = getProductImages(product.value, 'thumb')
+}
+
 onMounted(async () => {
   try {
     isLoading.value = true
-    product.value = await getProduct(id)
-    images.value = product.value.images.length ? fullImageUrls(product.value.images, 'small') : [DefaultProductImage]
-    galleryImages.value = product.value.images.length ? fullImageUrls(product.value.images, 'thumb') : [DefaultProductImage]
+    await fetchProduct(id)
+  } catch (error) {
+    if (process.client && error?.status === 404) {
+      await removeProductFromViewedAndRedirect(id)
+    } else {
+      console.error('Error when loading goods:', error)
+    }
   } finally {
     isLoading.value = false
   }
 })
-
 </script>
 
 <style scoped>

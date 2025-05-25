@@ -57,7 +57,7 @@
            ]">
         <p class="murecho-font title-lg-20 text-center mb-6">{{ t('new_client') }}</p>
         <Button
-            @click="authPopup.setType('register')"
+            @click="() => navigateTo('/auth/register')"
             :pt="{ root: { class: 'auth-button btn-hover-default' } }"
         >
           {{

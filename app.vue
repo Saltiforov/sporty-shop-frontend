@@ -14,6 +14,8 @@
     />
     <ResponsiveFooter @handle-mobile-sidebar="handleMobileMenu" :is-open="isOpenMenu"/>
     <Footer />
+    <Toast position="bottom-right" group="br" />
+
   </div>
 </template>
 
@@ -51,10 +53,6 @@ const checkWindowSize = () => {
 }
 
 onMounted(async () => {
-  $eventBus.on('handle-mobile-sidebar-login', () => {
-    isOpenMenu.value = true
-    $eventBus.emit('set-active-tab-mobile-sidebar')
-  })
   $eventBus.on('user-authenticated', () => {
     isOpenMenu.value = false
   })
@@ -65,7 +63,6 @@ onMounted(async () => {
 
 onBeforeUnmount( () => {
   window.removeEventListener('resize', checkWindowSize)
-  $eventBus.off('handle-mobile-sidebar-login')
   $eventBus.off('user-authenticated')
 })
 </script>

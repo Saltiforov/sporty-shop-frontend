@@ -29,11 +29,22 @@ export const useViewedProducts = () => {
         localStorage.removeItem(STORAGE_KEY)
     }
 
+    const removeProductFromViewedAndRedirect = async (id) => {
+        if (process.client) {
+            const router = useRouter()
+            const viewed = JSON.parse(localStorage.getItem('viewed_products') || '[]')
+            const updated = viewed.filter(p => p._id !== id)
+            localStorage.setItem('viewed_products', JSON.stringify(updated))
+            await router.push('/')
+        }
+    }
+
     onMounted(load)
 
     return {
         viewed,
         addProductToViewed,
-        clearViewed
+        clearViewed,
+        removeProductFromViewedAndRedirect
     }
 }

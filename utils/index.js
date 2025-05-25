@@ -42,8 +42,6 @@ export function mapOrdersToSummaries(orders) {
         const products = (order.products || []).map(item => {
             const product = item.product || {}
 
-            console.log("mapOrdersToSummaries", product.images)
-
             return {
                 image: fullImageUrls(product.images || [])[0] || '',
                 name: product.name || '',

@@ -1,5 +1,4 @@
 <template>
-  <OrderConfirmationPopup/>
 </template>
 
 <script setup>

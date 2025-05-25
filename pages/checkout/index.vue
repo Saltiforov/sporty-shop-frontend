@@ -119,18 +119,17 @@
                           rows="2" cols="30"/>
             </div>
           </div>
-          <div v-if="!isRegionUA" class="min-price-europe mb-6">
-            <p class="text-[var(--color-primary-pink)] text-[18px]">{{ t('minimum_amount_order_eu') }}</p>
-          </div>
           <div
-              class="checkout__wrapper-btn rounded-[8px] w-full">
+              class="checkout__wrapper-btn rounded-[8px] w-full mb-3">
             <Button @click="handleCreateOrder" :pt="{
               root: {
                 class: 'checkout__btn'
               }
             }"><p class="murecho-font text-[14px]">{{ t('confirm_order') }}</p></Button>
           </div>
-
+          <div v-if="!isRegionUA" class="min-price-europe mb-6">
+            <p class="text-[var(--color-primary-pink)] text-center text-[14px]">{{ t('minimum_amount_order_eu') }}</p>
+          </div>
         </div>
 
       </div>
@@ -258,8 +257,6 @@ const handleCreateOrder = async () => {
     products: [...mappedProductsForOrder(cartStore.getCartProducts)],
     ...mappedUserDataForOrder(fieldsBlock.value.getData()),
   }
-
-  console.log("handleCreateOrder", data)
 
   const isValid = fieldsBlock.value?.validateFields()
 

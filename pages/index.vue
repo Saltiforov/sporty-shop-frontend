@@ -59,7 +59,7 @@
                 <ProductCard
                     class="mt-3 mb-3"
                     :product="item"
-                    @add-to-cart="showProductAddedToast"
+                    @add-to-cart="showToast"
                     @click="addProductToViewed(item)"
                 />
               </template>
@@ -86,7 +86,7 @@
                   v-for="product in products"
                   :key="product.id"
                   :product="product"
-                  @add-to-cart="showProductAddedToast"
+                  @add-to-cart="showToast"
                   @click="addProductToViewed(product)"
 
               />
@@ -120,10 +120,7 @@
           </div>
         </div>
       </div>
-
-
     </div>
-
   </div>
 </template>
 
@@ -202,6 +199,10 @@ const productsQueryParams = computed(() => {
     filters: route.query.filters,
   }
 })
+
+const showToast = (product) => {
+  showProductAddedToast(product);
+}
 
 const getPromotionalProducts = async () => {
   const response = await getProductsOnSale()

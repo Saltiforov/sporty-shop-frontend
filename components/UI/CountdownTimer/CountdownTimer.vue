@@ -4,7 +4,7 @@
         :time="deadline.getTime() - Date.now()"
         :auto-start="true"
         @end="handleEnd"
-        v-slot="{ hours, minutes, seconds }"
+        v-slot="{ hours, minutes }"
     >
       <div class="timer-wrapper">
         <div class="timer-blocks">
@@ -20,21 +20,11 @@
           <div v-for="(digit, index) in splitDigits(minutes)" :key="'m' + index" class="digit-box">
             {{ digit }}
           </div>
-
-          <div class="separator">
-            <span class="dot"></span>
-            <span class="dot"></span>
-          </div>
-
-          <div v-for="(digit, index) in splitDigits(seconds)" :key="'s' + index" class="digit-box">
-            {{ digit }}
-          </div>
         </div>
 
         <div class="label-blocks flex justify-around w-full mt-2">
           <div class="label">Hours</div>
           <div class="label">Minutes</div>
-          <div class="label">Seconds</div>
         </div>
       </div>
     </Countdown>
@@ -43,20 +33,39 @@
 
 <script setup>
 import Countdown from '@chenfengyuan/vue-countdown'
+import { ref, computed } from 'vue'
 
-const orderCreatedAt = new Date('2025-05-24T10:00:00')
+const emit = defineEmits(['expired'])
+
+const props = defineProps({
+  orderCreatedAt: {
+    type: Date,
+    required: true,
+    default: () => new Date('2025-05-24T11:00:00')
+  },
+})
 
 const TOTAL_DURATION_MS = 12 * 60 * 60 * 1000
-const deadline = new Date(orderCreatedAt.getTime() + TOTAL_DURATION_MS)
+
+const deadline = computed(() => new Date(props.orderCreatedAt.getTime() + TOTAL_DURATION_MS))
+
+const isExpired = ref(false)
 
 function handleEnd() {
-  alert('⏰ Час сплинув! Замовлення буде анульовано.')
+  isExpired.value = true
+
 }
 
 function splitDigits(value) {
   return value.toString().padStart(2, '0').split('')
 }
+
+watch(() => isExpired.value, (newValue) => {
+  if (newValue) emit('expired')
+})
 </script>
+
+
 
 <style scoped>
 .countdown-wrapper {

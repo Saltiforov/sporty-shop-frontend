@@ -198,8 +198,8 @@ const items = computed(() => {
     return [
       {
         items: [
-          {label: t('auth_login'), command: () => authPopup.open('login')},
-          {label: t('auth_register'), command: () => authPopup.open('register')},
+          {label: t('login'), command: () => authPopup.open('login')},
+          {label: t('register'), command: () => authPopup.open('register')},
         ]
       }
     ]

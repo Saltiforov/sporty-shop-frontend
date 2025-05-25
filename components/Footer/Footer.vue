@@ -5,9 +5,20 @@
         <img src="@/assets/images/footer-logo.svg" alt="footer-logo.svg">
         <div class="links-list flex w-full max-w-[411px] justify-between flex-wrap sm:flex-nowrap gap-2">
           <div v-for="(list, index) in links" :key="index">
-            <h2 class="mb-2 small-title">{{ list.title }}</h2>
-            <LinksList :links="list.links" :parentClasses="['']"
-                       :linkClass="['text-[var(--color-primary-pure-white)]', 'last:mr-0', 'mb-[6px]', 'link-text']"/>
+            <div class="flex mb-2 items-center">
+              <h2
+                  class="mr-1 cursor-pointer small-title"
+                  @click="toggle(index)"
+              >
+                {{ list.title }}
+              </h2>
+              <img v-if="list.expanded" src="/assets/icons/footer-icon-minus.svg" alt="footer-icon-minus">
+              <img v-else src="/assets/icons/footer-icon-plus.svg" alt="footer-icon-plus">
+            </div>
+
+            <LinksList v-if="!list.expanded" :links="list.links" :parentClasses="['']"
+                       :linkClass="['text-[var(--color-primary-pure-white)]', 'last:mr-0', 'mb-[6px]', 'link-text']"
+            />
           </div>
         </div>
       </div>
@@ -45,21 +56,27 @@
   </footer>
 </template>
 
-<script setup lang="ts">
+<script setup>
 
 const { t } = useI18n()
+
+const toggle = (index) => {
+  links.value[index].expanded = !links.value[index].expanded
+}
 
 const links = ref([
   {
     title: computed(() => t('footer_about_us')),
+    expanded: true,
     links: [
-      { label: computed(() => t('footer_about_us')), page: '/about-us' },
+      { label: computed(() => t('footer_about_us')), page: '/content/about-us' },
       { label: computed(() => t('footer_warranties')), page: '/page1' },
       { label: computed(() => t('footer_terms_of_use')), page: '/page1' },
     ]
   },
   {
     title: computed(() => t('footer_payment_methods')),
+    expanded: true,
     links: [
       { label: computed(() => t('footer_payment_methods')), page: '/page3' },
       { label: computed(() => t('footer_delivery')), page: '/page3' },

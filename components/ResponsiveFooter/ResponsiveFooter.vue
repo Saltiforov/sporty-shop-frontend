@@ -85,7 +85,7 @@ const redirectToProfile = () => {
   if (token.value) {
     return navigateTo('/profile/personal-information');
   } else {
-    $eventBus.emit('handle-mobile-sidebar-login')
+    return navigateTo('/auth/login');
   }
 }
 

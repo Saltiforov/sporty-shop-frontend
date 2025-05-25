@@ -1,15 +1,21 @@
 <template>
-  <div class="confirmation-popup murecho-font bg-[var(--color-gray-lavender)] flex justify-center max-w-[814px] w-full">
-    <div class="confirmation-popup-container">
+  <div class="confirmation-popup murecho-font bg-[var(--color-gray-lavender)] rounded-[20px] p-20 flex justify-center max-w-[814px] w-full">
+    <div class="confirmation-popup-container w-full">
       <div class="confirmation-popup-header">
-        <h1>Ваше замовлення прийнято!</h1>
+        <h1 v-if="!isTimerExpired" class="confirmation-large-text mb-5 text-center">Ваше замовлення прийнято!</h1>
+        <p v-else class="text-red-500 confirmation-large-text  font-bold text-center mt-4">⏰ Ваш час вичерпано! Замовлення буде анульовано.</p>
       </div>
       <div class="confirmation-popup-content">
-        <div class="order-meta flex items-center">
-          <div class="order-number">Order #1234</div>
-          <div class="order-number"><CountdownTimer/></div>
+        <div class="order-meta flex justify-between">
+          <div class="order-number p-2 confirmation-large-text text-[var(--color-primary-pink)]">Order #{{ orderNumber }}</div>
+          <div class="order-number">
+            <CountdownTimer
+                :orderCreatedAt="new Date('2025-05-24T11:05:00')"
+                @expired="timerExpired"
+            />
+          </div>
         </div>
-        <div class="payment-instruction mb-10">
+        <div class="payment-instruction max-w-[576px] mx-auto mb-10">
           <div class="flex flex-col">
             <div class="instruction-text">
               <div class="flex mb-3">
@@ -24,15 +30,17 @@
           </div>
 
         </div>
-        <div class="confirmation-button-wrapper max-w-[439px] w-full mb-3 ">
+        <div class="confirmation-button-wrapper max-w-[439px] w-full mb-3 mx-auto">
           <Button :pt="{
             root: {
               style: {
                 padding: '3px',
                 borderRadius: '8px',
-              }
+                width: '100%',
+              },
+              class: 'confirmation__btn btn-hover-default'
             }
-          }" class="btn-hover-default confirmation__btn">
+          }" >
             Оплатити через Telegram
             <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
               <rect width="36" height="36" fill="url(#pattern0_1550_14084)"/>
@@ -46,7 +54,7 @@
           </Button>
         </div>
         <div class="confirmation-hint text-[14px]">
-          <p class="text-[var(--color-muted-gray)]">
+          <p class="text-[var(--color-muted-gray)] text-center">
             Підказка: якщо щось не вийшло — напишіть менеджеру в
             <a
                 :href="`https://t.me/${managerName}`"
@@ -70,8 +78,19 @@ defineProps({
     type: String,
     required: true,
     default: 'Manager'
+  },
+  orderNumber: {
+    type: String,
+    required: true,
+    default: "1"
   }
 })
+
+const isTimerExpired = ref(false)
+
+const timerExpired = () => {
+  isTimerExpired.value = true
+}
 
 import CountdownTimer from "~/components/UI/CountdownTimer/CountdownTimer.vue";
 </script>
@@ -85,5 +104,9 @@ import CountdownTimer from "~/components/UI/CountdownTimer/CountdownTimer.vue";
 }
 ol li {
   margin-bottom: 8px;
+}
+.confirmation-large-text {
+  font-weight: 500;
+  font-size: 36px;
 }
 </style>

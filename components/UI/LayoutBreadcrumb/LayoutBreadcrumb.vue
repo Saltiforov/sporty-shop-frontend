@@ -35,8 +35,7 @@ const breadcrumbItems = computed(() => {
     to: '/'
   }
 
-  const hasProductData =
-      props.product.productTitle?.trim()
+  const hasProductData = props.product.productTitle?.trim()
 
   if (hasProductData) {
     const hasFilters = props.product.filters?.length > 0
@@ -50,12 +49,12 @@ const breadcrumbItems = computed(() => {
       return [
         mainPage,
         ...localizedFilters,
-        {label: props.product.productTitle, to: null}
+        { label: props.product.productTitle, to: null }
       ]
     } else {
       return [
         mainPage,
-        {label: props.product.productTitle, to: null}
+        { label: props.product.productTitle, to: null }
       ]
     }
   }
@@ -63,23 +62,27 @@ const breadcrumbItems = computed(() => {
   const routeCrumbs = route.matched
       .filter(r => r.meta?.breadcrumb !== false)
       .map(r => {
-        let label = ''
+        let key = ''
 
-        if (r.meta?.breadcrumb) {
-          label = t(r.meta.breadcrumb)
+        if (typeof r.meta?.breadcrumb === 'string') {
+          key = r.meta.breadcrumb
         } else {
           const segments = r.path.split('/').filter(Boolean)
-          label = segments[segments.length - 1]?.replace(/-/g, '_')
+
+          console.log("segments", segments)
+
+          key = segments[segments.length - 1]?.replace(/-/g, '_') || 'navigation_home'
         }
 
         return {
-          label: t(label),
+          label: t(key),
           to: null
         }
       })
 
   return [mainPage, ...routeCrumbs]
 })
+
 </script>
 
 <style scoped>

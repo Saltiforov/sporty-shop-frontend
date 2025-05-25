@@ -27,6 +27,9 @@ export class Fetch {
                 },
                 onResponse({ response }) {
                     console.log('[Fetch] Ответ:', response._data);
+                    if ( response._data.status === 404) {
+                        return Promise.reject(response._data);
+                    }
                 },
                 onResponseError: async ({ response }) => {
                     console.error('[Fetch] Ошибка:', response.status);
