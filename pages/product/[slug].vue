@@ -215,7 +215,12 @@ import AmountSelector from "~/components/UI/AmountSelector/AmountSelector.vue";
 import FavoriteButton from "~/components/UI/FavoriteButton/FavoriteButton.vue";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 
-import {getProduct, addProductToFavorites, deleteProductFromFavorites} from "~/services/api/product-service.js";
+import {
+  getProduct,
+  addProductToFavorites,
+  deleteProductFromFavorites,
+  getAllProducts, getProductBySlug
+} from "~/services/api/product-service.js";
 import {useCartStore} from "~/stores/cart.js";
 
 import {useViewedProducts} from "~/composables/useViewedProducts.js";
@@ -237,6 +242,33 @@ const cartStore = useCartStore()
 
 const token = useCookie('token')
 
+const slug = useRoute().params.slug
+
+console.log('slug', slug);
+
+const { data: productItem, pending, error } = await useAsyncData(
+    'product slug',
+    () => getProductBySlug(slug)
+)
+const isLoading = ref(pending.value)
+
+const product = ref(productItem.value)
+
+console.log('product', product.value);
+
+const images = ref([])
+const galleryImages = ref([])
+
+const getProductImages = (product, size) => {
+  return product?.images?.length
+      ? fullImageUrls(product.images, size)
+      : [DefaultProductImage]
+}
+
+images.value = getProductImages(product.value, 'small')
+
+galleryImages.value = getProductImages(product.value, 'thumb')
+
 const {showProductAddedToast} = useToastManager()
 
 const {viewed, removeProductFromViewedAndRedirect} = useViewedProducts()
@@ -244,20 +276,6 @@ const {viewed, removeProductFromViewedAndRedirect} = useViewedProducts()
 const currencyStore = useCurrencyStore()
 
 const recommended = ref([])
-
-const route = useRoute()
-
-const router = useRouter()
-
-const id = route.params.id
-
-const product = ref({})
-
-const images = ref([])
-
-const galleryImages = ref([])
-
-const isLoading = ref(true)
 
 const selectedImage = ref(null)
 
@@ -329,25 +347,13 @@ const handleGalleryClick = (index) => {
   selectedImage.value = images.value[index]
 }
 
-const getProductImages = (product, size) => {
-  return product.images.length
-      ? fullImageUrls(product.images, size)
-      : [DefaultProductImage]
-}
-
-const fetchProduct = async (id) => {
-  product.value = await getProduct(id)
-  images.value = getProductImages(product.value, 'small')
-  galleryImages.value = getProductImages(product.value, 'thumb')
-}
-
 onMounted(async () => {
   try {
     isLoading.value = true
-    await fetchProduct(id)
   } catch (error) {
     if (process.client && error?.status === 404) {
-      await removeProductFromViewedAndRedirect(id)
+      // todo change to slug delete
+      // await removeProductFromViewedAndRedirect(id)
     } else {
       console.error('Error when loading goods:', error)
     }

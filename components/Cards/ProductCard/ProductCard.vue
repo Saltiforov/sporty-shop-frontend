@@ -17,7 +17,7 @@
               :icon-size="iconSize"
           />
         </div>
-        <NuxtLink :to="`/product/${product._id}`" :style="{ marginBottom: variant === 'small' ? '4px' : '' }"
+        <NuxtLink :to="`/${locale}/product/${product.slug}`" :style="{ marginBottom: variant === 'small' ? '4px' : '' }"
                   class="block mb-6">
           <img
               :class="[
@@ -88,7 +88,8 @@ import FavoriteButton from "~/components/UI/FavoriteButton/FavoriteButton.vue";
 
 import DefaultProductImage from '~/assets/images/product-image.png'
 import {useCartStore} from "~/stores/cart.js";
-import {addProductToFavorites, deleteProductFromFavorites} from "~/services/api/product-service.js";
+import { useI18n } from 'vue-i18n'
+const { locale } = useI18n()
 
 const props = defineProps({
   product: {

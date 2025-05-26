@@ -11,6 +11,12 @@ export const getAllProducts = (params = {}) => {
     return $fetch(url, { params })
 }
 
+export const getProductBySlug = (slug) => {
+    const config = useRuntimeConfig()
+    const url = `${config.public.apiBase}${router.products}/slug/${slug}`
+    return $fetch(url)
+}
+
 export const getProductsOnSale = () => {
     const { $api } = useNuxtApp()
     return $api.get(router.productsSale)
