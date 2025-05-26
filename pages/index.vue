@@ -72,25 +72,15 @@
             </div>
           </div>
         </aside>
-
         <div>
-          <div
-              class="product-grid">
-
-            <template v-if="!hydrated">
-              <ProductSkeleton v-for="i in 10" :key="'loading-skeleton-' + i"/>
-            </template>
-
-            <template v-else>
+          <div class="product-grid">
               <ProductCard
                   v-for="product in products"
                   :key="product.id"
                   :product="product"
                   @add-to-cart="showProductAddedToast"
                   @click="addProductToViewed(product)"
-
               />
-            </template>
           </div>
 
           <div class="products-pagination-actions mb-[72px]">
@@ -135,8 +125,27 @@ definePageMeta({
   layout: 'default',
 })
 
+useHead({
+  meta: [
+    { property: 'og:type',    content: 'website' },
+    { property: 'og:url',     content: 'http://localhost:4000/' },
+    { property: 'og:title',   content: 'Магазин спортивного питания | SP BALKAN' },
+    { property: 'og:description', content: 'Лучший выбор протеинов и BCAA в Украине.' },
+    { property: 'og:image',   content: 'https://example.com/og-image.jpg' },
+
+    { name: 'twitter:card',   content: 'summary_large_image' },
+    { name: 'twitter:title',  content: 'Магазин спортивного питания | SP BALKAN' },
+    { name: 'twitter:description', content: 'Лучший выбор протеинов и BCAA в Украине.' },
+    { name: 'twitter:image',  content: 'https://example.com/twitter-image.jpg' },
+  ],
+  link: [
+    { rel: 'canonical', href: 'http://localhost:4000/' },
+    { rel: 'alternate', href: 'http://localhost:4000/ua/', hreflang: 'uk' },
+    { rel: 'alternate', href: 'http://localhost:4000/en/', hreflang: 'en' }
+  ]
+})
+
 import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
-import SortSelect from "~/components/UI/SortSelect/SortSelect.vue";
 import LoadMoreButton from "~/components/UI/LoadMoreButton/LoadMoreButton.vue";
 import ProductPaginationButton from "~/components/UI/ProductPaginationButton/ProductPaginationButton.vue";
 import Filters from "~/components/UI/Filters/Filters.vue";
@@ -149,38 +158,52 @@ import {useViewedProducts} from "~/composables/useViewedProducts.js";
 import FiltersSkeleton from "~/components/Skeletons/FiltersSkeleton/FiltersSkeleton.vue";
 import PaginationButtonSkeleton from "~/components/Skeletons/PaginationButtonSkeleton/PaginationButtonSkeleton.vue";
 import LoadMoreButtonSkeleton from "~/components/Skeletons/LoadMoreButtonSkeleton/LoadMoreButtonSkeleton.vue";
-import {getStaticPagesInfo} from "~/services/api/static-info.js";
-import {useStaticPages} from "~/stores/staticPages.js";
-import {useCurrencyStore} from "~/stores/currency.js";
-
-const promotionalProductsSwiperOptions = {
-  slidesPerView: 1,
-  loop: true,
-}
-
-const {addProductToViewed} = useViewedProducts()
 
 const {$eventBus} = useNuxtApp()
 
-const hydrated = ref(false)
-
 const {t} = useI18n();
 
-const {showProductAddedToast} = useToastManager()
-
 const route = useRoute()
-
-const isMobileFiltersOpen = ref(false)
-
-const sortTitle = computed(() => t('sort_title'))
-
-const activePage = ref(Number(route.query.page))
 
 const page = ref(Number(route.query.page) || 1)
 
 const limit = ref(Number(route.query.limit) || 10)
 
 const skip = computed(() => (page.value - 1) * limit.value)
+
+const productsQueryParams = computed(() => {
+  return {
+    page: page.value,
+    limit: limit.value,
+    skip: skip.value,
+    filters: route.query.filters,
+  }
+})
+const { updateQueryParams } = useQueryParams(productsQueryParams);
+
+updateQueryParams();
+
+const { data: catalog, pending, error } = await useAsyncData(
+    'products catalog',
+    () => getAllProducts(productsQueryParams.value),
+    { watch: [productsQueryParams] }
+)
+
+const products = ref(catalog.value?.list || [])
+
+const promotionalProductsSwiperOptions = {
+  slidesPerView: 1,
+  loop: true,
+}
+const { addProductToViewed } = useViewedProducts()
+
+const hydrated = ref(false)
+
+const { showProductAddedToast } = useToastManager()
+
+const isMobileFiltersOpen = ref(false)
+
+const activePage = ref(Number(route.query.page))
 
 const totalProductsRecords = ref(0)
 
@@ -194,15 +217,6 @@ const loadMoreLabel = computed(() => {
   return t('load_more', {count: limit.value});
 });
 
-const productsQueryParams = computed(() => {
-  return {
-    page: page.value,
-    limit: limit.value,
-    skip: skip.value,
-    filters: route.query.filters,
-  }
-})
-
 const getPromotionalProducts = async () => {
   const response = await getProductsOnSale()
   promotionalProducts.value = response.list
@@ -212,22 +226,6 @@ const getProductsByPage = async (newPage) => {
   page.value = newPage
   await fetchProducts(true)
 }
-
-const syncFromRoute = () => {
-  const pageFromQuery = Number(route.query.page) || 1
-  if (page.value !== pageFromQuery) {
-    page.value = pageFromQuery
-  }
-
-  productsQueryParams.value = {...productsQueryParams.value, page: page.value}
-  updateQueryParams()
-}
-
-const {updateQueryParams} = useQueryParams(productsQueryParams);
-
-const products = ref([])
-
-const foundProducts = ref([])
 
 const isLoading = ref(false)
 
@@ -262,52 +260,18 @@ const fetchProducts = async (shouldReplace = false, params = {}) => {
   }
 }
 
-watch(
-    () => route.query.q,
-    async (newSearch, oldSearch) => {
-      if (!newSearch || newSearch.trim() === '') {
-        foundProducts.value = []
-
-        $eventBus.emit('products-found', [])
-        return
-      }
-
-      if (newSearch !== oldSearch) {
-        page.value = 1
-        products.value = []
-        totalProductsRecords.value = 0
-
-        const query = {}
-
-        if (route.query.q && route.query.q.trim() !== '') {
-          query.q = route.query.q
-        }
-
-        await fetchProducts(true, query)
-
-        foundProducts.value = [...products.value]
-        $eventBus.emit('products-found', foundProducts.value)
-      }
-    },
-    {immediate: true}
-)
-
 const searchStore = useSearchStore()
 
 onMounted(async () => {
-  syncFromRoute()
-
   searchStore.setSearchCallback(async (query) => {
     console.log('🔍 Поиск снаружи:', query)
   })
 
-  $eventBus.on('filters-updated', (filters) => {
-    fetchProducts(true, {filters})
-  })
+  // $eventBus.on('filters-updated', (filters) => {
+  //   fetchProducts(true, {filters})
+  // })
 
   await getPromotionalProducts()
-
-  await fetchProducts(true)
 
   hydrated.value = true
 });
