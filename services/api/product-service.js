@@ -13,7 +13,7 @@ export const getAllProducts = (params = {}) => {
 
 export const getProductBySlug = (slug) => {
     const config = useRuntimeConfig()
-    const url = `${config.public.apiBase}${router.products}/slug/${slug}`
+    const url = `${config.public.apiBase}${router.products}/${slug}`
     return $fetch(url)
 }
 
