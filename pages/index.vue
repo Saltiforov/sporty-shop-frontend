@@ -86,12 +86,6 @@
           <div>
             <div
                 class="product-grid">
-
-              <template v-if="!hydrated">
-                <ProductSkeleton v-for="i in 10" :key="'loading-skeleton-' + i"/>
-              </template>
-
-              <template v-else>
                 <ProductCard
                     v-for="product in products"
                     :key="product.id"
@@ -100,26 +94,9 @@
                     @click="addProductToViewed(product)"
 
                 />
-              </template>
-            </div>
-            <div v-else class="flex gap-4 overflow-x-auto">
-              <ProductSkeleton
-                  class="min-w-[180px]"
-              />
             </div>
           </div>
-        </aside>
         <div>
-          <div class="product-grid">
-              <ProductCard
-                  v-for="product in products"
-                  :key="product.id"
-                  :product="product"
-                  @add-to-cart="showProductAddedToast"
-                  @click="addProductToViewed(product)"
-              />
-          </div>
-
             <div class="products-pagination-actions mb-[72px]">
               <div class="load-more-wrapper mb-3 flex justify-center">
                 <LoadMoreButton
@@ -250,7 +227,7 @@ const totalPages = computed(() => Math.ceil(totalProductsRecords.value / limit.v
 const allLoaded = computed(() => products.value.length >= totalProductsRecords.value || activePage.value === totalPages.value)
 
 const loadMoreLabel = computed(() => {
-  return t('load_more', {count: limit.value});
+  return t('load_more', { count: limit.value });
 });
 
 const getPromotionalProducts = async () => {

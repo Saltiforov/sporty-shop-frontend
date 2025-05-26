@@ -16,7 +16,6 @@
         v-model="selectedCurrency"
         optionLabel="label"
         :options="currencyOptions"
-        @change="switchCurrency"
     />
   </div>
 </template>
@@ -31,16 +30,21 @@ const currencyStore = useCurrencyStore()
 const currencyCookie = useCookie('currency')
 
 const currencyOptions = [
-  { label: 'Украина (UAH)', code: 'UAH' },
-  { label: 'Европа (EUR)',   code: 'EUR' }
+  { label: 'Ukraine', code: 'UAH' },
+  { label: 'Europe', code: 'EUR' }
 ]
 
-const selectedCurrency = ref(currencyOptions[0])
+const defaultCode = currencyCookie.value || currencyOptions[0].code
+
+const selectedCurrency = ref(
+    currencyOptions.find(el => el.code === defaultCode)
+    || currencyOptions[0]
+)
 
 onBeforeMount(() => {
   let code = currencyCookie.value
 
-  if (!code && typeof window !== 'undefined') {
+  if (!code) {
     code = localStorage.getItem('currency') || ''
   }
 
@@ -57,8 +61,6 @@ onBeforeMount(() => {
 watch(selectedCurrency, (newVal) => {
   currencyStore.setCurrency(newVal.code)
   currencyCookie.value = newVal.code
-  if (typeof window !== 'undefined') {
-    localStorage.setItem('currency', newVal.code)
-  }
+  localStorage.setItem('currency', newVal.code)
 })
 </script>
