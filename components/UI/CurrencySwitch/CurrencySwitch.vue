@@ -21,30 +21,44 @@
   </div>
 </template>
 
-<script setup>
-import { ref, watch } from 'vue'
+<script setup lang="ts">
+import { ref, watch, onBeforeMount } from 'vue'
 import Select from 'primevue/select'
-import { useCurrencyStore } from '~/stores/currency.js'
+import { useCurrencyStore } from '~/stores/currency'
+import { useCookie } from '#app'
 
 const currencyStore = useCurrencyStore()
+const currencyCookie = useCookie('currency')
 
 const currencyOptions = [
-  { label: 'Ukraine', code: 'UAH' },
-  { label: 'Europe', code: 'EUR' }
+  { label: 'Украина (UAH)', code: 'UAH' },
+  { label: 'Европа (EUR)',   code: 'EUR' }
 ]
 
-const storedCurrencyCode = typeof window !== 'undefined'
-    ? localStorage.getItem('currency')
-    : null
+const selectedCurrency = ref(currencyOptions[0])
 
-const selectedCurrency = ref(
-    currencyOptions.find(c => c.code === storedCurrencyCode) || currencyOptions[0]
-)
+onBeforeMount(() => {
+  let code = currencyCookie.value
 
-const switchCurrency = () => {
-  localStorage.setItem('currency', selectedCurrency.value.code)
+  if (!code && typeof window !== 'undefined') {
+    code = localStorage.getItem('currency') || ''
+  }
+
+  const match = currencyOptions.find(c => c.code === code)
+
+  if (match) {
+    selectedCurrency.value = match
+  }
+
   currencyStore.setCurrency(selectedCurrency.value.code)
-}
+  currencyCookie.value = selectedCurrency.value.code
+})
 
-watch(selectedCurrency, switchCurrency)
+watch(selectedCurrency, (newVal) => {
+  currencyStore.setCurrency(newVal.code)
+  currencyCookie.value = newVal.code
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('currency', newVal.code)
+  }
+})
 </script>

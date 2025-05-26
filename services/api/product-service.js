@@ -6,8 +6,9 @@ const router = {
 }
 
 export const getAllProducts = (params = {}) => {
-    const { $api } = useNuxtApp()
-    return $api.get(router.products, { params })
+    const config = useRuntimeConfig()
+    const url = `${config.public.apiBase}${router.products}`
+    return $fetch(url, { params })
 }
 
 export const getProductsOnSale = () => {
