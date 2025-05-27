@@ -2,15 +2,17 @@
   <footer class="fixed bottom-0 left-0 w-full z-[1000] responsive-footer flex flex-col p-4 shadow">
     <div class="responsive-footer-container w-full flex justify-between">
 
-      <div class="menu flex items-center">
-        <button @click="handleMobileMenu">
-          <img v-if="!isOpen" src="~/assets/icons/menu-icon-open.svg" alt="menu-icon-open.svg">
-          <img v-else src="~/assets/icons/menu-icon-close.svg" alt="menu-icon-close.svg">
-        </button>
 
-      </div>
+      <div class="actions-wrapper w-full flex justify-between">
 
-      <div class="actions-wrapper w-full justify-end flex">
+        <div class="menu">
+          <button @click="handleMobileMenu">
+            <img v-if="!isOpen" src="~/assets/icons/menu-icon-open.svg" alt="menu-icon-open.svg">
+            <img v-else src="~/assets/icons/menu-icon-close.svg" alt="menu-icon-close.svg">
+          </button>
+        </div>
+
+
         <Button :disabled="!canUseFavorite" @click="navigateTo('/profile/favorites')"
                 :pt="{ root: { class: 'action-panel-icon' } }">
           <svg width="27" height="23" viewBox="0 0 29 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -66,6 +68,8 @@ const emit = defineEmits(['handle-mobile-sidebar'])
 const cartStore = useCartStore();
 
 const token = useCookie('token')
+
+const { t } = useI18n()
 
 const handleMobileMenu = () => {
   emit('handle-mobile-sidebar')

@@ -2,7 +2,11 @@
   <div :style="style" class="counter-container w-[108px] flex items-center gap-[4px]">
     <Button :pt="{
       root: {
-        class: 'amount-selector-button'
+        style: {
+          backgroundColor: 'transparent',
+          border: 'none',
+          padding: '0',
+        }
       }
     }" @click="decrement" class="w-[34px] h-[34px] flex items-center justify-center border rounded">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -25,7 +29,11 @@
 
     <Button :pt="{
       root: {
-        class: 'amount-selector-button'
+       style: {
+          backgroundColor: 'transparent',
+          border: 'none',
+          padding: '0',
+        }
       }
     }" @click="increment" class="w-[34px] h-[34px] flex items-center justify-center border rounded">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -43,6 +43,7 @@ import CartItem from "~/components/Cards/CartItem/CartItem.vue";
 import {calculateTotal} from "~/utils/index.js";
 import {useConfirmWithToast} from "~/composables/useConfirmWithToast.js";
 import {useCartStore} from "~/stores/cart.js";
+import {useCurrencyStore} from "~/stores/currency.js";
 
 const {confirmAction} = useConfirmWithToast()
 

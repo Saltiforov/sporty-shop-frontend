@@ -61,7 +61,13 @@
           <Button
               :pt="{
               root: {
-                class: 'card-buy-button'
+                style: {
+                border: 'none',
+                background: 'var( --color-primary-green)',
+                borderRadius: '50%',
+                width: '47px',
+                height: '47px',
+                },
               }
             }"
               @click="addToCart(product)"
@@ -90,6 +96,7 @@ import DefaultProductImage from '~/assets/images/product-image.png'
 import {useCartStore} from "~/stores/cart.js";
 import { useI18n } from 'vue-i18n'
 const { locale } = useI18n()
+import {useCurrencyStore} from "~/stores/currency.js";
 
 const props = defineProps({
   product: {
@@ -168,6 +175,16 @@ const iconSize = computed(() => {
   }
 }
 
+
+@media (max-width: 1610px) {
+  .product-card {
+    max-width: 310px;
+    aspect-ratio: 294 / 385;
+  }
+}
+
+
+
 @media (max-width: 1100px) {
   .product-name p {
     font-size: 18px;
@@ -189,27 +206,65 @@ const iconSize = computed(() => {
  }
 }
 
-@media (max-width: 500px) {
- .product-card {
-   max-width: 170px;
-   padding: 20px 6px 5px 6px;
- }
+@media (max-width: 700px) {
+  .product-card {
+    max-width: 180px;
+    padding: 20px 10px 10px 10px;
+  }
   .product-name p {
     font-size: 16px;
   }
   .discount-price {
-    font-size: 13px;
+    top: -0.25rem;
+    font-size: 12px;
   }
   .price-without-discount {
     font-size: 18px;
   }
-  .product-card-content {
-    max-width: 128px;
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-  }
+}
 
+@media (max-width: 615px) {
+  .product-card {
+    max-width: 230px;
+  }
+}
+
+
+@media (max-width: 500px) {
+ .product-card {
+   max-width: 200px;
+   aspect-ratio: 294 / 345;
+ }
+  .product-name p {
+    font-size: 14px;
+  }
+  .discount-price {
+    font-size: 12px;
+  }
+  .price-without-discount {
+    font-size: 15px;
+  }
+  .block {
+    margin-bottom: 4px;
+  }
+  .product-name {
+    min-height: 22px;
+  }
+  .product-grade {
+    font-size: 10px;
+  }
+}
+@media (max-width: 470px) {
+ .product-card {
+   max-width: 160px;
+   padding-top: 10px;
+ }
+  .product-name p {
+    font-size: 10px;
+  }
+  .price-without-discount {
+    font-size: 12px;
+  }
 }
 
 

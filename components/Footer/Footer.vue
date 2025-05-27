@@ -2,7 +2,13 @@
   <footer class="pt-[21px] pr-3 pl-3">
     <div class="footer-container flex justify-between flex-wrap items-center max-w-[1190px] px-[15px] mx-auto">
       <div class="left-side flex w-full max-w-[661px] justify-between flex-wrap sm:flex-nowrap gap-2">
-        <img src="@/assets/images/footer-logo.svg" alt="footer-logo.svg">
+        <NuxtImg
+            src="/images/footer-logo.svg"
+            width="184"
+            height="140"
+            alt="footer-logo"
+            loading="lazy"
+        />
         <div class="links-list flex w-full max-w-[411px] justify-between flex-wrap sm:flex-nowrap gap-2">
           <div v-for="(list, index) in links" :key="index">
             <div class="flex mb-2 items-center">
@@ -27,11 +33,23 @@
           </div>
           <div class="contacts-links w-[182px] flex justify-between items-center">
             <NuxtLink to="https://www.instagram.com/" class="flex flex-col items-center text-center gap-1">
-              <img src="@/assets/images/social-instagram.svg" alt="social-instagram.svg">
+              <NuxtImg
+                  src="/images/instagram-black-icon.png"
+                  width="36"
+                  height="36"
+                  alt="social instagram"
+                  loading="lazy"
+              />
               <p class="link-text">Instagram</p>
             </NuxtLink>
             <NuxtLink to="https://web.telegram.org/a/" class="flex flex-col items-center text-center gap-1">
-              <img src="@/assets/images/social-telegram.svg" alt="social-telegram.svg">
+              <NuxtImg
+                  src="/images/telegram-black-icon.png"
+                  width="36"
+                  height="36"
+                  alt="social telegram"
+                  loading="lazy"
+              />
               <p class="link-text">Telegram</p>
             </NuxtLink>
           </div>
@@ -40,10 +58,22 @@
           <div><p class="small-title mb-5">{{ t('footer_social_networks') }}</p></div>
           <div class="flex justify-between">
             <NuxtLink to="https://www.instagram.com/" class="flex flex-col items-center text-center gap-1">
-              <img src="@/assets/images/social-instagram.svg" alt="social-instagram.svg">
+              <NuxtImg
+                  src="/images/instagram-black-icon.png"
+                  width="36"
+                  height="36"
+                  alt="social instagram"
+                  loading="lazy"
+              />
             </NuxtLink>
             <NuxtLink to="https://web.telegram.org/a/" class="flex flex-col items-center text-center gap-1">
-              <img src="@/assets/images/social-telegram.svg" alt="social-telegram.svg">
+              <NuxtImg
+                  src="/images/telegram-black-icon.png"
+                  width="36"
+                  height="36"
+                  alt="social telegram"
+                  loading="lazy"
+              />
             </NuxtLink>
           </div>
         </div>
@@ -104,7 +134,7 @@ const links = ref([
 
 @media (max-width: 671px) {
   footer {
-    display: none;
+    display: block;
   }
 }
 

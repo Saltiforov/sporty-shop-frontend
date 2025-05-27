@@ -38,11 +38,11 @@
         </div>
 
 
-        <div class="grid-cols-1 grid lg:grid-cols-[390px_1fr] gap-[30px]">
+        <div class="main-content grid-cols-1 grid lg:grid-cols-[354px_1fr] gap-[30px]">
           <aside class="rounded-md">
             <div class="filters mb-[91px] w-full max-w-[354px] h-[554px] border rounded-[var(--default-rounded)]">
-              <Filters v-if="hydrated"/>
-              <FiltersSkeleton v-else/>
+              <FiltersSkeleton v-if="isLoading"/>
+              <Filters v-else/>
             </div>
 
             <transition name="fade-slide">
@@ -53,7 +53,9 @@
             </transition>
 
             <div class="promotional-products text-center">
-              <p class="text-[var(--color-primary-pink)] mb-[21px] fw-600 text-[20px]">{{ t('promo_products_title') }}</p>
+              <p class="text-[var(--color-primary-pink)] mb-[21px] fw-600 text-[20px]">{{
+                  t('promo_products_title')
+                }}</p>
               <SwiperWrapper
                   v-if="hydrated"
                   arrow-color="var(--color-muted-light-gray)"
@@ -86,17 +88,17 @@
           <div>
             <div
                 class="product-grid">
-                <ProductCard
-                    v-for="product in products"
-                    :key="product.id"
-                    :product="product"
-                    @add-to-cart="showToast"
-                    @click="addProductToViewed(product)"
+              <ProductCard
+                  v-for="product in products"
+                  :key="product.id"
+                  :product="product"
+                  @add-to-cart="showToast"
+                  @click="addProductToViewed(product)"
 
-                />
+              />
             </div>
           </div>
-        <div>
+          <div>
             <div class="products-pagination-actions mb-[72px]">
               <div class="load-more-wrapper mb-3 flex justify-center">
                 <LoadMoreButton
@@ -140,21 +142,21 @@ definePageMeta({
 
 useHead({
   meta: [
-    { property: 'og:type',    content: 'website' },
-    { property: 'og:url',     content: 'http://localhost:4000/' },
-    { property: 'og:title',   content: 'Магазин спортивного питания | SP BALKAN' },
-    { property: 'og:description', content: 'Лучший выбор протеинов и BCAA в Украине.' },
-    { property: 'og:image',   content: 'https://example.com/og-image.jpg' },
+    {property: 'og:type', content: 'website'},
+    {property: 'og:url', content: 'http://localhost:4000/'},
+    {property: 'og:title', content: 'Магазин спортивного питания | SP BALKAN'},
+    {property: 'og:description', content: 'Лучший выбор протеинов и BCAA в Украине.'},
+    {property: 'og:image', content: 'https://example.com/og-image.jpg'},
 
-    { name: 'twitter:card',   content: 'summary_large_image' },
-    { name: 'twitter:title',  content: 'Магазин спортивного питания | SP BALKAN' },
-    { name: 'twitter:description', content: 'Лучший выбор протеинов и BCAA в Украине.' },
-    { name: 'twitter:image',  content: 'https://example.com/twitter-image.jpg' },
+    {name: 'twitter:card', content: 'summary_large_image'},
+    {name: 'twitter:title', content: 'Магазин спортивного питания | SP BALKAN'},
+    {name: 'twitter:description', content: 'Лучший выбор протеинов и BCAA в Украине.'},
+    {name: 'twitter:image', content: 'https://example.com/twitter-image.jpg'},
   ],
   link: [
-    { rel: 'canonical', href: 'http://localhost:4000/' },
-    { rel: 'alternate', href: 'http://localhost:4000/ua/', hreflang: 'uk' },
-    { rel: 'alternate', href: 'http://localhost:4000/en/', hreflang: 'en' }
+    {rel: 'canonical', href: 'http://localhost:4000/'},
+    {rel: 'alternate', href: 'http://localhost:4000/ua/', hreflang: 'uk'},
+    {rel: 'alternate', href: 'http://localhost:4000/en/', hreflang: 'en'}
   ]
 })
 
@@ -171,6 +173,7 @@ import {useViewedProducts} from "~/composables/useViewedProducts.js";
 import FiltersSkeleton from "~/components/Skeletons/FiltersSkeleton/FiltersSkeleton.vue";
 import PaginationButtonSkeleton from "~/components/Skeletons/PaginationButtonSkeleton/PaginationButtonSkeleton.vue";
 import LoadMoreButtonSkeleton from "~/components/Skeletons/LoadMoreButtonSkeleton/LoadMoreButtonSkeleton.vue";
+import {defineAsyncComponent} from "vue";
 
 const {$eventBus} = useNuxtApp()
 
@@ -192,14 +195,14 @@ const productsQueryParams = computed(() => {
     filters: route.query.filters,
   }
 })
-const { updateQueryParams } = useQueryParams(productsQueryParams);
+const {updateQueryParams} = useQueryParams(productsQueryParams);
 
 updateQueryParams();
 
-const { data: catalog, pending, error } = await useAsyncData(
+const {data: catalog, pending, error} = await useAsyncData(
     'products catalog',
     () => getAllProducts(productsQueryParams.value),
-    { watch: [productsQueryParams] }
+    {watch: [productsQueryParams]}
 )
 
 const products = ref(catalog.value?.list || [])
@@ -208,11 +211,11 @@ const promotionalProductsSwiperOptions = {
   slidesPerView: 1,
   loop: true,
 }
-const { addProductToViewed } = useViewedProducts()
+const {addProductToViewed} = useViewedProducts()
 
 const hydrated = ref(false)
 
-const { showProductAddedToast } = useToastManager()
+const {showProductAddedToast} = useToastManager()
 
 const isMobileFiltersOpen = ref(false)
 
@@ -227,8 +230,12 @@ const totalPages = computed(() => Math.ceil(totalProductsRecords.value / limit.v
 const allLoaded = computed(() => products.value.length >= totalProductsRecords.value || activePage.value === totalPages.value)
 
 const loadMoreLabel = computed(() => {
-  return t('load_more', { count: limit.value });
+  return t('load_more', {count: limit.value});
 });
+
+const showToast = (product) => {
+  showProductAddedToast(product)
+}
 
 const getPromotionalProducts = async () => {
   const response = await getProductsOnSale()
@@ -276,6 +283,7 @@ const fetchProducts = async (shouldReplace = false, params = {}) => {
 const searchStore = useSearchStore()
 
 onMounted(async () => {
+  isLoading.value = true
   searchStore.setSearchCallback(async (query) => {
     console.log('🔍 Поиск снаружи:', query)
   })
@@ -287,6 +295,7 @@ onMounted(async () => {
   await getPromotionalProducts()
 
   hydrated.value = true
+  isLoading.value = false
 });
 
 onBeforeUnmount(() => {
@@ -346,6 +355,7 @@ onBeforeUnmount(() => {
     grid-template-columns: repeat(4, 1fr);
     gap: 24px;
   }
+
   .sort-select {
     min-width: auto;
   }
@@ -357,9 +367,12 @@ onBeforeUnmount(() => {
   }
 }
 
-@media (max-width: 1355px) {
+@media (max-width: 1380px) {
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .main-content {
+    gap: 16px;
   }
 }
 
@@ -408,16 +421,17 @@ onBeforeUnmount(() => {
   }
 }
 
-
 @media (max-width: 750px) {
   .select-filters {
     margin-top: 30px;
     padding-top: 10px;
     justify-content: space-between;
   }
+
   .sort-title {
     font-size: 15px;
   }
+
   .product-grid {
     gap: 24px;
   }
@@ -425,25 +439,42 @@ onBeforeUnmount(() => {
 
 @media (max-width: 700px) {
   .product-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
-
   .sort-title {
     margin-right: 4px;
   }
 }
 
+@media (max-width: 650px) {
+  .product-grid {
+    gap: 16px;
+  }
+}
+
+
+@media (max-width: 615px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+
 @media (max-width: 500px) {
   .product-grid {
-    gap: 5px;
+    gap: 10px;
   }
+
   .responsive-filters {
     justify-content: center;
   }
+
   .sort-select {
     justify-content: center;
     margin-bottom: 8px;
   }
+
   .select-filters {
     margin-top: 30px;
     padding-top: 25px;

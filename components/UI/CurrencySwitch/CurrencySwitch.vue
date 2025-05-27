@@ -16,6 +16,7 @@
         v-model="selectedCurrency"
         optionLabel="label"
         :options="currencyOptions"
+        @change="switchCurrency"
     />
   </div>
 </template>
@@ -30,8 +31,8 @@ const currencyStore = useCurrencyStore()
 const currencyCookie = useCookie('currency')
 
 const currencyOptions = [
-  { label: 'Ukraine', code: 'UAH' },
-  { label: 'Europe', code: 'EUR' }
+  { label: 'Ukraine', code: 'UAH', value: 'uah' },
+  { label: 'Europe', code: 'EUR', value: 'eur' }
 ]
 
 const defaultCode = currencyCookie.value || currencyOptions[0].code

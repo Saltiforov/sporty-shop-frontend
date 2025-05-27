@@ -81,6 +81,7 @@
 import CartItem from "~/components/Cards/CartItem/CartItem.vue";
 import {calculateTotal, capitalizeFirstLetter} from "~/utils/index.js";
 import CountdownTimer from "~/components/UI/CountdownTimer/CountdownTimer.vue";
+import {useCurrencyStore} from "~/stores/currency.js";
 
 const {t} = useI18n();
 

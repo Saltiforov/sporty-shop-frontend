@@ -104,6 +104,7 @@
 <script setup>
 import DefaultProductImage from "~/assets/images/product-image.png"
 import AmountSelector from "~/components/UI/AmountSelector/AmountSelector.vue";
+import {useCurrencyStore} from "~/stores/currency.js";
 
 const {cartProduct, isHistoryView, currency} = defineProps({
   cartProduct: {

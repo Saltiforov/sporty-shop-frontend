@@ -20,9 +20,6 @@
               </template>
             </component>
           </template>
-          <template v-else>
-            <MainBannerSkeleton />
-          </template>
         </ClientOnly>
       </div>
     </div>
@@ -37,10 +34,13 @@
 import { ref, onMounted, defineAsyncComponent } from 'vue'
 import MainBannerSkeleton from '~/components/Skeletons/MainBannerSkeleton/MainBannerSkeleton.vue'
 
-// 🌙 Lazy load компонента только на клиенте
 const AsyncSwiper = defineAsyncComponent(() => import('@/components/Swiper/SwiperWrapper.vue'))
 
-const { data: images } = await useFetch('/api/images')
+const images = [
+  'https://wallpapers.com/images/high/fitness-gym-with-equipment-iovhjg9dwfy87bzf.webp',
+  'https://wallpapers.com/images/high/home-gym-with-barbell-r4xvbh7jalyuhdme.webp',
+  'https://wallpapers.com/images/high/gym-motivation-picture-8rog1fmrp8zbmfkm.webp',
+]
 
 const hydrated = ref(false)
 onMounted(() => {

@@ -5,6 +5,8 @@ export const useCurrencyStore = defineStore('currency', () => {
 
     const currency = ref('')
 
+    const isRegionEurope = computed(() => currency.value === 'eur')
+
     const getCurrency = computed(() => currency.value)
 
     const isUAHSelected = computed(() => currency.value === 'uah')
@@ -26,6 +28,7 @@ export const useCurrencyStore = defineStore('currency', () => {
         getCurrency,
         setCurrency,
         isUAHSelected,
-        label
+        label,
+        isRegionEurope
     }
 })

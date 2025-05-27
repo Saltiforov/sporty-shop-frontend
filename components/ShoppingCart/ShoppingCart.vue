@@ -45,8 +45,16 @@
           </NuxtLink>
         </div>
         <div>
-          <Button @click="handleContinueShopping" class="continue-shopping__bnt" to="/">
-            <p class="text-[#A3A3A7] murecho-font">{{ t('continue_shopping') }}</p>
+          <Button @click="handleContinueShopping" :pt="{
+            root: {
+              style: {
+                border: 'none',
+                background: 'transparent',
+                color: 'var(--small-title-color)',
+              }
+            }
+          }" class="continue-shopping__btn" to="/">
+            <p class="murecho-font">{{ t('continue_shopping') }}</p>
           </Button>
         </div>
       </div>
@@ -69,8 +77,20 @@
             <template #buy-button>
               <Button
                   @click="addToCart(product)"
-                  :pt="{ root: { class: 'card-buy__small__btn' } }"
-                  class="flex justify-center items-center w-[29px] h-[29px]"
+                  :pt="{
+                    root: {
+                      style: {
+                        backgroundColor: 'var(--color-primary-green)',
+                        color: 'var(--color-primary-white)',
+                        borderRadius: '100%',
+                        border: 'none',
+                        padding: '0',
+                        width: '29px',
+                        height: '29px',
+                      }
+                    }
+                   }"
+                  class="flex justify-center items-center"
               >
                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
                      xmlns="http://www.w3.org/2000/svg">
@@ -168,16 +188,6 @@ const products = ref([
 </script>
 
 <style scoped>
-.continue-shopping__bnt {
-  border: none;
-  background: transparent;
-}
-
-.continue-shopping__bnt:hover {
-  border: none;
-  background: transparent;
-}
-
 .make-order-button {
   width: 100%;
   border-radius: var(--default-rounded);
@@ -186,14 +196,6 @@ const products = ref([
 
 .make-order-button:hover {
   background: var(--color-primary-dark);
-}
-
-.card-buy__small__btn {
-  background: var(--color-primary-green);
-  color: var(--color-primary-white);
-  border-radius: 100%;
-  border: none;
-  padding: 0;
 }
 
 .card-buy__small__btn:hover {

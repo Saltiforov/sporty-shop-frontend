@@ -1,7 +1,11 @@
 <template>
   <Button :pt="{
     root: {
-      class: 'favorite-button',
+      style: {
+        backgroundColor: 'transparent',
+        border: 'none',
+        padding: '0',
+      },
     }
   }" @click="toggleFavorite">
     <svg

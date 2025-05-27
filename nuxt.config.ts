@@ -31,7 +31,8 @@ export default defineNuxtConfig({
       '@nuxtjs/tailwindcss',
       'nuxt-swiper',
       '@pinia/nuxt',
-      '@nuxtjs/i18n'
+      '@nuxtjs/i18n',
+      '@nuxt/image'
     ],
     css: [
         'primeicons/primeicons.css',

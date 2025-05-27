@@ -1,12 +1,12 @@
 <template>
   <LayoutBreadcrumb v-if="!isLoading"/>
   <BreadcrumbSkeleton v-else/>
-  <div class="checkout-page">
+  <section class="checkout-page">
     <LoadingOverlay :visible="isLoading"/>
-    <div class="checkout-content mb-[101px] flex items-start">
+    <main class="checkout-content mb-[101px] flex items-start">
 
-      <div class="w-full checkout-info-wrapper max-w-[1064px] mr-[71px]">
-        <div
+      <section class="w-full checkout-info-wrapper max-w-[1064px] mr-[71px]">
+        <article
             v-if="hydrated || userData && userData._id"
             class="checkout-fields pt-[24px] pr-[45px] pb-[44px] pl-[42px] mb-[65px] rounded-lg bg-[var(--color-gray-lavender)]">
           <div class="header-fields flex justify-between mb-7">
@@ -17,11 +17,8 @@
                 <button @click="authPopup.open('login')">{{ t('sign_in') }}</button>
               </div>
             </div>
-            <div class="header-right">
-              <RegionSelect v-model="selectedRegion"/>
-            </div>
           </div>
-          <div class="fields-content">
+          <section class="fields-content">
             <FieldsBlock v-if="userData && userData._id"
                          ref="fieldsBlock"
                          :config="currentRegionConfig.fields"
@@ -29,24 +26,24 @@
                          :shouldResetOnConfigChange="false"
             />
             <FieldsBlock v-else :config="currentRegionConfig.fields" ref="fieldsBlock"/>
-          </div>
-        </div>
+          </section>
+        </article>
         <CheckoutFieldsSkeleton class="mb-[65px]" v-else/>
 
-        <div v-if="hydrated"
-             class="checkout-payment-method pt-[24px] px-[42px]  pb-[36px] rounded-lg bg-[var(--color-gray-lavender)]">
+        <section v-if="hydrated"
+                 class="checkout-payment-method pt-[24px] px-[42px]  pb-[36px] rounded-lg bg-[var(--color-gray-lavender)]">
           <h2 class="mb-[36px] flex title-lg">
             {{ t('payment_method_title') }}
             <TooltipIcon class="ml-2" :message="t('payment_method_tooltip')"/>
           </h2>
           <div class="payment-method-content murecho-font">
             <div class="flex mb-2 items-center">
-              <div class="mr-3" >
-                <img class="w-[36px] h-[36px]" src="/assets/icons/telegram-black-icon.png" alt="">
-              </div>
+              <figure class="mr-3">
+                <img class="w-[36px] h-[36px]" src="/assets/icons/telegram-black-icon.png" alt="telegram-icon">
+              </figure>
               <p class="font-medium ">Повна передоплата через Telegram</p>
             </div>
-            <div class="confirmation-hint text-[14px]">
+            <aside class="confirmation-hint text-[14px]">
               <p class="text-[var(--color-muted-gray)]">
                 {{ t('payment_instruction_text_part1') }}
                 <a
@@ -59,20 +56,20 @@
                 </a>
                 {{ t('payment_instruction_text_part2') }}
               </p>
-            </div>
+            </aside>
           </div>
-        </div>
+        </section>
         <CheckoutPaymentMethodSkeleton v-else/>
-      </div>
+      </section>
 
 
-      <div
+      <section
           v-if="hydrated"
           class="checkout-products-list bg-[var(--color-gray-lavender)]  rounded-lg max-w-[643px] pt-[24px] pr-[46px] pl-[48px] pb-[30px] w-full">
         <div class="products-list__container max-w-[547px] w-full">
           <h2 class="title-lg mb-[44px]">{{ t('checkout_list_title') }}</h2>
           <ProductsOverview :products-overview="cartStore.getCartProducts"/>
-          <div class="use-promocode">
+          <section class="use-promocode">
             <div class="flex justify-between mb-[17px]">
               <p class="text-[var(--color-primary-dark)]">{{ t('use_promo_code') }}</p>
               <div class="use-promocode-wrapper__btn">
@@ -81,25 +78,28 @@
                     class: 'use-promocode__btn'
                   }
                 }" v-if="isUsePromoCode" @click="togglePromoCodeUse">
-                  <img src="@/assets/icons/promocode-btn-plus.svg" alt="">
+                  <img src="@/assets/icons/promocode-btn-plus.svg" alt="promocode-icon">
                 </Button>
                 <Button :pt="{
                   root: {
                     class: 'use-promocode__btn'
                   }
                 }" v-else @click="togglePromoCodeUse">
-                  <img src="@/assets/icons/promocode-btn-minus.svg" alt="">
+                  <img src="@/assets/icons/promocode-btn-minus.svg" alt="promocode-icon">
                 </Button>
 
               </div>
             </div>
-            <div v-if="isUsePromoCode"
-                 class="use-promocode__field mb-[36px] bg-white flex rounded-[var(--default-rounded)] overflow-hidden border w-full">
+            <form v-if="isUsePromoCode"
+                  class="use-promocode__field mb-[36px] bg-white flex rounded-[var(--default-rounded)] overflow-hidden border w-full">
               <InputText
                   v-model="promoCodeValue"
                   :pt="{
                     root: {
-                      class: 'py-[12px]'
+                      style: {
+                        paddingTop: '12px',
+                        paddingBottom: '12px'
+                      }
                     }
                   }"
                   :placeholder="t('enter_promo_code')"
@@ -107,40 +107,46 @@
               />
               <Button :pt="{
                 root: {
-                  class: 'max-w-[48px] w-full rounded-none use-promocode-field__btn'
+                  class: 'use-promocode-field__btn',
+                   style: {
+                    maxWidth: '48px',
+                    width: '100%',
+                    borderRadius: '0'
+                  }
                 }
               }"
               >
                 <img src="@/assets/icons/arrow-right-white.svg" alt="arrow-right-white.svg">
               </Button>
-            </div>
-          </div>
+            </form>
+          </section>
 
-          <div class="comment-to-order mb-[24px]">
+          <section class="comment-to-order mb-[24px]">
             <p class="murecho-font mb-[18px]">{{ t('comment_to_order') }}</p>
             <div class="mb-[10px] rounded-[8px]">
                 <Textarea v-model="commentForOrder" style="resize: none" class="w-full rounded-[8px]"
                           rows="2" cols="30"/>
             </div>
-          </div>
+          </section>
           <div
               class="checkout__wrapper-btn rounded-[8px] w-full mb-3">
-            <Button @click="handleCreateOrder" :pt="{
+            <Button :disabled="currencyStore.isRegionEurope && !minimumEuropePrice" @click="handleCreateOrder" :pt="{
               root: {
                 class: 'checkout__btn'
               }
             }"><p class="murecho-font text-[14px]">{{ t('confirm_order') }}</p></Button>
           </div>
-          <div v-if="!isRegionUA" class="min-price-europe mb-6">
+          <aside v-if="currencyStore.isRegionEurope" class="min-price-europe mb-6">
             <p class="text-[var(--color-primary-pink)] text-center text-[14px]">{{ t('minimum_amount_order_eu') }}</p>
-          </div>
+          </aside>
         </div>
 
-      </div>
+      </section>
       <CheckoutOrderListSkeleton v-else/>
 
-    </div>
-  </div>
+    </main>
+  </section>
+
   <Toast group="tl"/>
 </template>
 
@@ -162,6 +168,7 @@ import {useCurrencyStore} from "~/stores/currency.js";
 import BreadcrumbSkeleton from "~/components/Skeletons/BreadcrumbSkeleton/BreadcrumbSkeleton.vue";
 import LayoutBreadcrumb from "~/components/UI/LayoutBreadcrumb/LayoutBreadcrumb.vue";
 import RegionSelect from "~/components/UI/RegionSelect/RegionSelect.vue";
+import {calculateTotal} from "~/utils/index.js";
 
 definePageMeta({
   layout: 'breadcrumb',
@@ -191,12 +198,6 @@ const promoCodeValue = ref(null)
 
 const commentForOrder = ref('')
 
-const selectedRegion = ref({label: t('checkout_region_ua'), value: 'ua'})
-
-const isRegionUA = computed(() => selectedRegion.value.value === 'ua')
-
-const currentRegion = computed(() => selectedRegion.value.value || 'ua')
-
 const isPaymentOnDelivery = ref(false)
 
 const isSendSmsWithFormData = ref(false)
@@ -205,7 +206,11 @@ const userData = ref({})
 
 const uaPhoneCode = ref('+380')
 
-const euPhoneCode = ref('+31')
+const MIN_EU_PRICE = 300
+
+const checkoutPrice = computed(() => calculateTotal(cartStore.getCartProducts, 'eur', true))
+
+const minimumEuropePrice = computed(() => checkoutPrice.value >= MIN_EU_PRICE)
 
 const showTopRight = () => {
   toast.add({severity: 'success', summary: 'Info Message', detail: 'Message Content', group: 'tl', life: 3000});
@@ -215,22 +220,14 @@ const showError = () => {
   toast.add({severity: 'error', summary: 'Error Message', detail: 'Message Content', group: 'tl', life: 3000});
 };
 
-const onSelectPaymentMethod = (option) => {
-  if (option === 'sms') {
-    isSendSmsWithFormData.value = true
-    isPaymentOnDelivery.value = false
-  } else if (option === 'cash') {
-    isSendSmsWithFormData.value = false
-    isPaymentOnDelivery.value = true
-  }
-}
-
 const mappedProductsForOrder = arr => arr.map(({quantity, ...withoutQuantity}) => ({
   product: withoutQuantity,
   quantity
 }));
 
 const currency = computed(() => currencyStore.isUAHSelected ? 'uah' : 'eur')
+
+const region = computed(() => currencyStore.isRegionEurope ? 'eur' : 'ua')
 
 const mappedUserDataForOrder = (data) => {
   const {street, city, postalCode, country, firstName, lastName, phone, email, telegramUsername} = data
@@ -241,7 +238,6 @@ const mappedUserDataForOrder = (data) => {
       postalCode,
       country,
     },
-    paymentMethod: isSendSmsWithFormData.value || isPaymentOnDelivery.value,
     customerInfo: {
       firstName,
       lastName,
@@ -251,7 +247,7 @@ const mappedUserDataForOrder = (data) => {
     },
     description: commentForOrder.value,
     currency: currency.value,
-    region: currentRegion.value
+    region: region.value
   }
 }
 
@@ -304,9 +300,9 @@ onMounted(async () => {
 })
 
 const currentRegionConfig = computed(() => {
-  return isRegionUA.value
-      ? configUkraine.value
-      : configEurope.value
+  return currencyStore.isRegionEurope
+      ? configEurope.value
+      : configUkraine.value
 })
 
 const configUkraine = ref({
@@ -570,194 +566,9 @@ const configEurope = ref({
       },
 
 
-
-
     ]
   }
 })
-
-const config = {
-  fields: {
-    items: [
-      {
-        name: 'firstName',
-        code: 'firstName',
-        label: computed(() => t('user_name')),
-        type: 'InputText',
-        props: {
-          side: 'left',
-          type: 'text',
-          placeholder: "",
-          required: true
-        },
-        validators: [
-          (value) => (value ? true : "First Name is required"),
-        ],
-      },
-
-      {
-        name: 'country',
-        code: 'country',
-        label: computed(() => t('country')),
-        type: 'InputText',
-        props: {
-          side: 'right',
-          half: true,
-          placeholder: ''
-        },
-        validators: [
-          (value) => (value ? true : "Country is required"),
-        ],
-      },
-
-      {
-        name: 'postalCode',
-        code: 'postalCode',
-        label: computed(() => t('post_code')),
-        type: 'InputText',
-        props: {
-          side: 'right',
-          half: true,
-          placeholder: ''
-        },
-      },
-      {
-        name: 'state',
-        code: 'state',
-        label: computed(() => t('state')),
-        type: 'InputText',
-        props: {
-          side: 'right',
-          placeholder: ''
-        },
-        validators: [
-          (value) => (value ? true : "State is required"),
-        ],
-      },
-      {
-        name: 'street',
-        code: 'street',
-        label: computed(() => t('street')),
-        type: 'InputText',
-        props: {
-          side: 'right',
-          placeholder: ''
-        },
-        validators: [
-          (value) => (value ? true : "Street is required"),
-        ],
-      },
-
-      {
-        name: 'city',
-        code: 'city',
-        label: computed(() => t('city')),
-        type: 'InputText',
-        props: {
-          side: 'right',
-          placeholder: ''
-        },
-        validators: [
-          (value) => (value ? true : "City is required"),
-        ],
-      },
-      {
-        name: 'deliveryInfo',
-        code: 'deliveryInfo',
-        label: computed(() => t('delivery_info')),
-        type: 'InputText',
-        props: {
-          side: 'right',
-          placeholder: ''
-        }
-      },
-
-      {
-        name: 'lastName',
-        code: 'lastName',
-        label: computed(() => t('last_name')),
-        type: 'InputText',
-        props: {
-          side: 'left',
-          type: 'text',
-          placeholder: "",
-          required: true
-        },
-        validators: [
-          (value) => (value ? true : "Last Name is required"),
-        ],
-      },
-      {
-        name: 'email',
-        code: 'email',
-        label: computed(() => t('email')),
-        type: 'InputText',
-        props: {
-          side: 'left',
-          type: 'text',
-          placeholder: "",
-          required: true
-        },
-        validators: [
-          (value) => (value ? true : "Email is required"),
-        ],
-      },
-      {
-        name: 'phone',
-        code: 'phone',
-        label: computed(() => t('phone_number')),
-        type: 'Custom',
-        props: {
-          side: 'left',
-        },
-        validators: [
-          (value) => (value ? true : "Phone is required"),
-          (value) => (value?.toString().length <= 11 ? true : "Phone number must be no more than 11 digits")
-        ],
-        render: ({modelValue, 'onUpdate:modelValue': update}) =>
-            h(InputGroup, {}, {
-              default: () => [
-                h(InputGroupAddon, {
-                  pt: {
-                    root: {
-                      style: {
-                        backgroundColor: 'white',
-                        color: 'var(--color-primary-dark)',
-                      }
-                    }
-                  }
-                }, () => '+380'),
-                h(InputNumber, {
-                  modelValue,
-                  'onUpdate:modelValue': update,
-                  useGrouping: false,
-                  placeholder: '',
-                  defaultValue: null
-                })
-              ]
-            })
-      },
-      {
-        name: 'telegramUsername',
-        code: 'telegramUsername',
-        label: computed(() => t('telegram_username')),
-        tooltipComponent: defineAsyncComponent(() => import('~/components/UI/TooltipIcon/TooltipIcon.vue')),
-        type: 'InputText',
-        tooltipProps: {
-          message: computed(() => t('telegram_tooltip'))
-        },
-        props: {
-          side: 'left',
-          type: 'text',
-          placeholder: "",
-          required: true,
-          class: 'w-full'
-        },
-      },
-    ]
-  }
-}
-
 </script>
 
 <style scoped>
