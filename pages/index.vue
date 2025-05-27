@@ -100,28 +100,12 @@
           </div>
           <div>
             <div class="products-pagination-actions mb-[72px]">
-              <div class="load-more-wrapper mb-3 flex justify-center">
-                <LoadMoreButton
-                    v-if="!isLoading"
-                    :disabled="allLoaded"
-                    :label="loadMoreLabel"
-                    @click="fetchProducts(false)"
-                >
-                  <template #icon>
-                    <img src="~/assets/icons/load-more-icon.svg" alt="load-more-icon">
-                  </template>
-                </LoadMoreButton>
-                <LoadMoreButtonSkeleton v-else/>
-              </div>
               <div class="product-pagination-wrapper flex justify-center">
-                <ProductPaginationButton
+                <BasePagination
                     v-if="!isLoading"
-                    v-model="activePage"
-                    :max-pages="totalPages"
-                    :all-loaded="allLoaded"
-                    @update:model-value="getProductsByPage"
+                    v-model="page"
+                    :totalItems="totalItems"
                 />
-                <PaginationButtonSkeleton v-else/>
               </div>
             </div>
           </div>
@@ -161,8 +145,7 @@ useHead({
 })
 
 import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
-import LoadMoreButton from "~/components/UI/LoadMoreButton/LoadMoreButton.vue";
-import ProductPaginationButton from "~/components/UI/ProductPaginationButton/ProductPaginationButton.vue";
+import BasePagination from "~/components/UI/BasePagination/BasePagination.vue";
 import Filters from "~/components/UI/Filters/Filters.vue";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 import {useQueryParams} from "~/composables/useQueryParams.js";
@@ -171,15 +154,14 @@ import {getAllProducts, getProductsOnSale} from "~/services/api/product-service.
 import {useToastManager} from "~/composables/useToastManager.js";
 import {useViewedProducts} from "~/composables/useViewedProducts.js";
 import FiltersSkeleton from "~/components/Skeletons/FiltersSkeleton/FiltersSkeleton.vue";
-import PaginationButtonSkeleton from "~/components/Skeletons/PaginationButtonSkeleton/PaginationButtonSkeleton.vue";
-import LoadMoreButtonSkeleton from "~/components/Skeletons/LoadMoreButtonSkeleton/LoadMoreButtonSkeleton.vue";
-import {defineAsyncComponent} from "vue";
 
 const {$eventBus} = useNuxtApp()
 
 const {t} = useI18n();
 
 const route = useRoute()
+
+const router = useRouter()
 
 const page = ref(Number(route.query.page) || 1)
 
@@ -200,7 +182,7 @@ const productsQueryParams = computed(() => {
 })
 
 
-const {updateQueryParams} = useQueryParams(productsQueryParams);
+const { updateQueryParams } = useQueryParams(productsQueryParams);
 
 updateQueryParams();
 
@@ -211,6 +193,14 @@ const {data: catalog, pending, error} = await useAsyncData(
 )
 
 const products = computed(() => catalog.value?.list || [])
+const totalItems = computed(() => catalog.value?.count || 0)
+
+console.log('catalog.value.count', catalog.value.count)
+console.log('products', products.value.length)
+
+watch(page, (page) => {
+  router.push({ query: { ...route.query, page } })
+})
 
 const promotionalProductsSwiperOptions = {
   slidesPerView: 1,
@@ -224,19 +214,7 @@ const {showProductAddedToast} = useToastManager()
 
 const isMobileFiltersOpen = ref(false)
 
-const activePage = ref(Number(route.query.page))
-
-const totalProductsRecords = ref(0)
-
 const promotionalProducts = ref([])
-
-const totalPages = computed(() => Math.ceil(totalProductsRecords.value / limit.value))
-
-const allLoaded = computed(() => products.value.length >= totalProductsRecords.value || activePage.value === totalPages.value)
-
-const loadMoreLabel = computed(() => {
-  return t('load_more', {count: limit.value});
-});
 
 const showToast = (product) => {
   showProductAddedToast(product)
@@ -245,11 +223,6 @@ const showToast = (product) => {
 const getPromotionalProducts = async () => {
   const response = await getProductsOnSale()
   promotionalProducts.value = response.list
-}
-
-const getProductsByPage = async (newPage) => {
-  page.value = newPage
-  // await fetchProducts(true)
 }
 
 const isLoading = ref(false)
