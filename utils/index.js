@@ -95,3 +95,4 @@ export const formatRating = (rating) => {
 export const toInteger = (number) => {
     return Math.floor(number);
 }
+

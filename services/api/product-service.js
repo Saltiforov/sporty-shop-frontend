@@ -1,5 +1,6 @@
 const router = {
     products: '/api/client/products',
+    products_suggestion: '/api/client/products-suggestion',
     productsSale: '/api/client/products/on-sale',
     productToFavorite: (id) =>  `/api/client/favorites/${id}`,
     favorites: '/api/client/favorites',
@@ -15,6 +16,12 @@ export const getProductBySlug = (slug) => {
     const config = useRuntimeConfig()
     const url = `${config.public.apiBase}${router.products}/${slug}`
     return $fetch(url)
+}
+
+export const getSuggestionProductList = (params) => {
+    const config = useRuntimeConfig()
+    const url = `${config.public.apiBase}${router.products_suggestion}`
+    return $fetch(url, { params })
 }
 
 export const getProductsOnSale = () => {

@@ -187,14 +187,19 @@ const limit = ref(Number(route.query.limit) || 10)
 
 const skip = computed(() => (page.value - 1) * limit.value)
 
+const q = computed(() => (route.query.q ?? ''));
+
 const productsQueryParams = computed(() => {
   return {
-    page: page.value,
-    limit: limit.value,
-    skip: skip.value,
+    page:   page.value,
+    limit:  limit.value,
+    skip:   skip.value,
     filters: route.query.filters,
+    ...(q.value ? { q: q.value } : {}),
   }
 })
+
+
 const {updateQueryParams} = useQueryParams(productsQueryParams);
 
 updateQueryParams();
@@ -205,7 +210,7 @@ const {data: catalog, pending, error} = await useAsyncData(
     {watch: [productsQueryParams]}
 )
 
-const products = ref(catalog.value?.list || [])
+const products = computed(() => catalog.value?.list || [])
 
 const promotionalProductsSwiperOptions = {
   slidesPerView: 1,
@@ -244,41 +249,10 @@ const getPromotionalProducts = async () => {
 
 const getProductsByPage = async (newPage) => {
   page.value = newPage
-  await fetchProducts(true)
+  // await fetchProducts(true)
 }
 
 const isLoading = ref(false)
-
-const fetchProducts = async (shouldReplace = false, params = {}) => {
-  try {
-    isLoading.value = true
-
-    if (!shouldReplace) {
-      page.value += 1
-    }
-
-    const queryWithoutPage = Object.fromEntries(
-        Object.entries(productsQueryParams.value).filter(([key]) => key !== 'page')
-    )
-
-    const response = await getAllProducts({...queryWithoutPage, ...params})
-
-    if (totalProductsRecords.value === 0) {
-      totalProductsRecords.value = response.count
-    }
-
-    if (shouldReplace) {
-      products.value = [...response.list]
-      updateQueryParams()
-    } else {
-      products.value.push(...response.list)
-    }
-
-
-  } finally {
-    isLoading.value = false
-  }
-}
 
 const searchStore = useSearchStore()
 
@@ -288,9 +262,6 @@ onMounted(async () => {
     console.log('🔍 Поиск снаружи:', query)
   })
 
-  // $eventBus.on('filters-updated', (filters) => {
-  //   fetchProducts(true, {filters})
-  // })
 
   await getPromotionalProducts()
 

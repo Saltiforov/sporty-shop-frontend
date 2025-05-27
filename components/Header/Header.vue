@@ -23,28 +23,7 @@
             parent-classes="links-container"
             link-class="link-item text-[var(--color-gray-pale-lavender)] mr-[32px] text-[#F6F6F6] sm:mr-[32px] md:mr-[53px] last:mr-0"
         />
-        <div class="search-field responsive-search-field max-w-[425px] w-full relative">
-          <IconField>
-            <InputText
-                @focus="searchIsFocused = true"
-                @blur="handleBlur"
-                v-model="searchFieldValue"
-                :pt="{ root: { class: 'header-search-field' } }"
-                :placeholder="searchFieldPlaceholder"
-            />
-            <InputIcon
-                :pt="{ root: { class: 'input-icon' } }"
-                class="pi pi-search"
-            />
-          </IconField>
-
-          <SearchDropdownMenu
-              :show="searchIsFocused"
-              :items="receivedProducts"
-              @selected="dropdownItemSelect"
-          />
-        </div>
-
+        <ProductSearch/>
         <div class="locale-switch max-w-[200px] w-full justify-between flex">
           <LocaleSwitch />
           <CurrencySwitch />
@@ -170,8 +149,6 @@ defineProps({
 
 const {t} = useI18n();
 
-const {$eventBus} = useNuxtApp()
-
 const token = useCookie('token')
 
 const authPopup = useAuthPopup()
@@ -180,36 +157,14 @@ const {logUserOut} = useAuthStore();
 
 const {authenticated, currentUser} = storeToRefs(useAuthStore());
 
-const isMainPage = computed(() => route.name === 'index')
-
-const router = useRouter()
-
-const route = useRoute()
 
 const cartStore = useCartStore();
 
 const emit = defineEmits(['handle-mobile-sidebar'])
 
-const searchIsFocused = ref(false)
-
-const receivedProducts = ref([])
-
-const searchFieldValue = ref('')
-
 const isUserLogin = computed(() => token.value ? 'var(--color-primary-green)' : 'var(--color-gray-pale-lavender)')
 
 const canUseFavorite = computed(() => token.value ? 'var(--color-gray-pale-lavender)' : 'var(--color-muted-gray)')
-
-const handleBlur = () => {
-  setTimeout(() => {
-    searchIsFocused.value = false
-  }, 150)
-}
-
-const dropdownItemSelect = () => {
-  searchIsFocused.value = false
-  receivedProducts.value = []
-}
 
 const handleMobileMenu = () => {
   emit('handle-mobile-sidebar')
@@ -225,6 +180,7 @@ const logout = () => {
 }
 
 const menu = ref();
+
 const items = computed(() => {
   if (authenticated.value) {
     return [
@@ -252,7 +208,6 @@ const toggle = (event) => {
   menu.value.toggle(event);
 };
 
-const searchFieldPlaceholder = computed(() => t('search_placeholder'))
 
 const links = ref([
   {
@@ -276,43 +231,6 @@ const links = ref([
     page: "/content/about-us",
   },
 ])
-
-const searchStore = useSearchStore()
-
-watch(searchFieldValue, (val) => {
-  if (!isMainPage.value) {
-    searchStore.emitSearch(searchFieldValue.value)
-    return
-  }
-
-  const currentQuery = {...route.query}
-  const updatedQuery = {
-    ...currentQuery,
-    q: val?.trim() || undefined,
-  }
-
-  router.push({path: route.path, query: updatedQuery})
-})
-
-
-watch(() => route.query.q, (val) => {
-  if (!val) {
-    searchFieldValue.value = ''
-  }
-})
-
-onMounted(() => {
-  $eventBus.on('products-found', (products) => {
-    receivedProducts.value = products
-  })
-})
-
-onBeforeUnmount(() => {
-  $eventBus.off('products-found', (products) => {
-    receivedProducts.value = products
-  })
-})
-
 
 </script>
 
