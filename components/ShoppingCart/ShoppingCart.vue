@@ -2,11 +2,11 @@
   <div>
     <div
         v-if="isOpen"
-        class="fixed inset-0 z-[400] bg-black bg-opacity-50 backdrop-blur-custom z-40"
+        class="fixed inset-0 z-[400] bg-black bg-opacity-50 backdrop-blur-custom"
         @click="emit('close')"
     ></div>
     <div
-        class="fixed z-[500] border-top-radius top-0 right-0 h-full bg-[var(--color-gray-light-lavender)] shadow-lg transform transition-transform duration-300 z-50 shopping-cart  pt-[36px] pb-[28px] pl-[46px] pr-[30px] rounded-tl-[32px] rounded-bl-[32px]"
+        class="fixed z-[500] border-top-radius top-0 right-0 h-full bg-[var(--color-gray-light-lavender)] shadow-lg transform transition-transform duration-300 shopping-cart  pt-[36px] pb-[28px] pl-[46px] pr-[30px] rounded-tl-[32px] rounded-bl-[32px]"
         :class="isOpen ? 'translate-x-0' : 'translate-x-full'"
     >
 
@@ -33,7 +33,10 @@
         </h2>
       </div>
 
-      <ProductsOverview :products-overview="cartItems"/>
+      <ProductsOverview
+          :products-overview="cartItems"
+          @handle-cart-item="emit('close')"
+      />
       <div class="make-order-block flex flex-col items-center">
         <div class="mb-[10px] w-full max-w-[423px]">
           <NuxtLink to="/checkout">
@@ -261,8 +264,6 @@ const products = ref([
 }
 
 @media (max-width: 700px) {
-  .recommended-products {
-  }
   .shopping-cart {
     width: 80%;
   }
@@ -270,8 +271,8 @@ const products = ref([
 
 @media (max-width: 610px) {
   .shopping-cart {
-    padding-right: 8px;
-    padding-left: 8px;
+    padding-right: 4px;
+    padding-left: 4px;
   }
   .header {
     padding: 0 10px 20px 10px;

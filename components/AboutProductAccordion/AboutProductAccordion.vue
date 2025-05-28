@@ -17,7 +17,9 @@
           style : 'background-color: var(--color-gray-lavender);'
         }
       }">
-        <p class="fw-500 text-[18px] leading-[34px] text-[var(--color-primary-dark)]" v-html="product.description"/>
+        <ClientOnly>
+          <p class="fw-500 text-[18px] leading-[34px] text-[var(--color-primary-dark)]" v-html="product.description"/>
+        </ClientOnly>
       </AccordionContent>
     </AccordionPanel>
 
@@ -148,10 +150,10 @@
                     <div class="review-card__stars mr-3">
                       <Rating v-model="review.rating" readonly>
                         <template #onicon>
-                          <img src="@/assets/icons/star-filled.svg" class="mr-1"/>
+                          <img src="../../assets/icons/star-filled.svg" class="mr-1"/>
                         </template>
                         <template #officon>
-                          <img src="@/assets/icons/star-empty.svg" class="mr-1"/>
+                          <img src="../../assets/icons/star-empty.svg" class="mr-1"/>
                         </template>
                       </Rating>
                     </div>
@@ -243,10 +245,10 @@
                 <p class="mr-[10px] text-[14px]">{{ t('rate_product') }}</p>
                 <Rating :disabled="!token" v-model="rating">
                   <template #onicon>
-                    <img src="@/assets/icons/star-filled.svg" class="mr-1"/>
+                    <img src="../../assets/icons/star-filled.svg" class="mr-1"/>
                   </template>
                   <template #officon>
-                    <img src="@/assets/icons/star-empty.svg" class="mr-1"/>
+                    <img src="../../assets/icons/star-empty.svg" class="mr-1"/>
                   </template>
                 </Rating>
               </div>

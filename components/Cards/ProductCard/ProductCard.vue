@@ -183,24 +183,62 @@ const iconSize = computed(() => {
   }
 }
 
+@media (max-width: 1350px) {
+  .product-card {
+    max-width: 270px;
+  }
+}
 
 
-@media (max-width: 1100px) {
+@media (max-width: 1275px) {
+  .product-card {
+    max-width: 250px;
+  }
+}
+
+@media (max-width: 1210px) {
+  .product-card {
+    max-width: 230px;
+  }
   .product-name p {
     font-size: 18px;
   }
-
   .product-reviews {
     margin-bottom: 10px;
   }
+  .discount-price {
+    top: -0.5rem;
+    font-size: 13px;
+  }
+  .price-without-discount {
+    font-size: 20px;
+  }
+}
 
+
+
+@media (max-width: 1150px) {
   .product-card {
     aspect-ratio: 3  / 4;
+    max-width: 280px;
   }
 
 }
 
 @media (max-width: 1000px) {
+ .product-card {
+   aspect-ratio: 284 / 345;
+ }
+}
+
+@media (max-width: 905px) {
+ .product-card {
+   max-width: 230px;
+ }
+}
+
+
+@media (max-width: 800px) {
  .product-card {
    max-width: 200px;
  }

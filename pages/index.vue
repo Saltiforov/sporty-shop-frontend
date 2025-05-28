@@ -313,12 +313,23 @@ onBeforeUnmount(() => {
 
 @media (max-width: 1380px) {
   .product-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
   .main-content {
     gap: 16px;
   }
 }
+
+@media (max-width: 1150px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .main-content {
+    gap: 8px;
+  }
+}
+
+
 
 @media (max-width: 1022px) {
   .promotional-products {
@@ -396,14 +407,11 @@ onBeforeUnmount(() => {
   }
 }
 
-
 @media (max-width: 615px) {
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
-
 
 @media (max-width: 500px) {
   .product-grid {

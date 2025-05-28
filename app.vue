@@ -15,7 +15,11 @@
     <ResponsiveFooter @handle-mobile-sidebar="handleMobileMenu" :is-open="isOpenMenu"/>
     <Footer />
     <Toast position="bottom-right" group="br" />
-
+    <ClientOnly>
+      <svg style="display: none">
+        <use :xlink:href="'/icons/sprite.svg#icon-check'" />
+      </svg>
+    </ClientOnly>
   </div>
 </template>
 

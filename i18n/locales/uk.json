@@ -22,6 +22,10 @@
   "filters_creatine": "Креатин",
   "filters_collagen": "Колаген",
   "filters_injections": "Інʼєкції",
+  "favorite_products_empty": "У вибраному наразі нічого немає",
+
+  "timer_hours": "Години",
+  "timer_minutes": "Хвилини",
 
   "confirm_delete_message": "Ви впевнені, що хочете видалити {product}?",
   "confirm_delete_header": "Підтвердження видалення",

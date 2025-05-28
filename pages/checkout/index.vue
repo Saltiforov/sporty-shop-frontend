@@ -227,7 +227,7 @@ const mappedProductsForOrder = arr => arr.map(({quantity, ...withoutQuantity}) =
 
 const currency = computed(() => currencyStore.isUAHSelected ? 'uah' : 'eur')
 
-const region = computed(() => currencyStore.isRegionEurope ? 'eur' : 'ua')
+const region = computed(() => currencyStore.isRegionEurope ? 'eu' : 'ua')
 
 const mappedUserDataForOrder = (data) => {
   const {street, city, postalCode, country, firstName, lastName, phone, email, telegramUsername} = data
@@ -238,6 +238,7 @@ const mappedUserDataForOrder = (data) => {
       postalCode,
       country,
     },
+    paymentMethod: "telegram",
     customerInfo: {
       firstName,
       lastName,

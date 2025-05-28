@@ -4,6 +4,7 @@ export default defineNuxtRouteMiddleware((to) => {
     const { authenticated, currentUser } = storeToRefs(useAuthStore());
     const { logUserOut } = useAuthStore();
     const token = useCookie('token');
+    const locale = useCookie('locale');
 
     if (process.client && token.value) {
         authenticated.value = true;
@@ -13,7 +14,10 @@ export default defineNuxtRouteMiddleware((to) => {
         }
     }
 
-    if (!token.value && to.path.startsWith('/profile')) {
+    console.log("`${locale}/profile`", locale.value)
+
+
+    if (!token.value && to.path.startsWith(`${locale}/profile`)) {
         return navigateTo('/');
     }
 

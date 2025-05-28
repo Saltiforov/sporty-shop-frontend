@@ -16,7 +16,7 @@
         </NuxtLink>
       </div>
 
-      <nav class="pb-[24px] header-actions justify-between items-center flex w-full items-end">
+      <nav class="pb-[24px] header-actions justify-between items-center flex w-full">
         <LinksList
             class="links-list"
             :links="links"

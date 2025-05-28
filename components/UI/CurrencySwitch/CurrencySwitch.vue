@@ -16,7 +16,6 @@
         v-model="selectedCurrency"
         optionLabel="label"
         :options="currencyOptions"
-        @change="switchCurrency"
     />
   </div>
 </template>

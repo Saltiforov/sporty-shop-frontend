@@ -20,14 +20,15 @@
                     class="flex items-center gap-2 cursor-pointer"
                     :to="item.route"
                     @click="item.command && item.command()"
+                    :class="{ 'active': item.page === currentTab && minWidthForMobileVersion }"
                 >
-                  <img class="mr-3" :src="item.icon" alt="" />
+                  <img  class="list-icon mr-3" :src="item.icon" alt=""/>
                   <span
-                      class="py-[11px] max-w-[185.5px] w-full rounded-tr-[100px] rounded-br-[100px] pr-[18.5px]"
+                      class="py-[11px] list-title max-w-[185.5px] w-full rounded-tr-[100px] rounded-br-[100px] pr-[18.5px]"
                       :class="{ 'active': item.page === currentTab }"
                   >
-    {{ item.title }}
-  </span>
+                  {{ item.title }}
+                </span>
                 </NuxtLink>
               </ul>
             </nav>
@@ -78,6 +79,8 @@ const route = useRoute();
 
 const currentTab = computed(() => route.path.split('/').pop() || 'personal-information')
 
+const minWidthForMobileVersion = ref(false)
+
 const fullUserName = computed(() => {
   const first = capitalizeFirstLetter(currentUser.value?.firstName ?? '')
   const last = capitalizeFirstLetter(currentUser.value?.lastName ?? '')
@@ -125,6 +128,10 @@ const setActiveTab = (component) => {
   currentTab.value = component;
 };
 
+const checkWindowSize = () => {
+  window.innerWidth <=  850 ?  minWidthForMobileVersion.value = true : minWidthForMobileVersion.value = false
+}
+
 const loadUserData = async () => {
   isLoading.value = true
   try {
@@ -140,8 +147,12 @@ const loadUserData = async () => {
 
 onMounted(async () => {
   await loadUserData()
+  window.addEventListener('resize', checkWindowSize)
 })
 
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', checkWindowSize)
+})
 </script>
 
 <style scoped>
@@ -188,16 +199,76 @@ main {
   .profile-layout {
     flex-direction: column;
   }
+
+  .sidebar {
+    max-width: 100%;
+    margin-right: 0;
+  }
+
   .sidebar-nav {
     padding-bottom: 24px;
     margin-bottom: 12px;
+
     border-bottom: 1px solid var(--color-gray-light-lavender);
   }
+
+  .sidebar-nav ul {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
 }
+
+@media (max-width: 1000px) {
+  .list-title {
+    font-size: 14px;
+    padding-right: 14px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+}
+
+@media (max-width: 900px) {
+  .list-icon {
+    margin-right: 4px;
+  }
+}
+
+@media (max-width: 850px) {
+  .list-title {
+    display: none;
+  }
+  .sidebar-nav ul {
+    justify-content: space-evenly;
+  }
+  .list-icon {
+    margin-right: 0;
+    padding: 9px;
+  }
+  .sidebar-nav ul {
+    border-radius: 50%;
+  }
+  .active {
+    border-radius: 100%;
+  }
+  .sidebar-header {
+    margin-bottom: 0;
+  }
+  .sidebar-nav {
+    padding-bottom: 0;
+  }
+  .sidebar-nav ul {
+    padding: 22px;
+  }
+}
+
+
+
 @media (max-width: 500px) {
   main {
     padding: 15px 5px 30px 5px;
   }
+
   .profile-container {
     padding: 8px;
   }

@@ -40,7 +40,7 @@
           ]"
         >
           <div v-if="!isHistoryView" class="card-product-count">
-            <AmountSelector v-model="cartProduct.quantity" min="1" max="100" />
+            <AmountSelector v-model="cartProduct.quantity" min="1" max="100"/>
           </div>
 
           <div
@@ -53,7 +53,7 @@
                 :class="[
                 isHistoryView ? 'discount-price__history-view' : 'fw-600 leading-[34px]',
                 hasDiscount
-                  ? 'line-through text-[#8E8E93] text-[13px] mr-[14px]'
+                  ? 'line-through text-[#8E8E93] has-discount-price text-[13px] mr-[14px]'
                   : 'text-[16px]'
               ]"
             >
@@ -100,11 +100,11 @@
 </template>
 
 
-
 <script setup>
 import DefaultProductImage from "~/assets/images/product-image.png"
 import AmountSelector from "~/components/UI/AmountSelector/AmountSelector.vue";
 import {useCurrencyStore} from "~/stores/currency.js";
+import {fullImageUrls} from "~/utils/index.js";
 
 const {cartProduct, isHistoryView, currency} = defineProps({
   cartProduct: {
@@ -131,12 +131,12 @@ const currencyStore = useCurrencyStore()
 const router = useRouter();
 
 const handleRemoveProduct = ({_id, name}) => {
-  emit('remove-product', { _id, name });
+  emit('remove-product', {_id, name});
 }
 
 const redirectToProduct = (cartProduct) => {
   if (!cartProduct?.id) return
-  router.replace(`/product/${cartProduct.id}`)
+  router.replace(`/product/${cartProduct.slug}`)
   emit('handle-cart-item')
 }
 
@@ -163,7 +163,9 @@ const hasDiscount = computed(() => {
   return discounted !== null && discounted !== undefined && discounted < price
 })
 
-const imageSource = computed(() => cartProduct.image || DefaultProductImage)
+console.log("cartProduct",cartProduct)
+
+const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] || DefaultProductImage)
 
 </script>
 
@@ -200,18 +202,48 @@ const imageSource = computed(() => cartProduct.image || DefaultProductImage)
 
 @media (max-width: 1250px) {
   .card-content__footer {
-    flex-direction: column-reverse;
     align-items: flex-start;
   }
+
   .card-product-price {
     margin-bottom: 8px;
   }
 }
 
+@media (max-width: 1150px) {
+  .card-content__footer {
+    padding-bottom: 0;
+    align-items: flex-end;
+
+  }
+
+  .remove-product-cart-wrapper {
+    padding-left: 0;
+  }
+
+  .card-product-price {
+    flex-direction: column;
+  }
+
+  .card-product-price {
+    margin-bottom: 0;
+  }
+
+  .discount-price {
+    line-height: 20px;
+  }
+
+  .has-discount-price {
+    line-height: 18px;
+  }
+}
+
+
 @media (max-width: 900px) {
   .card-title {
     display: block;
   }
+
   .card-quantity {
     display: inline-flex;
     justify-content: flex-start;
@@ -220,21 +252,44 @@ const imageSource = computed(() => cartProduct.image || DefaultProductImage)
   }
 }
 
+@media (max-width: 700px) {
+  .card-title {
+    margin-right: 10px;
+    font-size: 14px;
+  }
+
+  .card-image {
+    margin: 0;
+  }
+}
+
 @media (max-width: 600px) {
   .discount-price__history-view {
     font-size: 13px;
   }
+
   .discount-price {
-    font-size: 16px;
+    font-size: 15px;
   }
+
+  .final-price {
+    padding-right: 10px;
+  }
+
+  .has-discount-price {
+    margin-right: 0;
+  }
+
   .discount-price span {
     font-size: 14px;
   }
+
   .card-quantity p {
     font-size: 16px;
   }
+
   .remove-product-cart-wrapper {
-    padding-left: 10px;
+    padding-left: 0;
   }
 }
 
@@ -244,6 +299,15 @@ const imageSource = computed(() => cartProduct.image || DefaultProductImage)
     height: 125px;
     object-fit: cover;
   }
+
+  .card-title {
+    font-size: 12px;
+  }
+
+  .card-quantity p {
+    font-size: 14px;
+  }
+
   .cart-item__image {
     height: 125px;
   }

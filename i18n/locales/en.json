@@ -22,6 +22,9 @@
   "filters_creatine": "Creatine",
   "filters_collagen": "Collagen",
   "filters_injections": "Injections",
+  "favorite_products_empty": "There is nothing in your favorites",
+  "timer_hours": "Hours",
+  "timer_minutes": "Minutes",
 
   "confirm_delete_message": "Are you sure you want to delete {product}?",
   "confirm_delete_header": "Delete Confirmation",
@@ -117,8 +120,8 @@
   "purchase_not_confirmed": "Purchase not confirmed!",
 
   "checkout": "Checkout",
-  "account_text": "Already have an account? Log in",
-  "sign_in": "Log in",
+  "account_text": "Already have an account?",
+  "sign_in": "Login",
   "payment_method_title": "Payment Method",
   "payment_method_tooltip": "When paying via Telegram, our manager will contact you",
   "sms_text": "Send SMS to the provided data",

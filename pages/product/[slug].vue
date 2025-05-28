@@ -54,7 +54,7 @@
 
 
       <div
-          v-if="!isLoading"
+          v-if="productItem"
           class="about-product-info w-full min-h-[625px] mx-auto flex flex-col self-start max-w-full lg:max-w-[870px]"
       >
         <div
@@ -88,10 +88,14 @@
               </div>
             </div>
 
-            <div class="description">
-              <p class="fw-500 text-[18px] leading-[34px] truncate-6-lines text-[var(--color-primary-dark)]"
-                 v-html="product.description"/>
-            </div>
+            <ClientOnly>
+              <div class="description">
+                <p class="fw-500 text-[18px] leading-[34px] truncate-6-lines text-[var(--color-primary-dark)]"
+                   v-html="product.description"></p>
+              </div>
+            </ClientOnly>
+
+
           </div>
 
           <div>
@@ -102,7 +106,7 @@
             </div>
 
             <div class="price mb-10 flex items-center">
-              <div class="mr-[57px] price_and_discount">
+              <div class="mr-[57px] max-w-[150px] w-full price_and_discount">
                 <div :class="[hasDiscount ? 'text-[16px] line-through text-[#999]' : 'text-[36px]']"
                      class="fw-600 discount mr-[57px] text-[var(--color-primary-black)] leading-[34px]">
                   {{ priceByCurrency }}
@@ -232,7 +236,7 @@ import AboutProductImageSkeleton
   from "~/components/Skeletons/AboutProduct/AboutProductImageSkeleton/AboutProductImageSkeleton.vue";
 import AboutProductTabsSkeleton
   from "~/components/Skeletons/AboutProduct/AboutProductTabsSkeleton/AboutProductTabsSkeleton.vue";
-import AboutProductAccordion from "~/components/UI/AboutProductAccordion/AboutProductAccordion.vue";
+import AboutProductAccordion from "~/components/AboutProductAccordion/AboutProductAccordion.vue";
 import LayoutBreadcrumb from "~/components/UI/LayoutBreadcrumb/LayoutBreadcrumb.vue";
 import BreadcrumbSkeleton from "~/components/Skeletons/BreadcrumbSkeleton/BreadcrumbSkeleton.vue";
 
@@ -254,9 +258,8 @@ const isLoading = ref(pending.value)
 
 const product = ref(productItem.value)
 
-console.log('product', product.value);
-
 const images = ref([])
+
 const galleryImages = ref([])
 
 const getProductImages = (product, size) => {

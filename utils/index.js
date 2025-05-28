@@ -29,7 +29,7 @@ export function formatDateToDMY(isoDate) {
     const date = new Date(isoDate)
 
     const day = String(date.getDate()).padStart(2, '0')
-    const month = String(date.getMonth() + 1).padStart(2, '0') // Месяцы от 0 до 11
+    const month = String(date.getMonth() + 1).padStart(2, '0')
     const year = date.getFullYear()
 
     return `${day}.${month}.${year}`
@@ -43,13 +43,14 @@ export function mapOrdersToSummaries(orders) {
             const product = item.product || {}
 
             return {
-                image: fullImageUrls(product.images || [])[0] || '',
+                images: product.images || [],
                 name: product.name || '',
                 quantity: item.quantity || 0,
                 price: product.price || {},
                 id: product._id || '',
                 discount: product.discount || product.price || {},
                 priceAfterDiscount: product.priceAfterDiscount || {},
+                slug: product.slug || '',
             }
         })
 

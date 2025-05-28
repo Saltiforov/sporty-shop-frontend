@@ -16,8 +16,8 @@
               alt="item image"
               class="w-8 h-8 object-cover mr-3 rounded"
           />
-          <span class="text-sm text-gray-800">{{ product.name }}</span>
-          <span class="text-sm text-gray-800">{{ getProductPrice(product) }}</span>
+          <span class="text-sm text-gray-800 px-2">{{ product.name }}</span>
+          <span class="text-sm text-gray-800 font-bold">{{ getProductPrice(product) }}</span>
         </NuxtLink>
         <div
             v-else
@@ -29,8 +29,8 @@
               alt="item image"
               class="w-8 h-8 object-cover mr-3 rounded"
           />
-          <span class="text-sm text-gray-800">{{ product.name }}</span>
-          <span class="text-sm text-gray-800">{{ getProductPrice(product) }}</span>
+          <span class="text-sm text-gray-800 px-2">{{ product.name }}</span>
+          <span class="text-sm text-gray-800 font-bold">{{ getProductPrice(product) }}</span>
         </div>
       </div>
     </div>
@@ -57,7 +57,7 @@ const route = useRoute()
 
 const getProductPrice = (product) => {
   const currency =  currencyStore.getCurrency;
-  return `${product.priceAfterDiscount[currency]} ${currency}`;
+  return `${product.priceAfterDiscount[currency.toLowerCase()]} ${currency}`;
 }
 
 const buildRedirectUrlWithLocale = (product) => {

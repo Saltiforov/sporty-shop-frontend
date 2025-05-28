@@ -3,13 +3,13 @@ import {ref} from 'vue'
 
 export const useCurrencyStore = defineStore('currency', () => {
 
-    const currency = ref('')
+    const currency = useCookie('currency')
 
-    const isRegionEurope = computed(() => currency.value === 'eur')
+    const isRegionEurope = computed(() => currency.value.toLowerCase()  === 'eur')
 
     const getCurrency = computed(() => currency.value)
 
-    const isUAHSelected = computed(() => currency.value === 'uah')
+    const isUAHSelected = computed(() => currency.value.toLowerCase() === 'uah')
 
     const label = computed(() => {
         return isUAHSelected.value ? 'currency_uah' : 'currency_eur'

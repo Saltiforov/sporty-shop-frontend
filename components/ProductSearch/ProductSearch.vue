@@ -6,17 +6,19 @@
           @focus="searchIsFocused = true"
           @blur="handleBlur"
           v-model="searchFieldValue"
-          :pt="{ root: { class: 'header-search-field' } }"
+          :pt="{ root: { class: 'header-search-field', style: { width: '100%', borderRadius: '12px' } } }"
           :placeholder="searchFieldPlaceholder"
       />
       <InputIcon
-          class="pi pi-search"
-          :pt="{ root: { class: 'input-icon' } }"
-      />
-      <InputIcon
-          class="pi pi-shopping-cart"
+          v-if="searchFieldValue.length > 0"
+          class="pi pi-times cursor-pointer"
           :pt="{ root: { class: 'input-icon' } }"
           @click.prevent="handleClear"
+      />
+      <InputIcon
+          v-else
+          class="pi pi-search"
+          :pt="{ root: { class: 'input-icon', style: { color: 'var(--color-primary-black)' } } }"
       />
     </IconField>
 

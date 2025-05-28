@@ -15,12 +15,14 @@
         }
       }">
     <TabPanel :header="tabs.description.header">
-      <div class="">
-        <p
-            class="fw-500 text-[18px] leading-[34px] text-[var(--color-primary-dark)]"
-            v-html="product.description"
-        />
-      </div>
+      <ClientOnly>
+        <div class="">
+          <p
+              class="fw-500 text-[18px] leading-[34px] text-[var(--color-primary-dark)]"
+              v-html="product.description"
+          />
+        </div>
+      </ClientOnly>
     </TabPanel>
     <TabPanel v-if="product" :header="tabs.characteristics.header">
       <div class="characteristics-list max-w-[1030px] w-full">

@@ -3,13 +3,13 @@
     <div class="responsive-footer-container w-full flex justify-between">
 
 
-      <div class="actions-wrapper w-full flex justify-between">
+      <div class="actions-wrapper w-full flex justify-between items-center">
 
         <div class="menu">
-          <button @click="handleMobileMenu">
+          <Button  @click="handleMobileMenu" :pt="{ root: { class: 'action-panel-icon' } }">
             <img v-if="!isOpen" src="~/assets/icons/menu-icon-open.svg" alt="menu-icon-open.svg">
             <img v-else src="~/assets/icons/menu-icon-close.svg" alt="menu-icon-close.svg">
-          </button>
+          </Button>
         </div>
 
 
@@ -98,8 +98,12 @@ const redirectToProfile = () => {
 .action-panel-icon {
   background: transparent;
   border: none;
-  padding: 0 20px;
-  margin: 0 20px;
+  width: 36px;
+  height: 36px;
+}
+
+button {
+  padding: 0;
 }
 
 .action-panel-icon:last-child {
@@ -109,7 +113,6 @@ const redirectToProfile = () => {
 .action-panel-icon:hover {
   background: transparent;
   border: none;
-  padding: 0 20px;
 }
 
 @media (min-width: 670px) {

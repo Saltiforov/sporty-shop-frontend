@@ -15,24 +15,28 @@ export default defineNuxtConfig({
         head: {
             title: 'Магазин спортивного питания | SP BALKAN',
             link: [
-                { name: 'description', content: 'Купить протеин, аминокислоты и BCAA в Украине — доставка по всей стране. Широкий ассортимент от проверенных производителей.' },
-                { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+                {
+                    name: 'description',
+                    content: 'Купить протеин, аминокислоты и BCAA в Украине — доставка по всей стране. Широкий ассортимент от проверенных производителей.'
+                },
+                {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}
                 // { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
                 // { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
             ],
             // при желании можно добавить meta для темы
             meta: [
-                { name: 'theme-color', content: '#ffffff' }
+                {name: 'theme-color', content: '#ffffff'}
             ]
         }
     },
     modules: [
-      '@primevue/nuxt-module',
-      '@nuxtjs/tailwindcss',
-      'nuxt-swiper',
-      '@pinia/nuxt',
-      '@nuxtjs/i18n',
-      '@nuxt/image'
+        '@primevue/nuxt-module',
+        '@nuxtjs/tailwindcss',
+        'nuxt-swiper',
+        '@pinia/nuxt',
+        '@nuxtjs/i18n',
+        '@nuxt/image',
+        '@nuxtjs/svg-sprite'
     ],
     css: [
         'primeicons/primeicons.css',
@@ -41,12 +45,17 @@ export default defineNuxtConfig({
         '@/assets/css/variables.css',
         '@/assets/css/responsive.css',
     ],
+    svgSprite: {
+        input: '~/assets/sprite/svg/',
+        elementClass: 'svg-icon',
+        publicPath: '/sprite.svg',
+    },
     i18n: {
         defaultLocale: 'en',
         strategy: 'prefix',
         locales: [
-            { code: 'en', name: 'EN', file: 'en.json' },
-            { code: 'ua', name: 'UA', file: 'uk.json' },
+            {code: 'en', name: 'EN', file: 'en.json'},
+            {code: 'ua', name: 'UA', file: 'uk.json'},
         ]
     },
     primevue: {

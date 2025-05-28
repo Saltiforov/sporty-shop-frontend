@@ -16,17 +16,17 @@
         }">
         <div class="flex w-full items-center justify-between">
           <p class="title-lg-20 order-number">{{ t('order_number', {number: order.orderNumber}) }}</p>
-          <div
-              class="order-status  text-white px-[12px] bg-[var(--color-primary-purple)] rounded-[var(--default-rounded)] py-[10px] mx-[20px]">
+          <span
+              class="order-status text-white px-[12px] bg-[var(--color-primary-purple)] rounded-[var(--default-rounded)] py-[10px] mx-[20px]">
             {{ capitalizeFirstLetter(order?.status) }}
-          </div>
+          </span>
         </div>
       </AccordionHeader>
       <AccordionContent>
-        <div class="order-item-content-wrapper px-[48px] pb-[46px]">
-          <div class="card-item grid gap-7 mb-[27px]">
-            <div class="flex items-center justify-between">
-              <div class="">
+        <section class="order-item-content-wrapper px-[48px] pb-[46px]">
+          <section class="card-item grid gap-7 mb-[27px]">
+            <div class="order-countdown-timer flex items-center justify-between">
+              <div>
                 <h2 class="timer-title text-[var(--color-primary-pink)] mb-2 title-lg-20 p-2">{{ t('payment_timer_warning') }}</h2>
                 <div class="confirmation-hint text-[14px]">
                   <p class="text-[var(--color-muted-gray)] text-center">
@@ -43,9 +43,7 @@
                   </p>
                 </div>
               </div>
-              <CountdownTimer
-                  :orderCreatedAt="new Date(order.createdAt)"
-              />
+              <CountdownTimer :orderCreatedAt="new Date(order.createdAt)" />
             </div>
 
             <CartItem
@@ -61,21 +59,22 @@
                   t(order.currency === 'uah' ? 'currency_uah' : 'currency_eur')
                 }}</p>
             </div>
-          </div>
-          <div class="flex text-[var(--color-gray-dark-charcoal)] max-w-[890px] justify-between">
-            <div class="flex delivery-info__item flex-col gap-6 w-full max-w-[427px]">
+          </section>
+          <section class="flex text-[var(--color-gray-dark-charcoal)] max-w-[890px] justify-between">
+            <address class="flex delivery-info__item flex-col gap-6 w-full max-w-[427px] not-italic">
               <p v-for="(labelKey, index) in userInfoLabels" :key="index">{{ t(labelKey) }}</p>
-            </div>
+            </address>
 
-            <div class="flex delivery-info__item flex-col gap-6 w-full max-w-[427px]">
+            <address class="flex delivery-info__item flex-col gap-6 w-full max-w-[427px] not-italic">
               <p v-for="(value, label) in order.userInfo" :key="label">{{ value }}</p>
-            </div>
-          </div>
-        </div>
+            </address>
+          </section>
+        </section>
       </AccordionContent>
     </AccordionPanel>
   </Accordion>
 </template>
+
 
 <script setup>
 import CartItem from "~/components/Cards/CartItem/CartItem.vue";
@@ -129,6 +128,17 @@ const localizeStatus = (status) => {
 @media (max-width: 1000px) {
   .order-item-content-wrapper {
     padding: 0;
+  }
+}
+@media (max-width: 800px) {
+  .order-countdown-timer {
+    flex-direction: column-reverse;
+    margin-bottom: 12px;
+  }
+}
+@media (max-width: 750px) {
+  .timer-title {
+    font-size: 15px;
   }
 }
 

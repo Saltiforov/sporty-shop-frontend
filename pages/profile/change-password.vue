@@ -1,8 +1,8 @@
 <template>
-  <div class="change-password">
-    <div class="max-w-[432px]">
+  <section class="change-password">
+    <section class="max-w-[432px]">
       <h1 class="title-lg-20 mb-[30px]">{{ t('change_password') }}</h1>
-      <FieldsBlock :config="config.fields"/>
+      <FieldsBlock :config="config.fields" />
       <div class="max-w-[377px] mx-auto">
         <Button :pt="{
           root: {
@@ -11,8 +11,8 @@
         }">{{ t('change_password_button') }}
         </Button>
       </div>
-    </div>
-  </div>
+    </section>
+  </section>
 </template>
 
 <script setup>

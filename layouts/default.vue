@@ -2,37 +2,36 @@
   <div class="min-h-screen flex flex-col">
     <div class="w-full main-banner px-8 mx-auto mt-[98px] mb-[53px]">
       <div class="mx-auto w-full max-w-[1756px]">
-        <ClientOnly>
-          <template v-if="hydrated">
-            <component
-                :is="AsyncSwiper"
-                :items="images"
-                :options="swiperOptions"
-            >
-              <template #default="{ item }">
-                <img
-                    :src="item"
-                    loading="lazy"
-                    decoding="async"
-                    class="w-full h-[269px] object-cover rounded-lg"
-                    alt="swiper-image"
-                />
-              </template>
-            </component>
+        <SwiperWrapper
+            v-if="hydrated"
+            :items="images"
+            :options="swiperOptions"
+        >
+          <template #default="{ item }">
+            <img
+                :src="item"
+                loading="lazy"
+                decoding="async"
+                class="w-full h-[269px] object-cover rounded-lg"
+                alt="swiper-image"
+            />
           </template>
-        </ClientOnly>
+        </SwiperWrapper>
+        <MainBannerSkeleton v-else/>
       </div>
     </div>
 
     <main class="flex-1 p-4">
-      <NuxtPage />
+      <NuxtPage/>
     </main>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, defineAsyncComponent } from 'vue'
+import {ref, onMounted, defineAsyncComponent} from 'vue'
 import MainBannerSkeleton from '~/components/Skeletons/MainBannerSkeleton/MainBannerSkeleton.vue'
+
+import Swiper from '~/components/Swiper/SwiperWrapper.vue'
 
 const AsyncSwiper = defineAsyncComponent(() => import('@/components/Swiper/SwiperWrapper.vue'))
 

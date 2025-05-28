@@ -3,12 +3,18 @@
     <div
         :class="['cart-items-wrapper', { 'scrollable-items': isScrollable }]"
     >
-      <CartItem  v-for="item in productsOverview" :cart-product="item" :key="item.id" @remove-product="confirmDelete"/>
+      <CartItem
+          v-for="item in productsOverview"
+          :cart-product="item"
+          :key="item.id"
+          @remove-product="confirmDelete"
+          @handle-cart-item="emit('handle-cart-item')"
+      />
     </div>
 
     <div class="final-price pr-[50px] mb-[42px]">
       <div class="flex justify-end items-center">
-        <p class="fw-600 text-[16px] text-[var(--color-muted-light-gray)] mr-[14px] leading-[34px]">
+        <p class="fw-600 text-[16px] total-price-label text-[var(--color-muted-light-gray)] mr-[14px] leading-[34px]">
           {{ t('total_price_label') }}:</p>
         <p>
           {{ totalPriceBeforeDiscount }} <span
@@ -16,14 +22,14 @@
         </p>
       </div>
       <div class="flex text-[var(--color-primary-pink)] justify-end items-center">
-        <p class="fw-600 text-[16px] mr-[14px] leading-[34px]">{{ t('discount_label') }}:</p>
+        <p class="fw-600 text-[16px] total-discount-label mr-[14px] leading-[34px]">{{ t('discount_label') }}:</p>
         <p>
           {{ totalDiscount }} <span
             class="text-[15px]">{{ t(currencyStore.label) }}</span>
         </p>
       </div>
       <div class="flex justify-end items-center">
-        <p class="fw-600 text-[16px] text-[var(--color-muted-light-gray)] mr-[14px] leading-[34px]">
+        <p class="fw-600 text-[16px] amount-to-pay-label text-[var(--color-muted-light-gray)] mr-[14px] leading-[34px]">
           {{ t('amount_to_pay_label') }}:</p>
         <p>
           {{ totalPriceAfterDiscount }} <span class="text-[15px] text-[var(--color-primary-dark)]">{{
@@ -47,6 +53,7 @@ import {useCurrencyStore} from "~/stores/currency.js";
 
 const {confirmAction} = useConfirmWithToast()
 
+const emit = defineEmits(['handle-cart-item'])
 
 const {t} = useI18n()
 
@@ -128,5 +135,16 @@ const totalDiscount = computed(() => totalPriceBeforeDiscount.value - totalPrice
 .scrollable-items::-webkit-scrollbar-thumb {
   background: var(--color-primary-dark);
   border-radius: 8px;
+}
+
+@media (max-width: 600px) {
+  .final-price {
+    padding-right: 20px;
+  }
+  .total-price-label,
+  .total-discount-label,
+  .amount-to-pay-label {
+    font-size: 15px;
+  }
 }
 </style>

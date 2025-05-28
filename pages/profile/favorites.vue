@@ -1,29 +1,43 @@
 <template>
-  <div class="favorite-products">
-    <LoadingOverlay :visible="isLoading"/>
-    <h1 class="profile-page-title title-lg-20 mb-8">{{ t('favorites') }}</h1>
-    <div class="favorite-products-content grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
+  <main class="favorite-products">
+    <LoadingOverlay :visible="isLoading" />
 
+    <h1 class="profile-page-title title-lg-20 mb-8">
+      {{ t('favorites') }}
+    </h1>
 
-
+    <section
+        class="favorite-products-content grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10"
+        aria-label="Favorite products list"
+    >
       <template v-if="!hydrated">
-        <ProductSkeleton v-for="i in 5" :key="'loading-skeleton-' + i"/>
+        <ProductSkeleton v-for="i in 5" :key="'loading-skeleton-' + i" />
       </template>
 
       <template v-else>
-        <ProductCard
+        <article
             v-if="!isLoading"
             v-for="product in favoriteProducts"
             :key="product._id"
-            :product="product"
-            @add-to-cart="addToCart"
-        />
+        >
+          <ProductCard
+              :product="product"
+              @add-to-cart="addToCart"
+          />
+        </article>
       </template>
+    </section>
 
+    <section
+        v-if="!favoriteProducts.length"
+        class="empty-favorites-text text-center py-10 text-gray-400 text-xl font-medium"
+        aria-live="polite"
+    >
+      <p>{{ t('favorite_products_empty') }}</p>
+    </section>
+  </main>
 
-    </div>
-  </div>
-  <Toast position="bottom-right" group="br"/>
+  <Toast position="bottom-right" group="br" />
 </template>
 
 <script setup>

@@ -1,7 +1,6 @@
 <template>
-  <div class="layout justify-between"></div>
+  <section class="layout justify-between"></section>
 </template>
-
 <script setup>
 definePageMeta({
   layout: 'profile',

@@ -23,8 +23,8 @@
         </div>
 
         <div class="label-blocks flex justify-around w-full mt-2">
-          <div class="label">Hours</div>
-          <div class="label">Minutes</div>
+          <div class="label">{{ t('timer_hours') }}</div>
+          <div class="label">{{ t('timer_minutes') }}</div>
         </div>
       </div>
     </Countdown>
@@ -36,6 +36,8 @@ import Countdown from '@chenfengyuan/vue-countdown'
 import { ref, computed } from 'vue'
 
 const emit = defineEmits(['expired'])
+
+const { t } = useI18n()
 
 const props = defineProps({
   orderCreatedAt: {
@@ -129,6 +131,14 @@ watch(() => isExpired.value, (newValue) => {
   height: 3px;
   background-color: #5856D6;
   border-radius: 50%;
+}
+
+@media (max-width: 675px) {
+  .digit-box {
+    width: 31px;
+    height: 39px;
+    font-size: 1.5rem;
+  }
 }
 
 </style>
