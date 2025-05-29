@@ -50,143 +50,157 @@
       <!--      </div>-->
     </TabPanel>
     <TabPanel :header="tabs.reviews.header">
-      <div class="reviews-content murecho-font flex justify-between">
-        <div v-if="paginatedReviews.length" class="review-list max-w-[650px] w-full pt-[26px] justify-self-start">
-
+      <section class="reviews-content murecho-font flex justify-between">
+        <section v-if="paginatedReviews.length" class="review-list max-w-[650px] w-full pt-[26px] justify-self-start">
           <div class="min-h-[270px] flex flex-col justify-between">
-            <div
-                class="review-card mb-[23px] last:mb-0 max-w-[618px]"
-                v-for="review in paginatedReviews"
-                :key="review.id"
-            >
-              <div class="flex mb-2 items-center">
-                <strong class="mr-4"><p class="review-card__name fw-600">{{ fullReviewerName(review.user) }}</p>
-                </strong>
-                <div class="review-card__date mr-2 text-[14px]">{{ formatDateToDMY(review.createdAt) }}</div>
-                <div class="review-card__stars mr-3">
-                  <Rating v-model="review.rating" readonly>
-                    <template #onicon>
-                      <img src="@/assets/icons/star-filled.svg" class="mr-1"/>
-                    </template>
-                    <template #officon>
-                      <img src="@/assets/icons/star-empty.svg" class="mr-1"/>
-                    </template>
-                  </Rating>
-                </div>
-                <div class="review-card__confirmed text-[#ADADAD] fw-400">
-                  <p v-if="true">{{ t('purchase_confirmed') }}</p>
-                  <p v-else>{{ t('purchase_not_confirmed') }}</p>
-                </div>
-              </div>
-
-              <p class="review-card__comment">{{ getSlicedReview(review) }}</p>
-              <p
-                  v-if="isShowMoreButton(review.comment)"
-                  class="flex cursor-pointer justify-end text-[12px] text-[var(--color-muted-light-gray)] fw-500"
-                  @click="toggleComment(review._id)"
+            <ul class="space-y-[23px]">
+              <li
+                  is="article"
+                  v-for="review in paginatedReviews"
+                  :key="review.id"
+                  class="review-card max-w-[618px]"
               >
-                {{ expandedComments.has(review._id) ? 'Hide' : 'Read more' }}
-              </p>
-            </div>
-            <div class="pagination-wrapper flex justify-end">
-              <div class="pagination flex justify-between items-center  max-w-[80px] w-full">
+                <div class="flex mb-2 items-center">
+                  <strong class="mr-4">
+                    <p class="review-card__name fw-600">{{ fullReviewerName(review.user) }}</p>
+                  </strong>
+                  <time class="review-card__date mr-2 text-[14px]">
+                    {{ formatDateToDMY(review.createdAt) }}
+                  </time>
+                  <div class="review-card__stars mr-3">
+                    <Rating v-model="review.rating" readonly>
+                      <template #onicon>
+                        <img src="@/assets/icons/star-filled.svg" class="mr-1" />
+                      </template>
+                      <template #officon>
+                        <img src="@/assets/icons/star-empty.svg" class="mr-1" />
+                      </template>
+                    </Rating>
+                  </div>
+                  <p class="review-card__confirmed text-[#ADADAD] fw-400">
+                    {{ true ? t('purchase_confirmed') : t('purchase_not_confirmed') }}
+                  </p>
+                </div>
+
+                <p class="review-card__comment">{{ getSlicedReview(review) }}</p>
+                <button
+                    v-if="isShowMoreButton(review.comment)"
+                    type="button"
+                    class="flex cursor-pointer justify-end text-[12px] text-[var(--color-muted-light-gray)] fw-500"
+                    @click="toggleComment(review._id)"
+                >
+                  {{ expandedComments.has(review._id) ? 'Hide' : 'Read more' }}
+                </button>
+              </li>
+            </ul>
+
+            <nav class="pagination-wrapper flex justify-end" aria-label="Review pagination">
+              <div class="pagination flex justify-between items-center max-w-[80px] w-full">
                 <button
                     @click="changePage(currentPage - 1)"
                     :disabled="currentPage === 1"
                     :class="{ 'is-disabled': currentPage === 1 }"
+                    aria-label="Previous page"
                 >
-                  <svg
-                      width="21"
-                      height="21"
-                      viewBox="0 0 21 21"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                        class="arrow-path"
-                        d="M11.5 13.5L8.5 10.5L11.5 7.5M19.5 10.5C19.5 5.52944 15.4706 1.5 10.5 1.5C5.52944 1.5 1.5 5.52944 1.5 10.5C1.5 15.4706 5.52944 19.5 10.5 19.5C15.4706 19.5 19.5 15.4706 19.5 10.5Z"
-                    />
-                  </svg>
                 </button>
                 <span>{{ currentPage }}</span>
                 <button
                     @click="changePage(currentPage + 1)"
                     :disabled="currentPage * itemsPerPage >= reviews.length"
                     :class="{ 'is-disabled': currentPage * itemsPerPage >= reviews.length }"
+                    aria-label="Next page"
                 >
-                  <svg
-                      width="21"
-                      height="21"
-                      viewBox="0 0 21 21"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                        class="arrow-path"
-                        d="M9.5 7.5L12.5 10.5L9.5 13.5M19.5 10.5C19.5 5.52944 15.4706 1.5 10.5 1.5C5.52944 1.5 1.5 5.52944 1.5 10.5C1.5 15.4706 5.52944 19.5 10.5 19.5C15.4706 19.5 19.5 15.4706 19.5 10.5Z"
-                    />
-                  </svg>
                 </button>
               </div>
-            </div>
+            </nav>
           </div>
+        </section>
 
+        <section v-else class="empty-reviews-text">
+          <p class="text-[var(--color-primary-black)] text-[26px] italic">
+            {{ t('no_reviews_yet') }}
+          </p>
+        </section>
 
-        </div>
-
-        <div v-else class="empty-reviews-text">
-          <p class="text-[var(--color-primary-black)] text-[26px] italic">{{ t('no_reviews_yet') }}</p>
-        </div>
-
-        <div class="review-form max-w-[642px] w-full">
+        <section class="review-form max-w-[642px] w-full" aria-labelledby="review-form-title">
           <div class="mb-4">
-            <h2 class="form-title fw-500">{{ t('new_review') }}</h2>
+            <h2 id="review-form-title" class="form-title fw-500">{{ t('new_review') }}</h2>
           </div>
-          <div class="mb-4 rounded-[8px] max-w-[354px]">
-            <InputText :disabled="!token" v-model="reviewerInputValue" class="w-full h-[42px] py-[10px] rounded-[8px]"
-                       :placeholder="t('your_name')"/>
-          </div>
-          <div class="rounded-[8px]">
-          <Textarea :disabled="!token" :maxlength="MAX_REVIEW_LENGTH" v-model="textareaValue" style="resize: none"
-                    class="w-full rounded-[8px]"
-                    :placeholder="t('share_your_impressions')" rows="5" cols="30"/>
-          </div>
-          <div class="mb-[10px] text-[var(--color-muted-light-gray)] flex justify-end">
-            {{ getReviewLength }} / {{ MAX_REVIEW_LENGTH }}
-          </div>
-          <div class="rate-product mb-[27px] flex flex-col">
-            <div class="flex items-center">
-              <p class="mr-[10px] text-[14px]">{{ t('rate_product') }}</p>
-              <Rating :disabled="!token" v-model="rating">
-                <template #onicon>
-                  <img src="@/assets/icons/star-filled.svg" class="mr-1"/>
-                </template>
-                <template #officon>
-                  <img src="@/assets/icons/star-empty.svg" class="mr-1"/>
-                </template>
-              </Rating>
+
+          <form @submit.prevent="leaveProductReview">
+            <div class="mb-4 rounded-[8px] max-w-[354px]">
+              <label class="sr-only" for="reviewerName">{{ t('your_name') }}</label>
+              <InputText
+                  id="reviewerName"
+                  :disabled="!token"
+                  v-model="reviewerInputValue"
+                  class="w-full h-[42px] py-[10px] rounded-[8px]"
+                  :placeholder="t('your_name')"
+              />
             </div>
-            <p v-if="isEmptyRating" class="empty-rating-text text-[12px] text-[var(--color-primary-pink)]">
-              {{ t('empty_rating') }}</p>
-          </div>
 
+            <div class="rounded-[8px]">
+              <label class="sr-only" for="reviewTextarea">{{ t('share_your_impressions') }}</label>
+              <Textarea
+                  id="reviewTextarea"
+                  :disabled="!token"
+                  :maxlength="MAX_REVIEW_LENGTH"
+                  v-model="textareaValue"
+                  style="resize: none"
+                  class="w-full rounded-[8px]"
+                  :placeholder="t('share_your_impressions')"
+                  rows="5"
+                  cols="30"
+              />
+            </div>
 
-          <div class="rounded-[8px] max-w-[386px]">
-            <Button :disabled="!token"
-                    v-tooltip.top="!token ? { value: t('review_auth_tooltip'), autoHide: false } : null"
-                    @click="leaveProductReview" :pt="{
+            <div class="mb-[10px] text-[var(--color-muted-light-gray)] flex justify-end">
+              {{ getReviewLength }} / {{ MAX_REVIEW_LENGTH }}
+            </div>
+
+            <fieldset class="rate-product mb-[27px] flex flex-col" aria-required="true">
+              <legend class="sr-only">{{ t('rate_product') }}</legend>
+              <div class="flex items-center">
+                <p class="mr-[10px] text-[14px]">{{ t('rate_product') }}</p>
+                <Rating :disabled="!token" v-model="rating">
+                  <template #onicon>
+                    <img src="@/assets/icons/star-filled.svg" class="mr-1" />
+                  </template>
+                  <template #officon>
+                    <img src="@/assets/icons/star-empty.svg" class="mr-1" />
+                  </template>
+                </Rating>
+              </div>
+              <p
+                  v-if="isEmptyRating"
+                  class="empty-rating-text text-[12px] text-[var(--color-primary-pink)]"
+              >
+                {{ t('empty_rating') }}
+              </p>
+            </fieldset>
+
+            <div class="rounded-[8px] max-w-[386px]">
+              <Button
+                  type="submit"
+                  :disabled="!token"
+                  v-tooltip.top="!token ? { value: t('review_auth_tooltip'), autoHide: false } : null"
+                  :pt="{
             root: {
               class: 'send-review__btn btn-hover-default'
             }
-          }">
-              <p class="text-[14px]">{{ t('submit_review') }}</p>
-            </Button>
-          </div>
-          <div v-if="hasPurchasedProduct" class="purchased-product-text text-[var(--color-primary-pink)]">
-            {{ hasPurchasedProduct }}
-          </div>
-        </div>
-      </div>
+          }"
+              >
+                <p class="text-[14px]">{{ t('submit_review') }}</p>
+              </Button>
+            </div>
+
+            <div v-if="hasPurchasedProduct" class="purchased-product-text text-[var(--color-primary-pink)]">
+              {{ hasPurchasedProduct }}
+            </div>
+          </form>
+        </section>
+      </section>
+
     </TabPanel>
   </TabView>
 </template>
@@ -212,7 +226,7 @@ const MAX_REVIEW_LENGTH = 300;
 
 const route = useRoute()
 
-const productId = computed(() => route.params.id)
+const productSlug = computed(() => route.params.slug)
 
 const {t} = useI18n()
 
@@ -288,7 +302,7 @@ const leaveProductReview = async () => {
   isEmptyRating.value = false
 
   try {
-    const response = await leaveReview(productId.value, rating.value, textareaValue.value)
+    const response = await leaveReview(productSlug.value, rating.value, textareaValue.value)
     reviews.value.push(response)
     hasPurchasedProduct.value = ''
     clearFields()

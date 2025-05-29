@@ -1,5 +1,5 @@
 <template>
-  <form method="get" @submit.prevent="onEnter" class="search-field max-w-[425px] w-full relative">
+  <form method="get" @submit.prevent="onEnter" class="search-field  w-full relative">
     <IconField>
       <InputText
           name="q"

@@ -11,9 +11,11 @@
     <template #default="slotProps">
       <div :class="[
         'flex items-center gap-2 w-full',
-        slotProps.node.icon ? 'border-b pb-2' : '',
+        slotProps.node.icon ? 'pb-2' : '',
         slotProps.node.icon && expandedKeys[slotProps.node.key] ? 'w-[50%] mx-auto' : ''
-      ]">
+      ]"
+           :style="[slotProps.node.icon ? 'width: 278px; ' : '']"
+      >
         <img
             v-if="slotProps.node.icon"
             :src="slotProps.node.icon"
@@ -38,7 +40,7 @@
         <button
             v-if="slotProps.node.children"
             @click.stop="toggle(slotProps.node)"
-            class="ml-2 p-1 rounded transition"
+            class="ml-auto p-1 rounded transition"
         >
           <svg
               :class="{
@@ -53,6 +55,7 @@
           </svg>
         </button>
       </div>
+      <div v-if="slotProps.node.icon" :class="['border-b border-[var(--color-muted-gray)]', slotProps.node.icon && expandedKeys[slotProps.node.key] ? 'w-[50%] mx-auto' : '']"></div>
     </template>
 
     <template #nodeicon="slotProps">
@@ -75,7 +78,7 @@ const {t} = useI18n()
 const route = useRoute()
 const router = useRouter()
 
-const { $eventBus } = useNuxtApp()
+const {$eventBus} = useNuxtApp()
 
 const expandedKeys = ref({"0": true})
 
@@ -137,7 +140,7 @@ const onNodeCheckboxChange = (node, isChecked) => {
   }
 
   const filters = collectCheckedFilters(nodes.value)
-  const query = { ...route.query }
+  const query = {...route.query}
 
   if (filters.length > 0) {
     query.filters = filters.join(',')
@@ -145,11 +148,10 @@ const onNodeCheckboxChange = (node, isChecked) => {
     delete query.filters
   }
 
-  router.replace({ query })
+  router.replace({query})
 
   $eventBus.emit('filters-updated', filters.join(','))
 }
-
 
 
 const updateChildrenSelection = (children, isChecked) => {

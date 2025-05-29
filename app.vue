@@ -12,14 +12,8 @@
         @close="cartStore.close"
         @continue-shopping="handleContinueShopping"
     />
-    <ResponsiveFooter @handle-mobile-sidebar="handleMobileMenu" :is-open="isOpenMenu"/>
-    <Footer />
+    <Footer @handle-mobile-sidebar="handleMobileMenu" :is-mobile-sidebar-open="isOpenMenu"/>
     <Toast position="bottom-right" group="br" />
-    <ClientOnly>
-      <svg style="display: none">
-        <use :xlink:href="'/icons/sprite.svg#icon-check'" />
-      </svg>
-    </ClientOnly>
   </div>
 </template>
 

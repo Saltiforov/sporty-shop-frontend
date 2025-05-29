@@ -1,18 +1,19 @@
 <template>
-  <div class="fields-block">
+  <form class="fields-block">
     <div class="container">
       <div
           :class="{
-        'fields-block-content': true,
-        'form-content': true,
-        'grid-cols-1': !leftFullFields.length || !rightFullFields.length,
-        'grid-cols-2': leftFullFields.length && rightFullFields.length
+          'fields-block-content': true,
+          'form-content': true,
+          'grid-cols-1': !leftFullFields.length || !rightFullFields.length,
+          'grid-cols-2': leftFullFields.length && rightFullFields.length
         }"
-          class="grid gap-6">
+          class="grid gap-6"
+      >
         <div class="flex flex-col gap-6">
           <template v-for="field in leftFullFields" :key="field.name">
-            <div class="form-group">
-              <p class="form__title mb-[11px] flex items-center gap-2">
+            <fieldset class="form-group">
+              <legend class="form__title mb-[11px] flex items-center gap-2">
                 <span class="whitespace-nowrap">{{ field.label }}:</span>
                 <component
                     v-if="field.tooltipComponent"
@@ -20,7 +21,7 @@
                     v-bind="field.tooltipProps"
                     class="self-start"
                 />
-              </p>
+              </legend>
               <div>
                 <DynamicRenderField
                     v-if="field.render"
@@ -44,14 +45,14 @@
               >
                 {{ errors[field.code] }}
               </Message>
-            </div>
+            </fieldset>
           </template>
 
           <template v-for="(pair, index) in leftHalfPairs" :key="'lh' + index">
             <div class="flex gap-6">
               <template v-for="field in pair" :key="field.name">
-                <div class="form-group w-1/2">
-                  <p class="form__title mb-[11px] flex items-center gap-2">
+                <fieldset class="form-group w-1/2">
+                  <legend class="form__title mb-[11px] flex items-center gap-2">
                     <span class="whitespace-nowrap">{{ field.label }}:</span>
                     <component
                         v-if="field.tooltipComponent"
@@ -59,7 +60,7 @@
                         v-bind="field.tooltipProps"
                         class="self-start"
                     />
-                  </p>
+                  </legend>
                   <div>
                     <DynamicRenderField
                         v-if="field.render"
@@ -83,19 +84,18 @@
                   >
                     {{ errors[field.code] }}
                   </Message>
-                </div>
+                </fieldset>
               </template>
             </div>
           </template>
         </div>
 
         <div class="flex flex-col gap-6">
-
           <template v-for="(pair, index) in rightHalfPairs" :key="'rh' + index">
             <div class="flex gap-6">
               <template v-for="field in pair" :key="field.name">
-                <div class="form-group w-1/2">
-                  <p class="form__title mb-[11px] flex items-center gap-2">
+                <fieldset class="form-group w-1/2">
+                  <legend class="form__title mb-[11px] flex items-center gap-2">
                     <span class="whitespace-nowrap">{{ field.label }}:</span>
                     <component
                         v-if="field.tooltipComponent"
@@ -103,7 +103,7 @@
                         v-bind="field.tooltipProps"
                         class="self-start"
                     />
-                  </p>
+                  </legend>
                   <div>
                     <DynamicRenderField
                         v-if="field.render"
@@ -127,14 +127,14 @@
                   >
                     {{ errors[field.code] }}
                   </Message>
-                </div>
+                </fieldset>
               </template>
             </div>
           </template>
 
           <template v-for="field in rightFullFields" :key="field.name">
-            <div class="form-group">
-              <p class="form__title mb-[11px] flex items-center gap-2">
+            <fieldset class="form-group">
+              <legend class="form__title mb-[11px] flex items-center gap-2">
                 <span class="whitespace-nowrap">{{ field.label }}:</span>
                 <component
                     v-if="field.tooltipComponent"
@@ -142,7 +142,7 @@
                     v-bind="field.tooltipProps"
                     class="self-start"
                 />
-              </p>
+              </legend>
               <div>
                 <DynamicRenderField
                     v-if="field.render"
@@ -166,15 +166,13 @@
               >
                 {{ errors[field.code] }}
               </Message>
-            </div>
+            </fieldset>
           </template>
-
         </div>
       </div>
     </div>
-  </div>
+  </form>
 </template>
-
 
 <script setup>
 import {ref, computed, onMounted} from "vue";

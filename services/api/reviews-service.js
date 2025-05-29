@@ -1,16 +1,16 @@
 const router = {
-    reviews: (productId) => `/api/client/products/${productId}/reviews`,
+    reviews: (slug) => `/api/client/products/${slug}/reviews`,
 }
 
-export const leaveReview = async (productId, rating, comment) => {
+export const leaveReview = async (slug, rating, comment) => {
     const { $api } = useNuxtApp()
-    return $api.post(router.reviews(productId), {
+    return $api.post(router.reviews(slug), {
         rating,
         comment
     })
 }
 
-export const getReviewByProduct = (productId) => {
+export const getReviewByProduct = (slug) => {
     const { $api } = useNuxtApp()
-    return $api.get(router.reviews(productId))
+    return $api.get(router.reviews(slug))
 }

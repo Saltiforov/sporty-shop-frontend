@@ -8,12 +8,16 @@
             :options="swiperOptions"
         >
           <template #default="{ item }">
-            <img
-                :src="item"
+            <NuxtImg
+                :src="item.replace('/_nuxt/public', '')"
+                format="webp"
+                class="w-full object-cover rounded-lg"
+                alt="swiper-image"
                 loading="lazy"
                 decoding="async"
-                class="w-full h-[269px] object-cover rounded-lg"
-                alt="swiper-image"
+                width="1756"
+                height="250"
+                :modifiers="{ quality: 90 }"
             />
           </template>
         </SwiperWrapper>
@@ -28,18 +32,12 @@
 </template>
 
 <script setup>
-import {ref, onMounted, defineAsyncComponent} from 'vue'
+import {ref, onMounted} from 'vue'
 import MainBannerSkeleton from '~/components/Skeletons/MainBannerSkeleton/MainBannerSkeleton.vue'
 
-import Swiper from '~/components/Swiper/SwiperWrapper.vue'
+import BannerImage from '~/public/images/banner-image.webp'
 
-const AsyncSwiper = defineAsyncComponent(() => import('@/components/Swiper/SwiperWrapper.vue'))
-
-const images = [
-  'https://wallpapers.com/images/high/fitness-gym-with-equipment-iovhjg9dwfy87bzf.webp',
-  'https://wallpapers.com/images/high/home-gym-with-barbell-r4xvbh7jalyuhdme.webp',
-  'https://wallpapers.com/images/high/gym-motivation-picture-8rog1fmrp8zbmfkm.webp',
-]
+const images = [ BannerImage, BannerImage ]
 
 const hydrated = ref(false)
 onMounted(() => {
