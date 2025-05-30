@@ -1,26 +1,6 @@
 /* HEADER */
 
-@media (min-width: 640px) {
-    .link-item {
-        margin-right: 32px;
-    }
-}
 
-@media (min-width: 768px) {
-    .link-item {
-        margin-right: 53px;
-    }
-}
-
-.link-item:last-child {
-    margin-right: 0;
-}
-
-@media (min-width: 768px) {
-    .links-container {
-        column-gap: 32px;
-    }
-}
 
 /* HEADER */
 
@@ -42,3 +22,21 @@
 
 
 /* MAIN PAGE PRODUCT GRID */
+
+/* NO DATA TEXT */
+
+@media (max-width: 750px) {
+    .no-data-text {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 550px) {
+    .no-data-text {
+        font-size: 18px;
+    }
+}
+
+
+
+/* NO DATA TEXT */

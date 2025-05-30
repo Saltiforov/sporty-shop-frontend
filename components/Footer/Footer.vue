@@ -2,13 +2,13 @@
   <main>
     <footer
         ref="stickyFooter"
-        class=" bottom-0 left-0 w-full z-[20] responsive-footer flex flex-col p-4 shadow transition-transform duration-300"
+        class=" bottom-0 sticky-footer left-0 w-full z-1000 responsive-footer flex flex-col p-4 shadow transition-transform duration-300"
         :class="isIntersecting ? 'sticky' : 'fixed'"
     >
       <section class="responsive-footer-container w-full flex justify-between">
         <section class="actions-wrapper w-full flex justify-between items-center">
           <ActionPanel
-              :cartCount="useCartStore().cartCount"
+              :cartCount="useCartStore().cartCount || 0"
               :responsive="true"
               :is-open-mobile-menu="isMobileSidebarOpen"
               @showShoppingCart="showShoppingCart"
@@ -257,6 +257,10 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+.sticky-footer {
+  z-index: 1000;
+}
+
 .socials-responsive {
   display: none;
 }

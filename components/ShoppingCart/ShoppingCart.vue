@@ -12,8 +12,8 @@
 
       <div class="header flex justify-between pb-[49px] items-center">
         <div class="flex">
-          <h1 class="large-title mr-[25px]">{{ t('cart_title') }}</h1>
-          <p class="large-title" style="color: var(--color-muted-light-gray)">({{ cartStore.cartCount }})</p>
+          <h1 class="cart-title large-title mr-[25px]">{{ t('cart_title') }}</h1>
+          <p class="cart-count large-title" style="color: var(--color-muted-light-gray)">({{ cartStore.cartCount || 0 }})</p>
         </div>
         <div class="pr-[8px]">
           <Button :pt="{ root: { class: 'close-cart' } }" @click="$emit('close')">
@@ -37,8 +37,8 @@
           :products-overview="cartItems"
           @handle-cart-item="emit('close')"
       />
-      <div class="make-order-block flex flex-col items-center">
-        <div class="mb-[10px] w-full max-w-[423px]">
+      <div class="make-order-block flex flex-col items-center mb-[50px]">
+        <div class="make-order-button-wrapper mb-[10px] w-full max-w-[423px]">
           <NuxtLink to="/checkout">
             <Button @click="$emit('close')" :pt="{ root: { class: 'make-order-button btn-hover-default' } }">
               <p class="fw-400 murecho-font text-[#FFFFFF] text-[14px] leading-[22px]">
@@ -47,7 +47,7 @@
             </Button>
           </NuxtLink>
         </div>
-        <div>
+        <div class="">
           <Button @click="handleContinueShopping" :pt="{
             root: {
               style: {
@@ -57,12 +57,12 @@
               }
             }
           }" class="continue-shopping__btn" to="/">
-            <p class="murecho-font">{{ t('continue_shopping') }}</p>
+            <p class="continue-shopping-text murecho-font">{{ t('continue_shopping') }}</p>
           </Button>
         </div>
       </div>
 
-      <div class="recommended-products mt-[50px]">
+      <div class="recommended-products">
         <div class="flex items-center gap-4">
           <div class="w-[152px] h-px bg-white"></div>
           <h2 class="h2-title text-center whitespace-nowrap">{{ t('recommended_products') }}</h2>
@@ -88,8 +88,7 @@
                         borderRadius: '100%',
                         border: 'none',
                         padding: '0',
-                        width: '29px',
-                        height: '29px',
+                        ...recommendedProductsIconSizes
                       }
                     }
                    }"
@@ -114,13 +113,16 @@
 
 <script setup>
 import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
-import { useToastManager } from "~/composables/useToastManager.js";
+import {useToastManager} from "~/composables/useToastManager.js";
+
+import DefaultProductImage from "~/assets/images/product-image.png"
+import {useWindowWidthWatcher} from "~/composables/useWindowWidthWatcher.js";
 
 const emit = defineEmits(["continue-shopping", "handle-recommended-product", "close"]);
 
 const cartStore = useCartStore();
-const { showProductAddedToast } = useToastManager();
-const { t } = useI18n();
+const {showProductAddedToast} = useToastManager();
+const {t} = useI18n();
 
 const props = defineProps({
   isOpen: {
@@ -133,6 +135,10 @@ const props = defineProps({
   },
 });
 
+const getWidth = useWindowWidthWatcher()
+
+const windowWidth = computed(() => getWidth())
+
 const addToCart = (product) => {
   showProductAddedToast(product);
   cartStore.addToCart(product);
@@ -142,17 +148,23 @@ const handleContinueShopping = () => {
   emit("continue-shopping");
 };
 
+const recommendedProductsIconSizes = computed(() => {
+  return windowWidth.value < 470
+      ? { width: '36px', height: '36px',}
+      : { width: '29px', height: '29px',}
+})
+
 const handleRecommendedProduct = () => {
   cartStore.close();
 };
 
-// watch(() => props.isOpen, (newVal) => {
-//   document.body.style.overflow = newVal ? 'hidden' : '';
-// });
-//
-// onUnmounted(() => {
-//   document.body.style.overflow = '';
-// });
+watch(() => props.isOpen, (newVal) => {
+  document.body.style.overflow = newVal ? 'hidden' : '';
+});
+
+onUnmounted(() => {
+  document.body.style.overflow = '';
+});
 
 const products = ref([
   {
@@ -162,12 +174,7 @@ const products = ref([
     price_uah: 65,
     price_eur: 1.63,
     price: 70,
-    images: [
-      "/uploads/icons/581f66ac553b0d4f31d43869575c76c391c2876f6cf2258a842d97f7affd4722.webp",
-      "/uploads/icons/3382c9ae21b4f6cd49e2f42f1e0bc453bc87e3241310f8cf0aa24d5e7b2a6ded.webp",
-      "/uploads/icons/3d0f3bd3e1d69aa7db5c7eabe117eff5664a87d4c80d2c6b3434a5a5a91244d3.webp",
-      "/uploads/icons/7f784dd57f85b4fbf98d3fd0aa38abaefe40f7a7c7ae8fff53c38b4b8d35233c.webp"
-    ],
+    images: [],
     discount: 10,
     isFavorite: false,
   },
@@ -177,12 +184,7 @@ const products = ref([
     rating: '4.1',
     price_uah: 895,
     price_eur: 18,
-    images: [
-      "/uploads/icons/0a0773098658f21b18b20988c7c04d04eae01210a0dd55452dff452dce6ef68a.webp",
-      "/uploads/icons/3d0b0070887319eb85f0a5704918dbedace22f615db060b8c6fb874b894b1e78.webp",
-      "/uploads/icons/0b2b224e67639bacc9fb17209c3d36114967fb649f10d132f11e8f9e3f6254ca.webp",
-      "/uploads/icons/26e81294fed5013c4714bff7634f9438d3247b0e5558ab8c1cbde67f7bfc8233.webp"
-    ],
+    images: [],
     discount: 100,
     price: 699,
     isFavorite: true,
@@ -234,30 +236,25 @@ const products = ref([
 @media (max-width: 1700px) {
   .shopping-cart {
     padding: 18px 14px 23px 24px;
-    width: 40%;
+    width: 100%;
   }
 }
 
 @media (max-width: 1300px) {
   .shopping-cart {
-    width: 45%;
+    width: 100%;
     padding: 18px 14px 23px 14px;
   }
 }
 
 @media (max-width: 1000px) {
   .shopping-cart {
-    width: 50%;
+    width: 100%;
 
   }
 }
-@media (max-width: 1000px) {
-  .shopping-cart {
-    width: 60%;
-  }
-}
 
-@media (max-width: 800px) {
+@media (max-width: 850px) {
   .shopping-cart {
     width: 65%;
   }
@@ -265,47 +262,115 @@ const products = ref([
 
 @media (max-width: 700px) {
   .shopping-cart {
-    width: 80%;
+    width: 70%;
   }
-}
 
-@media (max-width: 610px) {
   .shopping-cart {
-    padding-right: 4px;
-    padding-left: 4px;
+    padding-right: 12px;
+    padding-left: 12px;
   }
+
   .header {
     padding: 0 10px 20px 10px;
   }
 }
 
-@media (max-width: 475px) {
+@media (max-width: 670px) {
+  .recommended-products-cards {
+    padding-bottom: 60px;
+    gap: 16px;
+  }
   .shopping-cart {
-    width: 90%;
-
+    width: 70%;
+  }
+  .shopping-cart {
+    padding: 18px 10px 23px 14px;
   }
 }
 
+@media (max-width: 670px) {
+  .shopping-cart {
+    width: 80%;
+  }
+
+}
+
+
+
+@media (max-width: 550px) {
+  .make-order-button-wrapper {
+    max-width: 274px;
+  }
+  .header {
+    flex-direction: row-reverse;
+  }
+  .cart-title {
+    margin-right: 22px;
+    font-size: 16px;
+  }
+  .cart-count {
+    font-size: 16px;
+  }
+  .header {
+    padding-bottom: 59px;
+  }
+  .continue-shopping-text {
+    font-size: 14px;
+  }
+  .make-order-block {
+    margin-bottom: 25px;
+  }
+  .recommended-products h2 {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .recommended-products-cards {
+    gap: 16px;
+  }
+
+}
+
+@media (max-width: 515px) {
+  .shopping-cart {
+    width: 90%;
+  }
+  .shopping-cart {
+    padding: 18px 5px 23px 14px;
+  }
+}
+
+
+
+@media (max-width: 475px) {
+  .shopping-cart {
+    width: 100%;
+  }
+}
 
 
 .cart-slide-enter-from {
   transform: translateX(100%);
   opacity: 0;
 }
+
 .cart-slide-enter-active {
   transition: transform 0.4s ease, opacity 0.3s ease;
 }
+
 .cart-slide-enter-to {
   transform: translateX(0%);
   opacity: 1;
 }
+
 .cart-slide-leave-from {
   transform: translateX(0%);
   opacity: 1;
 }
+
 .cart-slide-leave-active {
   transition: transform 0.4s ease, opacity 0.3s ease;
 }
+
 .cart-slide-leave-to {
   transform: translateX(100%);
   opacity: 0;

@@ -18,7 +18,15 @@
         }
       }">
         <ClientOnly>
-          <p class="fw-500 text-[18px] leading-[34px] text-[var(--color-primary-dark)]" v-html="product.description"/>
+          <div v-if="product.description">
+            <p
+                class="fw-500 text-[18px] leading-[34px] text-[var(--color-primary-dark)]"
+                v-html="product.description"
+            />
+          </div>
+          <p  v-else class="no-data-text">
+            {{ t('description_no_data') }}
+          </p>
         </ClientOnly>
       </AccordionContent>
     </AccordionPanel>
@@ -36,9 +44,9 @@
           style : 'background-color: var(--color-gray-lavender);'
         }
       }">
-        <div class="characteristics-list max-w-[1030px] w-full">
+        <div v-if="product?.attributes.length" class="characteristics-list max-w-[1030px] w-full">
           <div
-              v-for="characteristic in product?.attributes "
+              v-for="characteristic in product?.attributes"
               :key="characteristic.key"
               class="flex items-center gap-4 py-2"
           >
@@ -49,11 +57,14 @@
                 class="flex-grow h-px bg-[#5856D6]"
                 style="margin-top: 1em;"
             ></div>
-            <p class="characteristics-list__value whitespace-normal">
-              {{ characteristic.value }}
+            <p class="characteristics-list__value whitespace-nowrap">
+              {{ characteristic.value ? characteristic.value : $t('characteristics_no_data') }}
             </p>
           </div>
         </div>
+        <p  v-else class="no-data-text">
+          {{ t('characteristics_no_data') }}
+        </p>
       </AccordionContent>
     </AccordionPanel>
 
@@ -70,7 +81,7 @@
           style : 'background-color: var(--color-gray-lavender);'
         }
       }">
-        <div class="delivery-and-payment">
+        <div v-if="true" class="delivery-and-payment">
           <div class="mb-4">
             <strong class="fw-600 leading-[33px]">Оплата</strong>
           </div>
@@ -115,6 +126,9 @@
             </ul>
           </div>
         </div>
+        <p  v-else class="no-data-text">
+          {{ t('delivery_no_data') }}
+        </p>
       </AccordionContent>
     </AccordionPanel>
 
@@ -200,9 +214,11 @@
             </div>
           </section>
 
-          <div v-else class="empty-reviews-text">
-            <p class="text-[var(--color-primary-black)] text-[26px] italic">{{ t('no_reviews_yet') }}</p>
-          </div>
+          <section v-else class="no-data-text">
+            <p class="no-data-text text-center mb-6">
+              {{ t('no_reviews_yet') }}
+            </p>
+          </section>
 
           <section class="review-form max-w-[642px] w-full" aria-label="Review submission form">
             <div class="mb-4">

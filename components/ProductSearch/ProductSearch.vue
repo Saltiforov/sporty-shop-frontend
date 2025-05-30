@@ -1,12 +1,18 @@
 <template>
   <form method="get" @submit.prevent="onEnter" class="search-field  w-full relative">
-    <IconField>
+    <IconField :pt="{
+      root: {
+        style: {
+          borderRadius: '12px'
+        }
+      }
+    }">
       <InputText
           name="q"
           @focus="searchIsFocused = true"
           @blur="handleBlur"
           v-model="searchFieldValue"
-          :pt="{ root: { class: 'header-search-field', style: { width: '100%', borderRadius: '12px' } } }"
+          :pt="{ root: { class: 'header-search-field', style: searchFieldStyle } }"
           :placeholder="searchFieldPlaceholder"
       />
       <InputIcon
@@ -34,6 +40,7 @@
 import { useDebouncedRef } from '~/composables/useDebounceRef.js'
 import SearchDropdownMenu from '~/components/UI/SearchDropdownMenu/SearchDropdownMenu.vue'
 import { getSuggestionProductList } from '~/services/api/product-service.js'
+import {useWindowWidthWatcher} from "~/composables/useWindowWidthWatcher.js";
 
 const router = useRouter()
 const route  = useRoute()
@@ -43,6 +50,18 @@ const searchIsFocused  = ref(false)
 const receivedProducts = ref([])
 
 const searchFieldValue = ref(route.query.q || '')
+
+const getWidth = useWindowWidthWatcher()
+
+const searchFieldStyle = computed(() => {
+  return {
+    width: '100%',
+    borderRadius: '12px',
+    padding: getWidth() <= 500 ? '6px 10px 6px 20px' : '',
+    fontSize: getWidth() <= 500 ? '11px' : '',
+    border: 'none',
+  };
+});
 
 const debouncedSearch  = useDebouncedRef(searchFieldValue, 300)
 

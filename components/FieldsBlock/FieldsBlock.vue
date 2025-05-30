@@ -10,7 +10,7 @@
         }"
           class="grid gap-6"
       >
-        <div class="flex flex-col gap-6">
+        <div class="block flex flex-col gap-6">
           <template v-for="field in leftFullFields" :key="field.name">
             <fieldset class="form-group">
               <legend class="form__title mb-[11px] flex items-center gap-2">
@@ -90,11 +90,11 @@
           </template>
         </div>
 
-        <div class="flex flex-col gap-6">
+        <div class="block flex flex-col gap-6">
           <template v-for="(pair, index) in rightHalfPairs" :key="'rh' + index">
-            <div class="flex gap-6">
+            <div class="flex gap-6 responsive-pair">
               <template v-for="field in pair" :key="field.name">
-                <fieldset class="form-group w-1/2">
+                <fieldset class="half-field form-group w-1/2">
                   <legend class="form__title mb-[11px] flex items-center gap-2">
                     <span class="whitespace-nowrap">{{ field.label }}:</span>
                     <component
@@ -269,4 +269,46 @@ defineExpose({
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 600px) {
+  .form__title {
+    margin-bottom: 0;
+  }
+
+  .block {
+    margin-bottom: 26px;
+  }
+
+  .block:last-child {
+    margin-bottom: 0px;
+  }
+
+  .fields-block-content {
+    gap: 0;
+  }
+
+  .responsive-pair {
+    flex-direction: column !important;
+  }
+  .half-field {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .block:first-child {
+    margin-bottom: 0px;
+  }
+
+  .form-group {
+    width: 290px;
+    margin: 0 auto;
+  }
+
+  .fields-block-content {
+    gap: 26px;
+  }
+}
+
+
 </style>

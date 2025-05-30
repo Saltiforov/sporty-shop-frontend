@@ -236,7 +236,7 @@ onMounted(async () => {
   })
 
 
-  await getPromotionalProducts()
+  // await getPromotionalProducts()
 
   hydrated.value = true
   isLoading.value = false
@@ -305,13 +305,13 @@ onBeforeUnmount(() => {
   }
 }
 
-@media (max-width: 1610px) {
+@media (max-width: 1630px) {
   .product-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media (max-width: 1380px) {
+@media (max-width: 1420px) {
   .product-grid {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -405,6 +405,7 @@ onBeforeUnmount(() => {
   .product-grid {
     gap: 16px;
   }
+
 }
 
 @media (max-width: 615px) {
@@ -413,7 +414,7 @@ onBeforeUnmount(() => {
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 510px) {
   .product-grid {
     gap: 10px;
   }

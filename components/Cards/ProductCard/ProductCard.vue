@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'max-h-[316px]' : variant === 'small' }"
+  <div  :class="variant === 'small' ? maxWidthSmallClass : ''"
        class="w-full product-card relative bg-white pt-[30px] pr-[30px] pb-[22px] pl-[30px] max-w-[280px] mx-auto rounded-lg flex flex-col justify-start"
   >
 
@@ -10,7 +10,7 @@
     <div class="product-card-content">
       <div class="product-card-header flex relative flex-col items-center justify-center">
 
-        <div v-if="token" class="absolute flex items-center justify-center h-[31px] w-[31px] z-10 -top-3 right-1">
+        <div v-if="token" :class="favoriteButtonPosition" class="absolute flex items-center justify-center h-[31px] w-[31px] z-10 ">
           <FavoriteButton
               :is-favorite="product.isFavorite"
               :product="product"
@@ -23,15 +23,15 @@
               :class="[
               'rounded-lg w-full h-auto object-contain',
                 variant === 'small'
-                  ? 'max-w-[100px] max-h-[100px] md:max-w-[120px] md:h-[120px] lg:max-w-[137px] lg:h-[137px]'
-                  : 'max-w-[120px] min-h-[120px] md:max-w-[135px] md:h-[135px] lg:max-w-[180px] lg:h-[180px]'
+                  ? imageSizeSmallClasses
+                  : 'max-w-[128px] min-h-[114px] md:max-w-[135px] md:h-[135px] lg:max-w-[180px] lg:h-[180px]'
               ]"
               :src="productImage"
               alt="Product image"
           />
         </NuxtLink>
-        <div class="product-name min-h-[44px]">
-          <p :style="{ fontSize: variant === 'small' ? '16px' : '' }"
+        <div  class="product-name w-full min-h-[52px]">
+          <p :style="{ fontSize: variant === 'small' ? '16px' : '', }"
              class="text-[20px] leading-[22px] fw-500 line-clamp-2">{{ product.name }}</p>
         </div>
       </div>
@@ -52,7 +52,8 @@
             {{ priceByCurrency }} {{ t(currencyStore.label) }}
           </p>
           <p :class="{ 'text-[#EF4B4B]': hasDiscount }"
-             :style="{ fontSize: variant === 'small' ? '16px' : '' }" class="text-[24px] price-without-discount leading-[22px] fw-500">
+             :style="{ fontSize: variant === 'small' ? '16px' : '' }"
+             class="text-[24px] price-without-discount leading-[22px] fw-500">
             {{ discountPriceByCurrency || 0 }} {{ t(currencyStore.label) }}</p>
         </div>
 
@@ -63,10 +64,10 @@
               root: {
                 style: {
                 border: 'none',
+                padding: '0px',
                 background: 'var( --color-primary-green)',
                 borderRadius: '50%',
-                width: '47px',
-                height: '47px',
+                ...productCardIconSizes
                 },
               }
             }"
@@ -94,9 +95,11 @@ import FavoriteButton from "~/components/UI/FavoriteButton/FavoriteButton.vue";
 
 import DefaultProductImage from '~/assets/images/product-image.png'
 import {useCartStore} from "~/stores/cart.js";
-import { useI18n } from 'vue-i18n'
-const { locale } = useI18n()
+import {useI18n} from 'vue-i18n'
+
+const {locale} = useI18n()
 import {useCurrencyStore} from "~/stores/currency.js";
+import {useWindowWidthWatcher} from "~/composables/useWindowWidthWatcher.js";
 
 const props = defineProps({
   product: {
@@ -117,9 +120,13 @@ const cartStore = useCartStore()
 
 const currencyStore = useCurrencyStore()
 
+const getWidth = useWindowWidthWatcher()
+
 const {t} = useI18n()
 
 const token = useCookie('token')
+
+const windowWidth = computed(() => getWidth())
 
 const addToCart = (product) => {
   emit('add-to-cart', product)
@@ -142,6 +149,40 @@ const hasDiscount = computed(() => {
   const price = priceByCurrency.value
   const discounted = discountPriceByCurrency.value
   return discounted !== null && discounted !== undefined && discounted < price
+})
+
+const favoriteButtonPosition = computed(() => {
+  return windowWidth.value < 500
+      ? '-top-3 -right-2'
+      : '-top-3 right-1'
+})
+
+const productCardIconSizes = computed(() => {
+  return windowWidth.value < 500
+      ? { width: '36px', height: '36px',}
+      : { width: '47px', height: '47px',}
+})
+
+const imageSizeSmallClasses = computed(() => {
+  const breakpoints = [
+    { min: 1024, class: 'lg:max-w-[135px] lg:h-[135px]' },
+    { min: 768, class: 'md:max-w-[140px] md:h-[140px]' },
+    { min: 0, class: 'max-w-[128px] h-[114px]' }
+  ]
+  return breakpoints.find(bp => windowWidth.value >= bp.min).class
+})
+
+const maxWidthSmallClass = computed(() => {
+
+  const breakpoints = [
+    { min: 1201, class: 'max-h-[316px]' },
+    { min: 801,  class: 'max-h-[290px]' },
+    { min: 438, class: 'max-h-[300px]' },
+    { min: 0,    class: 'min-h-[240px]' }
+  ]
+
+
+  return breakpoints.find(bp => windowWidth.value >= bp.min).class
 })
 
 const iconSize = computed(() => {
@@ -200,48 +241,51 @@ const iconSize = computed(() => {
   .product-card {
     max-width: 230px;
   }
+
   .product-name p {
     font-size: 18px;
   }
+
   .product-reviews {
     margin-bottom: 10px;
   }
+
   .discount-price {
     top: -0.5rem;
     font-size: 13px;
   }
+
   .price-without-discount {
     font-size: 20px;
   }
 }
 
 
-
 @media (max-width: 1150px) {
   .product-card {
     aspect-ratio: 3  / 4;
-    max-width: 280px;
+    max-width: 240px;
   }
 
 }
 
 @media (max-width: 1000px) {
- .product-card {
-   aspect-ratio: 284 / 345;
- }
+  .product-card {
+    aspect-ratio: 284 / 345;
+  }
 }
 
 @media (max-width: 905px) {
- .product-card {
-   max-width: 230px;
- }
+  .product-card {
+    max-width: 230px;
+  }
 }
 
 
 @media (max-width: 800px) {
- .product-card {
-   max-width: 200px;
- }
+  .product-card {
+    max-width: 200px;
+  }
 }
 
 @media (max-width: 700px) {
@@ -249,13 +293,16 @@ const iconSize = computed(() => {
     max-width: 180px;
     padding: 20px 10px 10px 10px;
   }
+
   .product-name p {
     font-size: 16px;
   }
+
   .discount-price {
     top: -0.25rem;
     font-size: 12px;
   }
+
   .price-without-discount {
     font-size: 18px;
   }
@@ -263,43 +310,83 @@ const iconSize = computed(() => {
 
 @media (max-width: 615px) {
   .product-card {
-    max-width: 230px;
+    max-width: 220px;
   }
 }
 
 
 @media (max-width: 500px) {
- .product-card {
-   max-width: 200px;
-   aspect-ratio: 294 / 345;
- }
-  .product-name p {
-    font-size: 14px;
-  }
-  .discount-price {
-    font-size: 12px;
-  }
-  .price-without-discount {
-    font-size: 15px;
-  }
-  .block {
-    margin-bottom: 4px;
-  }
-  .product-name {
-    min-height: 22px;
+  .product-card {
+    max-width: 200px;
+    aspect-ratio: 294 / 345;
+    padding: 20px 16px 15px 16px;
   }
   .product-grade {
     font-size: 10px;
   }
+
+  .product-reviews {
+    margin-bottom: 4px;
+  }
+
+  .price-without-discount {
+    font-size: 12px !important;
+  }
+
+  .product-card-header img, a {
+    width: 128px !important;
+    height: 114px !important;
+    margin: 0 auto;
+
+  }
+
+  .product-name p {
+    font-size: 14px;
+  }
+
+  .discount-price {
+    font-size: 10px;
+  }
+
+  .price-without-discount {
+    font-size: 15px;
+  }
+
+  .block {
+    margin-bottom: 4px;
+  }
+
+  .product-name {
+    min-height: 28px;
+  }
+
+  .product-name p {
+    font-size: 10px !important;
+    line-height: 14px;
+  }
+
+  .product-card-content {
+    max-width: 155px;
+    margin: 0 auto;
+  }
+
+  .product-grade {
+    font-size: 10px;
+  }
+
 }
+
 @media (max-width: 470px) {
- .product-card {
-   max-width: 160px;
-   padding-top: 10px;
- }
+  .product-card {
+    max-width: 160px;
+    padding-top: 20px;
+  }
+
+
   .product-name p {
     font-size: 10px;
   }
+
   .price-without-discount {
     font-size: 12px;
   }

@@ -148,3 +148,9 @@ header {
     line-height: var(--line-height-base);
     color: var(--color-gray-dark-graphite);
 }
+
+.no-data-text {
+    color: var(--color-primary-black);
+    font-size: 26px;
+    font-style: italic;
+}

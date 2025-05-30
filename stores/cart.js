@@ -29,7 +29,7 @@ export const useCartStore = defineStore('cart', () => {
         }, 0)
     })
 
-    const getCartProducts = computed(() => cartProducts.value)
+    const getCartProducts = computed(() => cartProducts.value || [])
 
     const cartTotalPrice = computed(() =>
         cartProducts.value.reduce(

@@ -34,6 +34,10 @@
   "confirm_delete_toast_accept_detail": "Product {product} deleted",
   "confirm_delete_toast_reject_summary": "Cancelled",
   "confirm_delete_toast_reject_detail": "Deletion cancelled",
+  "characteristics_no_data": "No characteristics available",
+  "description_no_data": "No description available",
+  "delivery_no_data": "No delivery information",
+  "payment_no_data": "No payment information",
 
   "confirmation_order_accepted": "Your order has been received!",
   "confirmation_time_expired": "⏰ Time’s up! The order will be cancelled.",
@@ -130,7 +134,7 @@
   "menu_label": "Menu",
   "account_label": "Account",
 
-  "checkout_list_title": "Order List",
+  "checkout_list_title": "List of products to order",
   "use_promo_code": "Use Promo Code",
   "enter_promo_code": "Enter Code",
   "comment_to_order": "Comment on Order",

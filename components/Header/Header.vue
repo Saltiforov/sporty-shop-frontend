@@ -16,12 +16,12 @@
         </NuxtLink>
       </div>
 
-      <nav class="pb-[24px] header-actions justify-between items-center flex w-full">
+      <nav class="pb-[16px] header-actions justify-between items-center flex w-full">
         <LinksList
             class="links-list"
             :links="links"
             parent-classes="links-container"
-            link-class="link-item text-[var(--color-gray-pale-lavender)] text-[20px] mr-[32px]  text-[var(--color-gray-pale-lavender)] sm:mr-[32px] md:mr-[53px] last:mr-0"
+            link-class="link-item text-[var(--color-gray-pale-lavender)] mr-[64px] text-[20px] last:mr-0"
         />
 
         <div class="product-search-wrapper max-w-[425px] w-full">
@@ -33,7 +33,7 @@
           <CurrencySwitch />
         </div>
 
-        <div class="action-panel max-w-[134px] w-full h-[36px] ml-[10px]">
+        <div class="action-panel max-w-[144px] w-full  ml-[10px]">
           <ActionPanel
               :canUseFavorite="canUseFavorite"
               :isUserLogin="isUserLogin"
@@ -47,13 +47,6 @@
 
       </nav>
     </div>
-
-    <nav class="menu w-full text-[red] flex">
-      <button @click="handleMobileMenu">
-        <img v-if="!isOpen" src="~/assets/icons/menu-icon-open.svg" alt="menu-icon-open.svg">
-        <img v-else src="~/assets/icons/menu-icon-close.svg" alt="menu-icon-close.svg">
-      </button>
-    </nav>
   </header>
 
 
@@ -172,9 +165,8 @@ const links = ref([
 .links-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 16px;
+  max-width: 660px;
   width: 100%;
-  max-width: 815px;
 }
 
 .input-icon {
@@ -182,7 +174,7 @@ const links = ref([
 }
 
 .link-item {
-  margin-right: 32px;
+  margin-right: 64px !important;
   color: #F6F6F6;
   font-weight: 600;
   font-size: 20px;
@@ -194,9 +186,6 @@ const links = ref([
     top: 100px !important;
     right: 20px !important;
     left: auto !important;
-  }
-  .links-container {
-    max-width: 745px;
   }
   .input-icon {
     color: var(--color-primary-blue);
@@ -211,14 +200,13 @@ const links = ref([
   }
 }
 @media (max-width: 1400px) {
-  .links-list {
-    display: none;
-  }
   .menu {
     display: block;
   }
+  .links-list {
+    display: none;
+  }
   .header-actions {
-    padding-bottom: 0px;
     justify-content: flex-end;
   }
   .action-panel {
@@ -235,7 +223,7 @@ const links = ref([
 @media (max-width: 950px) {
   .product-search-wrapper {
     position: absolute !important;
-    top: 114px !important;
+    top: 95px !important;
     right: 20px !important;
     left: auto !important;
   }
@@ -259,7 +247,7 @@ const links = ref([
   }
   .product-search-wrapper {
     position: absolute !important;
-    top: 108px !important;
+    top: 90px !important;
     right: 20px !important;
     left: auto !important;
     max-width: 340px !important;
@@ -270,10 +258,14 @@ const links = ref([
   .action-panel {
     display: none;
   }
+  .header  {
+    padding-bottom: 30px;
+  }
   .product-search-wrapper {
+    top: 107px !important;
     right: 10px !important;
     left: auto !important;
-    max-width: 300px !important;
+    max-width: 259px !important;
   }
 }
 

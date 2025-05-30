@@ -26,6 +26,10 @@
 
   "timer_hours": "Години",
   "timer_minutes": "Хвилини",
+  "characteristics_no_data": "Характеристики відсутні",
+  "description_no_data": "Опис відсутній",
+  "delivery_no_data": "Інформація про доставку відсутня",
+  "payment_no_data": "Інформація про оплату відсутня",
 
   "confirm_delete_message": "Ви впевнені, що хочете видалити {product}?",
   "confirm_delete_header": "Підтвердження видалення",
@@ -131,7 +135,7 @@
   "cash_on_delivery_text": "Оплата при отриманні",
   "empty_search_message": "Ви ще нічого не ввели - спробуйте знайти потрібний товар",
 
-  "checkout_list_title": "Список замовлення",
+  "checkout_list_title": "Список товарів до замовлення",
   "use_promo_code": "Використати промокод",
   "enter_promo_code": "Введіть код",
   "comment_to_order": "Коментар до замовлення",
@@ -143,7 +147,7 @@
 
   "personal_information": "Особиста інформація",
   "orders_history": "Історія замовлень",
-  "favorites": "Улюблені товари",
+  "favorites": "Вподобані товари",
   "logout": "Вийти",
   "checkout_region_label": "Регіон оформлення замовлення",
 

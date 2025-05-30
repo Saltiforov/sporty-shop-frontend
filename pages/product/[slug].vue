@@ -13,7 +13,7 @@
     <div
         class="about-product-content mb-[46px] text-[var(--color-muted-light-gray)] flex flex-col lg:flex-row justify-between items-center gap-8">
       <div class="image relative w-full max-w-[678px]">
-        <div class="absolute z-[100] top-2 -right-4">
+        <div class="favorite-button-wrapper absolute z-[100] top-2 -right-4">
           <FavoriteButton
               v-if="token"
               inactive-color="var(--color-primary-dark-red)"
@@ -23,8 +23,8 @@
           />
         </div>
 
-        <div  v-if="images.length">
-          <div  class="about-product__image-wrapper max-w-[678px] mx-auto h-[678px] w-full">
+        <div v-if="images.length">
+          <div class="about-product__image-wrapper max-w-[678px] mx-auto h-[678px] w-full">
             <SwiperWrapper
                 :items="images"
                 :options="swiperOptions"
@@ -250,7 +250,7 @@ const slug = useRoute().params.slug
 
 console.log('slug', slug);
 
-const { data: productItem, pending, error } = await useAsyncData(
+const {data: productItem, pending, error} = await useAsyncData(
     'product slug',
     () => getProductBySlug(slug)
 )
@@ -321,7 +321,7 @@ const recommendedProductsSwiperOptions = {
     756: {
       slidesPerView: 2,
     },
-     910: {
+    910: {
       slidesPerView: 3,
     },
     1024: {
@@ -411,9 +411,19 @@ onMounted(async () => {
     flex-direction: column;
   }
 
+  .article {
+    align-self: flex-start;
+  }
+
   .about-product-info {
     max-width: 100%;
   }
+
+  .favorite-button-wrapper {
+    top: -12px;
+    right: -16px;
+  }
+
 }
 
 @media (max-width: 920px) {
@@ -512,7 +522,7 @@ onMounted(async () => {
   }
 
   .developer p {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .discount {

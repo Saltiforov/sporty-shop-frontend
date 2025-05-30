@@ -2,7 +2,7 @@
   <div class="min-h-screen flex flex-col">
     <div class="flex flex-1">
       <div class="profile-container base-container  justify-between flex-1 ">
-        <LayoutBreadcrumb v-if="!isLoading"/>
+        <LayoutBreadcrumb v-if="hydrated"/>
         <BreadcrumbSkeleton v-else/>
         <div class="pb-[100px] profile-layout h-full flex ">
           <aside class="sidebar max-w-[277px] mr-[116px] w-full">
@@ -17,12 +17,12 @@
                 <NuxtLink
                     v-for="item in localizedList"
                     :key="item.title"
+                    :to="getRouteForLink(item.route)"
                     class="flex items-center gap-2 cursor-pointer"
-                    :to="item.route"
                     @click="item.command && item.command()"
                     :class="{ 'active': item.page === currentTab && minWidthForMobileVersion }"
                 >
-                  <img  class="list-icon mr-3" :src="item.icon" alt=""/>
+                  <img class="list-icon mr-3" :src="item.icon" alt=""/>
                   <span
                       class="py-[11px] list-title max-w-[185.5px] w-full rounded-tr-[100px] rounded-br-[100px] pr-[18.5px]"
                       :class="{ 'active': item.page === currentTab }"
@@ -58,18 +58,23 @@ import FavoriteProductsIcon from '~/assets/icons/user-profile-favorite-products-
 import ChangePasswordIcon from '~/assets/icons/user-profile-change-passwrd-icon.svg'
 import LogoutIcon from '~/assets/icons/user-profile-logout-icon.svg'
 
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 import {getCurrentUser} from "~/services/api/user-service.js";
 import {storeToRefs} from "pinia";
 import {capitalizeFirstLetter} from "~/utils/index.js";
 import BreadcrumbSkeleton from "~/components/Skeletons/BreadcrumbSkeleton/BreadcrumbSkeleton.vue";
 import LayoutBreadcrumb from "~/components/UI/LayoutBreadcrumb/LayoutBreadcrumb.vue";
+import {useWindowWidthWatcher} from "~/composables/useWindowWidthWatcher.js";
 
-const {t} = useI18n();
+const {t, locale} = useI18n();
 
 const {logUserOut} = useAuthStore();
 
+const hydrated = ref(false)
+
 const {currentUser} = storeToRefs(useAuthStore());
+
+const getWidth = useWindowWidthWatcher()
 
 const userData = ref({})
 
@@ -79,7 +84,21 @@ const route = useRoute();
 
 const currentTab = computed(() => route.path.split('/').pop() || 'personal-information')
 
-const minWidthForMobileVersion = ref(false)
+const windowWidth = computed(() => getWidth())
+
+const minWidthForMobileVersion = computed(() => windowWidth.value <= 850)
+
+const getRouteForLink = (routePath) => {
+  const localizedPath = `/${locale.value}${routePath}`
+
+  const isCurrentLocalizedRoute = localizedPath === route.path
+
+  if (isCurrentLocalizedRoute) {
+    return localizedPath
+  }
+
+  return routePath
+}
 
 const fullUserName = computed(() => {
   const first = capitalizeFirstLetter(currentUser.value?.firstName ?? '')
@@ -128,10 +147,6 @@ const setActiveTab = (component) => {
   currentTab.value = component;
 };
 
-const checkWindowSize = () => {
-  window.innerWidth <=  850 ?  minWidthForMobileVersion.value = true : minWidthForMobileVersion.value = false
-}
-
 const loadUserData = async () => {
   isLoading.value = true
   try {
@@ -146,13 +161,12 @@ const loadUserData = async () => {
 }
 
 onMounted(async () => {
+  isLoading.value = true
   await loadUserData()
-  window.addEventListener('resize', checkWindowSize)
+  isLoading.value = false
+  hydrated.value = true
 })
 
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', checkWindowSize)
-})
 </script>
 
 <style scoped>
@@ -238,30 +252,36 @@ main {
   .list-title {
     display: none;
   }
+
   .sidebar-nav ul {
     justify-content: space-evenly;
   }
+
   .list-icon {
     margin-right: 0;
     padding: 9px;
   }
+
   .sidebar-nav ul {
     border-radius: 50%;
   }
+
   .active {
     border-radius: 100%;
   }
+
   .sidebar-header {
     margin-bottom: 0;
   }
+
   .sidebar-nav {
     padding-bottom: 0;
   }
+
   .sidebar-nav ul {
     padding: 22px;
   }
 }
-
 
 
 @media (max-width: 500px) {
@@ -270,7 +290,7 @@ main {
   }
 
   .profile-container {
-    padding: 8px;
+    padding: 8px 10px;
   }
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <Breadcrumb class="breadcrumb" :model="breadcrumbItemsSkeleton">
+  <Breadcrumb class="breadcrumb max-h-[94px]" :model="breadcrumbItemsSkeleton">
     <template #item="{ item }">
       <span class="breadcrumb-text skeleton"></span>
     </template>

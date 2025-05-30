@@ -5,7 +5,9 @@
     <LoadingOverlay :visible="isLoading"/>
     <main class="checkout-content mb-[101px] flex items-start">
 
+
       <section class="w-full checkout-info-wrapper max-w-[1064px] mr-[71px]">
+
         <article
             v-if="hydrated || userData && userData._id"
             class="checkout-fields pt-[24px] pr-[45px] pb-[44px] pl-[42px] mb-[65px] rounded-lg bg-[var(--color-gray-lavender)]">
@@ -58,8 +60,32 @@
               </p>
             </aside>
           </div>
+
+
         </section>
         <CheckoutPaymentMethodSkeleton v-else/>
+
+        <div class="responsive-checkout-footer rounded-lg bg-[var(--color-gray-lavender)]">
+          <section class="comment-to-order mb-[24px]">
+            <p class="murecho-font mb-[18px]">{{ t('comment_to_order') }}</p>
+            <div class="mb-[10px] rounded-[8px]">
+                <Textarea v-model="commentForOrder" style="resize: none" class="w-full rounded-[8px]"
+                          rows="2" cols="30"/>
+            </div>
+          </section>
+          <div
+              class="checkout__wrapper-btn rounded-[8px] w-full mb-3">
+            <Button :disabled="currencyStore.isRegionEurope && !minimumEuropePrice" @click="handleCreateOrder" :pt="{
+              root: {
+                class: 'checkout__btn'
+              }
+            }"><p class="murecho-font text-[14px]">{{ t('confirm_order') }}</p></Button>
+          </div>
+          <aside v-if="currencyStore.isRegionEurope" class="min-price-europe mb-6">
+            <p class="text-[var(--color-primary-pink)] text-center text-[14px]">{{ t('minimum_amount_order_eu') }}</p>
+          </aside>
+        </div>
+
       </section>
 
 
@@ -67,7 +93,12 @@
           v-if="hydrated"
           class="checkout-products-list bg-[var(--color-gray-lavender)]  rounded-lg max-w-[643px] pt-[24px] pr-[46px] pl-[48px] pb-[30px] w-full">
         <div class="products-list__container max-w-[547px] w-full">
-          <h2 class="title-lg mb-[44px]">{{ t('checkout_list_title') }}</h2>
+          <div class="checkout-header mb-[44px]">
+            <h2 class="checkout-title title-lg ">{{ t('checkout_list_title') }}</h2>
+            <div class="checkout-count">
+              ({{ cartStore.cartCount || 0 }})
+            </div>
+          </div>
           <ProductsOverview :products-overview="cartStore.getCartProducts"/>
           <section class="use-promocode">
             <div class="flex justify-between mb-[17px]">
@@ -121,28 +152,47 @@
             </form>
           </section>
 
-          <section class="comment-to-order mb-[24px]">
-            <p class="murecho-font mb-[18px]">{{ t('comment_to_order') }}</p>
-            <div class="mb-[10px] rounded-[8px]">
+          <div class="checkout-footer">
+            <section class="comment-to-order mb-[24px]">
+              <p class="murecho-font mb-[18px]">{{ t('comment_to_order') }}</p>
+              <div class="mb-[10px] rounded-[8px]">
                 <Textarea v-model="commentForOrder" style="resize: none" class="w-full rounded-[8px]"
                           rows="2" cols="30"/>
-            </div>
-          </section>
-          <div
-              class="checkout__wrapper-btn rounded-[8px] w-full mb-3">
-            <Button :disabled="currencyStore.isRegionEurope && !minimumEuropePrice" @click="handleCreateOrder" :pt="{
+              </div>
+            </section>
+            <div
+                class="checkout__wrapper-btn rounded-[8px] w-full mb-3">
+              <Button :disabled="currencyStore.isRegionEurope && !minimumEuropePrice" @click="handleCreateOrder" :pt="{
               root: {
                 class: 'checkout__btn'
               }
             }"><p class="murecho-font text-[14px]">{{ t('confirm_order') }}</p></Button>
+            </div>
+            <aside v-if="currencyStore.isRegionEurope" class="min-price-europe mb-6">
+              <p class="text-[var(--color-primary-pink)] text-center text-[14px]">{{ t('minimum_amount_order_eu') }}</p>
+            </aside>
           </div>
-          <aside v-if="currencyStore.isRegionEurope" class="min-price-europe mb-6">
-            <p class="text-[var(--color-primary-pink)] text-center text-[14px]">{{ t('minimum_amount_order_eu') }}</p>
-          </aside>
+
+
+
         </div>
 
+
       </section>
+
+
       <CheckoutOrderListSkeleton v-else/>
+
+      <div class="responsive-header-fields w-full flex justify-between mb-4">
+        <div class="header-left">
+          <h1 class="title-lg text-center mb-2">{{ t('checkout') }}</h1>
+          <div class="flex justify-end subtitle-lg text-[var(--color-muted-gray)]">
+            <p class="mr-1">{{ t('account_text') }}</p>
+            <button @click="authPopup.open('login')">{{ t('sign_in') }}</button>
+          </div>
+        </div>
+      </div>
+
 
     </main>
   </section>
@@ -586,6 +636,10 @@ const configEurope = ref({
   border: none;
 }
 
+.checkout-count {
+  display: none;
+}
+
 .use-promocode__btn {
   background: transparent;
   border: none;
@@ -626,6 +680,14 @@ const configEurope = ref({
   margin-bottom: 24px;
 }
 
+.responsive-header-fields {
+  display: none;
+}
+
+.responsive-checkout-footer {
+  display: none;
+}
+
 @media (max-width: 1500px) {
   .checkout-info-wrapper {
     margin-right: 30px;
@@ -662,6 +724,44 @@ const configEurope = ref({
 }
 
 @media (max-width: 600px) {
+  .header-fields {
+    display: none;
+  }
+  .checkout-footer {
+    display: none;
+  }
+  .checkout-payment-method {
+    margin-bottom: 26px;
+  }
+  .checkout-products-list {
+    margin-bottom: 26px;
+  }
+  .checkout-count {
+    display: block;
+    color: var(--color-muted-light-gray);
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .checkout-header {
+    margin-bottom: 18px;
+    display: flex;
+  }
+  .checkout-title {
+    font-size: 18px;
+    margin-right: 11px;
+  }
+  .responsive-checkout-footer {
+    padding: 24px 12px 34px 12px;
+    display: block;
+  }
+  .checkout-content {
+    flex-direction: column-reverse;
+  }
+
+  .responsive-header-fields {
+    display: block;
+  }
+
   .checkout-fields {
     flex-direction: column;
     padding: 24px 12px 34px 12px;

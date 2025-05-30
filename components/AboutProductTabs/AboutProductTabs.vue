@@ -16,18 +16,21 @@
       }">
     <TabPanel :header="tabs.description.header">
       <ClientOnly>
-        <div class="">
+        <div v-if="product.description">
           <p
               class="fw-500 text-[18px] leading-[34px] text-[var(--color-primary-dark)]"
               v-html="product.description"
           />
         </div>
+        <p  v-else class="no-data-text">
+          {{ t('description_no_data') }}
+        </p>
       </ClientOnly>
     </TabPanel>
     <TabPanel v-if="product" :header="tabs.characteristics.header">
-      <div class="characteristics-list max-w-[1030px] w-full">
+      <div v-if="product?.attributes.length" class="characteristics-list max-w-[1030px] w-full">
         <div
-            v-for="characteristic in product?.attributes "
+            v-for="characteristic in product?.attributes"
             :key="characteristic.key"
             class="flex items-center gap-4 py-2"
         >
@@ -39,15 +42,21 @@
               style="margin-top: 1em;"
           ></div>
           <p class="characteristics-list__value whitespace-nowrap">
-            {{ characteristic.value }}
+            {{ characteristic.value ? characteristic.value : $t('characteristics_no_data') }}
           </p>
         </div>
       </div>
+      <p  v-else class="no-data-text">
+        {{ t('characteristics_no_data') }}
+      </p>
     </TabPanel>
     <TabPanel :header="tabs.delivery.header">
-      <!--      <div class="delivery-and-payment">-->
-      <!--        <p v-html="deliveryAndPaymentInfo.content"></p>-->
-      <!--      </div>-->
+            <div v-if="false"  class="delivery-and-payment">
+              <p v-html="deliveryAndPaymentInfo.content"></p>
+            </div>
+      <p  v-else class="no-data-text">
+        {{ t('delivery_no_data') }}
+      </p>
     </TabPanel>
     <TabPanel :header="tabs.reviews.header">
       <section class="reviews-content murecho-font flex justify-between">
@@ -116,8 +125,8 @@
           </div>
         </section>
 
-        <section v-else class="empty-reviews-text">
-          <p class="text-[var(--color-primary-black)] text-[26px] italic">
+        <section v-else class="no-data-text">
+          <p class="no-data-text">
             {{ t('no_reviews_yet') }}
           </p>
         </section>

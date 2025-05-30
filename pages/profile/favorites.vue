@@ -103,6 +103,12 @@ onMounted(async () => {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+@media (max-width: 500px) {
+  .favorite-products-content {
+    gap: 11px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
 
 </style>

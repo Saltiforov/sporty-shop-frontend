@@ -66,7 +66,7 @@
             </address>
 
             <address class="flex delivery-info__item flex-col gap-6 w-full max-w-[427px] not-italic">
-              <p v-for="(value, label) in order.userInfo" :key="label">{{ value }}</p>
+              <p v-for="(value, label) in order.userInfo" :key="label">{{ value || '-----' }}</p>
             </address>
           </section>
         </section>

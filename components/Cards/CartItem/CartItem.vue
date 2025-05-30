@@ -3,15 +3,19 @@
     <div class="flex flex-1">
       <div
           :class="[
-          'card-image shrink-0 rounded-[16px]',
-          isHistoryView ? 'mb-[22px] mr-[36px] h-[210px] max-w-[145px]' : 'mr-[22px] h-[156px] max-w-[156px] w-full'
-        ]"
+    'card-image shrink rounded-[16px]',
+    isHistoryView
+      ? 'mb-[22px] mr-[36px] h-[210px] w-[145px]'
+      : 'mr-[22px] min-w-[100px] min-h-[100px] max-w-[156px] max-h-[156px] w-full h-auto'
+  ]"
       >
         <img
             :class="[
-            'cart-item__image cursor-pointer rounded-[16px]',
-            isHistoryView ? 'h-[210px] object-cover' : 'h-[156px] max-w-[156px] w-full'
-          ]"
+      'cart-item__image cursor-pointer rounded-[16px] object-cover',
+      isHistoryView
+        ? 'h-[210px] w-[145px]'
+        : 'min-w-[100px] min-h-[100px] max-w-[156px] max-h-[156px] w-full h-full'
+    ]"
             :src="imageSource"
             alt="product-image.png"
             @click="redirectToProduct(cartProduct)"
@@ -22,12 +26,37 @@
           :class="[isHistoryView ? 'items-start' : 'flex-col']"
           class="card-content flex flex-1 justify-between"
       >
-        <p
-            :class="[isHistoryView ? 'text-[20px]' : 'text-[16px]']"
-            class="card-title max-w-[276px] w-full fw-500 leading-[var(--line-height-base)]"
-        >
-          {{ cartProduct.name }}
-        </p>
+        <div class="flex">
+          <p
+              :class="[isHistoryView ? 'text-[20px]' : 'text-[16px]']"
+              class="card-title max-w-[276px] w-full fw-500 leading-[var(--line-height-base)]"
+          >
+            {{ cartProduct.name }}
+          </p>
+          <div
+              v-if="!isHistoryView"
+              class="remove-product-cart-responsive ml-auto flex flex-col justify-center"
+          >
+            <Button
+                :pt="{ root: { class: 'cart-item__delete-btn' } }"
+                @click="handleRemoveProduct(cartProduct)"
+            >
+              <svg
+                  width="16"
+                  height="18"
+                  viewBox="0 0 16 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                    d="M3 18C2.45 18 1.97917 17.8042 1.5875 17.4125C1.19583 17.0208 1 16.55 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.8042 17.0208 14.4125 17.4125C14.0208 17.8042 13.55 18 13 18H3ZM13 3H3V16H13V3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
+                    fill="#ADADAD"
+                />
+              </svg>
+            </Button>
+          </div>
+
+        </div>
 
         <div v-if="isHistoryView" class="card-quantity w-full flex justify-end">
           <p class="text-medium-20">{{ cartProduct.quantity }} {{ t('unit') }}.</p>
@@ -163,7 +192,7 @@ const hasDiscount = computed(() => {
   return discounted !== null && discounted !== undefined && discounted < price
 })
 
-console.log("cartProduct",cartProduct)
+console.log("cartProduct", cartProduct)
 
 const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] || DefaultProductImage)
 
@@ -175,6 +204,10 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
   background: transparent;
   border: none;
   padding: 0;
+}
+
+.remove-product-cart-responsive {
+  display: none;
 }
 
 .cart-item__delete-btn:hover {
@@ -259,7 +292,7 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
   }
 
   .card-image {
-    margin: 0;
+    margin-right: 8px;
   }
 }
 
@@ -289,7 +322,15 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
   }
 
   .remove-product-cart-wrapper {
-    padding-left: 0;
+    display: none;
+  }
+
+  .remove-product-cart-responsive {
+    display: block;
+  }
+
+  .card-title {
+    margin: 0;
   }
 }
 
@@ -301,7 +342,7 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
   }
 
   .card-title {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .card-quantity p {
