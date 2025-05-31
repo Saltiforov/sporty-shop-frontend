@@ -92,18 +92,18 @@
               <div class="description">
                 <p class="fw-500 text-[18px] leading-[34px] truncate-6-lines text-[var(--color-primary-dark)]"
                    v-html="product.description"></p>
+                <div class="developer mb-[24px]">
+                  <p class="text-[20px] fw-400 leading-[34px]">
+                    {{ t('product_developer') }} {{ product.vendor }}
+                  </p>
+                </div>
+
               </div>
             </ClientOnly>
-
 
           </div>
 
           <div>
-            <div class="developer mb-[24px]">
-              <p class="text-[20px] fw-400 leading-[34px]">
-                {{ t('product_developer') }} {{ product.vendor }}
-              </p>
-            </div>
 
             <div class="price mb-10 flex items-center">
               <div class="mr-[57px] max-w-[150px] w-full price_and_discount">
@@ -114,21 +114,21 @@
                 </div>
 
                 <p v-if="hasDiscount"
-                   class="text-[var(--color-primary-pink)] price-with-discount text-[24px] leading-[22px] fw-500">
+                   class="text-[var(--color-primary-pink)] price-with-discount text-[36px] leading-[34px] fw-600">
                   {{ priceByCurrencyWithDiscount }} {{ t(currencyStore.label) }}
                 </p>
               </div>
 
               <AmountSelector
                   v-model="product.quantity"
-                  :style="{ width: '129px' }"
-                  :input-styles="{ width: '53px', height: '60px' }"
+                  :style="counterContainerStyle"
+                  :inputClass="inputSizeClass"
               />
             </div>
 
-            <div class="action-button text-[var(--color-gray-pale-lavender)]">
+            <div class="action-button h-[59px] text-[var(--color-gray-pale-lavender)]">
               <Button @click="addToCart(product)" :pt="{ root: { class: 'product-buy-now__btn' } }"
-                      class="bg-[var(--color-primary-green)] hover:bg-[var(--color-primary-green)] rounded-2xl max-w-[456px] w-full h-[59px] flex justify-center items-center">
+                      class="bg-[var(--color-primary-green)] hover:bg-[var(--color-primary-green)] rounded-2xl max-w-[456px] w-full h-full flex justify-center items-center">
                 <p class="mr-1">{{ t('product_buy_now') }}</p>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                      xmlns="http://www.w3.org/2000/svg">
@@ -239,6 +239,7 @@ import AboutProductTabsSkeleton
 import AboutProductAccordion from "~/components/AboutProductAccordion/AboutProductAccordion.vue";
 import LayoutBreadcrumb from "~/components/UI/LayoutBreadcrumb/LayoutBreadcrumb.vue";
 import BreadcrumbSkeleton from "~/components/Skeletons/BreadcrumbSkeleton/BreadcrumbSkeleton.vue";
+import {useWindowWidthWatcher} from "~/composables/useWindowWidthWatcher.js";
 
 const {t} = useI18n()
 
@@ -276,6 +277,10 @@ const {showProductAddedToast} = useToastManager()
 
 const {viewed, removeProductFromViewedAndRedirect} = useViewedProducts()
 
+const getWidth = useWindowWidthWatcher()
+
+const windowWidth = computed(() => getWidth())
+
 const currencyStore = useCurrencyStore()
 
 const recommended = ref([])
@@ -291,6 +296,14 @@ const priceByCurrencyWithDiscount = computed(() => {
 const priceByCurrency = computed(() => {
   return currencyStore.getCurrency === 'uah' ? product.value.price?.uah : product.value.price?.eur
 })
+
+const counterContainerStyle = computed(() => {
+  return windowWidth.value >= 500 ? 'width: 129px' : 'width: 139px';
+});
+
+const inputSizeClass = computed(() => {
+  return windowWidth.value >= 500 ? 'w-[53px] h-[60px]' : 'w-[36px] h-[36px]';
+});
 
 const hasDiscount = computed(() => {
   const price = priceByCurrency.value
@@ -316,7 +329,7 @@ const recommendedProductsSwiperOptions = {
   loop: true,
   breakpoints: {
     320: {
-      slidesPerView: 1,
+      slidesPerView: 2,
     },
     756: {
       slidesPerView: 2,
@@ -415,6 +428,18 @@ onMounted(async () => {
     align-self: flex-start;
   }
 
+  .discount {
+    margin-right: 20px;
+  }
+
+  .price_and_discount {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 300px;
+  }
+
   .about-product-info {
     max-width: 100%;
   }
@@ -447,6 +472,11 @@ onMounted(async () => {
     font-size: 20px;
   }
 
+  .price-with-discount {
+    font-size: 30px;
+    line-height: 32px;
+  }
+
   .availability-grade {
     margin-bottom: 18px;
   }
@@ -471,30 +501,85 @@ onMounted(async () => {
     margin-bottom: 8px;
   }
 
+  .description {
+    max-width: 90%;
+    margin: 0 auto;
+  }
+
+  .price {
+    padding: 0 10px;
+  }
+
+  .price-with-discount {
+    font-size: 24px;
+    line-height: 22px;
+  }
+
+
   .image {
     width: 390px;
+  }
+
+  .about-product-info {
+    min-height: auto;
+  }
+
+  .about-product-content {
+    margin-bottom: 31px;
   }
 
   .about-product__image {
     height: 390px;
   }
 
+  .discount {
+    margin-right: 0;
+    font-size: 18px;
+
+  }
+
   .action-button {
     display: flex;
     justify-content: center;
+    max-height: 42px;
+    max-width: 285px;
+    margin: 0 auto;
+  }
+
+  .header {
+    padding: 0;
   }
 
   .price_and_discount {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: center;
+    font-size: 24px;
+    flex-direction: column;
+    width: auto;
   }
+
 
   .price {
-    justify-content: space-around;
+    justify-content: space-between;
   }
 
-  .discount {
-    margin-right: 20px;
+  .about-product-info__content {
+    min-height: auto;
+  }
+
+  .developer {
+    margin-bottom: 14px;
+  }
+
+  .price_and_discount {
+    max-width: 100%;
+    margin-right: 0px;
+  }
+
+  .price_and_discount,
+  discount {
+    line-height: 24px;
   }
 
   .gallery-image {
@@ -506,6 +591,12 @@ onMounted(async () => {
 @media (max-width: 600px) {
   .about-product__image-wrapper {
     height: 290px;
+  }
+
+  .viewed-products__content {
+    padding-bottom: 36px;
+    padding-right: 0;
+    padding-left: 0;
   }
 
   .image {
@@ -526,12 +617,9 @@ onMounted(async () => {
   }
 
   .discount {
-    font-size: 20px;
+    font-size: 18px;
   }
 
-  .price-with-discount {
-    font-size: 20px;
-  }
 }
 
 @media (max-width: 420px) {
@@ -540,16 +628,9 @@ onMounted(async () => {
   }
 
   .discount {
-    font-size: 18px;
+    font-size: 16px;
   }
 
-  .price-with-discount {
-    font-size: 18px;
-  }
-
-  .price_and_discount {
-    margin-right: 20px;
-  }
 }
 
 

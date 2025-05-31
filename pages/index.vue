@@ -38,7 +38,7 @@
         </div>
 
 
-        <div class="main-content grid-cols-1 grid lg:grid-cols-[354px_1fr] gap-[89px]">
+        <div class="main-content min-h-screen grid-cols-1 grid lg:grid-cols-[354px_1fr] gap-[89px]">
           <aside class="rounded-md">
             <div class="filters mb-[91px] w-full max-w-[354px] h-[554px] border rounded-[var(--default-rounded)]">
               <FiltersSkeleton v-if="isLoading"/>
@@ -98,6 +98,7 @@
               />
             </div>
           </div>
+          <div class="empty-block"></div>
           <div>
             <div class="products-pagination-actions mb-[72px]">
               <div class="product-pagination-wrapper flex justify-center">
@@ -173,16 +174,16 @@ const q = computed(() => (route.query.q ?? ''));
 
 const productsQueryParams = computed(() => {
   return {
-    page:   page.value,
-    limit:  limit.value,
-    skip:   skip.value,
+    page: page.value,
+    limit: limit.value,
+    skip: skip.value,
     filters: route.query.filters,
-    ...(q.value ? { q: q.value } : {}),
+    ...(q.value ? {q: q.value} : {}),
   }
 })
 
 
-const { updateQueryParams } = useQueryParams(productsQueryParams);
+const {updateQueryParams} = useQueryParams(productsQueryParams);
 
 updateQueryParams();
 
@@ -199,7 +200,7 @@ console.log('catalog.value.count', catalog.value.count)
 console.log('products', products.value.length)
 
 watch(page, (page) => {
-  router.push({ query: { ...route.query, page } })
+  router.push({query: {...route.query, page}})
 })
 
 const promotionalProductsSwiperOptions = {
@@ -255,6 +256,11 @@ onBeforeUnmount(() => {
   margin-bottom: 45px;
   width: 100%;
   grid-template-columns: repeat(4, 1fr);
+}
+
+.product-pagination-wrapper {
+  width: 274px;
+  margin: 0 auto;
 }
 
 .promo-slider-btn:hover {
@@ -315,6 +321,7 @@ onBeforeUnmount(() => {
   .product-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+
   .main-content {
     gap: 16px;
   }
@@ -324,15 +331,19 @@ onBeforeUnmount(() => {
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
   .main-content {
     gap: 8px;
   }
 }
 
 
-
 @media (max-width: 1022px) {
   .promotional-products {
+    display: none;
+  }
+
+  .empty-block {
     display: none;
   }
 
@@ -396,6 +407,7 @@ onBeforeUnmount(() => {
   .product-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+
   .sort-title {
     margin-right: 4px;
   }
@@ -414,9 +426,20 @@ onBeforeUnmount(() => {
   }
 }
 
-@media (max-width: 510px) {
+@media (max-width: 550px) {
+  .products-pagination-actions {
+    margin-bottom: 40px;
+  }
   .product-grid {
-    gap: 10px;
+    margin-bottom: 24px;
+  }
+}
+
+
+@media (max-width: 510px) {
+
+  .main-content {
+    gap: 0;
   }
 
   .responsive-filters {

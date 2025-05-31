@@ -30,6 +30,7 @@
   "description_no_data": "Опис відсутній",
   "delivery_no_data": "Інформація про доставку відсутня",
   "payment_no_data": "Інформація про оплату відсутня",
+  "show_more_products_count": "Показати ще {count} товарів",
 
   "confirm_delete_message": "Ви впевнені, що хочете видалити {product}?",
   "confirm_delete_header": "Підтвердження видалення",
@@ -85,7 +86,7 @@
   "product_available": "В наявності!",
   "product_out_of_stock": "Немає в наявності!",
   "product_developer": "Виробник:",
-  "product_buy_now": "Купити зараз",
+  "product_buy_now": "Купити",
   "currency": "грн",
   "currency_uah": "грн",
   "currency_eur": "eur",
@@ -203,5 +204,5 @@
   "auth_username": "Логін*",
   "auth_last_name": "Прізвище*",
   "auth_phone_number": "Номер телефону*",
-  "auth_email": "Email адреса*"
+  "auth_email": "Електронна пошта*"
 }

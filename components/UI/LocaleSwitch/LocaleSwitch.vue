@@ -3,10 +3,10 @@
     <Select
         :pt="{
         root: {
-          style: 'background-color: transparent; border: none;'
+          style: 'background-color: transparent; border: none; w-auto'
         },
         label: {
-          style: 'color: var(--color-gray-pale-lavender); line-height: 22px; font-weight: 600; font-size: 20px;'
+          style: 'color: var(--color-gray-pale-lavender); text-end; line-height: 22px; font-weight: 600; font-size: 20px;'
         },
         dropdown: {
           style: 'width: 1.25rem;'

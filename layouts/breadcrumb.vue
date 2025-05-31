@@ -12,5 +12,13 @@
     padding: 0 15px;
   }
 }
+
+@media(max-width: 400px) {
+  main {
+    padding: 0 10px;
+  }
+}
+
+
 </style>
 

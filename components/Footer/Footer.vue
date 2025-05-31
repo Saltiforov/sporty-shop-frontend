@@ -2,7 +2,7 @@
   <main>
     <footer
         ref="stickyFooter"
-        class=" bottom-0 sticky-footer left-0 w-full z-1000 responsive-footer flex flex-col p-4 shadow transition-transform duration-300"
+        class=" bottom-0 sticky-footer px-[16px] left-0 w-full z-1000 responsive-footer flex flex-col p-4 shadow transition-transform duration-300"
         :class="isIntersecting ? 'sticky' : 'fixed'"
     >
       <section class="responsive-footer-container w-full flex justify-between">
@@ -20,7 +20,7 @@
 
     <footer
         ref="mainFooter"
-        class="pt-[21px] pr-3 pl-3 transition-all duration-300"
+        class="pt-[21px] relative z-[1000] pr-3 pl-3 transition-all duration-300"
     >
       <section class="footer-container flex justify-between flex-wrap items-center max-w-[1190px] px-[15px] mx-auto">
         <section class="left-side flex w-full max-w-[661px] justify-between gap-2">
@@ -328,6 +328,11 @@ onBeforeUnmount(() => {
   }
 }
 
+@media (max-width: 760px) {
+  .sticky-footer {
+    padding: 14px 16px 16px;
+  }
+}
 @media (max-width: 530px) {
   .links-list {
     width: 150px;

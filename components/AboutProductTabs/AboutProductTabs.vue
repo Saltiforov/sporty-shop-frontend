@@ -231,6 +231,57 @@ const props = defineProps({
   }
 })
 
+const productCharacteristics = {
+  manufacturer: {
+    key: "Виробник",
+    value: "BioPharm Ukraine"
+  },
+  product_type: {
+    key: "Тип продукту",
+    value: "Харчова добавка"
+  },
+  release_form: {
+    key: "Форма випуску",
+    value: "Капсули"
+  },
+  quantity_in_pack: {
+    key: "Кількість в упаковці",
+    value: "90 шт."
+  },
+  main_ingredients: {
+    key: "Основні інгредієнти",
+    value: "L-аргінін, кофеїн, екстракт женьшеню"
+  },
+  purpose: {
+    key: "Призначення",
+    value: "Підвищення витривалості та енергії"
+  },
+  recommended_dose: {
+    key: "Рекомендована доза",
+    value: "2 капсули на день"
+  },
+  intake_time: {
+    key: "Час прийому",
+    value: "До тренування або зранку"
+  },
+  features: {
+    key: "Особливості",
+    value: "Без ГМО, підходить веганам"
+  },
+  suitable_for: {
+    key: "Кому підходить",
+    value: "Активним людям і спортсменам"
+  },
+  contraindications: {
+    key: "Протипоказання",
+    value: "Індивідуальна непереносимість компонентів"
+  },
+  expiration: {
+    key: "Термін придатності",
+    value: "24 місяці"
+  }
+};
+
 const MAX_REVIEW_LENGTH = 300;
 
 const route = useRoute()

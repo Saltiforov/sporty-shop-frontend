@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <main class="flex-1 p-4">
+    <main class="flex-1 pt-4 px-4 pb-0">
       <NuxtPage/>
     </main>
   </div>

@@ -38,6 +38,7 @@
   "description_no_data": "No description available",
   "delivery_no_data": "No delivery information",
   "payment_no_data": "No payment information",
+  "show_more_products_count": "Show {count} more products",
 
   "confirmation_order_accepted": "Your order has been received!",
   "confirmation_time_expired": "⏰ Time’s up! The order will be cancelled.",
@@ -84,7 +85,7 @@
   "product_available": "In Stock!",
   "product_out_of_stock": "Out of Stock!",
   "product_developer": "Manufacturer:",
-  "product_buy_now": "Buy Now",
+  "product_buy_now": "Buy",
   "currency": "UAH",
   "currency_uah": "UAH",
   "currency_eur": "EUR",

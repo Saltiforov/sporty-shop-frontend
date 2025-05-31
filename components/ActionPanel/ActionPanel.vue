@@ -1,7 +1,7 @@
 <template>
   <div class="action-panel w-full flex justify-between items-center">
 
-    <div v-if="responsive" class="menu min-w-[44px]">
+    <div v-if="responsive" class="menu">
       <Button @click="handleMobileMenu" :pt="buttonPT">
         <img v-if="!isOpenMobileMenu" src="~/assets/icons/menu-icon-open.svg" alt="menu-icon-open.svg">
         <img v-else src="~/assets/icons/menu-icon-close.svg" alt="menu-icon-close.svg">
@@ -130,5 +130,12 @@ const menuPT = {
   right: 0;
   transform: translate(-20%, 0%);
   z-index: 200;
+}
+
+@media (max-width: 670px) {
+  button {
+    width: 36px;
+    height: 36px;
+  }
 }
 </style>

@@ -7,7 +7,7 @@
     ></div>
 
     <aside
-        class="fixed z-[500] border-top-radius top-0 left-0 w-[80%] h-full bg-[var(--color-primary-lavender)] shadow-lg transform transition-transform duration-300 z-50"
+        class="fixed z-[500] border-top-radius top-0 left-0 w-[80%] h-full bg-[var(--color-primary-lavender)] shadow-lg transform transition-transform duration-300"
         :class="isOpen ? 'translate-x-0' : '-translate-x-full'"
     >
       <Tabs v-model:value="currentTab">
@@ -113,6 +113,12 @@ const links = ref([
 @media (max-width: 900px) {
   aside {
     width: 80%;
+  }
+}
+
+@media (max-width: 500px) {
+  aside {
+    width: 100%;
   }
 }
 

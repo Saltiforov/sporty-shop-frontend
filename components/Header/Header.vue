@@ -29,7 +29,7 @@
         </div>
 
         <div class="locale-switch max-w-[200px] w-full justify-between flex">
-          <LocaleSwitch />
+          <LocaleSwitch class="locale-switch-item" />
           <CurrencySwitch />
         </div>
 
@@ -255,19 +255,32 @@ const links = ref([
 }
 
 @media (max-width: 530px) {
+  .header-actions {
+    padding-bottom: 0px;
+  }
+  .locale-switch {
+    flex-direction: column;
+    width: auto;
+  }
+  .locale-switch-item {
+    width: 75px;
+    align-self: flex-end;
+  }
   .action-panel {
     display: none;
   }
   .header  {
-    padding-bottom: 30px;
+    padding-bottom: 17px;
+
   }
   .product-search-wrapper {
-    top: 107px !important;
+    top: 95px !important;
     right: 10px !important;
     left: auto !important;
     max-width: 259px !important;
   }
 }
+
 
 
 </style>

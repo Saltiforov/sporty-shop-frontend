@@ -406,6 +406,9 @@ const configUkraine = ref({
           required: true,
           class: 'w-full'
         },
+        validators: [
+          (value) => (value ? true : "Telegram Username is required"),
+        ],
       },
 
       {
@@ -525,6 +528,9 @@ const configEurope = ref({
           required: true,
           class: 'w-full'
         },
+        validators: [
+          (value) => (value ? true : "Telegram Username is required"),
+        ],
       },
 
       {
@@ -756,6 +762,7 @@ const configEurope = ref({
   }
   .checkout-content {
     flex-direction: column-reverse;
+    margin-bottom: 34px;
   }
 
   .responsive-header-fields {

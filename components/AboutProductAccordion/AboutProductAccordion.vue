@@ -44,21 +44,18 @@
           style : 'background-color: var(--color-gray-lavender);'
         }
       }">
-        <div v-if="product?.attributes.length" class="characteristics-list max-w-[1030px] w-full">
+        <div v-if="product?.attributes.length" class="characteristics-list w-full">
           <div
               v-for="characteristic in product?.attributes"
               :key="characteristic.key"
-              class="flex items-center gap-4 py-2"
+              class="flex items-start gap-4 py-2"
           >
             <p class="characteristics-list__title whitespace-nowrap">
               {{ characteristic.key }}
             </p>
-            <div
-                class="flex-grow h-px bg-[#5856D6]"
-                style="margin-top: 1em;"
-            ></div>
-            <p class="characteristics-list__value whitespace-nowrap">
-              {{ characteristic.value ? characteristic.value : $t('characteristics_no_data') }}
+            <div class="characteristics-separator flex-grow h-px bg-[#5856D6] mt-[1.3em]"></div>
+            <p class="characteristics-list__value text-right">
+              {{ characteristic.value ? characteristic.value : t('characteristics_no_data') }}
             </p>
           </div>
         </div>
@@ -316,7 +313,21 @@ const tabs = {
     header: 'Відгуки'
   },
   characteristics: {
-    header: 'Характеристики'
+    header: computed(() => t('tabs_characteristics')),
+    list: [
+      {key: "Виробник", value: "Nutrex Research"},
+      {key: "Тип продукту", value: "Анаболічна добавка"},
+      {key: "Форма випуску", value: "Капсули"},
+      {key: "Кількість в упаковці", value: "60 капсул"},
+      {key: "Основні інгредієнти", value: "Анаболічний комплекс на основі рослинних стероїдів"},
+      {key: "Призначення", value: "Підвищення сили, витривалості та набору м’язової маси"},
+      {key: "Рекомендована доза", value: "2 капсули на день (1 вранці, 1 ввечері)"},
+      {key: "Час прийому", value: "Після їжі"},
+      {key: "Особливості", value: "Без гормонів, не впливає на рівень тестостерону"},
+      {key: "Кому підходить", value: "Спортсменам та бодібілдерам"},
+      {key: "Протипоказання", value: "Індивідуальна непереносимість, вагітність, період лактації"},
+      {key: "Термін придатності", value: "Вказаний на упаковці"},
+    ]
   }
 }
 
@@ -439,7 +450,14 @@ watch(() => rating.value, (newValue) => {
   border-radius: var(--default-rounded);
 }
 
+.characteristics-list__title {
+  font-size: 15px;
+  line-height: 36px;
+}
+
 .characteristics-list__value {
+  line-height: 36px;
+  font-size: 15px;
   max-width: 40%;
   word-break: break-word;
 }
@@ -478,6 +496,11 @@ button.is-disabled .arrow-path {
   .empty-reviews-text {
     padding: 15px;
     margin-bottom: 15px;
+  }
+}
+@media (max-width: 450px) {
+  .characteristics-list__value {
+    max-width: 45%;
   }
 }
 

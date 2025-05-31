@@ -61,7 +61,7 @@
             </div>
           </section>
           <section class="flex text-[var(--color-gray-dark-charcoal)] max-w-[890px] justify-between">
-            <address class="flex delivery-info__item flex-col gap-6 w-full max-w-[427px] not-italic">
+            <address class="flex delivery-info__item flex-col gap-6 w-full max-w-[427px] not-italic mr-[36px]">
               <p v-for="(labelKey, index) in userInfoLabels" :key="index">{{ t(labelKey) }}</p>
             </address>
 
