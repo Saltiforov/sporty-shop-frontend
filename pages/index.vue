@@ -237,7 +237,7 @@ onMounted(async () => {
   })
 
 
-  // await getPromotionalProducts()
+  await getPromotionalProducts()
 
   hydrated.value = true
   isLoading.value = false
