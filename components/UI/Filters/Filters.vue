@@ -1,6 +1,6 @@
 <template>
   <Tree
-      :value="nodes"
+      :value="filters"
       :expanded-keys="expandedKeys"
       @update:expandedKeys="onExpandedKeysChange"
       class="w-full p-2 rounded-[var(--default-rounded)]"
@@ -73,12 +73,14 @@ import CustomCheckbox from "~/components/UI/CustomCheckbox/CustomCheckbox.vue"
 import SportsNutritionIcon from '~/assets/icons/filters/sports-nutrition-icon.svg'
 import InjectionsIcon from '~/assets/icons/filters/injections-icon.svg'
 import PriceRangeFilter from "~/components/UI/PriceRangeFilter/PriceRangeFilter.vue";
+import {getAllFilters} from "~/services/api/filters-http.service.js";
 
-const {t} = useI18n()
+const {t, locale} = useI18n()
 const route = useRoute()
 const router = useRouter()
 
 const {$eventBus} = useNuxtApp()
+const filters = ref([])
 
 const expandedKeys = ref({"0": true})
 
@@ -99,27 +101,9 @@ const collectCheckedFilters = (nodes) => {
   return filters
 }
 
-const fetchDataByFilters = async (query) => {
-
-  const {page, ...currentQuery} = route.query
-
-  currentQuery.filters = query
-
-  const {$api} = useNuxtApp()
-
-  try {
-    const response = await $api.get('/api/client/products', {
-      params: currentQuery
-    })
-    console.log('Filtered result:', response)
-  } catch (error) {
-    console.error('Error fetching filtered data:', error)
-  }
-}
-
 const applyQueryParamsFromUrl = () => {
   const selectedFilters = route.query.filters?.split(',') || []
-  applyFiltersToNodes(nodes.value, selectedFilters)
+  applyFiltersToNodes(filters.value, selectedFilters)
 }
 
 const applyFiltersToNodes = (nodes, selectedFilters) => {
@@ -135,24 +119,68 @@ const applyFiltersToNodes = (nodes, selectedFilters) => {
 
 const onNodeCheckboxChange = (node, isChecked) => {
   node.modelValue = isChecked
-  if (node.children?.length) {
-    updateChildrenSelection(node.children, isChecked)
-  }
-
-  const filters = collectCheckedFilters(nodes.value)
-  const query = {...route.query}
-
-  if (filters.length > 0) {
-    query.filters = filters.join(',')
-  } else {
-    delete query.filters
-  }
-
-  router.replace({query})
-
-  $eventBus.emit('filters-updated', filters.join(','))
+  toggleFilterInQuery(node)
+  console.log('onNodeCheckboxChange', node)
+  // if (node.children?.length) {
+  //   updateChildrenSelection(node.children, isChecked)
+  // }
+  //
+  // const filters = collectCheckedFilters(filters.value)
+  // const query = {...route.query}
+  //
+  // if (filters.length > 0) {
+  //   query.filters = filters.join(',')
+  // } else {
+  //   delete query.filters
+  // }
+  //
+  // router.replace({query})
 }
 
+function getSlugsFromQuery() {
+  const raw = route.query.filters
+  if (typeof raw === 'string' && raw.length) {
+    return raw.split(',').filter(s => s.length)
+  }
+  return []
+}
+
+
+async function toggleFilterInQuery(item) {
+  const slug = item.slug
+  if (!slug) return
+
+  // Получаем текущие slug-ы
+  const slugs = getSlugsFromQuery()
+  const index = slugs.indexOf(slug)
+
+  if (index === -1) {
+    // Добавляем новый slug
+    slugs.push(slug)
+  } else {
+    // Удаляем существующий
+    slugs.splice(index, 1)
+  }
+
+  // Формируем новую строку или undefined, если пусто
+  const newFilters = slugs.length ? slugs.join(',') : undefined
+
+  // Собираем новый query, не трогая остальные параметры
+  const newQuery = { ...route.query }
+
+  if (newFilters) {
+    newQuery.filters = newFilters
+  } else {
+    delete newQuery.filters
+  }
+
+  // Пушим обновление в адресную строку без перезагрузки
+  await router.replace({
+    path:  route.path,
+    query: newQuery
+  })
+
+}
 
 const updateChildrenSelection = (children, isChecked) => {
   for (const child of children) {
@@ -171,76 +199,32 @@ const onNodeLabelClick = (node) => {
   toggle(node)
 }
 
-const nodes = ref([
-  {
-    key: '0',
-    label: computed(() => t('filters_sports_nutrition')),
-    icon: SportsNutritionIcon,
-    children: [
-      {
-        key: '0-0',
-        label: computed(() => t('filters_protein')),
-        modelValue: false,
-        filter: '681f76360c47d4dd8034b851',
-        children: [
-          {
-            key: '0-0-1',
-            label: computed(() => t('filters_amino_acids')),
-            modelValue: false,
-            filter: '681f743c0c47d4dd8034b754',
-          },
-        ]
-      },
-      {
-        key: '0-1',
-        label: computed(() => t('filters_amino_acids')),
-        modelValue: false,
-        filter: '681f75510c47d4dd8034b7ec',
-      },
-      {
-        key: '0-2',
-        label: computed(() => t('filters_creatine')),
-        modelValue: false,
-        filter: '681f74c30c47d4dd8034b79f',
-      },
-      {
-        key: '0-3',
-        label: computed(() => t('filters_collagen')),
-        modelValue: false,
-        filter: '681f74250c47d4dd8034b748',
-      },
-    ]
-  },
-  {
-    key: '1',
-    label: computed(() => t('filters_injections')),
-    icon: InjectionsIcon,
-    children: [
-      {
-        key: '1-0',
-        label: computed(() => t('filters_protein')),
-        modelValue: false,
-        filter: '681f75680c47d4dd8034b804',
-      },
-      {
-        key: '1-1',
-        label: computed(() => t('filters_amino_acids')),
-        modelValue: false,
-        filter: '681f75850c47d4dd8034b816',
-      },
-      {
-        key: '1-2',
-        label: computed(() => t('filters_creatine')),
-        modelValue: false,
-        filter: '681f74dd0c47d4dd8034b7af',
-      },
-    ]
-  },
-])
+function mapFilters(inputArray) {
+  const mapNode = (item, idx, parentKey = "") => {
+    const key = parentKey ? `${parentKey}-${idx}` : `${idx}`;
+
+    return {
+      key: key,
+      id: item._id,
+      label: t(item.name[locale.value]),
+      slug: item.slug[locale.value],
+      icon: item.icon,
+      children: item.children && item.children.length
+          ? item.children.map((child, childIdx) => mapNode(child, childIdx, key))
+          : [],
+    };
+  };
+
+  return inputArray.map((item, idx) => mapNode(item, idx));
+}
 
 
-onMounted(() => {
+onMounted(async () => {
   applyQueryParamsFromUrl()
+
+  const response = await getAllFilters();
+
+  filters.value = mapFilters(response.list);
 })
 
 const onExpandedKeysChange = (newExpandedKeys) => {
