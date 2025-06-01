@@ -29,7 +29,7 @@
         </div>
 
         <div class="locale-switch max-w-[200px] w-full justify-between flex">
-          <LocaleSwitch class="locale-switch-item" />
+          <LocaleSwitch/>
           <CurrencySwitch />
         </div>
 
@@ -261,10 +261,6 @@ const links = ref([
   .locale-switch {
     flex-direction: column;
     width: auto;
-  }
-  .locale-switch-item {
-    width: 75px;
-    align-self: flex-end;
   }
   .action-panel {
     display: none;

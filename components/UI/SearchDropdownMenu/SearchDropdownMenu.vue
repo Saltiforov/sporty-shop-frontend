@@ -1,23 +1,23 @@
 <template>
   <ul
       v-if="show"
-      class="absolute z-50 mt-1 w-full bg-white border border-gray-300 rounded shadow-md max-w-[420px] max-h-[300px] min-h-[50px] overflow-auto"
+      class="search-dropdown-menu absolute z-50 mt-1 w-full bg-white border border-gray-300 rounded shadow-md max-w-[420px] max-h-[300px] min-h-[50px] overflow-auto"
   >
     <div v-if="items.length" class="flex flex-col">
       <div v-for="(product, index) in items" :key="index">
           <NuxtLink
             v-if="!isCurrent(product)"
             :to="buildRedirectUrlWithLocale(product)"
-            class="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
+            class="product-item flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
             @click.native="selectItem(product)"
         >
           <img
               :src="fullImageUrls(product.images)[0] || DefaultProductImage"
               alt="item image"
-              class="w-8 h-8 object-cover mr-3 rounded"
+              class="search-image w-8 h-8 object-cover mr-3 rounded"
           />
-          <span class="text-sm text-gray-800 px-2">{{ product.name }}</span>
-          <span class="text-sm text-gray-800 font-bold">{{ getProductPrice(product) }}</span>
+          <span class="search-name text-sm text-gray-800 px-2">{{ product.name }}</span>
+          <span class="search-price text-sm text-gray-800 font-bold">{{ getProductPrice(product) }}</span>
         </NuxtLink>
         <div
             v-else
@@ -35,7 +35,7 @@
       </div>
     </div>
     <div v-else>
-      <p class="text-center p-5">{{ t('empty_search_message') }}</p>
+      <p class="search-dropdown-menu-text text-center p-5">{{ t('empty_search_message') }}</p>
     </div>
   </ul>
 </template>
@@ -74,3 +74,30 @@ const selectItem = (item) => {
   emit('selected', item)
 }
 </script>
+
+<style scoped>
+@media(max-width: 500px) {
+  .search-dropdown-menu {
+    border-radius: 8px;
+    min-height: auto;
+  }
+  .search-image {
+    margin-right: 0;
+  }
+  .search-name {
+    font-size: 11px;
+    line-height: 22px;
+  }
+  .search-price {
+    font-size: 11px;
+    line-height: 22px;
+    margin-left: auto;
+  }
+  .product-item {
+    padding: 5px 14px 4px 12px;
+  }
+  .search-dropdown-menu-text {
+    font-size: 12px;
+  }
+}
+</style>

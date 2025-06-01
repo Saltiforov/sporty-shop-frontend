@@ -6,7 +6,7 @@
           style: 'background-color: transparent; border: none; w-auto'
         },
         label: {
-          style: 'color: var(--color-gray-pale-lavender); text-end; line-height: 22px; font-weight: 600; font-size: 20px;'
+          style: labelStyles
         },
         dropdown: {
           style: 'width: 1.25rem;'
@@ -24,8 +24,13 @@
 <script setup>
 import {ref, computed} from 'vue'
 import Select from 'primevue/select'
+import {useWindowWidthWatcher} from "~/composables/useWindowWidthWatcher.js";
 
 const {locales, locale, setLocale, defaultLocale} = useI18n()
+
+const getWidth = useWindowWidthWatcher()
+
+const windowWidth = computed(() => getWidth())
 
 const storedLocale = computed(() =>  locale.value || localStorage.getItem('locale'))
 
@@ -37,6 +42,16 @@ const languages = computed(() =>
 )
 
 const defaultLanguage = computed(() => languages.value.find(l => l.code === defaultLocale))
+
+const labelStyles = computed(() => {
+  return {
+    color: 'var(--color-gray-pale-lavender)',
+    textAlign: 'end',
+    lineHeight: '22px',
+    fontWeight: 600,
+    fontSize: windowWidth.value < 500 ? '12px' : '20px',
+  }
+})
 
 const selectedLanguage = ref(
     languages.value.find(l => l.code === storedLocale.value) || defaultLanguage.value

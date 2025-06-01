@@ -6,7 +6,7 @@
           style: 'background-color: transparent; border: none;'
         },
         label: {
-          style: 'color: var(--color-gray-pale-lavender); line-height: 22px; font-weight: 600; font-size: 20px;'
+          style: labelStyles
         },
         dropdown: {
           style: 'width: 1.25rem;'
@@ -20,19 +20,34 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, watch, onBeforeMount } from 'vue'
+<script setup>
+import {ref, watch, onBeforeMount, computed} from 'vue'
 import Select from 'primevue/select'
 import { useCurrencyStore } from '~/stores/currency'
 import { useCookie } from '#app'
+import {useWindowWidthWatcher} from "~/composables/useWindowWidthWatcher";
 
 const currencyStore = useCurrencyStore()
 const currencyCookie = useCookie('currency')
+const getWidth = useWindowWidthWatcher()
+
 
 const currencyOptions = [
   { label: 'Ukraine', code: 'UAH', value: 'uah' },
   { label: 'Europe', code: 'EUR', value: 'eur' }
 ]
+
+const windowWidth = computed(() => getWidth())
+
+const labelStyles = computed(() => {
+  return {
+    color: 'var(--color-gray-pale-lavender)',
+    textAlign: 'end',
+    lineHeight: '22px',
+    fontWeight: 600,
+    fontSize: windowWidth.value < 500 ? '16px' : '20px',
+  }
+})
 
 const defaultCode = currencyCookie.value || currencyOptions[0].code
 

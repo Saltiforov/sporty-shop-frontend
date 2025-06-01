@@ -34,7 +34,7 @@
             </nav>
           </aside>
 
-          <main class="p-6 w-full">
+          <main class="profile-main p-6 w-full">
             <NuxtPage/>
           </main>
         </div>
@@ -203,7 +203,7 @@ onMounted(async () => {
   padding: 0 15px;
 }
 
-main {
+.profile-main {
   background-color: var(--color-gray-lavender);
   padding: 20px;
   border-radius: 8px;
@@ -252,7 +252,9 @@ main {
   .list-title {
     display: none;
   }
-
+  .profile-layout {
+    padding-bottom: 36px;
+  }
   .sidebar-nav ul {
     justify-content: space-evenly;
   }
@@ -287,6 +289,10 @@ main {
 @media (max-width: 500px) {
   main {
     padding: 15px 5px 30px 5px;
+  }
+
+  .profile-main {
+    padding: 16px 8px 36px;
   }
 
   .profile-container {

@@ -2,45 +2,24 @@
   <div class="auth-component">
     <LoadingOverlay :visible="isLoading"/>
     <FieldsBlock
-        class="scrollable-fields-block"
         :config="fieldsConfig.fields"
         ref="fieldsBlock"
     />
     <div v-if="isLogin" class="reset-password justify-end mb-[27px] flex">
       <NuxtLink><p class="text-[var(--color-muted-gray)]">{{ t('forgot_password') }}</p></NuxtLink>
     </div>
-    <div :class="[
-        'mx-auto  mb-[37px]',
-        isLogin ? 'max-w-[320px]' : 'max-w-[386px] pt-[15px]'
-    ]" class="auth-button-wrapper">
-      <Button @keyup.enter="handleAuth" @click="handleAuth" :pt="{ root: { class: 'auth-button btn-hover-default' } }">{{
-          buttonLabel
-        }}
+
+    <div :class="wrapperClass">
+      <Button @keyup.enter="handleAuth" @click="handleAuth" :pt="{ root: { class: rootClass } }">
+        {{ buttonLabel }}
       </Button>
     </div>
-    <div class="flex mb-[16px] items-center justify-center gap-4">
-      <div class="max-w-[196px] w-full h-px bg-[var(--color-primary-pure-white)]"></div>
-      <h2 class="murecho-font text-[12px] fw-400">{{ t('or') }}</h2>
-      <div class="max-w-[196px] w-full h-px bg-[var(--color-primary-pure-white)]"></div>
-    </div>
-    <div :class="[
-        'login-with mb-6 flex flex-col items-center justify-center',
-        isLogin ? 'border-b border-[var(--color-primary-pure-white)]' : ''
-    ]">
-      <div class="mb-[14px]">
-        <NuxtLink><p class="murecho-font text-[12px] text-[var(--color-muted-gray)]">
-          {{ isLogin ? t('login_with') : t('register_with') }}</p></NuxtLink>
-      </div>
 
-      <div class="login-with-wrapper mb-6">
-        <Button :pt="{ root: { class: 'login-with__img' } }">
-          <img src="~/assets/icons/google-icon.svg" alt="google-icon">
-        </Button>
-      </div>
-    </div>
+    <div v-if="responsive && isLogin" :class="['h-[1px]']" :style="dividerStyle"></div>
+
     <div class="login-with-footer">
-      <div v-if="!responsive" class="flex text-[12px] justify-center">
-        <div v-if="isLogin" class="flex">
+      <div v-if="!isLogin" class="flex text-[12px] justify-center">
+        <div v-if="isLogin && responsive" class="flex">
           <p class="mr-[17px]">{{ t('new_client') }}</p>
           <p>
             <NuxtLink @click="authPopup.setType('register')"
@@ -51,18 +30,13 @@
         </div>
         <p v-else class="text-[var(--color-muted-gray)]">{{ t('user_agreement') }}</p>
       </div>
-      <div v-if="responsive && authPopup.popupType === 'login'" class="responsive-register-button" :class="[
-        'mx-auto  mb-[37px]',
-        isLogin ? 'max-w-[320px]' : 'max-w-[386px] pt-[15px]'
-           ]">
-        <p class="murecho-font title-lg-20 text-center mb-6">{{ t('new_client') }}</p>
+      <div v-if="responsive && isLogin" :class="wrapperClass">
+        <p class="title-lg-20 text-center mb-[26px]">{{ t('new_client') }}</p>
         <Button
             @click="() => navigateTo('/auth/register')"
-            :pt="{ root: { class: 'auth-button btn-hover-default' } }"
+            :pt="{ root: { class: rootClass } }"
         >
-          {{
-            t('register_button')
-          }}
+          {{ t('register_button') }}
         </Button>
       </div>
     </div>
@@ -91,7 +65,7 @@ const authPopup = useAuthPopup()
 
 const isLoading = ref(false);
 
-const {isLogin} = defineProps({
+const props = defineProps({
   isLogin: {
     type: Boolean,
     default: true
@@ -108,7 +82,7 @@ const handleAuth = async () => {
   const isValid = fieldsBlock.value?.validateFields()
   const user = fieldsBlock.value?.getData()
 
-  const action = isLogin ? authenticateUser : registerUser;
+  const action = props.isLogin ? authenticateUser : registerUser;
 
   if (isValid) {
     try {
@@ -129,9 +103,42 @@ const handleAuth = async () => {
   }
 }
 
-const buttonLabel = computed(() => isLogin ? t('login') : t('register_button'))
+const wrapperClass = computed(() => [
+  'auth-button-wrapper',
+  'murecho-font',
+  'mx-auto',
+  'mb-[37px]',
+  props.responsive ? 'responsive-class' : '',
+  props.isLogin ? 'max-w-[320px]' : 'max-w-[285px]',
+  (!props.isLogin && props.responsive) ? 'responsive-class' : ''
+])
 
-const fieldsConfig = computed(() => isLogin ? loginFields : registerFields)
+const rootClass = computed(() => [
+  'auth-button btn-hover-default',
+  props.responsive ? 'responsive-class-root' : ''
+])
+
+const dividerStyle = computed(() => {
+  if (props.responsive) {
+    return {
+      backgroundColor: 'var(--color-primary-blue)',
+      marginBottom: '24px',
+      height: '1px'
+    }
+  }
+  if (props.isLogin && !props.responsive) {
+    return {
+      backgroundColor: 'var(--color-primary-pure-white)',
+      marginBottom: '0',
+      height: '1px'
+    }
+  }
+  return {}
+})
+
+const buttonLabel = computed(() => props.isLogin ? t('login') : t('register_button'))
+
+const fieldsConfig = computed(() => props.isLogin ? loginFields : registerFields)
 
 const loginFields = {
   fields: {
@@ -177,21 +184,6 @@ const registerFields = {
   fields: {
     items: [
       {
-        name: 'username',
-        code: 'username',
-        label: computed(() => t('auth_username')),
-        type: 'InputText',
-        props: {
-          side: 'left',
-          type: 'text',
-          placeholder: "",
-          required: true
-        },
-        validators: [
-          (value) => (value ? true : "First Name is required"),
-        ],
-      },
-      {
         name: 'firstName',
         code: 'firstName',
         label: computed(() => t('auth_first_name')),
@@ -226,34 +218,28 @@ const registerFields = {
         name: 'phone',
         code: 'phone',
         label: computed(() => t('auth_phone_number')),
-        type: 'Custom',
+        type: 'InputText',
         props: {
           side: 'left',
+          type: 'tel',
+          placeholder: '',
+          required: true,
+          onKeydown: (e) => {
+            const allowedKeys = [
+              'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab',
+              '+', '-', '(', ')', ' '
+            ];
+            if (
+                !allowedKeys.includes(e.key) &&
+                !e.key.match(/[0-9]/) // цифры
+            ) {
+              e.preventDefault();
+            }
+          }
         },
         validators: [
           (value) => (value ? true : "Phone Number is required"),
         ],
-        render: ({modelValue, 'onUpdate:modelValue': update}) =>
-            h(InputGroup, {}, {
-              default: () => [
-                h(InputGroupAddon, {
-                  pt: {
-                    root: {
-                      style: {
-                        backgroundColor: 'white',
-                        color: 'var(--color-primary-dark)',
-                      }
-                    }
-                  }
-                }, () => '+380'),
-                h(InputNumber, {
-                  modelValue,
-                  'onUpdate:modelValue': update,
-                  useGrouping: false,
-                  placeholder: '',
-                })
-              ]
-            })
       },
       {
         name: 'email',
@@ -345,5 +331,15 @@ const registerFields = {
 .scrollable-fields-block::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.05);
   border-radius: 4px;
+}
+
+.responsive-class {
+  width: 243px;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+.responsive-class-root {
+  font-size: 14px;
+  padding: 10px 10px;
 }
 </style>

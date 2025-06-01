@@ -25,18 +25,43 @@
 
 /* NO DATA TEXT */
 
+.no-data-text {
+    font-size: 18px;
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 0px;
+}
+
+.no-data-reviews {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    width: 50%;
+    justify-content: center;
+}
+
+@media (max-width: 1250px) {
+    .no-data-reviews {
+        width: auto;
+        margin-right: 20px;
+    }
+}
+@media (max-width: 1030px) {
+    .no-data-reviews {
+        margin-right: 0px;
+        margin-bottom: 0px;
+    }
+}
+
 @media (max-width: 750px) {
     .no-data-text {
-        font-size: 20px;
+        font-size: 16px;
     }
-}
-
-@media (max-width: 550px) {
-    .no-data-text {
-        font-size: 18px;
+    .no-data-reviews  {
+        font-size: 16px;
     }
-}
 
+}
 
 
 /* NO DATA TEXT */

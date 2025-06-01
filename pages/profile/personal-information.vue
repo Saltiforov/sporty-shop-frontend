@@ -1,18 +1,21 @@
 <template>
   <div class="personal-information">
     <LoadingOverlay :visible="isLoading"/>
-    <h1 class="title-lg-20 mb-[30px]">{{ t('contact_information') }}</h1>
-    <FieldsBlock v-if="userData && userData._id" class="mb-[73px]" :config="config.fields" ref="fieldsBlock" :data="userData"/>
-    <FieldsBlockSkeleton v-else/>
+    <div class="personal-information-content">
+      <h1 class="personal-information-title title-lg-20 mb-[30px]">{{ t('contact_information') }}</h1>
+      <FieldsBlock v-if="userData && userData._id" class="mb-[73px]" :config="config.fields" ref="fieldsBlock" :data="userData"/>
+      <FieldsBlockSkeleton v-else/>
       <div
-        class="max-w-[338px] mx-auto py-[10px] px-[10px]">
-      <Button v-if="userData && userData._id" @click="savePersonalInformation" :pt="{
+          class="max-w-[338px] mx-auto py-[10px] px-[10px]">
+        <Button v-if="userData && userData._id" @click="savePersonalInformation" :pt="{
         root: {
           class: 'personal-information__btn btn-hover-default'
         }
       }">{{ t('save') }}
-      </Button>
+        </Button>
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -252,8 +255,6 @@ const config = {
 }
 
 @media (max-width: 500px) {
-  .personal-information {
-    padding: 15px;
-  }
+
 }
 </style>

@@ -27,12 +27,12 @@
                 />
               </svg>
             </div>
-            <div class="responsive-filters-title">
+            <div class="responsive-filters-title fw-500">
               <p>Фільтри</p>
             </div>
           </div>
           <div class="sort-select min-w-[320px] p-1 flex">
-            <p class="mr-5 sort-title">{{ sortTitle }}</p>
+            <p class="mr-5 sort-title">{{ t("sort_title") }}</p>
             <SortSelect/>
           </div>
         </div>
@@ -120,6 +120,7 @@
 
 <script setup>
 import ProductSkeleton from '~/components/Skeletons/ProductSkeleton/ProductSkeleton.vue'
+import SortSelect from '~/components/UI/SortSelect/SortSelect.vue'
 
 definePageMeta({
   layout: 'default',
@@ -196,9 +197,6 @@ const {data: catalog, pending, error} = await useAsyncData(
 const products = computed(() => catalog.value?.list || [])
 const totalItems = computed(() => catalog.value?.count || 0)
 
-console.log('catalog.value.count', catalog.value.count)
-console.log('products', products.value.length)
-
 watch(page, (page) => {
   router.push({query: {...route.query, page}})
 })
@@ -237,7 +235,7 @@ onMounted(async () => {
   })
 
 
-  await getPromotionalProducts()
+  // await getPromotionalProducts()
 
   hydrated.value = true
   isLoading.value = false
@@ -268,18 +266,20 @@ onBeforeUnmount(() => {
 }
 
 .responsive-filters {
+  font-size: 12px;
   box-shadow: 0 0 2px #00000040;
   border-radius: 8px;
   cursor: pointer;
-  min-width: 100px;
-  padding: 5px;
+  min-width: 92px;
+  height: auto;
+  padding: 4.5px 6px;
   display: none;
   justify-content: space-between;
   align-items: center;
 }
 
 .responsive-filters-icon {
-  padding: 5px 12px;
+  margin-left: 10px;
 }
 
 .fade-slide-enter-active,
@@ -292,6 +292,10 @@ onBeforeUnmount(() => {
 .fade-slide-leave-to {
   opacity: 0;
   transform: translateY(-20px);
+}
+
+.responsive-filters-title {
+  font-size: 16px;
 }
 
 .fade-slide-enter-to,
@@ -374,7 +378,6 @@ onBeforeUnmount(() => {
   }
 
   .filters--mobile {
-    max-width: 100% !important;
     height: auto !important;
     border: none !important;
     margin-bottom: 10px;
@@ -430,6 +433,7 @@ onBeforeUnmount(() => {
   .products-pagination-actions {
     margin-bottom: 40px;
   }
+
   .product-grid {
     margin-bottom: 24px;
   }
@@ -438,23 +442,30 @@ onBeforeUnmount(() => {
 
 @media (max-width: 510px) {
 
+  .sort-title {
+    font-size: 10px;
+  }
+
+  .responsive-filters-title {
+    font-size: 12px;
+  }
+
   .main-content {
     gap: 0;
   }
 
   .responsive-filters {
-    justify-content: center;
+    justify-content: space-between;
   }
 
   .sort-select {
     justify-content: center;
-    margin-bottom: 8px;
+    align-items: center;
   }
 
   .select-filters {
     margin-top: 30px;
     padding-top: 25px;
-    flex-direction: column-reverse;
   }
 }
 

@@ -123,7 +123,7 @@
             </ul>
           </div>
         </div>
-        <p  v-else class="no-data-text">
+        <p  v-else class="no-data-text no-data-reviews">
           {{ t('delivery_no_data') }}
         </p>
       </AccordionContent>
@@ -211,7 +211,7 @@
             </div>
           </section>
 
-          <section v-else class="no-data-text">
+          <section v-else class="no-data-text no-data-reviews">
             <p class="no-data-text text-center mb-6">
               {{ t('no_reviews_yet') }}
             </p>

@@ -171,6 +171,12 @@ button[disabled] {
 }
 
 @media (max-width: 530px) {
+  .load-more-button {
+    padding: 8px 23px;
+  }
+  .pagination-button {
+    padding: 3px 24.5px;
+  }
   .load-more-button-text {
     font-size: 12px;
   }

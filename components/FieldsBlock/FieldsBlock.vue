@@ -269,6 +269,12 @@ defineExpose({
     grid-template-columns: 1fr;
   }
 }
+@media (max-width: 670px) {
+  .fields-block-content {
+    gap: 0;
+    margin-bottom: 36px;
+  }
+}
 
 @media (max-width: 600px) {
   .form__title {
@@ -301,12 +307,8 @@ defineExpose({
   }
 
   .form-group {
-    width: 290px;
+    width: 269px;
     margin: 0 auto;
-  }
-
-  .fields-block-content {
-    gap: 26px;
   }
 }
 

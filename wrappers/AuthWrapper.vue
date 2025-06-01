@@ -20,7 +20,7 @@
                 value="login"
                 @click="setActiveTab('login')"
             >
-              {{ t('login') }}
+              {{ t('login_tab') }}
             </Tab>
             <Tab
                 value="register"

@@ -125,6 +125,17 @@ const localizeStatus = (status) => {
   color: var(--color-primary-dark);
 }
 
+.order-status {
+  color: #fff;
+  background-color: var(--color-primary-purple);
+  padding: 10px 12px;
+  margin: 0 20px;
+  border-radius: var(--default-rounded);
+  font-weight: 500;
+  display: inline-block;
+  line-height: 22px;
+}
+
 @media (max-width: 1000px) {
   .order-item-content-wrapper {
     padding: 0;
@@ -144,12 +155,13 @@ const localizeStatus = (status) => {
 
 @media (max-width: 500px) {
   .order-number {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .order-status {
-    font-size: 12px;
+    font-size: 11px;
     margin: 0 10px;
+    padding: 0px 14.5px;
   }
 
   .history-view-price {

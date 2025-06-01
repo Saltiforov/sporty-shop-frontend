@@ -54,7 +54,7 @@
             <div v-if="false"  class="delivery-and-payment">
               <p v-html="deliveryAndPaymentInfo.content"></p>
             </div>
-      <p  v-else class="no-data-text">
+      <p v-else class="no-data-text ">
         {{ t('delivery_no_data') }}
       </p>
     </TabPanel>
@@ -125,7 +125,7 @@
           </div>
         </section>
 
-        <section v-else class="no-data-text">
+        <section v-else class="no-data-text no-data-reviews">
           <p class="no-data-text">
             {{ t('no_reviews_yet') }}
           </p>

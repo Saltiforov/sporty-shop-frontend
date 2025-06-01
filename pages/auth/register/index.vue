@@ -1,9 +1,9 @@
 <template>
   <div class="register max-w-[1230px] mx-auto">
-    <h1 class="login-title large-title text-center mb-10">
+    <h1 class="login-title large-title text-center mb-[19px]">
       {{ t('register') }}
     </h1>
-    <AuthComponent :is-login="false"/>
+    <AuthComponent :is-login="false" :responsive="true" />
   </div>
 </template>
 
