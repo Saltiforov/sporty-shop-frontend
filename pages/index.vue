@@ -174,6 +174,7 @@ const productsQueryParams = computed(() => {
     skip: skip.value,
     filters: route.query.filters,
     price: route.query.price,
+    sort: route.query.sort,
     ...(q.value ? { q: q.value } : {}),
   }
 })
@@ -184,7 +185,7 @@ updateQueryParams()
 const currencyStore = useCurrencyStore()
 
 const sortQueryParams = (query) => {
-  const order = ['page', 'limit', 'skip', 'filters', 'q', 'price']
+  const order = ['page', 'limit', 'skip', 'filters', 'q', 'price', 'sort']
   const sortedQuery = {}
   order.forEach(key => {
     if (query[key] !== undefined) {
@@ -236,7 +237,7 @@ const isLoading = ref(false)
 
 onMounted(async () => {
   isLoading.value = true
-  // await getPromotionalProducts()
+  await getPromotionalProducts()
 
   hydrated.value = true
   isLoading.value = false

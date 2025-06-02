@@ -16,45 +16,64 @@
         v-model="selectedOption"
         optionLabel="name"
         :options="sortOptions"
+        @change="applySort"
     ></Select>
   </div>
 </template>
 
-
 <script setup>
 import Select from "primevue/select";
-import {ref} from "vue";
-import {useWindowWidthWatcher} from "~/composables/useWindowWidthWatcher";
+import { ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
+import { useWindowWidthWatcher } from "~/composables/useWindowWidthWatcher";
+import { useRoute, useRouter } from "vue-router"; // Добавляем для работы с маршрутами
 
-const {t} = useI18n()
+const { t } = useI18n();
+const getWidth = useWindowWidthWatcher();
+const route = useRoute();
+const router = useRouter();
 
-const getWidth = useWindowWidthWatcher()
+const selectedOption = ref({ name: t("sort_popular"), code: "popular" });
+const windowWidth = computed(() => getWidth());
 
-const selectedOption = ref({name: computed(() => t('sort_popular')), code: 'popular'});
+const sortOptions = computed(() => [
+  { code: "popular", name: t("sort_popular") },
+  { code: "price_asc", name: t("sort_price_asc") },
+  { code: "price_desc", name: t("sort_price_desc") },
+  { code: "newest", name: t("sort_newest") },
+  { code: "rating", name: t("sort_rating") }
+]);
 
-const windowWidth = computed(() => getWidth())
+const labelStyles = computed(() => ({
+  color: "var(--color-primary-dark)",
+  marginRight: "0.5rem",
+  padding: "0",
+  lineHeight: "22px",
+  fontWeight: 500,
+  fontSize: windowWidth.value < 500 ? "10px" : "15px"
+}));
 
-const sortOptions = ref([
-  {code: 'popular', name: computed(() => t('sort_popular'))},
-  {code: 'price_asc', name: computed(() => t('sort_price_asc'))},
-  {code: 'price_desc', name: computed(() => t('sort_price_desc'))},
-  {code: 'newest', name: computed(() => t('sort_newest'))},
-  {code: 'rating', name: computed(() => t('sort_rating'))}
-])
-
-const labelStyles = computed(() => {
-  return {
-    color: 'var(--color-primary-dark)',
-    marginRight: '0.5rem',
-    padding: '0',
-    lineHeight: '22px',
-    fontWeight: 500,
-    fontSize: windowWidth.value < 500 ? '10px' : '15px',
+const syncWithRoute = () => {
+  const sortFromRoute = route.query.sort;
+  if (sortFromRoute) {
+    const option = sortOptions.value.find(opt => opt.code === sortFromRoute);
+    if (option) {
+      selectedOption.value = option;
+    }
   }
-})
+};
 
+const applySort = () => {
+  const updatedQuery = {
+    ...route.query,
+    sort: selectedOption.value.code
+  };
+  router.push({ query: updatedQuery });
+};
+
+onMounted(syncWithRoute);
+watch(() => route.query.sort, syncWithRoute);
 </script>
-
 
 <style scoped>
 .select-root {
@@ -75,7 +94,6 @@ const labelStyles = computed(() => {
 }
 
 @media (max-width: 510px) {
-
   .select-label {
     font-size: 10px !important;
   }
