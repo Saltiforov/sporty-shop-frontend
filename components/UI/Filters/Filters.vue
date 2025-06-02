@@ -25,6 +25,7 @@
 
         <div class="ml-auto">
           <CustomCheckbox
+              v-if="!isRootNode(slotProps.node)"
               :unchecked-border-color="'#7F7F7F80'"
               :border-radius="'4px'"
               :modelValue="slotProps.node.modelValue"
@@ -55,6 +56,12 @@
           </svg>
         </button>
       </div>
+      <div v-if="slotProps.node.children && slotProps.node.children.length > 1 && expandedKeys[slotProps.node.key]" class="mt-2 text-sm cursor-pointer filters-block-text w-[50%] mx-auto">
+        <span
+            :class="{'text-green-500': areAllChildrenSelected(slotProps.node), 'text-blue-500': !areAllChildrenSelected(slotProps.node)}"
+            @click.stop="onNodeCheckboxChange(slotProps.node, !slotProps.node.modelValue)"
+        >Select all</span>
+      </div>
       <div v-if="slotProps.node.icon" :class="['border-b border-[var(--color-muted-gray)]', slotProps.node.icon && expandedKeys[slotProps.node.key] ? 'w-[50%] mx-auto' : '']"></div>
     </template>
 
@@ -72,138 +79,101 @@ import {useRoute, useRouter} from 'vue-router'
 import CustomCheckbox from "~/components/UI/CustomCheckbox/CustomCheckbox.vue"
 import PriceRangeFilter from "~/components/UI/PriceRangeFilter/PriceRangeFilter.vue";
 import {getAllFilters} from "~/services/api/filters-http.service.js";
+const { t, locale } = useI18n();
+const route = useRoute();
+const router = useRouter();
+const { $eventBus } = useNuxtApp();
 
-const {t, locale} = useI18n()
-const route = useRoute()
-const router = useRouter()
+const nodes = ref([]);
+const expandedKeys = ref({ "0": true });
 
-const {$eventBus} = useNuxtApp()
-const nodes = ref([])
-const expandedKeys = ref({"0": true})
-
-const isRootNode = (node) => {
-  return !node.key.includes('-')
-}
+const isRootNode = (node) => !node.key.includes('-');
 
 const toggle = (node) => {
-  expandedKeys.value[node.key] = !expandedKeys.value[node.key]
-}
+  expandedKeys.value[node.key] = !expandedKeys.value[node.key];
+};
 
 const collectAllSlugs = (node) => {
-  const result = [node.slug]
+  const slugs = [node.slug];
   if (Array.isArray(node.children) && node.children.length) {
-    for (const child of node.children) {
-      result.push(...collectAllSlugs(child))
-    }
+    node.children.forEach(child => {
+      slugs.push(...collectAllSlugs(child));
+    });
   }
-  return result
-}
+  return slugs;
+};
 
-const onNodeCheckboxChange = (node, isChecked) => {
-  // node.modelValue = !node.modelValue;
-
-  if (isRootNode(node)) {
-    const slugs = collectAllSlugs(node);
-    updateFilters(slugs);
-  } else {
-    updateFilters(node);
+const updateNodeAndChildren = (node, isChecked) => {
+  node.modelValue = isChecked;
+  if (Array.isArray(node.children) && node.children.length) {
+    node.children.forEach(child => updateNodeAndChildren(child, isChecked));
   }
-}
-
-function getSlugsFromQuery() {
-  const raw = route.query.filters
-  if (typeof raw === 'string' && raw.length) {
-    return raw.split(',').filter(s => s.length)
-  }
-  return []
-}
-
-function buildNewQuery(routerQuery, newSlugs) {
-  const nextQuery = { ...routerQuery }
-  if (newSlugs.length) {
-    nextQuery.filters = newSlugs.join(',')
-  } else {
-    delete nextQuery.filters
-  }
-  return nextQuery
-}
+};
 
 const findNodeBySlug = (nodes, targetSlug) => {
   for (const node of nodes) {
-    if (node.slug === targetSlug) {
-      return node
-    }
+    if (node.slug === targetSlug) return node;
     if (Array.isArray(node.children) && node.children.length) {
-      const found = findNodeBySlug(node.children, targetSlug)
-      if (found) {
-        return found
-      }
+      const found = findNodeBySlug(node.children, targetSlug);
+      if (found) return found;
     }
   }
-  return null
-}
+  return null;
+};
 
-async function updateFilters(payload) {
-    const currentSlugs = getSlugsFromQuery()
-    let newSlugs
-    let deletedSlugs
-    const slugsFromQuery = getSlugsFromQuery()
+const getSlugsFromQuery = () => {
+  const raw = route.query.filters;
+  if (typeof raw === 'string' && raw.length) {
+    return raw.split(',').filter(s => s.length);
+  }
+  return [];
+};
 
-    if (Array.isArray(payload)) {
-      newSlugs = payload.filter(slug => {
-        const relatedNode = findNodeBySlug(nodes.value, slug);
-        relatedNode.modelValue = !relatedNode.modelValue;
-        console.log('relatedNode.modelValue', relatedNode.slug, relatedNode.modelValue)
-        // return !isRootNode(relatedNode) && relatedNode.modelValue;
-        return relatedNode.modelValue;
-      })
-    } else {
-      const itemSlugs = collectAllSlugs(payload)
-      newSlugs = [...currentSlugs]
-      payload.modelValue = !payload.modelValue;
+const buildNewQuery = (routerQuery, newSlugs) => {
+  const nextQuery = { ...routerQuery };
+  if (newSlugs.length) {
+    nextQuery.filters = newSlugs.join(',');
+  } else {
+    delete nextQuery.filters;
+  }
+  return nextQuery;
+};
 
-      if (payload.modelValue) {
-        itemSlugs.forEach(slug => {
-          if (!newSlugs.includes(slug)) newSlugs.push(slug)
-        })
-      } else {
-        newSlugs = newSlugs.filter(slug => !itemSlugs.includes(slug))
+const areAllChildrenSelected = (node) => {
+  if (!node.children || node.children.length === 0) return false;
+  return node.children.every(child => child.modelValue === true);
+};
+
+const onNodeCheckboxChange = async (node, isChecked) => {
+  updateNodeAndChildren(node, isChecked);
+
+  const allSlugs = [];
+  const collectSelectedSlugs = (nodes) => {
+    nodes.forEach(n => {
+      if (n.modelValue) {
+        allSlugs.push(n.slug);
       }
-    }
-  console.log('newSlugs', newSlugs);
-  console.log('slugsFromQuery', slugsFromQuery);
+      if (Array.isArray(n.children) && n.children.length) {
+        collectSelectedSlugs(n.children);
+      }
+    });
+  };
+  collectSelectedSlugs(nodes.value);
 
+  const nextQuery = buildNewQuery(route.query, allSlugs);
+  await router.replace({
+    path: route.path,
+    query: nextQuery,
+  });
+};
 
-  // const mergedSlugs = Array.from(new Set([...difference(newSlugs, slugsFromQuery)]))
-  const mergedSlugs = Array.from(new Set([...newSlugs, ...slugsFromQuery]))
-
-  console.log('Array.from(mergedSlugs)', mergedSlugs);
-  console.log('difference', difference(newSlugs, slugsFromQuery));
-
-    const nextQuery = buildNewQuery(route.query, mergedSlugs)
-
-    await router.replace({
-      path:  route.path,
-      query: nextQuery
-    })
-}
-
-const difference = (source, toRemove) => {
-  console.log('difference source', source)
-  console.log('difference toRemove', toRemove)
-  const removeSet = new Set(toRemove)
-  return [...source, ...toRemove].filter(item => !removeSet.has(item))
-}
-
-
-function mapNodes(inputArray) {
-  const mapNode = (item, idx, parentKey = "") => {
+const mapNodes = (inputArray) => {
+  const mapNode = (item, idx, parentKey = '') => {
     const key = parentKey ? `${parentKey}-${idx}` : `${idx}`;
-
     return {
-      key: key,
+      key,
       id: item._id,
-      modelValue: null,
+      modelValue: false,
       label: t(item.name[locale.value]),
       slug: item.slug[locale.value],
       icon: item.icon || '',
@@ -212,17 +182,26 @@ function mapNodes(inputArray) {
           : [],
     };
   };
-
   return inputArray.map((item, idx) => mapNode(item, idx));
-}
+};
+
+const syncTreeWithQuery = () => {
+  const querySlugs = getSlugsFromQuery();
+  querySlugs.forEach(slug => {
+    const node = findNodeBySlug(nodes.value, slug);
+    if (node) {
+      updateNodeAndChildren(node, true);
+    }
+  });
+};
 
 const onExpandedKeysChange = (newExpandedKeys) => {
-  expandedKeys.value = newExpandedKeys
-}
+  expandedKeys.value = newExpandedKeys;
+};
 
 onMounted(async () => {
   const response = await getAllFilters();
-
   nodes.value = mapNodes(response.list);
-})
+  syncTreeWithQuery();
+});
 </script>
