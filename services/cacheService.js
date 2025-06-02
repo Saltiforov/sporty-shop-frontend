@@ -60,7 +60,12 @@ class CacheService {
         }
 
         console.log(`CACHE SERVICE Fetching data for ${cacheKey}`);
-        const request = $fetch(url, { params })
+        const request = $fetch(url, {
+            params,
+            headers: {
+                'ngrok-skip-browser-warning': 'true',
+            }
+        })
             .then((response) => {
                 this.cache.set(cacheKey, { data: response, timestamp: Date.now() });
                 this.cacheOrder.add(cacheKey);
