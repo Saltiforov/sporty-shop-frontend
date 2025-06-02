@@ -1,4 +1,3 @@
-<!--suppress LanguageDetectionInspection -->
 <template>
   <div class="price-range-filter p-[8px_36px]">
     <div class="range-title mb-[17px]">{{ t('price_range_title') }}</div>
@@ -35,6 +34,7 @@
           />
         </div>
       </div>
+      <!-- Ползунок -->
       <div class="range-slider w-full px-4">
         <Slider
             v-model="priceRange"
@@ -65,7 +65,6 @@ const currencyStore = useCurrencyStore()
 
 const min = ref(0)
 const max = ref(0)
-
 const priceRange = ref([0, 0])
 
 const maxLimit = computed(() => {
@@ -98,12 +97,20 @@ const syncQueryParams = () => {
 }
 
 onMounted(syncQueryParams)
-watch(() => currencyStore.getCurrency, syncQueryParams)
+
+watch(() => currencyStore.getCurrency, () => {
+  min.value = 0
+  max.value = maxLimit.value
+  priceRange.value = [0, maxLimit.value]
+
+  const updatedQuery = { ...route.query }
+  delete updatedQuery.price
+  router.push({ query: updatedQuery })
+})
 
 const updatePriceRange = () => {
   min.value = Math.max(0, Math.min(min.value, maxLimit.value))
   max.value = Math.max(min.value, Math.min(max.value, maxLimit.value))
-
   priceRange.value = [min.value, max.value]
 }
 
