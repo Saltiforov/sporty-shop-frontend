@@ -159,7 +159,7 @@ import FiltersSkeleton from "~/components/Skeletons/FiltersSkeleton/FiltersSkele
 
 const {$eventBus} = useNuxtApp()
 
-const {t} = useI18n();
+const {t, locale} = useI18n();
 
 const route = useRoute()
 
@@ -190,7 +190,7 @@ updateQueryParams();
 
 const {data: catalog, pending, error} = await useAsyncData(
     'products catalog',
-    () => getAllProducts(productsQueryParams.value),
+    () => getAllProducts({ ...productsQueryParams.value, ...{ locale: locale.value } }),
     {watch: [productsQueryParams]}
 )
 
