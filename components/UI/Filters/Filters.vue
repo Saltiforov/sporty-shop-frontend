@@ -6,22 +6,28 @@
             display: 'none',
           }
         },
+        nodeToggleButton: {
+                style: {
+                  display: 'none',
+                }
+              },
       }"
       :value="nodes"
       :expanded-keys="expandedKeys"
       @update:expandedKeys="onExpandedKeysChange"
-      class="w-full p-2 rounded-[var(--default-rounded)]"
+      class="w-full p-7 pb-[2px] rounded-[var(--default-rounded)]"
       :toggler-icon="null"
   >
     <template #togglericon></template>
 
     <template #default="slotProps">
-      <div :class="[
-        'flex items-center justify-start gap-2 ',
-        isRootNode(slotProps.node) ? 'pb-3' : '',
-        isRootNode(slotProps.node) && expandedKeys[slotProps.node.key] ? 'w-[50%] mx-auto' : ''
-      ]"
-           :style="[isRootNode(slotProps.node) ? 'width: 278px;' : '']"
+      <div
+          :class="[
+      'flex items-center justify-start gap-2 ',
+      isRootNode(slotProps.node) ? 'pb-3' : '',
+      isRootNode(slotProps.node) && expandedKeys[slotProps.node.key] ? 'w-[50%] mx-auto' : ''
+    ]"
+          :style="[isRootNode(slotProps.node) ? 'width: 278px;' : '']"
       >
         <img
             v-if="isRootNode(slotProps.node)"
@@ -41,60 +47,83 @@
         >
           <svg
               :class="{
-              'rotate-90': expandedKeys[slotProps.node.key],
-              'rotate-0': !expandedKeys[slotProps.node.key]
-            }"
+          'rotate-90': expandedKeys[slotProps.node.key],
+          'rotate-0': !expandedKeys[slotProps.node.key]
+        }"
               class="w-4 h-4 transform transition-transform"
               viewBox="0 0 24 24"
               fill="none"
           >
-            <path d="M8 5L15 12L8 19" stroke="currentColor" stroke-width="2"/>
+            <path d="M8 5L15 12L8 19" stroke="currentColor" stroke-width="2" />
           </svg>
         </button>
       </div>
-      <div v-if="isRootNode(slotProps.node) || slotProps.node.children.length > 1"
-           class="mb-[9px]"
-           :class="['border-b border-[var(--color-muted-gray)]', isRootNode(slotProps.node) && expandedKeys[slotProps.node.key] ? 'w-[50%] mx-auto' : '']"></div>
 
-      <div v-if="slotProps.node.children && expandedKeys[slotProps.node.key]"
-           class="pl-4 mt-2">
+      <div
+          v-if="isRootNode(slotProps.node) || slotProps.node.children.length > 1"
+          class="mb-[9px]"
+          :class="['border-b border-[var(--color-muted-gray)]', isRootNode(slotProps.node) && expandedKeys[slotProps.node.key] ? 'w-[50%] mx-auto' : '']"
+      ></div>
+
+      <transition
+          name="expand"
+          @before-enter="beforeEnter"
+          @enter="enter"
+          @after-enter="afterEnter"
+          @before-leave="beforeLeave"
+          @leave="leave"
+          @after-leave="afterLeave"
+      >
         <div
-            v-for="(child, idx) in slotProps.node.children"
-            :key="child.key"
-            class="node-child flex items-center"
-            :style="{
-                marginBottom:
-                  slotProps.node.children.length > 1 && idx === slotProps.node.children.length - 1
-                    ? '0px'
-                    : '12px'
-              }"
+            v-show="slotProps.node.children && expandedKeys[slotProps.node.key]"
+            class="pl-4 mt-2 overflow-hidden"
+            ref="childList"
         >
-          <CustomCheckbox
-              :modelValue="child.modelValue"
-              @update:modelValue="val => onNodeCheckboxChange(child, val)"
-              :unchecked-border-color="'#7F7F7F80'"
-              :border-radius="'4px'"
-              @click.stop
-          />
-          <span class="filters-block-text text-sm">{{ child.label }}</span>
-        </div>
-        <div v-if="slotProps.node.children && slotProps.node.children.length > 1 && expandedKeys[slotProps.node.key]"
-             class="pt-3 mb-3 text-sm cursor-pointer filters-block-text w-[50%] mx-auto flex justify-center">
+          <div
+              v-for="(child, idx) in slotProps.node.children"
+              :key="child.key"
+              class="node-child flex items-center"
+              :style="{
+          marginBottom:
+            slotProps.node.children.length > 1 && idx === slotProps.node.children.length - 1
+              ? '0px'
+              : '12px'
+        }"
+          >
+            <CustomCheckbox
+                :modelValue="child.modelValue"
+                @update:modelValue="val => onNodeCheckboxChange(child, val)"
+                :unchecked-border-color="'#7F7F7F80'"
+                :border-radius="'4px'"
+                @click.stop
+            />
+            <span class="filters-block-text text-sm">{{ child.label }}</span>
+          </div>
+
+          <div
+              v-if="slotProps.node.children && slotProps.node.children.length > 1 && expandedKeys[slotProps.node.key]"
+              class="pt-3 mb-3 text-sm cursor-pointer filters-block-text w-[50%] mx-auto flex justify-center"
+          >
         <span
             class="text-[12px]"
             :style="{
-              color: areAllChildrenSelected(slotProps.node)
-                ? 'var(--small-title-color)'
-                : 'var(--color-primary-purple)'
-            }"
+            color: areAllChildrenSelected(slotProps.node)
+              ? 'var(--small-title-color)'
+              : 'var(--color-primary-purple)'
+          }"
             @click.stop="onNodeCheckboxChange(slotProps.node, !slotProps.node.modelValue)"
-        >Select all</span>
-        </div>
-        <div v-if="slotProps.node.children.length > 1"
-             class="mb-[8px]"
-             :class="['border-b border-[var(--color-muted-gray)]', isRootNode(slotProps.node) && expandedKeys[slotProps.node.key] ? 'w-full' : '']"></div>
-      </div>
+        >
+          Select all
+        </span>
+          </div>
 
+          <div
+              v-if="slotProps.node.children.length > 1"
+              class="mb-[8px]"
+              :class="['border-b border-[var(--color-muted-gray)]', isRootNode(slotProps.node) && expandedKeys[slotProps.node.key] ? 'w-full' : '']"
+          ></div>
+        </div>
+      </transition>
     </template>
 
 
@@ -255,4 +284,37 @@ watch(() => route.query.filters, (newFilters) => {
     syncTreeWithQuery()
   }
 })
+
+const childList = ref(null);
+
+const beforeEnter = el => {
+  el.style.height = '0'
+}
+const enter = el => {
+  el.style.height = el.scrollHeight + 'px'
+}
+const afterEnter = el => {
+  el.style.height = 'auto'
+}
+const beforeLeave = el => {
+  el.style.height = el.scrollHeight + 'px'
+}
+const leave = el => {
+  el.style.height = '0'
+}
+const afterLeave = el => {
+  el.style.height = 'auto'
+}
 </script>
+
+<style scoped>
+.expand-enter-active,
+.expand-leave-active {
+  transition: height 0.3s ease;
+}
+.expand-enter-from,
+.expand-leave-to {
+  height: 0;
+  overflow: hidden;
+}
+</style>

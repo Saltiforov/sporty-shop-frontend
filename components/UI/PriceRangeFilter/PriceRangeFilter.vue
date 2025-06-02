@@ -1,8 +1,7 @@
 <template>
-  <div class="price-range-filter p-[8px_36px]">
-    <div class="range-title mb-[17px]">{{ t('price_range_title') }}</div>
-    <div class="range-fields-wrapper flex flex-col gap-4">
-      <!-- Поля ввода для min и max -->
+  <div class="price-range-filter p-[8px_36px] pb-10">
+    <div class="range-title mb-[9px]">{{ t('price_range_title', {currency: currentCurrency}) }}</div>
+    <div class="range-fields-wrapper flex flex-col gap-[29px]">
       <div class="range-fields w-full flex justify-between items-center">
         <div class="flex items-center gap-2">
           <InputNumber
@@ -24,7 +23,6 @@
               :inputStyle="{ padding: '0 10px', textAlign: 'center', maxWidth: '80px' }"
               @update:modelValue="updatePriceRange"
           />
-          <span class="ml-2">{{ currencyLabel }}</span>
         </div>
         <div>
           <Button
@@ -34,9 +32,28 @@
           />
         </div>
       </div>
-      <!-- Ползунок -->
       <div class="range-slider w-full px-4">
         <Slider
+            :pt="{
+              root: {
+                class: 'h-[1px]',
+                style: {
+        '--p-slider-handle-width': '12px',
+        '--p-slider-handle-height': '12px',
+         '--p-slider-handle-content-width': '12px',
+        '--p-slider-handle-content-height': '12px',
+        '--p-slider-handle-background': 'var(--color-primary-purple)',
+        '--p-slider-handle-content-background': 'var(--color-primary-purple)',
+        '--p-slider-handle-content-hover-background': 'var(--color-primary-purple)',
+        '--p-slider-range-background': 'var(--color-primary-purple)',
+         '--p-slider-handle-focus-ring-shadow': 'none',
+        '--p-slider-handle-focus-ring-width': '0',
+      }
+              },
+              range: {
+                style: sliderRangeStyles
+              },
+            }"
             v-model="priceRange"
             range
             :min="0"
@@ -50,15 +67,15 @@
 </template>
 
 <script setup>
-import { useI18n } from 'vue-i18n'
-import { useCurrencyStore } from '~/stores/currency'
-import { ref, computed, watch, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import {useI18n} from 'vue-i18n'
+import {useCurrencyStore} from '~/stores/currency'
+import {ref, computed, watch, onMounted} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
 import InputNumber from 'primevue/inputnumber'
 import Slider from 'primevue/slider'
 import Button from 'primevue/button'
 
-const { t } = useI18n()
+const {t} = useI18n()
 const route = useRoute()
 const router = useRouter()
 const currencyStore = useCurrencyStore()
@@ -71,8 +88,13 @@ const maxLimit = computed(() => {
   return currencyStore.isUAHSelected ? 10000 : 1000
 })
 
-const currencyLabel = computed(() => {
-  return currencyStore.isUAHSelected ? 'uah' : 'eur'
+const currentCurrency = computed(() => currencyStore.getCurrency.toUpperCase())
+
+const sliderRangeStyles = computed(() => {
+  return {
+    backgroundColor: 'var(--color-primary-purple)',
+    height: '2px',
+  }
 })
 
 const syncQueryParams = () => {
@@ -103,9 +125,9 @@ watch(() => currencyStore.getCurrency, () => {
   max.value = maxLimit.value
   priceRange.value = [0, maxLimit.value]
 
-  const updatedQuery = { ...route.query }
+  const updatedQuery = {...route.query}
   delete updatedQuery.price
-  router.push({ query: updatedQuery })
+  router.push({query: updatedQuery})
 })
 
 const updatePriceRange = () => {
@@ -125,7 +147,7 @@ const applyPriceRange = () => {
     ...route.query,
     price: `min-${min.value},max-${max.value}`
   }
-  router.push({ query: updatedQuery })
+  router.push({query: updatedQuery})
 }
 </script>
 
@@ -133,16 +155,34 @@ const applyPriceRange = () => {
 .range-field {
   background: black;
 }
+
+.custom-slider-handle::before {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background-color: white;
+  border-radius: 9999px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .range-button {
-  padding: 0;
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 500;
+  padding: 0px 22px;
   background-color: var(--color-primary-purple);
   border: none;
 }
+
 .range-button:hover {
-  padding: 0;
+  padding: 0px 22px;
   background-color: var(--color-primary-purple);
   border: none;
 }
+
 @media (max-width: 450px) {
   .price-range-filter {
     padding: 8px 16px;

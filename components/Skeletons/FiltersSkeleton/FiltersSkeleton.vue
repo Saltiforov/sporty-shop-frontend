@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-2 rounded-[var(--default-rounded)] h-[500px] bg-white shadow animate-pulse space-y-4">
+  <div class="w-full p-2 rounded-[var(--default-rounded)] min-h-[675px] bg-white shadow animate-pulse space-y-4">
     <div class="border-b pb-2">
       <div class="flex items-center gap-2">
         <div class="w-5 h-5 bg-gray-200 rounded" />
@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <div class="pl-6 space-y-2">
+    <div class="pl-6 space-y-2" v-for="i in nestedFiltersCount" :key="'nested-' + i">
       <div class="flex items-center gap-2">
         <div class="flex-1 h-4 bg-gray-200 rounded" />
         <div class="w-5 h-5 bg-gray-300 rounded ml-auto" />
@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="border-b pt-2 pb-2">
+    <div class="border-b pt-2 pb-2" v-for="i in simpleBlocksCount" :key="'simple-' + i">
       <div class="flex items-center gap-2">
         <div class="w-5 h-5 bg-gray-200 rounded" />
         <div class="flex-1 h-4 bg-gray-200 rounded" />
@@ -36,3 +36,7 @@
   </div>
 </template>
 
+<script setup>
+const nestedFiltersCount = 2
+const simpleBlocksCount = 4
+</script>

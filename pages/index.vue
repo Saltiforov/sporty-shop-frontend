@@ -40,7 +40,7 @@
 
         <div class="main-content min-h-screen grid-cols-1 grid lg:grid-cols-[354px_1fr] gap-[89px]">
           <aside class="rounded-md">
-            <div class="filters mb-[91px] w-full max-w-[354px] h-[554px] border rounded-[var(--default-rounded)]">
+            <div class="filters mb-[91px] w-full max-w-[354px] min-h-[575px] border rounded-[var(--default-rounded)]">
               <Filters v-if="hydrated"/>
               <FiltersSkeleton v-else/>
             </div>
