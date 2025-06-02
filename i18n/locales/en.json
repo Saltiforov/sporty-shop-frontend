@@ -54,8 +54,8 @@
   "payment_instruction_text_part1": "Go to",
   "payment_instruction_text_part2": "and complete the payment",
 
-  "price_range_title": "Price, UAH",
-  "price_range_ok_button": "OK",
+  "price_range_title": "Price, {currency}",
+  "price_range_ok_button": "Ok",
 
   "promo_products_title": "Promotional Products",
   "recommended_products": "Recommended Products",

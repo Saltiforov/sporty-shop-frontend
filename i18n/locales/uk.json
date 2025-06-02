@@ -54,8 +54,8 @@
   "payment_instruction_text_part1": "Перейдіть у",
   "payment_instruction_text_part2": "та оплатіть замовлення",
 
-  "price_range_title": "Ціна, грн",
-  "price_range_ok_button": "ОК",
+  "price_range_title": "Ціна, {currency}",
+  "price_range_ok_button": "Ок",
 
   "promo_products_title": "Акційні товари",
   "recommended_products": "Рекомендовані товари",

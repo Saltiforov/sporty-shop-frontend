@@ -47,6 +47,12 @@
 
       </nav>
     </div>
+    <nav class="menu w-full text-[red] flex">
+      <button @click="handleMobileMenu">
+        <img v-if="!isOpen" src="~/assets/icons/menu-icon-open.svg" alt="menu-icon-open.svg">
+        <img v-else src="~/assets/icons/menu-icon-close.svg" alt="menu-icon-close.svg">
+      </button>
+    </nav>
   </header>
 
 
@@ -238,7 +244,7 @@ const links = ref([
 @media (max-width: 950px) {
   .product-search-wrapper {
     position: absolute !important;
-    top: 95px !important;
+    top: 118px !important;
     right: 20px !important;
     left: auto !important;
   }
@@ -258,6 +264,9 @@ const links = ref([
 
 @media (max-width: 670px) {
   .action-panel {
+    display: none;
+  }
+  .menu {
     display: none;
   }
   .product-search-wrapper {

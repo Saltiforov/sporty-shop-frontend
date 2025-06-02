@@ -1,5 +1,12 @@
 <template>
   <Tree
+      :pt="{
+        nodeChildren: {
+          style: {
+            display: 'none',
+          }
+        },
+      }"
       :value="nodes"
       :expanded-keys="expandedKeys"
       @update:expandedKeys="onExpandedKeysChange"
@@ -10,29 +17,18 @@
 
     <template #default="slotProps">
       <div :class="[
-        'flex items-center gap-2 w-full',
-        slotProps.node.icon ? 'pb-2' : '',
-        slotProps.node.icon && expandedKeys[slotProps.node.key] ? 'w-[50%] mx-auto' : ''
+        'flex items-center justify-start gap-2 ',
+        isRootNode(slotProps.node) ? 'pb-3' : '',
+        isRootNode(slotProps.node) && expandedKeys[slotProps.node.key] ? 'w-[50%] mx-auto' : ''
       ]"
-           :style="[slotProps.node.icon ? 'width: 278px;' : '']"
+           :style="[isRootNode(slotProps.node) ? 'width: 278px;' : '']"
       >
         <img
-            v-if="slotProps.node.icon"
+            v-if="isRootNode(slotProps.node)"
             :src="slotProps.node.icon"
             alt="icon"
             class="w-5 h-5"
         />
-
-        <div class="ml-auto">
-          <CustomCheckbox
-              v-if="!isRootNode(slotProps.node)"
-              :unchecked-border-color="'#7F7F7F80'"
-              :border-radius="'4px'"
-              :modelValue="slotProps.node.modelValue"
-              @update:modelValue="(val) => onNodeCheckboxChange(slotProps.node, val)"
-              @click.stop
-          />
-        </div>
 
         <b @click.stop="onNodeCheckboxChange(slotProps.node)" class="cursor-pointer filters-block-text">
           {{ slotProps.node.label }}
@@ -56,14 +52,51 @@
           </svg>
         </button>
       </div>
-      <div v-if="slotProps.node.children && slotProps.node.children.length > 1 && expandedKeys[slotProps.node.key]" class="mt-2 text-sm cursor-pointer filters-block-text w-[50%] mx-auto">
+      <div v-if="isRootNode(slotProps.node) || slotProps.node.children.length > 1"
+           class="mb-[9px]"
+           :class="['border-b border-[var(--color-muted-gray)]', isRootNode(slotProps.node) && expandedKeys[slotProps.node.key] ? 'w-[50%] mx-auto' : '']"></div>
+
+      <div v-if="slotProps.node.children && expandedKeys[slotProps.node.key]"
+           class="pl-4 mt-2">
+        <div
+            v-for="(child, idx) in slotProps.node.children"
+            :key="child.key"
+            class="node-child flex items-center"
+            :style="{
+                marginBottom:
+                  slotProps.node.children.length > 1 && idx === slotProps.node.children.length - 1
+                    ? '0px'
+                    : '12px'
+              }"
+        >
+          <CustomCheckbox
+              :modelValue="child.modelValue"
+              @update:modelValue="val => onNodeCheckboxChange(child, val)"
+              :unchecked-border-color="'#7F7F7F80'"
+              :border-radius="'4px'"
+              @click.stop
+          />
+          <span class="filters-block-text text-sm">{{ child.label }}</span>
+        </div>
+        <div v-if="slotProps.node.children && slotProps.node.children.length > 1 && expandedKeys[slotProps.node.key]"
+             class="pt-3 mb-3 text-sm cursor-pointer filters-block-text w-[50%] mx-auto flex justify-center">
         <span
-            :class="{'text-green-500': areAllChildrenSelected(slotProps.node), 'text-blue-500': !areAllChildrenSelected(slotProps.node)}"
+            class="text-[12px]"
+            :style="{
+              color: areAllChildrenSelected(slotProps.node)
+                ? 'var(--small-title-color)'
+                : 'var(--color-primary-purple)'
+            }"
             @click.stop="onNodeCheckboxChange(slotProps.node, !slotProps.node.modelValue)"
         >Select all</span>
+        </div>
+        <div v-if="slotProps.node.children.length > 1"
+             class="mb-[8px]"
+             :class="['border-b border-[var(--color-muted-gray)]', isRootNode(slotProps.node) && expandedKeys[slotProps.node.key] ? 'w-full' : '']"></div>
       </div>
-      <div v-if="slotProps.node.icon" :class="['border-b border-[var(--color-muted-gray)]', slotProps.node.icon && expandedKeys[slotProps.node.key] ? 'w-[50%] mx-auto' : '']"></div>
+
     </template>
+
 
     <template #nodeicon="slotProps">
       <div></div>
@@ -74,17 +107,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import {ref, onMounted, watch} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
 import CustomCheckbox from "~/components/UI/CustomCheckbox/CustomCheckbox.vue"
 import PriceRangeFilter from "~/components/UI/PriceRangeFilter/PriceRangeFilter.vue"
-import { getAllFilters } from "~/services/api/filters-http.service.js"
-const { t, locale } = useI18n()
+import {getAllFilters} from "~/services/api/filters-http.service.js"
+
+const {t, locale} = useI18n()
 const route = useRoute()
 const router = useRouter()
 
 const nodes = ref([])
-const expandedKeys = ref({ "0": true })
+const expandedKeys = ref({"0": true})
 
 const isRootNode = (node) => !node.key.includes('-')
 
@@ -129,7 +163,7 @@ const getSlugsFromQuery = () => {
 }
 
 const buildNewQuery = (routerQuery, newSlugs) => {
-  const nextQuery = { ...routerQuery }
+  const nextQuery = {...routerQuery}
   if (newSlugs.length) {
     nextQuery.filters = newSlugs.join(',')
   } else {
