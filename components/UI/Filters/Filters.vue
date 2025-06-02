@@ -14,7 +14,7 @@
         slotProps.node.icon ? 'pb-2' : '',
         slotProps.node.icon && expandedKeys[slotProps.node.key] ? 'w-[50%] mx-auto' : ''
       ]"
-           :style="[slotProps.node.icon ? 'width: 278px; ' : '']"
+           :style="[slotProps.node.icon ? 'width: 278px;' : '']"
       >
         <img
             v-if="slotProps.node.icon"
@@ -74,102 +74,112 @@
 </template>
 
 <script setup>
-import {ref, onMounted} from 'vue'
-import {useRoute, useRouter} from 'vue-router'
+import { ref, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import CustomCheckbox from "~/components/UI/CustomCheckbox/CustomCheckbox.vue"
-import PriceRangeFilter from "~/components/UI/PriceRangeFilter/PriceRangeFilter.vue";
-import {getAllFilters} from "~/services/api/filters-http.service.js";
-const { t, locale } = useI18n();
-const route = useRoute();
-const router = useRouter();
-const { $eventBus } = useNuxtApp();
+import PriceRangeFilter from "~/components/UI/PriceRangeFilter/PriceRangeFilter.vue"
+import { getAllFilters } from "~/services/api/filters-http.service.js"
+const { t, locale } = useI18n()
+const route = useRoute()
+const router = useRouter()
 
-const nodes = ref([]);
-const expandedKeys = ref({ "0": true });
+const nodes = ref([])
+const expandedKeys = ref({ "0": true })
 
-const isRootNode = (node) => !node.key.includes('-');
+const isRootNode = (node) => !node.key.includes('-')
 
 const toggle = (node) => {
-  expandedKeys.value[node.key] = !expandedKeys.value[node.key];
-};
+  expandedKeys.value[node.key] = !expandedKeys.value[node.key]
+}
 
 const collectAllSlugs = (node) => {
-  const slugs = [node.slug];
+  const slugs = [node.slug]
   if (Array.isArray(node.children) && node.children.length) {
     node.children.forEach(child => {
-      slugs.push(...collectAllSlugs(child));
-    });
+      slugs.push(...collectAllSlugs(child))
+    })
   }
-  return slugs;
-};
+  return slugs
+}
 
 const updateNodeAndChildren = (node, isChecked) => {
-  node.modelValue = isChecked;
+  node.modelValue = isChecked
   if (Array.isArray(node.children) && node.children.length) {
-    node.children.forEach(child => updateNodeAndChildren(child, isChecked));
+    node.children.forEach(child => updateNodeAndChildren(child, isChecked))
   }
-};
+}
 
 const findNodeBySlug = (nodes, targetSlug) => {
   for (const node of nodes) {
-    if (node.slug === targetSlug) return node;
+    if (node.slug === targetSlug) return node
     if (Array.isArray(node.children) && node.children.length) {
-      const found = findNodeBySlug(node.children, targetSlug);
-      if (found) return found;
+      const found = findNodeBySlug(node.children, targetSlug)
+      if (found) return found
     }
   }
-  return null;
-};
+  return null
+}
 
 const getSlugsFromQuery = () => {
-  const raw = route.query.filters;
+  const raw = route.query.filters
   if (typeof raw === 'string' && raw.length) {
-    return raw.split(',').filter(s => s.length);
+    return raw.split(',').filter(s => s.length)
   }
-  return [];
-};
+  return []
+}
 
 const buildNewQuery = (routerQuery, newSlugs) => {
-  const nextQuery = { ...routerQuery };
+  const nextQuery = { ...routerQuery }
   if (newSlugs.length) {
-    nextQuery.filters = newSlugs.join(',');
+    nextQuery.filters = newSlugs.join(',')
   } else {
-    delete nextQuery.filters;
+    delete nextQuery.filters
   }
-  return nextQuery;
-};
+  return nextQuery
+}
 
 const areAllChildrenSelected = (node) => {
-  if (!node.children || node.children.length === 0) return false;
-  return node.children.every(child => child.modelValue === true);
-};
+  if (!node.children || node.children.length === 0) return false
+  return node.children.every(child => child.modelValue === true)
+}
+
+const expandParentNodes = (nodeKey) => {
+  const keys = nodeKey.split('-')
+  keys.forEach((_, index) => {
+    const partialKey = keys.slice(0, index + 1).join('-')
+    if (partialKey) {
+      expandedKeys.value[partialKey] = true
+    }
+  })
+}
 
 const onNodeCheckboxChange = async (node, isChecked) => {
-  updateNodeAndChildren(node, isChecked);
+  updateNodeAndChildren(node, isChecked)
 
-  const allSlugs = [];
+  const allSlugs = []
   const collectSelectedSlugs = (nodes) => {
     nodes.forEach(n => {
       if (n.modelValue) {
-        allSlugs.push(n.slug);
+        allSlugs.push(n.slug)
+        expandParentNodes(n.key)
       }
       if (Array.isArray(n.children) && n.children.length) {
-        collectSelectedSlugs(n.children);
+        collectSelectedSlugs(n.children)
       }
-    });
-  };
-  collectSelectedSlugs(nodes.value);
+    })
+  }
+  collectSelectedSlugs(nodes.value)
 
-  const nextQuery = buildNewQuery(route.query, allSlugs);
+  const nextQuery = buildNewQuery(route.query, allSlugs)
   await router.replace({
     path: route.path,
     query: nextQuery,
-  });
-};
+  })
+}
 
 const mapNodes = (inputArray) => {
   const mapNode = (item, idx, parentKey = '') => {
-    const key = parentKey ? `${parentKey}-${idx}` : `${idx}`;
+    const key = parentKey ? `${parentKey}-${idx}` : `${idx}`
     return {
       key,
       id: item._id,
@@ -180,28 +190,35 @@ const mapNodes = (inputArray) => {
       children: item.children && item.children.length
           ? item.children.map((child, childIdx) => mapNode(child, childIdx, key))
           : [],
-    };
-  };
-  return inputArray.map((item, idx) => mapNode(item, idx));
-};
+    }
+  }
+  return inputArray.map((item, idx) => mapNode(item, idx))
+}
 
 const syncTreeWithQuery = () => {
-  const querySlugs = getSlugsFromQuery();
+  const querySlugs = getSlugsFromQuery()
   querySlugs.forEach(slug => {
-    const node = findNodeBySlug(nodes.value, slug);
+    const node = findNodeBySlug(nodes.value, slug)
     if (node) {
-      updateNodeAndChildren(node, true);
+      updateNodeAndChildren(node, true)
+      expandParentNodes(node.key)
     }
-  });
-};
+  })
+}
 
 const onExpandedKeysChange = (newExpandedKeys) => {
-  expandedKeys.value = newExpandedKeys;
-};
+  expandedKeys.value = newExpandedKeys
+}
 
 onMounted(async () => {
-  const response = await getAllFilters();
-  nodes.value = mapNodes(response.list);
-  syncTreeWithQuery();
-});
+  const response = await getAllFilters()
+  nodes.value = mapNodes(response.list)
+  syncTreeWithQuery()
+})
+
+watch(() => route.query.filters, (newFilters) => {
+  if (newFilters) {
+    syncTreeWithQuery()
+  }
+})
 </script>

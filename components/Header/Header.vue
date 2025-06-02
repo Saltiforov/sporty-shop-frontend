@@ -2,7 +2,7 @@
   <header class="flex relative  header flex-col items-end pt-[13px] pr-[24px] pb-[8px] pl-[71px]">
     <div class="header-content w-full items-end flex">
       <div class="logo mr-[67px]">
-        <NuxtLink to="/">
+        <NuxtLink :to="logoLink">
           <NuxtImg
               src="/images/header-logo.svg"
               alt="header-logo"
@@ -75,9 +75,13 @@ const {t} = useI18n();
 
 const token = useCookie('token')
 
+const route = useRoute()
+
 const authPopup = useAuthPopup()
 
 const {logUserOut} = useAuthStore();
+
+const localePath = useLocalePath()
 
 const {authenticated, currentUser} = storeToRefs(useAuthStore());
 
@@ -103,6 +107,17 @@ const logout = () => {
   navigateTo('/')
 }
 
+const isHomePage = computed(() => {
+  const normalizedPath = route.path.replace(/^\/(en|uk)/, '')
+  return normalizedPath === '/' || normalizedPath === ''
+})
+
+const logoLink = computed(() => {
+  if (isHomePage.value) {
+    return localePath({ path: '/', query: route.query })
+  }
+  return localePath('/')
+})
 
 const items = computed(() => {
   if (authenticated.value) {

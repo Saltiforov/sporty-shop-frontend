@@ -227,14 +227,9 @@ const getPromotionalProducts = async () => {
 }
 
 const isLoading = ref(false)
-const searchStore = useSearchStore()
 
 onMounted(async () => {
   isLoading.value = true
-  searchStore.setSearchCallback(async (query) => {
-    console.log('🔍 Поиск снаружи:', query)
-  })
-
   // await getPromotionalProducts()
 
   hydrated.value = true
