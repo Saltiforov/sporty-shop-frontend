@@ -128,21 +128,20 @@ definePageMeta({
 
 useHead({
   meta: [
-    {property: 'og:type', content: 'website'},
-    {property: 'og:url', content: 'http://localhost:4000/'},
-    {property: 'og:title', content: 'Магазин спортивного питания | SP BALKAN'},
-    {property: 'og:description', content: 'Лучший выбор протеинов и BCAA в Украине.'},
-    {property: 'og:image', content: 'https://example.com/og-image.jpg'},
-
-    {name: 'twitter:card', content: 'summary_large_image'},
-    {name: 'twitter:title', content: 'Магазин спортивного питания | SP BALKAN'},
-    {name: 'twitter:description', content: 'Лучший выбор протеинов и BCAA в Украине.'},
-    {name: 'twitter:image', content: 'https://example.com/twitter-image.jpg'},
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: 'http://localhost:4000/' },
+    { property: 'og:title', content: 'Магазин спортивного питания | SP BALKAN' },
+    { property: 'og:description', content: 'Лучший выбор протеинов и BCAA в Украине.' },
+    { property: 'og:image', content: 'https://example.com/og-image.jpg' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Магазин спортивного питания | SP BALKAN' },
+    { name: 'twitter:description', content: 'Лучший выбор протеинов и BCAA в Украине.' },
+    { name: 'twitter:image', content: 'https://example.com/twitter-image.jpg' },
   ],
   link: [
-    {rel: 'canonical', href: 'http://localhost:4000/'},
-    {rel: 'alternate', href: 'http://localhost:4000/ua/', hreflang: 'uk'},
-    {rel: 'alternate', href: 'http://localhost:4000/en/', hreflang: 'en'}
+    { rel: 'canonical', href: 'http://localhost:4000/' },
+    { rel: 'alternate', href: 'http://localhost:4000/ua/', hreflang: 'uk' },
+    { rel: 'alternate', href: 'http://localhost:4000/en/', hreflang: 'en' }
   ]
 })
 
@@ -150,28 +149,21 @@ import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
 import BasePagination from "~/components/UI/BasePagination/BasePagination.vue";
 import Filters from "~/components/UI/Filters/Filters.vue";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
-import {useQueryParams} from "~/composables/useQueryParams.js";
-import {getAllProducts, getProductsOnSale} from "~/services/api/product-service.js";
-
-import {useToastManager} from "~/composables/useToastManager.js";
-import {useViewedProducts} from "~/composables/useViewedProducts.js";
+import { useQueryParams } from "~/composables/useQueryParams.js";
+import { getAllProducts, getProductsOnSale } from "~/services/api/product-service.js";
+import { useToastManager } from "~/composables/useToastManager.js";
+import { useViewedProducts } from "~/composables/useViewedProducts.js";
 import FiltersSkeleton from "~/components/Skeletons/FiltersSkeleton/FiltersSkeleton.vue";
 
-const {$eventBus} = useNuxtApp()
-
-const {t, locale} = useI18n();
-
+const { $eventBus } = useNuxtApp()
+const { t, locale } = useI18n()
 const route = useRoute()
-
 const router = useRouter()
 
 const page = ref(Number(route.query.page) || 1)
-
 const limit = ref(Number(route.query.limit) || 10)
-
 const skip = computed(() => (page.value - 1) * limit.value)
-
-const q = computed(() => (route.query.q ?? ''));
+const q = computed(() => (route.query.q ?? ''))
 
 const productsQueryParams = computed(() => {
   return {
@@ -179,19 +171,32 @@ const productsQueryParams = computed(() => {
     limit: limit.value,
     skip: skip.value,
     filters: route.query.filters,
-    ...(q.value ? {q: q.value} : {}),
+    ...(q.value ? { q: q.value } : {}),
   }
 })
 
+const { updateQueryParams } = useQueryParams(productsQueryParams)
+updateQueryParams()
 
-const {updateQueryParams} = useQueryParams(productsQueryParams);
+const sortQueryParams = (query) => {
+  const order = ['page', 'limit', 'skip', 'filters', 'q']
+  const sortedQuery = {}
+  order.forEach(key => {
+    if (query[key] !== undefined) {
+      sortedQuery[key] = query[key]
+    }
+  })
+  return sortedQuery
+}
 
-updateQueryParams();
-
-const {data: catalog, pending, error} = await useAsyncData(
+const { data: catalog, pending, error } = await useAsyncData(
     'products catalog',
-    () => getAllProducts({ ...productsQueryParams.value, ...{ locale: locale.value } }),
-    {watch: [productsQueryParams]}
+    () => {
+      const sortedQuery = sortQueryParams(productsQueryParams.value)
+      router.push({ query: sortedQuery })
+      return getAllProducts({ ...productsQueryParams.value, ...{ locale: locale.value } })
+    },
+    { watch: [productsQueryParams] }
 )
 
 const products = computed(() => catalog.value?.list || [])
@@ -205,14 +210,11 @@ const promotionalProductsSwiperOptions = {
   slidesPerView: 1,
   loop: true,
 }
-const {addProductToViewed} = useViewedProducts()
 
+const { addProductToViewed } = useViewedProducts()
 const hydrated = ref(false)
-
-const {showProductAddedToast} = useToastManager()
-
+const { showProductAddedToast } = useToastManager()
 const isMobileFiltersOpen = ref(false)
-
 const promotionalProducts = ref([])
 
 const showToast = (product) => {
@@ -225,7 +227,6 @@ const getPromotionalProducts = async () => {
 }
 
 const isLoading = ref(false)
-
 const searchStore = useSearchStore()
 
 onMounted(async () => {
@@ -234,12 +235,11 @@ onMounted(async () => {
     console.log('🔍 Поиск снаружи:', query)
   })
 
-
   // await getPromotionalProducts()
 
   hydrated.value = true
   isLoading.value = false
-});
+})
 
 onBeforeUnmount(() => {
   $eventBus.off('filters-updated')

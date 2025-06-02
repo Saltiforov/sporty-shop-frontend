@@ -1,13 +1,12 @@
 <template>
-  <Breadcrumb :pt="{
-    list: {
-      style: {
-        flexWrap: 'wrap'
-      }
-    }
-  }" class="breadcrumb" :model="breadcrumbItems">
+  <Breadcrumb :pt="{ list: { style: { flexWrap: 'wrap' } } }" class="breadcrumb" :model="breadcrumbItems">
     <template #item="{ item }">
-      <NuxtLink v-if="item.to" :to="item.to" class="cursor-pointer breadcrumb-text">
+      <NuxtLink
+          v-if="item.to"
+          :to="item.to"
+          class="cursor-pointer breadcrumb-text"
+          @click.prevent="handleLinkClick(item)"
+      >
         {{ item.label }}
       </NuxtLink>
       <span class="breadcrumb-text" v-else>{{ item.label }}</span>
@@ -17,22 +16,24 @@
 </template>
 
 <script setup>
-import {useRoute} from 'vue-router'
+import { computed } from 'vue'
 
 const props = defineProps({
   product: {
     type: Object,
-    default: () => ({filters: [], productTitle: ''})
+    default: () => ({ filters: [], productTitle: '' })
   }
 })
 
-const {t, locale} = useI18n()
+const { t, locale } = useI18n()
 const route = useRoute()
+const router = useRouter()
+const localePath = useLocalePath()
 
 const breadcrumbItems = computed(() => {
   const mainPage = {
     label: t('navigation_home'),
-    to: '/'
+    to: localePath('/')
   }
 
   const hasProductData = props.product.productTitle?.trim()
@@ -42,8 +43,11 @@ const breadcrumbItems = computed(() => {
 
     if (hasFilters) {
       const localizedFilters = props.product.filters.map(filter => ({
-        label: filter.name?.[locale.value] || filter.name?.ru || '',
-        to: `/catalog/${filter.code}`
+        label: filter.name?.[locale.value],
+        to: localePath({
+          path: `/`,
+          query: { filters: filter.slug[locale.value] }
+        })
       }))
 
       return [
@@ -68,10 +72,7 @@ const breadcrumbItems = computed(() => {
           key = r.meta.breadcrumb
         } else {
           const segments = r.path.split('/').filter(Boolean)
-
-          console.log("segments", segments)
-
-          key = segments[segments.length - 1]?.replace(/-/g, '_') || 'navigation_home'
+          key = segments[segments.length - 1]?.replace(/-()/g, '_') || 'navigation_home'
         }
 
         return {
@@ -82,6 +83,12 @@ const breadcrumbItems = computed(() => {
 
   return [mainPage, ...routeCrumbs]
 })
+
+const handleLinkClick = (item) => {
+  if (item.to) {
+    router.push(item.to)
+  }
+}
 
 </script>
 
