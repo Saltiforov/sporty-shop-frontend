@@ -5,5 +5,10 @@ const router = {
 export const getAllFilters = (params = {}) => {
     const config = useRuntimeConfig()
     const url = `${config.public.apiBase}${router.filters}`
-    return $fetch(url, { params })
+    return $fetch(url,
+        {
+            params,
+            headers: { 'ngrok-skip-browser-warning': 'true' }
+        }
+    )
 }
