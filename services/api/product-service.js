@@ -9,19 +9,25 @@ const router = {
 export const getAllProducts = (params = {}) => {
     const config = useRuntimeConfig()
     const url = `${config.public.apiBase}${router.products}`
-    return $fetch(url, { params })
+    return $fetch(url, { params,       headers: {
+            'ngrok-skip-browser-warning': 'true',
+        } })
 }
 
 export const getProductBySlug = (slug) => {
     const config = useRuntimeConfig()
     const url = `${config.public.apiBase}${router.products}/${slug}`
-    return $fetch(url)
+    return $fetch(url, {       headers: {
+            'ngrok-skip-browser-warning': 'true',
+        } })
 }
 
 export const getSuggestionProductList = (params) => {
     const config = useRuntimeConfig()
     const url = `${config.public.apiBase}${router.products_suggestion}`
-    return $fetch(url, { params })
+    return $fetch(url, { params,       headers: {
+            'ngrok-skip-browser-warning': 'true',
+        } })
 }
 
 export const getProductsOnSale = () => {
