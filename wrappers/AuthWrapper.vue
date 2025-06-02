@@ -6,7 +6,7 @@
           <TabList
               :pt="{
               tabList: {
-                style: 'background-color: var(--color-primary-lavender); border-top: none; border-bottom: 2px solid var(--link-color);'
+                style:  tabListStyles,
               },
             activeBar: {
                 style: {
@@ -17,6 +17,7 @@
             }"
           >
             <Tab
+                :pt="tabStyles"
                 value="login"
                 @click="setActiveTab('login')"
             >
@@ -79,6 +80,15 @@ const activeTab = computed(() => authPopup.popupType)
 
 const isLogin = computed(() => activeTab.value === 'login')
 
+const tabListStyles = computed(() => {
+  return {
+    fontSize: '20px',
+    fontWeight: 400,
+    backgroundColor: 'var(--color-primary-lavender)',
+    borderTop: 'none',
+    borderBottom: '2px solid var(--link-color)',
+  }
+})
 const handleOverlayClick = (e) => {
   if (!popupRef.value?.contains(e.target)) {
     authPopup.close()
@@ -106,7 +116,7 @@ const handleOverlayClick = (e) => {
   background: #E6E7F8;
   border-radius: 12px;
   max-width: 480px;
-  padding: 24px;
+  padding: 24px 24px 32px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 

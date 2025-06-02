@@ -59,6 +59,29 @@ const swiperOptions = {
 </script>
 
 <style scoped>
+:deep(.swiper-pagination) {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+:deep(.swiper-pagination-bullet) {
+  background-color: #d6d6eb;
+  opacity: 1;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+:deep(.swiper-pagination-bullet-active) {
+  background-color: #7e5bef;
+}
+
 @media (max-width: 750px) {
   .main-banner {
     display: none;

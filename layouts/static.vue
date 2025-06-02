@@ -10,3 +10,11 @@
 <script setup lang="ts">
 import LayoutBreadcrumb from "~/components/UI/LayoutBreadcrumb/LayoutBreadcrumb.vue";
 </script>
+
+<style scoped>
+@media (max-width: 400px) {
+  main {
+    padding: 0;
+  }
+}
+</style>

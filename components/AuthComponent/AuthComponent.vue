@@ -6,7 +6,7 @@
         ref="fieldsBlock"
     />
     <div v-if="isLogin" class="reset-password justify-end mb-[27px] flex">
-      <NuxtLink><p class="text-[var(--color-muted-gray)]">{{ t('forgot_password') }}</p></NuxtLink>
+      <NuxtLink><p class="text-[var(--color-muted-gray)] text-[14px]">{{ t('forgot_password') }}</p></NuxtLink>
     </div>
 
     <div :class="wrapperClass">
@@ -15,20 +15,25 @@
       </Button>
     </div>
 
-    <div v-if="responsive && isLogin" :class="['h-[1px]']" :style="dividerStyle"></div>
+    <div v-if="responsive && isLogin || isLogin" :class="['h-[1px]']" :style="dividerStyle"></div>
 
     <div class="login-with-footer">
-      <div v-if="!isLogin" class="flex text-[12px] justify-center">
-        <div v-if="isLogin && responsive" class="flex">
+      <div v-if="isLogin && !responsive" class="flex text-[12px] justify-center">
+        <div class="flex">
           <p class="mr-[17px]">{{ t('new_client') }}</p>
           <p>
-            <NuxtLink @click="authPopup.setType('register')"
-                      class="text-[var(--color-primary-dark-red)] cursor-pointer">{{ t('register_button') }}
+            <NuxtLink
+                @click="authPopup.setType('register')"
+                class="text-[var(--color-primary-dark-red)] cursor-pointer"
+            >
+              {{ t('register_button') }}
             </NuxtLink>
             {{ t('for_good_offers') }}
           </p>
         </div>
-        <p v-else class="text-[var(--color-muted-gray)]">{{ t('user_agreement') }}</p>
+      </div>
+      <div v-else-if="!isLogin" class="flex text-[12px] justify-center">
+        <p class="text-[var(--color-muted-gray)]">{{ t('user_agreement') }}</p>
       </div>
       <div v-if="responsive && isLogin" :class="wrapperClass">
         <p class="title-lg-20 text-center mb-[26px]">{{ t('new_client') }}</p>
@@ -107,7 +112,7 @@ const wrapperClass = computed(() => [
   'auth-button-wrapper',
   'murecho-font',
   'mx-auto',
-  'mb-[37px]',
+  'mb-[36px]',
   props.responsive ? 'responsive-class' : '',
   props.isLogin ? 'max-w-[320px]' : 'max-w-[285px]',
   (!props.isLogin && props.responsive) ? 'responsive-class' : ''
@@ -119,22 +124,28 @@ const rootClass = computed(() => [
 ])
 
 const dividerStyle = computed(() => {
+  const baseStyles = {
+    marginBottom: '24px',
+    height: '1px',
+  }
+
   if (props.responsive) {
     return {
+      ...baseStyles,
       backgroundColor: 'var(--color-primary-blue)',
-      marginBottom: '24px',
-      height: '1px'
     }
   }
+
   if (props.isLogin && !props.responsive) {
     return {
+      ...baseStyles,
       backgroundColor: 'var(--color-primary-pure-white)',
-      marginBottom: '0',
-      height: '1px'
     }
   }
+
   return {}
 })
+
 
 const buttonLabel = computed(() => props.isLogin ? t('login') : t('register_button'))
 

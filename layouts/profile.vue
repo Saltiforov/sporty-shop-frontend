@@ -292,7 +292,7 @@ onMounted(async () => {
   }
 
   .profile-main {
-    padding: 16px 8px 36px;
+    padding: 16px 4px 36px;
   }
 
   .profile-container {

@@ -302,13 +302,11 @@ defineExpose({
 }
 
 @media (max-width: 500px) {
-  .block:first-child {
-    margin-bottom: 0px;
-  }
-
   .form-group {
-    width: 269px;
-    margin: 0 auto;
+    width: 100%;
+  }
+  .block:last-child {
+    margin-bottom: 0px;
   }
 }
 

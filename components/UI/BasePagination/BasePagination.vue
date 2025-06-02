@@ -14,7 +14,7 @@
           }"
       >
               <span class="flex  items-center gap-2">
-        <p class="load-more-button-text">{{ t('show_more_products_count', {count: loadCount}) }} </p>
+        <p class="load-more-button-text">{{ t('show_more_products_count', {count: itemsPerPage}) }} </p>
         <slot name="icon">
           <img src="~/assets/icons/load-more-icon.svg" alt="icon" class="w-4 h-4"/>
         </slot>
@@ -72,7 +72,6 @@ const props = defineProps({
   totalItems: {type: Number, required: true},
   itemsPerPage: {type: Number, default: 10},
   modelValue: {type: Number, default: FIRST_PAGE},
-  loadCount: {type: Number, default: 0},
 })
 const emit = defineEmits(['update:modelValue', 'load-more'])
 

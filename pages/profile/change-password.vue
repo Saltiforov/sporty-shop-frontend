@@ -1,17 +1,18 @@
 <template>
   <section class="change-password">
-    <section class="max-w-[432px]">
+    <section class="max-w-[432px] change-password-content">
       <h1 class="title-lg-20 mb-[30px]">{{ t('change_password') }}</h1>
       <FieldsBlock :config="config.fields" />
-      <div class="max-w-[377px] mx-auto">
-        <Button :pt="{
+    </section>
+    <div class="max-w-[377px] mx-auto">
+      <Button :pt="{
           root: {
             class: 'change-password__btn btn-hover-default'
           }
         }">{{ t('change_password_button') }}
-        </Button>
-      </div>
-    </section>
+      </Button>
+    </div>
+
   </section>
 </template>
 
@@ -118,4 +119,13 @@ const config = {
   width: 100%;
 }
 
+@media (max-width: 520px) {
+  .change-password-content {
+    max-width: 269px;
+    margin: 0 auto;
+  }
+  .change-password__btn {
+    font-size: 14px;
+  }
+}
 </style>

@@ -343,6 +343,7 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
 
   .card-title {
     font-size: 13px;
+    max-width: 157px;
   }
 
   .card-quantity p {

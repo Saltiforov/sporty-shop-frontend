@@ -2,20 +2,24 @@
   <div class="personal-information">
     <LoadingOverlay :visible="isLoading"/>
     <div class="personal-information-content">
-      <h1 class="personal-information-title title-lg-20 mb-[30px]">{{ t('contact_information') }}</h1>
-      <FieldsBlock v-if="userData && userData._id" class="mb-[73px]" :config="config.fields" ref="fieldsBlock" :data="userData"/>
-      <FieldsBlockSkeleton v-else/>
-      <div
-          class="max-w-[338px] mx-auto py-[10px] px-[10px]">
-        <Button v-if="userData && userData._id" @click="savePersonalInformation" :pt="{
+      <div class="main-content">
+        <h1 class="personal-information-title title-lg-20 mb-[30px]">{{ t('contact_information') }}</h1>
+        <FieldsBlock v-if="userData && userData._id" class="personal-information-fields-block mb-[73px] murecho-font"
+                     :config="config.fields" ref="fieldsBlock" :data="userData"/>
+        <FieldsBlockSkeleton v-else/>
+      </div>
+      <div class="footer">
+        <div
+            class="'personal-information-wrapper__btn max-w-[338px] mx-auto">
+          <Button v-if="userData && userData._id" @click="savePersonalInformation" :pt="{
         root: {
           class: 'personal-information__btn btn-hover-default'
         }
       }">{{ t('save') }}
-        </Button>
+          </Button>
+        </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -212,7 +216,7 @@ const config = {
           (value) => (value ? true : "Phone is required"),
           (value) => (value?.toString().length <= 11 ? true : "Phone number must be no more than 11 digits")
         ],
-        render: ({modelValue, 'onUpdate:modelValue': update, disabled }) =>
+        render: ({modelValue, 'onUpdate:modelValue': update, disabled}) =>
             h(InputGroup, {}, {
               default: () => [
                 h(InputGroupAddon, {
@@ -254,7 +258,26 @@ const config = {
   background-color: var(--color-primary-dark);
 }
 
-@media (max-width: 500px) {
-
+@media (max-width: 800px) {
+  .personal-information-fields-block {
+    margin-bottom: 26px;
+  }
 }
+@media (max-width: 520px) {
+  .personal-information-wrapper__btn {
+    padding: 0;
+  }
+  .personal-information__btn {
+    font-size: 14px !important;
+
+  }
+  .main-content {
+    max-width: 269px;
+    margin: 0 auto;
+  }
+  .personal-information-fields-block {
+    max-width: 100%;
+  }
+}
+
 </style>
