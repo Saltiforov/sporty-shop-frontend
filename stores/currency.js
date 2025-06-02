@@ -20,7 +20,7 @@ export const useCurrencyStore = defineStore('currency', () => {
     }
 
     onMounted(() => {
-        const currentCurrency = localStorage.getItem('currency') || 'UAH'
+        const currentCurrency = localStorage.getItem('currency') || 'uah'
         currency.value = currentCurrency.toLowerCase()
     })
 

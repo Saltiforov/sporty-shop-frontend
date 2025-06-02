@@ -155,6 +155,7 @@ import { useToastManager } from "~/composables/useToastManager.js";
 import { useViewedProducts } from "~/composables/useViewedProducts.js";
 import FiltersSkeleton from "~/components/Skeletons/FiltersSkeleton/FiltersSkeleton.vue";
 import { cacheService } from '~/services/cacheService.js'
+import {useCurrencyStore} from "~/stores/currency.js";
 
 const { $eventBus } = useNuxtApp()
 const { t, locale } = useI18n()
@@ -172,6 +173,7 @@ const productsQueryParams = computed(() => {
     limit: limit.value,
     skip: skip.value,
     filters: route.query.filters,
+    price: route.query.price,
     ...(q.value ? { q: q.value } : {}),
   }
 })
@@ -179,8 +181,10 @@ const productsQueryParams = computed(() => {
 const { updateQueryParams } = useQueryParams(productsQueryParams)
 updateQueryParams()
 
+const currencyStore = useCurrencyStore()
+
 const sortQueryParams = (query) => {
-  const order = ['page', 'limit', 'skip', 'filters', 'q']
+  const order = ['page', 'limit', 'skip', 'filters', 'q', 'price']
   const sortedQuery = {}
   order.forEach(key => {
     if (query[key] !== undefined) {
@@ -195,9 +199,10 @@ const { data: catalog, pending, error } = await useAsyncData(
     () => {
       const sortedQuery = sortQueryParams(productsQueryParams.value)
       router.push({ query: sortedQuery })
-      return cacheService.getAllProducts({ ...sortedQuery, locale: locale.value })
+      const currency =  currencyStore.getCurrency;
+      return cacheService.getAllProducts({ ...sortedQuery, locale: locale.value, currency })
     },
-    { watch: [productsQueryParams], lazy: true }
+    { watch: [productsQueryParams] }
 )
 
 const products = computed(() => catalog.value?.list || [])
