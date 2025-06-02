@@ -154,6 +154,7 @@ import { getAllProducts, getProductsOnSale } from "~/services/api/product-servic
 import { useToastManager } from "~/composables/useToastManager.js";
 import { useViewedProducts } from "~/composables/useViewedProducts.js";
 import FiltersSkeleton from "~/components/Skeletons/FiltersSkeleton/FiltersSkeleton.vue";
+import { cacheService } from '~/services/cacheService.js'
 
 const { $eventBus } = useNuxtApp()
 const { t, locale } = useI18n()
@@ -194,9 +195,9 @@ const { data: catalog, pending, error } = await useAsyncData(
     () => {
       const sortedQuery = sortQueryParams(productsQueryParams.value)
       router.push({ query: sortedQuery })
-      return getAllProducts({ ...productsQueryParams.value, ...{ locale: locale.value } })
+      return cacheService.getAllProducts({ ...sortedQuery, locale: locale.value })
     },
-    { watch: [productsQueryParams] }
+    { watch: [productsQueryParams], lazy: true }
 )
 
 const products = computed(() => catalog.value?.list || [])

@@ -96,4 +96,45 @@ export const formatRating = (rating) => {
 export const toInteger = (number) => {
     return Math.floor(number);
 }
+export function isEqual(a, b) {
+    if (a === b) return true;
 
+    if (a == null || b == null) return a === b;
+
+    const typeA = typeof a;
+    const typeB = typeof b;
+
+    if (typeA !== typeB) return false;
+
+    if (typeA !== 'object') {
+        return a === b;
+    }
+
+    if (a instanceof Date) return b instanceof Date && a.getTime() === b.getTime();
+    if (a instanceof RegExp) return b instanceof RegExp && a.source === b.source && a.flags === b.flags;
+
+    if (Array.isArray(a)) {
+        if (!Array.isArray(b) || a.length !== b.length) return false;
+        return a.every((item, index) => isEqual(item, b[index]));
+    }
+
+    const keysA = Object.keys(a);
+    const keysB = Object.keys(b);
+
+    if (keysA.length !== keysB.length) return false;
+
+    const visited = new WeakMap();
+
+    function checkCircular(objA, objB) {
+        if (visited.has(objA)) return visited.get(objA) === objB;
+        visited.set(objA, objB);
+
+        for (const key of keysA) {
+            if (!keysB.includes(key) || !isEqual(a[key], b[key])) return false;
+        }
+
+        return true;
+    }
+
+    return checkCircular(a, b);
+}
