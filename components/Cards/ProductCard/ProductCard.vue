@@ -207,7 +207,6 @@ const iconSize = computed(() => {
 .product-card {
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
   height: auto;
-  aspect-ratio: 294 / 426;
 }
 
 @media (max-width: 1669px) {
@@ -220,7 +219,6 @@ const iconSize = computed(() => {
 @media (max-width: 1610px) {
   .product-card {
     max-width: 310px;
-    aspect-ratio: 294 / 385;
   }
 }
 
@@ -263,7 +261,6 @@ const iconSize = computed(() => {
 
 @media (max-width: 1150px) {
   .product-card {
-    aspect-ratio: 3  / 4;
     max-width: 240px;
   }
 
@@ -271,7 +268,6 @@ const iconSize = computed(() => {
 
 @media (max-width: 1000px) {
   .product-card {
-    aspect-ratio: 284 / 345;
   }
 }
 
@@ -318,7 +314,6 @@ const iconSize = computed(() => {
 @media (max-width: 500px) {
   .product-card {
     max-width: 200px;
-    aspect-ratio: 294 / 345;
     padding: 20px 16px 15px 16px;
   }
   .product-grade {
