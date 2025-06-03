@@ -90,8 +90,12 @@
 
             <ClientOnly>
               <div class="description">
-                <p class="fw-500 text-[18px] leading-[34px] truncate-6-lines text-[var(--color-primary-dark)]"
+                <p v-if="product.description"
+                   class="fw-500 text-[18px] leading-[34px] truncate-6-lines text-[var(--color-primary-dark)]"
                    v-html="product.description"></p>
+                <p v-else class="no-data-text">
+                  {{ t('description_no_data') }}
+                </p>
                 <div class="developer mb-[24px]">
                   <p class="text-[20px] fw-400 leading-[34px]">
                     {{ t('product_developer') }} {{ product.vendor }}
@@ -123,6 +127,7 @@
                   v-model="product.quantity"
                   :style="counterContainerStyle"
                   :inputClass="inputSizeClass"
+                  :amount-selector-button="{ width: '27px', height: '27px' }"
               />
             </div>
 

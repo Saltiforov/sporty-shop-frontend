@@ -28,7 +28,7 @@
       </div>
 
       <div v-if="!cartItems.length" class="cart-empty-title">
-        <h2 class="text-center text-[var(--color-gray-dark-charcoal)] text-[24px] py-[50px]">
+        <h2 class="empty-cart-text text-center text-[var(--color-gray-dark-charcoal)] text-[24px] py-[50px]">
           {{ t('empty_cart_text') }}
         </h2>
       </div>
@@ -74,7 +74,6 @@
               :key="product.id"
               variant="small"
               :product="product"
-              @click="handleRecommendedProduct"
               @add-to-cart="showProductAddedToast"
           >
             <template #buy-button>
@@ -154,10 +153,6 @@ const recommendedProductsIconSizes = computed(() => {
       : { width: '29px', height: '29px',}
 })
 
-const handleRecommendedProduct = () => {
-  cartStore.close();
-};
-
 watch(() => props.isOpen, (newVal) => {
   document.body.style.overflow = newVal ? 'hidden' : '';
 });
@@ -170,25 +165,31 @@ const products = ref([
   {
     _id: '680be0d6e0a2df86dc64154e',
     name: "Енергетичний напій MOXY Power+",
-    rating: '4.6',
-    price_uah: 65,
-    price_eur: 1.63,
-    price: 70,
+    slug: "moxy-power-drink",
+    rating: ref('4.6'),
+    price: ref({ uah: 70, eur: 1.63 }),
+    discount: ref({ uah: 5, eur: 0.13 }), // или 10% перерасчёт
+    priceAfterDiscount: ref({ uah: 65, eur: 1.50 }),
     images: [],
-    discount: 10,
-    isFavorite: false,
+    isFavorite: ref(false),
+    filters: [],
+    reviews: ref({ list: [], reviewCount: 0, averageRating: null }),
+    quantity: 1
   },
   {
     _id: "680bdf7fe0a2df86dc6414ec",
     name: "Креатин моногідрат - OstroVit",
-    rating: '4.1',
-    price_uah: 895,
-    price_eur: 18,
+    slug: "creatine-ostrovit",
+    rating: ref('4.1'),
+    price: ref({ uah: 895, eur: 18 }),
+    discount: ref({ uah: 196, eur: 4 }), // скидка 100грн / 4 евро
+    priceAfterDiscount: ref({ uah: 699, eur: 14 }),
     images: [],
-    discount: 100,
-    price: 699,
-    isFavorite: true,
-  },
+    isFavorite: ref(true),
+    filters: [],
+    reviews: ref({ list: [], reviewCount: 0, averageRating: null }),
+    quantity: 1
+  }
 ]);
 </script>
 
@@ -301,6 +302,9 @@ const products = ref([
   .make-order-button-wrapper {
     max-width: 274px;
   }
+  .empty-cart-text{
+    font-size: 16px;
+  }
   .header {
     flex-direction: row-reverse;
   }
@@ -312,7 +316,7 @@ const products = ref([
     font-size: 16px;
   }
   .header {
-    padding-bottom: 59px;
+    padding-bottom: 55px;
   }
   .continue-shopping-text {
     font-size: 14px;
@@ -335,7 +339,7 @@ const products = ref([
     width: 90%;
   }
   .shopping-cart {
-    padding: 18px 5px 23px 14px;
+    padding: 18px 10px 23px 13px;
   }
 }
 

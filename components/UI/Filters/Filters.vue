@@ -31,7 +31,7 @@
       >
         <img
             v-if="isRootNode(slotProps.node)"
-            :src="slotProps.node.icon"
+            :src="slotProps.node.icon || defaultFilterImage"
             alt="icon"
             class="w-5 h-5"
         />
@@ -141,6 +141,8 @@ import {useRoute, useRouter} from 'vue-router'
 import CustomCheckbox from "~/components/UI/CustomCheckbox/CustomCheckbox.vue"
 import PriceRangeFilter from "~/components/UI/PriceRangeFilter/PriceRangeFilter.vue"
 import {getAllFilters} from "~/services/api/filters-http.service.js"
+
+import defaultFilterImage from '~/assets/icons/filters/injections-icon.svg'
 
 const {t, locale} = useI18n()
 const route = useRoute()

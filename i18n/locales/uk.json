@@ -129,7 +129,7 @@
 
   "checkout": "Оформлення замовлення",
   "account_text": "Вже маєте акаунт?",
-  "sign_in" : "Увійдіть",
+  "sign_in" : "Увійти",
   "payment_method_title": "Спосіб оплати",
   "payment_method_tooltip": "При оплаті через Telegram менеджер звʼяжеться з вами",
   "sms_text": "Надіслати SMS за вказаними даними",

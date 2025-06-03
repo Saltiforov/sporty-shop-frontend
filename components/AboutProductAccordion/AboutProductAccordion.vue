@@ -304,13 +304,13 @@ const props = defineProps({
 
 const tabs = {
   description: {
-    header: 'Опис'
+    header: computed(() => t('tabs_description')),
   },
   delivery: {
-    header: 'Доставка та оплата'
+    header: computed(() => t('tabs_delivery'))
   },
   reviews: {
-    header: 'Відгуки'
+    header: computed(() => t('tabs_reviews')),
   },
   characteristics: {
     header: computed(() => t('tabs_characteristics')),
@@ -448,6 +448,12 @@ watch(() => rating.value, (newValue) => {
 
 .accordion-header {
   border-radius: var(--default-rounded);
+  padding: 8px 16px;
+  color: var(--color-primary-black);
+  font-size: 20px;
+}
+.accordion-header:hover {
+  color: var(--color-primary-black);
 }
 
 .characteristics-list__title {

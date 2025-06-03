@@ -184,7 +184,7 @@
       <CheckoutOrderListSkeleton v-else/>
 
       <div class="responsive-header-fields w-full flex justify-between mb-4">
-        <div class="header-left">
+          <div class="header-left">
           <h1 class="title-lg text-center mb-2">{{ t('checkout') }}</h1>
           <div class="flex justify-end subtitle-lg text-[var(--color-muted-gray)]">
             <p class="mr-1">{{ t('account_text') }}</p>
@@ -753,7 +753,7 @@ const configEurope = ref({
     display: flex;
   }
   .checkout-title {
-    font-size: 18px;
+    font-size: 16px;
     margin-right: 11px;
   }
   .responsive-checkout-footer {
@@ -767,6 +767,7 @@ const configEurope = ref({
 
   .responsive-header-fields {
     display: block;
+    padding: 0 10px;
   }
 
   .checkout-fields {
