@@ -13,7 +13,7 @@
       }"
     >
       <span class="flex items-center gap-2">
-        <p class="mr-[17px] text-[15px]">{{ label.toUpperCase() }} </p>
+        <p class="mr-[17px] text-[15px]">{{ label?.toUpperCase() }} </p>
         <slot name="icon">
           <img src="~/assets/icons/shopping-cart-icon.svg" alt="icon" class="w-4 h-4" />
         </slot>

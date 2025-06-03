@@ -88,7 +88,7 @@ const maxLimit = computed(() => {
   return currencyStore.isUAHSelected ? 10000 : 1000
 })
 
-const currentCurrency = computed(() => currencyStore.getCurrency.toUpperCase())
+const currentCurrency = computed(() => currencyStore.getCurrency?.toUpperCase())
 
 const sliderRangeStyles = computed(() => {
   return {
