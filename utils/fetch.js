@@ -21,7 +21,7 @@ export class Fetch {
                 method,
                 headers: finalHeaders,
                 params,
-                body: ['POST', 'PUT', 'PATCH'].includes(method.toUpperCase()) ? data : undefined,
+                body: ['POST', 'PUT', 'PATCH'].includes(method?.toUpperCase()) ? data : undefined,
                 ...config,
                 onRequest({ options }) {
                     console.log('[Fetch] Запрос:', method, url);
