@@ -1,5 +1,5 @@
 <template>
-  <header class="flex relative  header flex-col items-end pt-[13px] pr-[24px] pb-[8px] pl-[71px]">
+  <header class="flex relative  header flex-col items-end pt-[13px] pr-[24px] pb-[8px] pl-[71px] mb-[98px] ">
     <div class="header-content w-full items-end flex">
       <div class="logo mr-[67px]">
         <NuxtLink :to="logoLink">
@@ -224,11 +224,15 @@ const links = ref([
   .menu {
     display: block;
   }
+  .header {
+    margin-bottom: 36px;
+  }
   .links-list {
     display: none;
   }
   .header-actions {
     justify-content: flex-end;
+    padding-bottom: 0px;
   }
   .action-panel {
     max-width: 130px;
@@ -254,6 +258,7 @@ const links = ref([
   .header  {
     padding-left: 20px;
     padding-right: 20px;
+    margin-bottom: 0;
   }
   .logo {
     margin: 0;
@@ -268,6 +273,9 @@ const links = ref([
   }
   .menu {
     display: none;
+  }
+  .header-actions {
+    padding-bottom: 16px;
   }
   .product-search-wrapper {
     position: absolute !important;

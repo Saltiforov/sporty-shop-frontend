@@ -93,11 +93,11 @@
             <CustomCheckbox
                 :modelValue="child.modelValue"
                 @update:modelValue="val => onNodeCheckboxChange(child, val)"
-                :unchecked-border-color="'#7F7F7F80'"
-                :border-radius="'4px'"
+                :unchecked-border-color="'var(--small-title-color)'"
+                :border-radius="'2px'"
                 @click.stop
             />
-            <span class="filters-block-text text-sm">{{ child.label }}</span>
+            <span class="filters-block-text-child text-sm">{{ child.label }}</span>
           </div>
 
           <div
@@ -316,5 +316,9 @@ const afterLeave = el => {
 .expand-leave-to {
   height: 0;
   overflow: hidden;
+}
+.filters-block-text-child {
+  font-weight: 300;
+  font-size: 18px;
 }
 </style>

@@ -47,8 +47,7 @@
 
             <transition name="fade-slide">
               <div v-if="isMobileFiltersOpen" class="filters--mobile">
-                <Filters v-if="hydrated"/>
-                <FiltersSkeleton v-else/>
+                <Filters/>
               </div>
             </transition>
 

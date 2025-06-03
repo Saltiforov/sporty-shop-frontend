@@ -86,7 +86,7 @@
                   : 'text-[16px]'
               ]"
             >
-              {{ priceByCurrency * cartProduct.quantity }} {{ t(currentCurrency) }}
+              {{ priceByCurrency }} {{ t(currentCurrency) }}
             </div>
 
             <div

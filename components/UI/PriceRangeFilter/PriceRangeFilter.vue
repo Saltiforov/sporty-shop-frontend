@@ -1,5 +1,5 @@
 <template>
-  <div class="price-range-filter p-[8px_36px] pb-10">
+  <div class="price-range-filter p-[8px_36px] pb-[36px]">
     <div class="range-title mb-[9px]">{{ t('price_range_title', {currency: currentCurrency}) }}</div>
     <div class="range-fields-wrapper flex flex-col gap-[29px]">
       <div class="range-fields w-full flex justify-between items-center">
