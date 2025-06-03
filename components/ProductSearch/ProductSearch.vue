@@ -31,6 +31,7 @@
     <SearchDropdownMenu
         :show="searchIsFocused"
         :items="receivedProducts"
+        :searchFieldValue="searchFieldValue"
         @selected="onSuggestionSelect"
     />
   </form>

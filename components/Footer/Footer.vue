@@ -1,9 +1,12 @@
 <template>
   <main>
+
+    <div ref="footerMarker" class="h-[10px] footer-marker w-full"></div>
+
     <footer
         ref="stickyFooter"
         class=" bottom-0 sticky-footer px-[16px] left-0 w-full z-1000 responsive-footer flex flex-col p-4 shadow transition-transform duration-300"
-        :class="isIntersecting ? 'sticky' : 'fixed'"
+        :class="[footerPositionClass]"
     >
       <section class="responsive-footer-container w-full flex justify-between">
         <section class="actions-wrapper w-full flex justify-between items-center">
@@ -195,9 +198,15 @@ const props = defineProps({
 })
 const emit = defineEmits(['handle-mobile-sidebar'])
 
+const footerMarker = ref(null)
+
 const showShoppingCart = () => useCartStore().open()
 
 const isResponsiveVersion = computed(() => getWidth() <= 670)
+
+const footerPositionClass = computed(() => {
+  return isIntersecting.value ? 'relative translate-y-0' : 'fixed translate-y-0'
+})
 
 const showSocialLinks = ref(true)
 
@@ -231,37 +240,46 @@ const links = ref([
 ])
 
 let observer
+let timeout = null
 
 onMounted(() => {
-
   observer = new IntersectionObserver(
       ([entry]) => {
-        isIntersecting.value = entry.isIntersecting
+        clearTimeout(timeout)
+        timeout = setTimeout(() => {
+          isIntersecting.value = entry.isIntersecting
+        }, 100)
       },
       {
         root: null,
-        threshold: 0.1
+        threshold: 0.05
       }
   )
 
-  if (mainFooter.value) {
-    observer.observe(mainFooter.value)
+  if (footerMarker.value) {
+    observer.observe(footerMarker.value)
   }
 })
 
 onBeforeUnmount(() => {
-  if (observer && mainFooter.value) {
-    observer.unobserve(mainFooter.value)
+  if (observer && footerMarker.value) {
+    observer.unobserve(footerMarker.value)
   }
+  clearTimeout(timeout)
 })
 </script>
 
 <style scoped>
 .sticky-footer {
   z-index: 1000;
+  transition: all 0.3s ease;
 }
 
 .socials-responsive {
+  display: none;
+}
+
+.footer-marker {
   display: none;
 }
 
@@ -299,7 +317,9 @@ onBeforeUnmount(() => {
   .footer-container {
     flex-direction: column;
   }
-
+  .footer-marker {
+    display: block;
+  }
   .responsive-footer {
     display: block;
   }

@@ -9,6 +9,7 @@
   "my_cabinet": "My Account",
   "my_orders": "My Orders",
   "login_tab": "Login",
+  "search_no_results_hint": "No products match your search",
 
   "sort_title": "Sorting:",
   "sort_popular": "By Popularity",

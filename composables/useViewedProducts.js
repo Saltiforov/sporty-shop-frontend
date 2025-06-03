@@ -11,11 +11,11 @@ export const useViewedProducts = () => {
     }
 
     const addProductToViewed = (product) => {
-        if (!product?._id) return
+        if (!product?.slug) return
 
         if (!viewed.value.length) load()
 
-        viewed.value = viewed.value.filter(p => p._id !== product._id)
+        viewed.value = viewed.value.filter(p => p.slug !== product.slug)
 
         viewed.value.unshift(product)
 
@@ -29,11 +29,11 @@ export const useViewedProducts = () => {
         localStorage.removeItem(STORAGE_KEY)
     }
 
-    const removeProductFromViewedAndRedirect = async (id) => {
+    const removeProductFromViewedAndRedirect = async (slug) => {
         if (process.client) {
             const router = useRouter()
             const viewed = JSON.parse(localStorage.getItem('viewed_products') || '[]')
-            const updated = viewed.filter(p => p._id !== id)
+            const updated = viewed.filter(p => p.slug !== slug)
             localStorage.setItem('viewed_products', JSON.stringify(updated))
             await router.push('/')
         }

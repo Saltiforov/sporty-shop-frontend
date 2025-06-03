@@ -121,6 +121,7 @@ const menuPT = {
   submenuLabel: {class: 'p-0'},
   itemLink: {class: 'border-b border-[var(--color-primary-pure-white)] last:pb-[10px]'}
 }
+
 </script>
 
 <style scoped>

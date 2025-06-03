@@ -5,7 +5,7 @@
   >
     <div v-if="items.length" class="flex flex-col">
       <div v-for="(product, index) in items" :key="index">
-          <NuxtLink
+        <NuxtLink
             v-if="!isCurrent(product)"
             :to="buildRedirectUrlWithLocale(product)"
             class="product-item flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -34,6 +34,9 @@
         </div>
       </div>
     </div>
+    <div v-else-if="searchFieldValue && !items.length">
+      <p class="search-dropdown-menu-text text-center p-5">{{ t('search_no_results_hint') }}</p>
+    </div>
     <div v-else>
       <p class="search-dropdown-menu-text text-center p-5">{{ t('empty_search_message') }}</p>
     </div>
@@ -43,12 +46,18 @@
 <script setup>
 import DefaultProductImage from '~/assets/images/product-image.png'
 import {useCurrencyStore} from "~/stores/currency.js";
+
 defineProps({
   show: Boolean,
   items: {
     type: Array,
     required: true,
   },
+  searchFieldValue: {
+    type: String,
+    required: false,
+    default: '',
+  }
 })
 
 const {t, locale} = useI18n();
@@ -56,7 +65,7 @@ const currencyStore = useCurrencyStore()
 const route = useRoute()
 
 const getProductPrice = (product) => {
-  const currency =  currencyStore.getCurrency;
+  const currency = currencyStore.getCurrency;
   return currency && `${product.priceAfterDiscount[currency.toLowerCase()]} ${currency}`;
 }
 
@@ -76,26 +85,31 @@ const selectItem = (item) => {
 </script>
 
 <style scoped>
-@media(max-width: 500px) {
+@media (max-width: 500px) {
   .search-dropdown-menu {
     border-radius: 8px;
     min-height: auto;
   }
+
   .search-image {
     margin-right: 0;
   }
+
   .search-name {
     font-size: 11px;
     line-height: 22px;
   }
+
   .search-price {
     font-size: 11px;
     line-height: 22px;
     margin-left: auto;
   }
+
   .product-item {
     padding: 5px 14px 4px 12px;
   }
+
   .search-dropdown-menu-text {
     font-size: 12px;
   }

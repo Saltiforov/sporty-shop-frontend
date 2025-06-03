@@ -20,7 +20,7 @@
         <ClientOnly>
           <div v-if="product.description">
             <p
-                class="fw-500 text-[18px] leading-[34px] text-[var(--color-primary-dark)]"
+                class="product-accordion-description fw-500 text-[18px] leading-[34px] text-[var(--color-primary-dark)]"
                 v-html="product.description"
             />
           </div>
@@ -498,7 +498,9 @@ button.is-disabled .arrow-path {
   .review-button__wrapper {
     margin: 0 auto;
   }
-
+  .product-accordion-description {
+    font-size: 15px;
+  }
   .empty-reviews-text {
     padding: 15px;
     margin-bottom: 15px;

@@ -160,6 +160,8 @@
   "checkout_region_ua": "Україна",
   "checkout_region_eu": "Європа",
   "minimum_amount_order_eu" : "Мінімальна сума замовлення для регіону Європа становить 300 євро.",
+  "search_no_results_hint": "За вашим запитом товарів не знайдено",
+
 
   "forgot_password": "Забули пароль? Відновити",
   "or": "або",

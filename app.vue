@@ -3,9 +3,9 @@
     <Header @handle-mobile-sidebar="handleMobileMenu" :is-open="isOpenMenu"/>
     <MobileSidebar :is-open="isOpenMenu" @close="isOpenMenu = false"/>
     <NuxtLayout>
-      <NuxtPage />
+      <NuxtPage/>
     </NuxtLayout>
-    <NuxtRouteAnnouncer />
+    <NuxtRouteAnnouncer/>
     <ShoppingCart
         :is-open="cartStore.isOpen"
         :cart-items="cartStore.getCartProducts"
@@ -13,7 +13,14 @@
         @continue-shopping="handleContinueShopping"
     />
     <Footer @handle-mobile-sidebar="handleMobileMenu" :is-mobile-sidebar-open="isOpenMenu"/>
-    <Toast position="bottom-right" group="br" />
+    <Toast
+        :class="{
+          'max-w-[240px] top-[70]': isMobileToast
+        }"
+        :pt="toastPt"
+        position="bottom-right"
+        group="br"
+    />
   </div>
 </template>
 
@@ -21,19 +28,50 @@
 <script setup>
 
 import {getStaticPagesInfo} from "~/services/api/static-info.js";
+import {useWindowWidthWatcher} from "~/composables/useWindowWidthWatcher.js";
+import {computed} from "vue";
+
+const getWidth = useWindowWidthWatcher()
 
 const staticPagesStore = useStaticPages()
 
 const cartStore = useCartStore();
 
-const { $eventBus } = useNuxtApp()
+const {$eventBus} = useNuxtApp()
 
 const isOpenMenu = ref(false)
+
+const isMobileToast = computed(() => getWidth() < 500)
 
 const handleContinueShopping = () => {
   cartStore.close()
   navigateTo('/')
 }
+
+const toastPt = computed(() => {
+  return {
+    message: {
+      style: {
+        width: isMobileToast.value ? '250px' : '',
+      }
+    },
+    messageContent: {
+      style: {
+        padding: isMobileToast.value ? '5px' : '',
+      }
+    },
+    summary: {
+      style: {
+        fontSize: isMobileToast.value ? '14px' : '',
+      }
+    },
+    detail: {
+      style: {
+        fontSize: isMobileToast.value ? '12px' : '',
+      }
+    },
+  }
+})
 
 const fetchStaticPages = async () => {
   const response = await getStaticPagesInfo()
@@ -59,7 +97,7 @@ onMounted(async () => {
   window.addEventListener('resize', checkWindowSize)
 })
 
-onBeforeUnmount( () => {
+onBeforeUnmount(() => {
   window.removeEventListener('resize', checkWindowSize)
   $eventBus.off('user-authenticated')
 })

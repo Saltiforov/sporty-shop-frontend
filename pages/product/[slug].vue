@@ -196,7 +196,7 @@
         class="viewed-products__content mx-auto max-w-[1500px] pb-[70px] p-4">
       <SwiperWrapper
           :items="viewed"
-          :options="recommendedProductsSwiperOptions"
+          :options="viewedSwiperOptions"
       >
         <template #default="{ item }">
           <ProductCard
@@ -329,6 +329,21 @@ const swiperOptions = {
   },
 }
 
+const viewedSwiperOptions = computed(() => {
+  const count = viewed.value.length
+  return {
+    slidesPerView: Math.min(count, 4),
+    loop: count > 4,
+    breakpoints: {
+      320: {slidesPerView: Math.min(count, 2),},
+      756: {slidesPerView: Math.min(count, 2),},
+      910: {slidesPerView: Math.min(count, 3),},
+      1024: {slidesPerView: Math.min(count, 3),},
+      1410: {slidesPerView: Math.min(count, 4),},
+    },
+  }
+})
+
 const recommendedProductsSwiperOptions = {
   slidesPerView: 4,
   loop: true,
@@ -373,8 +388,7 @@ onMounted(async () => {
     isLoading.value = true
   } catch (error) {
     if (process.client && error?.status === 404) {
-      // todo change to slug delete
-      // await removeProductFromViewedAndRedirect(id)
+      await removeProductFromViewedAndRedirect(slug)
     } else {
       console.error('Error when loading goods:', error)
     }

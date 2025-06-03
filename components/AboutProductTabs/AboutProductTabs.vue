@@ -428,6 +428,16 @@ const tabs = {
   width: 100%;
 }
 
+.accordion-header {
+  border-radius: var(--default-rounded);
+  color: var(--color-primary-black);
+  font-weight: 600;
+  font-size: 24px;
+}
+.accordion-header:hover {
+  color: var(--color-primary-black);
+}
+
 button .arrow-path {
   stroke: #1B1F26;
   stroke-opacity: 0.72;
