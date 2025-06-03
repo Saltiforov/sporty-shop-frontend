@@ -11,14 +11,18 @@ export default defineNuxtConfig({
             apiBase: process.env.API_BASE
         }
     },
+    nitro: {
+        preset: 'vercel'
+    },
+    hooks: {
+        'build:before': () => {
+            console.log('API_BASE during build:', process.env.API_BASE);
+        },
+    },
     app: {
         head: {
             title: 'Магазин спортивного питания | SP BALKAN',
             link: [
-                {
-                    name: 'description',
-                    content: 'Купить протеин, аминокислоты и BCAA в Украине — доставка по всей стране. Широкий ассортимент от проверенных производителей.'
-                },
                 {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}
                 // { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
                 // { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },

@@ -57,7 +57,7 @@ const route = useRoute()
 
 const getProductPrice = (product) => {
   const currency =  currencyStore.getCurrency;
-  return `${product.priceAfterDiscount[currency.toLowerCase()]} ${currency}`;
+  return currency && `${product.priceAfterDiscount[currency.toLowerCase()]} ${currency}`;
 }
 
 const buildRedirectUrlWithLocale = (product) => {
