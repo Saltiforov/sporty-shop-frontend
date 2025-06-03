@@ -128,8 +128,8 @@
 
             <div class="action-button h-[59px] text-[var(--color-gray-pale-lavender)]">
               <Button @click="addToCart(product)" :pt="{ root: { class: 'product-buy-now__btn' } }"
-                      class="bg-[var(--color-primary-green)] hover:bg-[var(--color-primary-green)] rounded-2xl max-w-[456px] w-full h-full flex justify-center items-center">
-                <p class="mr-1">{{ t('product_buy_now') }}</p>
+                      class="bg-[var(--color-primary-green)] hover:bg-[var(--color-primary-green)] max-w-[456px] w-full h-full flex justify-center items-center">
+                <p class="buy-now__btn-text mr-1">{{ t('product_buy_now') }}</p>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                      xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -394,12 +394,24 @@ onMounted(async () => {
 }
 
 .product-buy-now__btn:hover {
+  border-radius: 17px;
+  background: var(--color-primary-green);
+  border: none;
+}
+
+.product-buy-now__btn {
+  border-radius: 17px;
   background: var(--color-primary-green);
   border: none;
 }
 
 .product-buy-now__btn {
   border: none;
+}
+
+.buy-now__btn-text {
+  font-size: 24px;
+  font-weight: 300;
 }
 
 .about-product-accordion {

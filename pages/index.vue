@@ -46,7 +46,7 @@
             </div>
 
             <transition name="fade-slide">
-              <div v-if="isMobileFiltersOpen" class="filters--mobile">
+              <div v-show="isMobileFiltersOpen" class="filters--mobile">
                 <Filters/>
               </div>
             </transition>

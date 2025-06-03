@@ -11,6 +11,9 @@
         },
         dropdown: {
           style: 'width: 0.75rem; color: var(--color-gray-dark-charcoal);'
+        },
+        optionLabel: {
+          style: optionLabel
         }
       }"
         v-model="selectedOption"
@@ -52,6 +55,12 @@ const labelStyles = computed(() => ({
   fontWeight: 500,
   fontSize: windowWidth.value < 500 ? "10px" : "15px"
 }));
+
+const optionLabel = computed(() => ({
+  fontSize: windowWidth.value < 500 ? "10px" : "15px"
+}));
+
+
 
 const syncWithRoute = () => {
   const sortFromRoute = route.query.sort;

@@ -321,4 +321,13 @@ const afterLeave = el => {
   font-weight: 300;
   font-size: 18px;
 }
+
+@media (max-width: 500px) {
+  .filters-block-text {
+    font-size: 14px;
+  }
+  .filters-block-text-child {
+    font-size: 14px;
+  }
+}
 </style>

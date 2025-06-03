@@ -183,6 +183,14 @@ const applyPriceRange = () => {
   border: none;
 }
 
+@media (max-width: 500px) {
+  .range-title {
+    font-size: 14px;
+  }
+  .range-button {
+    font-size: 14px;
+  }
+}
 @media (max-width: 450px) {
   .price-range-filter {
     padding: 8px 16px;

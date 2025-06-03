@@ -15,16 +15,12 @@
       </template>
 
       <template v-else>
-        <article
-            v-if="!isLoading"
+        <ProductCard
             v-for="product in favoriteProducts"
             :key="product._id"
-        >
-          <ProductCard
-              :product="product"
-              @add-to-cart="addToCart"
-          />
-        </article>
+            :product="product"
+            @add-to-cart="addToCart"
+        />
       </template>
     </section>
 

@@ -196,47 +196,26 @@ const iconSize = computed(() => {
 <style scoped>
 .card-buy-button {
   border: none;
-  background-color: #28A745;
-  color: white;
-  cursor: pointer;
-  -webkit-appearance: none;
-  appearance: none;
-  transition: background-color 0.3s ease;
+  background: #28A745;
 }
 
 .card-buy-button:hover {
-  background-color: #218838;
   border: none;
+  background: #28A745;
 }
 
 .product-card {
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
   height: auto;
   aspect-ratio: 294 / 426;
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
 }
 
-@supports not (aspect-ratio: 1) {
-  .product-card {
-    position: relative;
-  }
-  .product-card::before {
-    content: '';
-    display: block;
-    padding-top: calc(426 / 294 * 100%);
-  }
-}
-
-/* Адаптивность */
 @media (max-width: 1669px) {
   .product-card {
     padding: 20px 16px 15px 16px;
   }
 }
+
 
 @media (max-width: 1610px) {
   .product-card {
@@ -250,6 +229,7 @@ const iconSize = computed(() => {
     max-width: 270px;
   }
 }
+
 
 @media (max-width: 1275px) {
   .product-card {
@@ -280,11 +260,13 @@ const iconSize = computed(() => {
   }
 }
 
+
 @media (max-width: 1150px) {
   .product-card {
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 3  / 4;
     max-width: 240px;
   }
+
 }
 
 @media (max-width: 1000px) {
@@ -298,6 +280,7 @@ const iconSize = computed(() => {
     max-width: 230px;
   }
 }
+
 
 @media (max-width: 800px) {
   .product-card {
@@ -331,13 +314,13 @@ const iconSize = computed(() => {
   }
 }
 
+
 @media (max-width: 500px) {
   .product-card {
     max-width: 200px;
     aspect-ratio: 294 / 345;
     padding: 20px 16px 15px 16px;
   }
-
   .product-grade {
     font-size: 10px;
   }
@@ -347,20 +330,30 @@ const iconSize = computed(() => {
   }
 
   .price-without-discount {
+    font-size: 12px !important;
+  }
+
+  .product-card-header img, a {
+    width: 128px !important;
+    height: 114px !important;
+    margin: 0 auto;
+
+  }
+
+  .product-name p {
+    font-size: 14px;
+  }
+
+  .discount-price {
+    font-size: 10px;
+  }
+
+  .price-without-discount {
     font-size: 15px;
   }
 
-  .product-card-header img {
-    display: block;
-    width: 128px !important;
-    height: 114px !important;
-    object-fit: contain;
-    margin: 0 auto;
-  }
-
-  .product-card-header a {
-    display: block;
-    text-align: center;
+  .block {
+    margin-bottom: 4px;
   }
 
   .product-name {
@@ -377,9 +370,10 @@ const iconSize = computed(() => {
     margin: 0 auto;
   }
 
-  .discount-price {
+  .product-grade {
     font-size: 10px;
   }
+
 }
 
 @media (max-width: 470px) {
@@ -387,6 +381,7 @@ const iconSize = computed(() => {
     max-width: 160px;
     padding-top: 20px;
   }
+
 
   .product-name p {
     font-size: 10px;
@@ -396,5 +391,6 @@ const iconSize = computed(() => {
     font-size: 12px;
   }
 }
-</style>
 
+
+</style>
