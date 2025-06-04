@@ -11,32 +11,20 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.swiper-pagination-bullet {
-    background-color: #ccc;
-    color: #333;
-    width: 28px;
-    height: 28px;
-    line-height: 28px;
+.empty-message-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 20vh;
     text-align: center;
-    font-size: 14px;
-    font-weight: bold;
-    border-radius: 50%;
-    opacity: 0.6;
-    cursor: pointer;
-    margin: 0 4px;
-    user-select: none;
-    display: inline-block;
-    transition: all 0.3s ease;
+    padding: 1rem;
 }
 
-/* Стили для активного буллета */
-.swiper-pagination-bullet-active {
-    background-color: #007bff;
-    color: white;
-    opacity: 1;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.6);
+.empty-message {
+    font-size: clamp(1rem, 3.5vw, 2rem);
+    font-weight: 500;
+    color: #666;
 }
-
 .base-container {
     width: 100%;
     max-width: 1690px;

@@ -44,7 +44,7 @@
           style : 'background-color: var(--color-gray-lavender);'
         }
       }">
-        <div v-if="product?.attributes.length" class="characteristics-list w-full">
+        <div v-if="product?.attributes" class="characteristics-list w-full">
           <div
               v-for="characteristic in product?.attributes"
               :key="characteristic.key"
@@ -78,50 +78,8 @@
           style : 'background-color: var(--color-gray-lavender);'
         }
       }">
-        <div v-if="true" class="delivery-and-payment">
-          <div class="mb-4">
-            <strong class="fw-600 leading-[33px]">Оплата</strong>
-          </div>
-          <p class="mb-4">
-            Оплата здійснюється через <strong>Telegram</strong>. Після оформлення замовлення наш
-            менеджер зв’яжеться з вами у Telegram для підтвердження замовлення та надасть реквізити для оплати.
-          </p>
-
-          <div class="mb-4">
-            <strong>Доступні методи оплати:</strong>
-            <ul class="list-disc pl-6">
-              <li>Банківський переказ (Monobank, ПриватБанк та інші)</li>
-              <li>Переказ на картку</li>
-              <li>Криптовалюта (за запитом)</li>
-            </ul>
-          </div>
-
-          <div class="mb-4">
-            <strong>Доставка</strong>
-            <div>
-              <p>По Україні:</p>
-              <ul class="list-disc pl-6">
-                <li>Нова Пошта – 1-3 дні, згідно з тарифами перевізника</li>
-                <li>Укрпошта – 3-7 днів</li>
-              </ul>
-            </div>
-            <div>
-              <p>Міжнародна доставка:</p>
-              <ul class="list-disc pl-6">
-                <li>Доставка в інші країни здійснюється через міжнародні поштові сервіси</li>
-                <li>Терміни та вартість доставки залежать від країни одержувача та вибраного перевізника</li>
-                <li>Після відправки ви отримаєте номер для відстеження посилки</li>
-              </ul>
-            </div>
-          </div>
-
-          <div>
-            <p>📌 Важливо!</p>
-            <ul class="list-disc pl-6">
-              <li>Відправка здійснюється тільки після повної передоплати</li>
-              <li>Точну вартість міжнародної доставки уточнюйте у менеджера в Telegram</li>
-            </ul>
-          </div>
+        <div v-if="deliveryAndPaymentInfo" class="delivery-and-payment">
+          <p v-html="staticDeliveryAndPayment.content"></p>
         </div>
         <p  v-else class="no-data-text no-data-reviews">
           {{ t('delivery_no_data') }}
@@ -294,7 +252,6 @@ import {capitalizeFirstLetter, formatDateToDMY} from "~/utils/index.js";
 import {storeToRefs} from "pinia";
 import {useAuthStore} from "~/stores/auth.js";
 import {leaveReview} from "~/services/api/reviews-service.js";
-
 const props = defineProps({
   product: {
     type: Object,
@@ -331,10 +288,20 @@ const tabs = {
   }
 }
 
+const staticPagesStore = useStaticPages()
+
 const MAX_REVIEW_LENGTH = 300;
 
 const route = useRoute()
+
 const productSlug = computed(() => route.params.slug)
+
+const deliveryAndPaymentInfo = ref(null)
+
+const staticDeliveryAndPayment = computed(() => {
+  const { title, ...data } = deliveryAndPaymentInfo.value.content[0]
+  return data
+})
 
 const {t} = useI18n()
 
@@ -436,6 +403,10 @@ watch(() => rating.value, (newValue) => {
   if (newValue) {
     isEmptyRating.value = false
   }
+})
+
+onMounted(() => {
+  deliveryAndPaymentInfo.value = staticPagesStore.getCurrentPage('shipping-and-payment')
 })
 
 </script>

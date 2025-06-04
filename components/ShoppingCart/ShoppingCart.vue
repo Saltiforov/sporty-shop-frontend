@@ -168,7 +168,7 @@ const products = ref([
     slug: "moxy-power-drink",
     rating: ref('4.6'),
     price: ref({ uah: 70, eur: 1.63 }),
-    discount: ref({ uah: 5, eur: 0.13 }), // или 10% перерасчёт
+    discount: ref({ uah: 5, eur: 0.13 }),
     priceAfterDiscount: ref({ uah: 65, eur: 1.50 }),
     images: [],
     isFavorite: ref(false),
@@ -182,7 +182,7 @@ const products = ref([
     slug: "creatine-ostrovit",
     rating: ref('4.1'),
     price: ref({ uah: 895, eur: 18 }),
-    discount: ref({ uah: 196, eur: 4 }), // скидка 100грн / 4 евро
+    discount: ref({ uah: 196, eur: 4 }),
     priceAfterDiscount: ref({ uah: 699, eur: 14 }),
     images: [],
     isFavorite: ref(true),

@@ -81,7 +81,7 @@
               }
             }"><p class="murecho-font text-[14px]">{{ t('confirm_order') }}</p></Button>
           </div>
-          <aside v-if="currencyStore.isRegionEurope" class="min-price-europe mb-6">
+          <aside v-if="currencyStore.isRegionEurope && !minimumEuropePrice" class="min-price-europe mb-6">
             <p class="text-[var(--color-primary-pink)] text-center text-[14px]">{{ t('minimum_amount_order_eu') }}</p>
           </aside>
         </div>
@@ -168,7 +168,7 @@
               }
             }"><p class="murecho-font text-[14px]">{{ t('confirm_order') }}</p></Button>
             </div>
-            <aside v-if="currencyStore.isRegionEurope" class="min-price-europe mb-6">
+            <aside v-if="currencyStore.isRegionEurope && !minimumEuropePrice" class="min-price-europe mb-6">
               <p class="text-[var(--color-primary-pink)] text-center text-[14px]">{{ t('minimum_amount_order_eu') }}</p>
             </aside>
           </div>

@@ -59,7 +59,7 @@ export default defineNuxtConfig({
         strategy: 'prefix',
         locales: [
             {code: 'en', name: 'EN', file: 'en.json'},
-            {code: 'ua', name: 'UA', file: 'uk.json'},
+            {code: 'uk', name: 'UA', file: 'uk.json'},
         ]
     },
     primevue: {

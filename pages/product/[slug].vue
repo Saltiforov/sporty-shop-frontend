@@ -116,7 +116,6 @@
                   {{ priceByCurrency }}
                   <span>{{ t(currencyStore.label) }}</span>
                 </div>
-
                 <p v-if="hasDiscount"
                    class="text-[var(--color-primary-pink)] price-with-discount text-[36px] leading-[34px] fw-600">
                   {{ priceByCurrencyWithDiscount }} {{ t(currencyStore.label) }}
@@ -127,7 +126,7 @@
                   v-model="product.quantity"
                   :style="counterContainerStyle"
                   :inputClass="inputSizeClass"
-                  :amount-selector-button="{ width: '27px', height: '27px' }"
+                  :amount-selector-button="amountButtonSize"
               />
             </div>
 
@@ -292,14 +291,22 @@ const recommended = ref([])
 
 const selectedImage = ref(null)
 
+const amountButtonSize = computed(() => {
+  const size = windowWidth.value < 620 ? '27px' : '18px'
+  return {
+    width: size,
+    height: size
+  }
+})
+
 const priceByCurrencyWithDiscount = computed(() => {
-  return currencyStore.getCurrency === 'uah'
+  return currencyStore.getCurrency === 'UAH'
       ? product.value.price.uah - product.value.discount.uah
       : product.value.price.eur - product.value.discount.eur
 })
 
 const priceByCurrency = computed(() => {
-  return currencyStore.getCurrency === 'uah' ? product.value.price?.uah : product.value.price?.eur
+  return currencyStore.getCurrency === 'UAH' ? product.value.price?.uah : product.value.price?.eur
 })
 
 const counterContainerStyle = computed(() => {

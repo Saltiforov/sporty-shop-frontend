@@ -28,7 +28,7 @@
       </ClientOnly>
     </TabPanel>
     <TabPanel v-if="product" :header="tabs.characteristics.header">
-      <div v-if="product?.attributes.length" class="characteristics-list max-w-[1030px] w-full">
+      <div v-if="product?.attributes" class="characteristics-list max-w-[1030px] w-full">
         <div
             v-for="characteristic in product?.attributes"
             :key="characteristic.key"
@@ -51,10 +51,10 @@
       </p>
     </TabPanel>
     <TabPanel :header="tabs.delivery.header">
-            <div v-if="false"  class="delivery-and-payment">
-              <p v-html="deliveryAndPaymentInfo.content"></p>
-            </div>
-      <p v-else class="no-data-text ">
+      <div v-if="deliveryAndPaymentInfo" class="delivery-and-payment">
+        <p v-html="staticDeliveryAndPayment.content"></p>
+      </div>
+      <p  v-else class="no-data-text no-data-reviews">
         {{ t('delivery_no_data') }}
       </p>
     </TabPanel>
@@ -282,6 +282,15 @@ const productCharacteristics = {
   }
 };
 
+const staticPagesStore = useStaticPages()
+
+const deliveryAndPaymentInfo = ref(null)
+
+const staticDeliveryAndPayment = computed(() => {
+  const { title, ...data } = deliveryAndPaymentInfo.value.content[0]
+  return data
+})
+
 const MAX_REVIEW_LENGTH = 300;
 
 const route = useRoute()
@@ -420,6 +429,10 @@ const tabs = {
     ]
   }
 }
+
+onMounted(() => {
+  deliveryAndPaymentInfo.value = staticPagesStore.getCurrentPage('shipping-and-payment')
+})
 </script>
 
 <style scoped>
