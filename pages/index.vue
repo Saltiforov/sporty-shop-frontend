@@ -45,6 +45,12 @@
               <FiltersSkeleton v-else/>
             </div>
 
+            <transition name="fade-slide">
+              <div v-show="isMobileFiltersOpen" class="filters--mobile">
+                <Filters/>
+              </div>
+            </transition>
+
 
             <div class="promotional-products text-center">
               <p class="text-[var(--color-primary-pink)] mb-[21px] fw-600 text-[20px]">{{
@@ -79,28 +85,19 @@
             </div>
           </aside>
 
-          <transition name="fade-slide">
-            <div v-show="isMobileFiltersOpen" class="filters--mobile">
-              <Filters/>
-            </div>
-          </transition>
-
           <div>
-            <div class="product-grid" v-if="products.length > 0">
+            <div
+                class="product-grid">
               <ProductCard
                   v-for="product in products"
                   :key="product.id"
                   :product="product"
                   @add-to-cart="showToast"
                   @click="addProductToViewed(product)"
+
               />
             </div>
-
-            <div v-else class="empty-message-wrapper">
-              <p class="empty-message">{{ t('no_products_found') }}</p>
-            </div>
           </div>
-
 
           <div class="empty-block"></div>
           <div>
@@ -447,9 +444,6 @@ onBeforeUnmount(() => {
 
 
 @media (max-width: 510px) {
-  aside {
-    display: none;
-  }
   .sort-title {
     font-size: 10px;
   }
