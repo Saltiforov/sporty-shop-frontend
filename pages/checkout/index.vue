@@ -34,7 +34,7 @@
 
         <section v-if="hydrated"
                  class="checkout-payment-method pt-[24px] px-[42px]  pb-[36px] rounded-lg bg-[var(--color-gray-lavender)]">
-          <h2 class="mb-[36px] flex title-lg">
+          <h2 class="checkout-payment-method-title mb-[36px] flex title-lg">
             {{ t('payment_method_title') }}
             <TooltipIcon class="ml-2" :message="t('payment_method_tooltip')"/>
           </h2>
@@ -197,7 +197,14 @@
     </main>
   </section>
 
-  <Toast group="tl"/>
+  <Toast
+      :class="{
+          'max-w-[240px] top-[70]': isMobileToast
+        }"
+      :pt="toastPt"
+      position="top-left"
+      group="tl"
+  />
 </template>
 
 <script setup>
@@ -219,10 +226,14 @@ import BreadcrumbSkeleton from "~/components/Skeletons/BreadcrumbSkeleton/Breadc
 import LayoutBreadcrumb from "~/components/UI/LayoutBreadcrumb/LayoutBreadcrumb.vue";
 import RegionSelect from "~/components/UI/RegionSelect/RegionSelect.vue";
 import {calculateTotal} from "~/utils/index.js";
+import {computed} from "vue";
+import {useWindowWidthWatcher} from "~/composables/useWindowWidthWatcher.js";
 
 definePageMeta({
   layout: 'breadcrumb',
 })
+
+const getWidth = useWindowWidthWatcher()
 
 const fieldsBlock = ref(null)
 
@@ -251,6 +262,33 @@ const commentForOrder = ref('')
 const isPaymentOnDelivery = ref(false)
 
 const isSendSmsWithFormData = ref(false)
+
+const isMobileToast = computed(() => getWidth() < 500)
+
+const toastPt = computed(() => {
+  return {
+    message: {
+      style: {
+        width: isMobileToast.value ? '250px' : '',
+      }
+    },
+    messageContent: {
+      style: {
+        padding: isMobileToast.value ? '5px' : '',
+      }
+    },
+    summary: {
+      style: {
+        fontSize: isMobileToast.value ? '14px' : '',
+      }
+    },
+    detail: {
+      style: {
+        fontSize: isMobileToast.value ? '12px' : '',
+      }
+    },
+  }
+})
 
 const userData = ref({})
 
@@ -736,6 +774,11 @@ const configEurope = ref({
   .checkout-footer {
     display: none;
   }
+  .checkout-payment-method-title {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
   .checkout-payment-method {
     margin-bottom: 26px;
   }
@@ -773,6 +816,9 @@ const configEurope = ref({
   .checkout-fields {
     flex-direction: column;
     padding: 24px 12px 34px 12px;
+  }
+  .use-promocode div {
+    margin-bottom: 0;
   }
 
   .checkout-products-list,

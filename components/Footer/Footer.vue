@@ -224,17 +224,17 @@ const links = ref([
     expanded: false,
     links: [
       {label: computed(() => t('footer_about_us')), page: '/content/about-us'},
-      {label: computed(() => t('footer_warranties')), page: '/page1'},
-      {label: computed(() => t('footer_terms_of_use')), page: '/page1'}
+      {label: computed(() => t('footer_warranties')), page: '/content/guarantees'},
+      {label: computed(() => t('footer_terms_of_use')), page: '/content/term-of-use'},
     ]
   },
   {
     title: computed(() => t('footer_payment_methods')),
     expanded: false,
     links: [
-      {label: computed(() => t('footer_payment_methods')), page: '/page3'},
-      {label: computed(() => t('footer_delivery')), page: '/page3'},
-      {label: computed(() => t('footer_faq')), page: '/page3'}
+      {label: computed(() => t('footer_payment_methods')), page: '/content/shipping-and-payment'},
+      {label: computed(() => t('footer_delivery')), page: '/content/delivery'},
+      {label: computed(() => t('footer_faq')), page: '/content/frequently-questions'},
     ]
   }
 ])

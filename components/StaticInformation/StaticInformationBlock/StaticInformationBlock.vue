@@ -5,6 +5,13 @@
         :is="config.component"
         :data="config.data"
     />
+    <p
+        v-else
+        class="text-gray-600  min-h-[200px] flex items-center justify-center px-4 text-center text-lg md:text-xl lg:text-2xl max-w-md mx-auto"
+        style="line-height: 1.4;"
+    >
+      {{ t('text_no_info') }}
+    </p>
   </div>
 </template>
 
@@ -16,6 +23,10 @@ import { computed } from "vue";
 
 const { staticInformation } = useStaticInformation();
 
+const { t } = useI18n();
+
+const {$eventBus} = useNuxtApp()
+
 const config = computed(() => {
   return {
     component: staticInformation.value?.accordion ? StaticAccordionGroup : StaticFields,
@@ -24,4 +35,7 @@ const config = computed(() => {
 });
 
 
+onMounted(() => {
+  $eventBus.emit('static-info-mounted')
+})
 </script>

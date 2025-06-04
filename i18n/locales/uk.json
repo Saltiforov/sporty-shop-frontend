@@ -4,6 +4,7 @@
   "new_arrivals": "Новинки",
   "shipping_and_payment": "Доставка та оплата",
   "about_us": "Про нас",
+  "frequently_questions" : "F.Q.A.",
   "search_placeholder": "Пошук...",
   "register": "Зареєструватись",
   "my_cabinet": "Мій кабінет",
@@ -15,6 +16,8 @@
   "sort_price_desc": "Від дорогих до дешевих",
   "sort_newest": "За новизною",
   "sort_rating": "За рейтингом",
+  "text_no_info": "На даний момент інформації немає, спробуйте зайти пізніше.",
+
 
   "filters_sports_nutrition": "Спортивне харчування",
   "filters_protein": "Протеїн",

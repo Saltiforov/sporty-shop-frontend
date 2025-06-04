@@ -21,14 +21,8 @@
           },
         }">{{ block.title }}</AccordionHeader>
         <AccordionContent :pt="{
-          content: {
-            style: {
-              backgroundColor: openedIndexes.includes(index) ?  'var(--color-gray-lavender)' : 'white',
-              borderBottomRightRadius: '30px',
-              borderBottomLeftRadius: '30px',
-              borderTop: 'none',
-              padding: '12px 24px',
-            }
+         content: {
+            style: getContentStyle(index)
           }
         }">
           <p class="leading-relaxed">
@@ -41,6 +35,8 @@
 </template>
 
 <script setup>
+import {useWindowWidthWatcher} from "~/composables/useWindowWidthWatcher.js";
+
 const props = defineProps({
   data: {
     type: Object,
@@ -48,24 +44,55 @@ const props = defineProps({
   }
 })
 
+const getWidth = useWindowWidthWatcher()
+
+const isMobile = computed(() => getWidth() < 540)
+
 const openedIndexes = ref([])
+
+const getContentStyle = (index) => {
+  const isOpened = openedIndexes.value.includes(index)
+
+  return {
+    backgroundColor: isOpened ? 'var(--color-gray-lavender)' : 'white',
+    borderBottomRightRadius: isMobile.value ? '16px' : '30px',
+    borderBottomLeftRadius: isMobile.value ? '16px' : '30px',
+    borderTop: 'none',
+    padding: isMobile.value ? '8px 16px' : '12px 24px',
+    fontSize: isMobile.value ? '12px' : ''
+  }
+}
 
 const getHeaderStyle = (index) => {
   const isOpened = openedIndexes.value.includes(index)
 
-    return isOpened
-        ? {
-          padding: '12px 24px',
-          backgroundColor: 'var(--color-gray-lavender)',
-          borderTop: '1px solid var(--border-color)',
-          borderLeft: '1px solid var(--border-color)',
-          borderRight: '1px solid var(--border-color)',
-          borderRadius: '30px 30px 0 0'
-        }
-        : {
-          padding: '12px 24px',
-          backgroundColor: 'var(--color-gray-lavender)',
-          borderRadius: '30px'
-        }
+  const basePadding = isMobile.value ? '8px 16px' : '12px 24px'
+  const baseRadius = isMobile.value ? '16px' : '30px'
+  const fontSize = isMobile.value ? '12px' : ''
+
+  return isOpened
+      ? {
+        padding: basePadding,
+        backgroundColor: 'var(--color-gray-lavender)',
+        borderTop: '1px solid var(--border-color)',
+        borderLeft: '1px solid var(--border-color)',
+        borderRight: '1px solid var(--border-color)',
+        borderRadius: `${baseRadius} ${baseRadius} 0 0`,
+        fontSize: fontSize
+      }
+      : {
+        padding: basePadding,
+        backgroundColor: 'var(--color-gray-lavender)',
+        borderRadius: baseRadius,
+        fontSize: fontSize
+      }
 }
 </script>
+
+<style scoped>
+@media (max-width: 500px) {
+  .static-title {
+    font-size: 20px;
+  }
+}
+</style>

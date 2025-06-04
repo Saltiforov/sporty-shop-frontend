@@ -92,13 +92,16 @@ onMounted(async () => {
   $eventBus.on('user-authenticated', () => {
     isOpenMenu.value = false
   })
+  $eventBus.on('static-info-mounted', () => {
+    isOpenMenu.value = false
+  })
   await fetchStaticPages()
-
   window.addEventListener('resize', checkWindowSize)
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', checkWindowSize)
   $eventBus.off('user-authenticated')
+  $eventBus.off('static-info-mounted')
 })
 </script>

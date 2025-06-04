@@ -10,6 +10,8 @@
   "my_orders": "My Orders",
   "login_tab": "Login",
   "search_no_results_hint": "No products match your search",
+  "text_no_info": "Currently there is no information, please try again later.",
+  "frequently_questions" : "F.Q.A.",
 
   "sort_title": "Sorting:",
   "sort_popular": "By Popularity",

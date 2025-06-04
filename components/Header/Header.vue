@@ -1,5 +1,10 @@
 <template>
-  <header class="flex relative  header flex-col items-end pt-[13px] pr-[24px] pb-[8px] pl-[71px] mb-[98px] ">
+  <header
+      :class="[
+      'flex relative header flex-col items-end pt-[13px] pr-[24px] pb-[8px] pl-[71px]',
+      { 'mb-[98px]': isHomePage }
+    ]"
+  >
     <div class="header-content w-full items-end flex">
       <div class="logo mr-[67px]">
         <NuxtLink :to="logoLink">
@@ -91,7 +96,6 @@ const localePath = useLocalePath()
 
 const {authenticated, currentUser} = storeToRefs(useAuthStore());
 
-
 const cartStore = useCartStore();
 
 const emit = defineEmits(['handle-mobile-sidebar'])
@@ -170,6 +174,11 @@ const links = ref([
     icon: "pi pi-user",
     page: "/content/about-us",
   },
+  {
+    label: computed(() => t('frequently_questions')),
+    icon: "pi pi-user",
+    page: "content/frequently-questions",
+  },
 ])
 
 </script>
@@ -186,7 +195,7 @@ const links = ref([
 .links-container {
   display: flex;
   flex-wrap: wrap;
-  max-width: 660px;
+  max-width: 780px;
   width: 100%;
 }
 

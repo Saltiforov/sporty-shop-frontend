@@ -37,7 +37,6 @@
                     parent-classes="links-container"
                     link-class="link-item text-[var(--color-gray-pale-lavender)]  mb-6 mr-[32px] text-[var(--color-primary-black)] sm:mr-[32px] md:mr-[53px] last:mr-0"
                     :label-style="['font-weight: 700']"
-                    @handle-navigation="$emit('close')"
                 />
               </nav>
             </div>
@@ -53,7 +52,6 @@ defineProps({
   isOpen: Boolean,
 })
 
-const authPopup = useAuthPopup()
 
 const {t} = useI18n();
 
@@ -71,11 +69,6 @@ const links = ref([
     page: "/content/promotions",
   },
   {
-    label: computed(() => t('new_arrivals')),
-    icon: "pi pi-user",
-    page: "/content/new-arrivals",
-  },
-  {
     label: computed(() => t('shipping_and_payment')),
     icon: "pi pi-user",
     page: "/content/shipping-and-payment",
@@ -84,6 +77,11 @@ const links = ref([
     label: computed(() => t('about_us')),
     icon: "pi pi-user",
     page: "/content/about-us",
+  },
+  {
+    label: computed(() => t('frequently_questions')),
+    icon: "pi pi-user",
+    page: "/content/frequently-questions",
   },
 ])
 </script>
