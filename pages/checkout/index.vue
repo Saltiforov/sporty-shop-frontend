@@ -318,7 +318,7 @@ const currency = computed(() => currencyStore.isUAHSelected ? 'uah' : 'eur')
 const region = computed(() => currencyStore.isRegionEurope ? 'eu' : 'ua')
 
 const mappedUserDataForOrder = (data) => {
-  const {street, city, postalCode, country, firstName, lastName, phone, email, telegramUsername} = data
+  const {street, city, postalCode, country, firstName, lastName, phone, email, telegramUsername, deliveryInfo} = data
   return {
     shippingAddress: {
       street,
@@ -336,7 +336,8 @@ const mappedUserDataForOrder = (data) => {
     },
     description: commentForOrder.value,
     currency: currency.value,
-    region: region.value
+    region: region.value,
+    deliveryInfo
   }
 }
 

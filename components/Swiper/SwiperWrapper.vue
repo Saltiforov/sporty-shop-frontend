@@ -8,13 +8,14 @@
         <swiper-slide
             v-for="(item, idx) in items"
             :key="idx"
-            class="flex items-center justify-center"
+            :class="['flex items-center px-2', alignStart ? 'justify-start' : 'justify-center']"
         >
           <slot :item="item" :index="idx"/>
         </swiper-slide>
       </swiper-container>
 
       <button
+          v-show="isShowSlideButton"
           class="swiper-btn  -left-6"
           @click="swipeToLeft"
           :style="buttonStyles"
@@ -26,6 +27,7 @@
       </button>
 
       <button
+          v-show="isShowSlideButton"
           class="swiper-btn -right-6"
           @click="swipeToRight"
           :style="buttonStyles"
@@ -66,6 +68,14 @@ const props = defineProps({
   buttonClass: {
     type: String,
     default: () => 'btn-hover-default'
+  },
+  isShowSlideButton: {
+    type: Boolean,
+    default: true
+  },
+  alignStart: {
+    type: Boolean,
+    default: false
   }
 })
 

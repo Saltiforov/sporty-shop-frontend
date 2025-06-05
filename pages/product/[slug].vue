@@ -196,11 +196,14 @@
       <SwiperWrapper
           :items="viewed"
           :options="viewedSwiperOptions"
+          :is-show-slide-button="shouldDisplayButtonsViewedSwiper"
+          :align-start="viewed.length === 1"
       >
         <template #default="{ item }">
           <ProductCard
               class="mt-3 mb-3"
               :product="item"
+              :no-auto-margin="viewed.length === 1"
               @add-to-cart="showProductAddedToast"
           />
         </template>
@@ -335,6 +338,8 @@ const swiperOptions = {
     delay: 1000,
   },
 }
+
+const shouldDisplayButtonsViewedSwiper = computed(() => viewed.value.length >= 4)
 
 const viewedSwiperOptions = computed(() => {
   const count = viewed.value.length

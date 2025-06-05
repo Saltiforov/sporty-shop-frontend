@@ -64,7 +64,6 @@
             <address class="flex delivery-info__item flex-col gap-6 w-full max-w-[427px] not-italic mr-[36px]">
               <p v-for="(labelKey, index) in userInfoLabels" :key="index">{{ t(labelKey) }}</p>
             </address>
-
             <address class="flex delivery-info__item flex-col gap-6 w-full max-w-[427px] not-italic">
               <p v-for="(value, label) in order.userInfo" :key="label">{{ value || '-----' }}</p>
             </address>
@@ -97,8 +96,8 @@ defineProps({
 const userInfoLabels = [
   'user_info_first_name',
   'user_info_last_name',
-  'user_info_email',
   'user_info_phone',
+  'user_info_email',
   'user_info_address',
   'user_info_delivery_comment'
 ];

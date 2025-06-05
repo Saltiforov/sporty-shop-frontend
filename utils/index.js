@@ -35,9 +35,23 @@ export function formatDateToDMY(isoDate) {
     return `${day}.${month}.${year}`
 }
 
+const getOrderUserInfo = (order) => {
+    const shipping = order.shippingAddress || {}
+    const email =  order.user.email || '----'
+    const description =  order.description || '----'
+    const { telegramUsername, ...rest } = order.customerInfo || {};
+    return {
+        ...rest,
+        email,
+        address: formatAddress(shipping),
+        description
+    };
+};
+
+
+
 export function mapOrdersToSummaries(orders) {
     return orders.map(order => {
-        const shipping = order.shippingAddress || {}
 
         const products = (order.products || []).map(item => {
             const product = item.product || {}
@@ -61,15 +75,7 @@ export function mapOrdersToSummaries(orders) {
             firstName: order.user.firstName || '',
             lastName: order.user.lastName || '',
             phone: order.user.phone || '',
-            email: order.user.email || '',
-            userInfo: {
-                firstName: order.user.firstName || '',
-                lastName: order.user.lastName || '',
-                email: order.user.email || '',
-                phone: order.user.phone || '',
-                address: formatAddress(shipping),
-                deliveryComment: order.description || ''
-            },
+            userInfo: getOrderUserInfo(order),
             pricing: order.pricing || '',
             currency: order.currency || '',
             createdAt: order.createdAt || '',
@@ -79,8 +85,8 @@ export function mapOrdersToSummaries(orders) {
 }
 
 function formatAddress(address) {
-    const parts = [address.street, address.city, address.country].filter(Boolean)
-    return parts.join(', ')
+    const parts = [address?.street, address?.city, address?.country].filter(Boolean);
+    return parts.join(', ');
 }
 
 export function capitalizeFirstLetter(str) {
@@ -96,6 +102,7 @@ export const formatRating = (rating) => {
 export const toInteger = (number) => {
     return Math.floor(number);
 }
+
 export function isEqual(a, b) {
     if (a === b) return true;
 

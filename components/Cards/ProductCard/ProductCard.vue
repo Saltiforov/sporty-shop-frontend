@@ -1,8 +1,11 @@
 <template>
-  <div  :class="variant === 'small' ? maxWidthSmallClass : ''"
-       class="w-full product-card relative bg-white pt-[30px] pr-[30px] pb-[22px] pl-[30px] max-w-[280px] mx-auto rounded-lg flex flex-col justify-start"
+  <div
+      :class="[
+    'w-full product-card relative bg-white pt-[30px] pr-[30px] pb-[22px] pl-[30px] max-w-[280px] rounded-lg flex flex-col justify-start',
+    variant === 'small' ? maxWidthSmallClass : '',
+    !noAutoMargin && 'mx-auto'
+  ]"
   >
-
     <div v-if="product.status" class="absolute max-w-[82px] w-full -top-3 -left-5 z-100">
       <StatusBadge :label="product.status" :background-color="product.backgroundStatus"/>
     </div>
@@ -112,6 +115,10 @@ const props = defineProps({
     type: String,
     default: 'default',
   },
+  noAutoMargin: {
+    type: Boolean,
+    default: false
+  }
 })
 
 const emit = defineEmits(['add-to-cart'])
