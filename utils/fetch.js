@@ -1,3 +1,5 @@
+import {useAuthStore} from "~/stores/auth.js";
+
 export class Fetch {
     constructor(baseURL, defaultHeaders = {}) {
         this.baseURL = baseURL
@@ -5,7 +7,8 @@ export class Fetch {
     }
 
     async request(method, url, { params = {}, data = {}, headers = {}, ...config } = {}) {
-        const token = unref(useCookie('token'))
+        const { userToken } = useAuthStore()
+        const token = userToken
         // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcklkIjoiNjdhNGYxMGVjZTMzNDg0MjE5OTUzZTkwIiwiaWF0IjoxNzQ2MTE4MTU3LCJleHAiOjE3NDYyMDQ1NTd9.oIJQrci3c4AOszHkCsoMGdPs1xyNHSrOv4TEd4PWp-Q'
 
         const finalHeaders = {

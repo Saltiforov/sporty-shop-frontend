@@ -10,19 +10,37 @@
         class="fixed z-[500] border-top-radius top-0 left-0 w-[80%] h-full bg-[var(--color-primary-lavender)] shadow-lg transform transition-transform duration-300"
         :class="isOpen ? 'translate-x-0' : '-translate-x-full'"
     >
+
+      <Button v-show="content === 'filters'" :pt="{
+        root: {
+          class: 'mobile-filter-close__btn'
+        }
+      }"
+          @click="$emit('close')"
+          class="absolute top-4 right-4 p-2 cursor-pointer z-10"
+          aria-label="Закрыть"
+      >
+        <svg width="9" height="15" viewBox="0 0 9 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.28516 13.0556L1.74269 7.51317L7.28516 1.9707" stroke="#9E2B24" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </Button>
+
       <Tabs v-model:value="currentTab">
         <TabList :pt="{
           tabList: {
             style: 'background-color: var(--color-primary-lavender) border-top: none'
-          },
-          activeBar: {
-            style: {
-              height: '3px',
-              backgroundColor: 'var(--color-primary-purple)',
-            }
           }
         }">
-          <Tab value="0">{{ t('menu_label') }}</Tab>
+          <Tab :pt="{
+            root: {
+              style: {
+                borderBottom: '3px solid var(--color-primary-purple)',
+                paddingBottom: '4px'
+              }
+            }
+          }" value="0">{{ tabLabel }}
+          </Tab>
         </TabList>
         <TabPanels :pt="{
             root: {
@@ -30,16 +48,7 @@
             }
           }">
           <TabPanel value="0">
-            <div class="m-0">
-              <nav class="p-4 bg-[var(--color-primary-lavender)]">
-                <LinksList
-                    :links="links"
-                    parent-classes="links-container"
-                    link-class="link-item text-[var(--color-gray-pale-lavender)]  mb-6 mr-[32px] text-[var(--color-primary-black)] sm:mr-[32px] md:mr-[53px] last:mr-0"
-                    :label-style="['font-weight: 700']"
-                />
-              </nav>
-            </div>
+            <component :is="sidebarContent"/>
           </TabPanel>
         </TabPanels>
       </Tabs>
@@ -48,42 +57,23 @@
 </template>
 
 <script setup>
-defineProps({
-  isOpen: Boolean,
-})
+import MobileSidebarMenu from "~/components/MobileSidebar/MobileSidebarMenu/MobileSidebarMenu.vue";
+import Filters from "~/components/UI/Filters/Filters.vue"
 
+const props = defineProps({
+  isOpen: Boolean,
+  content: String,
+})
 
 const {t} = useI18n();
 
 const currentTab = ref('0')
 
-const links = ref([
-  {
-    label: computed(() => t('catalog')),
-    icon: "pi pi-filter",
-    page: "/content/catalog",
-  },
-  {
-    label: computed(() => t('promotions')),
-    icon: "pi pi-shopping-cart",
-    page: "/content/promotions",
-  },
-  {
-    label: computed(() => t('shipping_and_payment')),
-    icon: "pi pi-user",
-    page: "/content/shipping-and-payment",
-  },
-  {
-    label: computed(() => t('about_us')),
-    icon: "pi pi-user",
-    page: "/content/about-us",
-  },
-  {
-    label: computed(() => t('frequently_questions')),
-    icon: "pi pi-user",
-    page: "/content/frequently-questions",
-  },
-])
+const tabLabel = computed(() => props.content === 'menu' ? t('menu_label') : t('filters'))
+
+const sidebarContent = computed(() => props.content === 'menu' ? MobileSidebarMenu : Filters)
+
+
 </script>
 
 <style scoped>
@@ -94,6 +84,15 @@ const links = ref([
 .backdrop-blur-custom {
   backdrop-filter: blur(6.9px);
   -webkit-backdrop-filter: blur(6.9px);
+}
+
+.mobile-filter-close__btn {
+  background: transparent;
+  border: none;
+}
+.mobile-filter-close__btn:hover {
+  background: transparent;
+  border: none;
 }
 
 @media (max-width: 1400px) {

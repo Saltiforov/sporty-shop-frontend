@@ -48,8 +48,6 @@
           />
         </div>
 
-
-
       </nav>
     </div>
     <nav class="menu w-full text-[red] flex">
@@ -84,8 +82,6 @@ defineProps({
 
 const {t} = useI18n();
 
-const token = useCookie('token')
-
 const route = useRoute()
 
 const authPopup = useAuthPopup()
@@ -94,15 +90,15 @@ const {logUserOut} = useAuthStore();
 
 const localePath = useLocalePath()
 
-const {authenticated, currentUser} = storeToRefs(useAuthStore());
+const {authenticated, isAuthenticated} = storeToRefs(useAuthStore());
 
 const cartStore = useCartStore();
 
 const emit = defineEmits(['handle-mobile-sidebar'])
 
-const isUserLogin = computed(() => token.value ? 'var(--color-primary-green)' : 'var(--color-gray-pale-lavender)')
+const isUserLogin = computed(() => isAuthenticated.value ? 'var(--color-primary-green)' : 'var(--color-gray-pale-lavender)')
 
-const canUseFavorite = computed(() => token.value ? 'var(--color-gray-pale-lavender)' : 'var(--color-muted-gray)')
+const canUseFavorite = computed(() => isAuthenticated.value ? 'var(--color-gray-pale-lavender)' : 'var(--color-muted-gray)')
 
 const handleMobileMenu = () => {
   emit('handle-mobile-sidebar')

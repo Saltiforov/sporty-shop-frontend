@@ -141,7 +141,7 @@
               <label class="sr-only" for="reviewerName">{{ t('your_name') }}</label>
               <InputText
                   id="reviewerName"
-                  :disabled="!token"
+                  :disabled="!isAuthenticated"
                   v-model="reviewerInputValue"
                   class="w-full h-[42px] py-[10px] rounded-[8px]"
                   :placeholder="t('your_name')"
@@ -152,7 +152,7 @@
               <label class="sr-only" for="reviewTextarea">{{ t('share_your_impressions') }}</label>
               <Textarea
                   id="reviewTextarea"
-                  :disabled="!token"
+                  :disabled="!isAuthenticated"
                   :maxlength="MAX_REVIEW_LENGTH"
                   v-model="textareaValue"
                   style="resize: none"
@@ -171,7 +171,7 @@
               <legend class="sr-only">{{ t('rate_product') }}</legend>
               <div class="flex items-center">
                 <p class="mr-[10px] text-[14px]">{{ t('rate_product') }}</p>
-                <Rating :disabled="!token" v-model="rating">
+                <Rating :disabled="!isAuthenticated" v-model="rating">
                   <template #onicon>
                     <img src="@/assets/icons/star-filled.svg" class="mr-1" />
                   </template>
@@ -191,8 +191,8 @@
             <div class="rounded-[8px] max-w-[386px]">
               <Button
                   type="submit"
-                  :disabled="!token"
-                  v-tooltip.top="!token ? { value: t('review_auth_tooltip'), autoHide: false } : null"
+                  :disabled="!isAuthenticated"
+                  v-tooltip.top="!isAuthenticated ? { value: t('review_auth_tooltip'), autoHide: false } : null"
                   :pt="{
             root: {
               class: 'send-review__btn btn-hover-default'
@@ -299,11 +299,9 @@ const productSlug = computed(() => route.params.slug)
 
 const {t} = useI18n()
 
-const token = useCookie('token')
+const {currentUser, isAuthenticated} = storeToRefs(useAuthStore());
 
-const {currentUser} = storeToRefs(useAuthStore());
-
-const fullNameOfUser = computed(() => token.value ? `${currentUser.value.firstName} ${currentUser.value.lastName}` : '');
+const fullNameOfUser = computed(() => isAuthenticated.value ? `${currentUser.value.firstName} ${currentUser.value.lastName}` : '');
 
 const getReviewLength = computed(() => textareaValue.value.length);
 

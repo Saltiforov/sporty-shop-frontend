@@ -1,7 +1,14 @@
 <template>
   <div>
-    <Header @handle-mobile-sidebar="handleMobileMenu" :is-open="isOpenMenu"/>
-    <MobileSidebar :is-open="isOpenMenu" @close="isOpenMenu = false"/>
+    <Header
+        :is-open="isOpenMenu"
+        @handle-mobile-sidebar="handleMobileMenu"
+    />
+    <MobileSidebar
+        :is-open="isOpenMenu"
+        :content="mobileSidebarContent"
+        @close="isOpenMenu = false"
+    />
     <NuxtLayout>
       <NuxtPage/>
     </NuxtLayout>
@@ -12,7 +19,10 @@
         @close="cartStore.close"
         @continue-shopping="handleContinueShopping"
     />
-    <Footer @handle-mobile-sidebar="handleMobileMenu" :is-mobile-sidebar-open="isOpenMenu"/>
+    <Footer
+        :is-mobile-sidebar-open="isOpenMenu"
+        @handle-mobile-sidebar="handleMobileMenu"
+    />
     <Toast
         :class="{
           'max-w-[240px] top-[70]': isMobileToast
@@ -38,6 +48,10 @@ const staticPagesStore = useStaticPages()
 const cartStore = useCartStore();
 
 const {$eventBus} = useNuxtApp()
+
+const auth = useAuthStore()
+
+const mobileSidebarContent = ref('menu')
 
 const isOpenMenu = ref(false)
 
@@ -78,7 +92,12 @@ const fetchStaticPages = async () => {
   staticPagesStore.setPages(response)
 }
 
+const setMobileSidebarContent = (content) => {
+  mobileSidebarContent.value = content
+}
+
 const handleMobileMenu = () => {
+  setMobileSidebarContent('menu')
   isOpenMenu.value = !isOpenMenu.value
 }
 
@@ -89,12 +108,20 @@ const checkWindowSize = () => {
 }
 
 onMounted(async () => {
+
+  auth.restoreAuthFromLocalStorage()
+
   $eventBus.on('user-authenticated', () => {
     isOpenMenu.value = false
   })
   $eventBus.on('static-info-mounted', () => {
     isOpenMenu.value = false
   })
+  $eventBus.on('handle-mobile-filters', () => {
+    setMobileSidebarContent('filters')
+    isOpenMenu.value = true
+  })
+
   await fetchStaticPages()
   window.addEventListener('resize', checkWindowSize)
 })
@@ -103,5 +130,6 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', checkWindowSize)
   $eventBus.off('user-authenticated')
   $eventBus.off('static-info-mounted')
+  $eventBus.off('handle-mobile-filters')
 })
 </script>

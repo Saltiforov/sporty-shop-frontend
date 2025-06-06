@@ -1,24 +1,21 @@
-import { useAuthStore } from "~/stores/auth.js";
+import { storeToRefs } from "pinia"
+import { useAuthStore } from "~/stores/auth.js"
 
 export default defineNuxtRouteMiddleware((to) => {
-    const { authenticated, currentUser } = storeToRefs(useAuthStore());
-    const { logUserOut } = useAuthStore();
-    const token = useCookie('token');
-    const locale = useCookie('locale');
+    if (process.server) return
 
-    if (process.client && token.value) {
-        authenticated.value = true;
-        const storedUserData = localStorage.getItem('currentUser');
-        if (storedUserData) {
-            currentUser.value = JSON.parse(storedUserData);
-        }
+    const auth = useAuthStore()
+    const { isAuthenticated } = storeToRefs(auth)
+
+    const locale = useCookie('locale')
+
+    if (!isAuthenticated.value && to.path.startsWith(`${locale.value}/profile`)) {
+        return navigateTo('/')
     }
 
-    console.log("`${locale}/profile`", locale.value)
-
-
-    if (!token.value && to.path.startsWith(`${locale}/profile`)) {
-        return navigateTo('/');
+    if (isAuthenticated.value && to.path.startsWith(`${locale.value}/auth/`)) {
+        return navigateTo('/')
     }
 
-});
+    console.log("auth.isAuthenticated", isAuthenticated.value)
+})

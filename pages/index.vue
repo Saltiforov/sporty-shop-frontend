@@ -7,7 +7,7 @@
       <div class="main-content-container ">
 
         <div class="select-filters mb-3 flex w-full px-3 justify-end">
-          <div class="responsive-filters" @click="isMobileFiltersOpen = !isMobileFiltersOpen">
+          <div class="responsive-filters" @click="handleMobileFilters">
             <div class="responsive-filters-icon">
               <svg
                   :class="isMobileFiltersOpen ? 'rotate-90' : 'rotate-0'"
@@ -162,6 +162,10 @@ const { $eventBus } = useNuxtApp()
 const { t, locale } = useI18n()
 const route = useRoute()
 const router = useRouter()
+
+const handleMobileFilters = () => {
+  $eventBus.emit('handle-mobile-filters')
+}
 
 const page = ref(Number(route.query.page) || 1)
 const limit = ref(Number(route.query.limit) || 10)
@@ -345,7 +349,7 @@ onBeforeUnmount(() => {
 }
 
 
-@media (max-width: 1022px) {
+@media (max-width: 1024px) {
   .promotional-products {
     display: none;
   }

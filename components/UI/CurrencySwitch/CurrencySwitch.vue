@@ -2,16 +2,16 @@
   <div class="flex currency-switch items-center">
     <Select
         :pt="{
-        root: {
-          style: 'background-color: transparent; border: none;'
-        },
-        label: {
-          style: labelStyles
-        },
-        dropdown: {
-          style: 'width: 1.25rem;'
-        }
-      }"
+          root: {
+            class: 'currency-select-root'
+          },
+          label: {
+            class: 'currency-select-label'
+          },
+          dropdown: {
+            class: 'currency-select-dropdown'
+          }
+        }"
         class="w-full"
         v-model="selectedCurrency"
         optionLabel="label"
@@ -23,31 +23,16 @@
 <script setup>
 import {ref, watch, onBeforeMount, computed} from 'vue'
 import Select from 'primevue/select'
-import { useCurrencyStore } from '~/stores/currency'
-import { useCookie } from '#app'
-import {useWindowWidthWatcher} from "~/composables/useWindowWidthWatcher";
+import {useCurrencyStore} from '~/stores/currency'
+import {useCookie} from '#app'
 
 const currencyStore = useCurrencyStore()
 const currencyCookie = useCookie('currency')
-const getWidth = useWindowWidthWatcher()
-
 
 const currencyOptions = [
-  { label: 'Ukraine', code: 'UAH', value: 'uah' },
-  { label: 'Europe', code: 'EUR', value: 'eur' }
+  {label: 'Ukraine', code: 'UAH', value: 'uah'},
+  {label: 'Europe', code: 'EUR', value: 'eur'}
 ]
-
-const windowWidth = computed(() => getWidth())
-
-const labelStyles = computed(() => {
-  return {
-    color: 'var(--color-gray-pale-lavender)',
-    textAlign: 'end',
-    lineHeight: '22px',
-    fontWeight: 600,
-    fontSize: windowWidth.value < 500 ? '16px' : '20px',
-  }
-})
 
 const defaultCode = currencyCookie.value || currencyOptions[0].code
 
@@ -79,3 +64,28 @@ watch(selectedCurrency, (newVal) => {
   localStorage.setItem('currency', newVal.code)
 })
 </script>
+
+<style>
+.currency-select-root {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.currency-select-label {
+  color: var(--color-gray-pale-lavender) !important;
+  text-align: end !important;
+  line-height: 22px !important;
+  font-weight: 600 !important;
+  font-size: 20px !important;
+}
+
+@media (max-width: 500px) {
+  .currency-select-label {
+    font-size: 16px !important;
+  }
+}
+
+.currency-select-dropdown {
+  width: 1.25rem !important;
+}
+</style>

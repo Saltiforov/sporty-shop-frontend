@@ -6,6 +6,12 @@
             display: 'none',
           }
         },
+        root: {
+          style: mobileRootStyles
+        },
+        nodeContent: {
+          style: mobileNodeContentStyles
+        },
         nodeToggleButton: {
                 style: {
                   display: 'none',
@@ -24,7 +30,7 @@
       <div
           :class="[
       'flex items-center justify-start gap-2 ',
-      isRootNode(slotProps.node) ? 'pb-3' : '',
+      shouldShowDivider(slotProps.node)  ? 'pb-3' : '',
       isRootNode(slotProps.node) && expandedKeys[slotProps.node.key] ? 'w-[50%] mx-auto' : ''
     ]"
           :style="[isRootNode(slotProps.node) ? 'width: 278px;' : '']"
@@ -54,13 +60,13 @@
               viewBox="0 0 24 24"
               fill="none"
           >
-            <path d="M8 5L15 12L8 19" stroke="currentColor" stroke-width="2" />
+            <path d="M8 5L15 12L8 19" stroke="currentColor" stroke-width="2"/>
           </svg>
         </button>
       </div>
 
       <div
-          v-if="isRootNode(slotProps.node) || slotProps.node.children.length > 1"
+          v-if="shouldShowDivider(slotProps.node)"
           class="mb-[9px]"
           :class="['border-b border-[var(--color-muted-gray)]', isRootNode(slotProps.node) && expandedKeys[slotProps.node.key] ? 'w-[50%] mx-auto' : '']"
       ></div>
@@ -76,7 +82,10 @@
       >
         <div
             v-show="slotProps.node.children && expandedKeys[slotProps.node.key]"
-            class="pl-4 mt-2 overflow-hidden"
+            :class="[
+              'mt-2 overflow-hidden',
+              !mobileVersion ? 'pl-4' : ''
+            ]"
             ref="childList"
         >
           <div
@@ -103,6 +112,7 @@
           <div
               v-if="slotProps.node.children && slotProps.node.children.length > 1 && expandedKeys[slotProps.node.key]"
               class="pt-3 mb-3 text-sm cursor-pointer filters-block-text w-[50%] mx-auto flex justify-center"
+              :style="mobileSelectAllStyles"
           >
         <span
             class="text-[12px]"
@@ -113,12 +123,12 @@
           }"
             @click.stop="onNodeCheckboxChange(slotProps.node, !slotProps.node.modelValue)"
         >
-          Select all
+          {{ selectAllLabel(areAllChildrenSelected(slotProps.node)) }}
         </span>
           </div>
 
           <div
-              v-if="slotProps.node.children.length > 1"
+              v-if="slotProps.node.children.length > 1 && !mobileVersion"
               class="mb-[8px]"
               :class="['border-b border-[var(--color-muted-gray)]', isRootNode(slotProps.node) && expandedKeys[slotProps.node.key] ? 'w-full' : '']"
           ></div>
@@ -132,7 +142,7 @@
     </template>
   </Tree>
 
-  <PriceRangeFilter class="filters-block-text"/>
+  <PriceRangeFilter class="filters-block-text" :is-mobile-version="mobileVersion"/>
 </template>
 
 <script setup>
@@ -143,6 +153,56 @@ import PriceRangeFilter from "~/components/UI/PriceRangeFilter/PriceRangeFilter.
 import {getAllFilters} from "~/services/api/filters-http.service.js"
 
 import defaultFilterImage from '~/assets/icons/filters/injections-icon.svg'
+import {useWindowWidthWatcher} from "~/composables/useWindowWidthWatcher.js";
+
+const getWidth = useWindowWidthWatcher();
+
+const mobileVersion = computed(() => getWidth() <= 1024)
+
+const mobileNodeContentStyles = computed(() => {
+  return mobileVersion.value
+      ? {
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        padding: '8px',
+        marginBottom: '24px',
+      }
+      : {}
+})
+
+const mobileRootStyles = computed(() => {
+  return mobileVersion.value
+      ? {
+        backgroundColor: 'var(--color-primary-lavender)'
+      }
+      : {}
+})
+
+const mobileSelectAllStyles = computed(() => {
+  return mobileVersion.value
+      ? {
+        backgroundColor: 'var(--color-primary-lavender)',
+        padding: '5px 6.5px',
+        borderRadius: 'var(--default-rounded)',
+        marginTop: '14px',
+        marginBottom: '2px',
+        maxWidth: '80px',
+      }
+      : {}
+})
+
+const selectAllLabel = (allSelected) => {
+  return mobileVersion.value && allSelected
+      ? 'Deselect all'
+      : 'Select all'
+}
+
+
+const shouldShowDivider = (node) => {
+  const isRoot = isRootNode(node)
+  const isExpanded = expandedKeys.value[node.key]
+  return mobileVersion.value ? isRoot && isExpanded : isRoot
+}
 
 const {t, locale} = useI18n()
 const route = useRoute()
@@ -314,22 +374,15 @@ const afterLeave = el => {
 .expand-leave-active {
   transition: height 0.3s ease;
 }
+
 .expand-enter-from,
 .expand-leave-to {
   height: 0;
   overflow: hidden;
 }
+
 .filters-block-text-child {
   font-weight: 300;
   font-size: 18px;
-}
-
-@media (max-width: 500px) {
-  .filters-block-text {
-    font-size: 14px;
-  }
-  .filters-block-text-child {
-    font-size: 14px;
-  }
 }
 </style>

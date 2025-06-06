@@ -13,7 +13,7 @@
     <div class="product-card-content">
       <div class="product-card-header flex relative flex-col items-center justify-center">
 
-        <div v-if="token" :class="favoriteButtonPosition" class="absolute flex items-center justify-center h-[31px] w-[31px] z-10 ">
+        <div v-if="isAuthenticated" :class="favoriteButtonPosition" class="absolute flex items-center justify-center h-[31px] w-[31px] z-10 ">
           <FavoriteButton
               :is-favorite="product.isFavorite"
               :product="product"
@@ -100,6 +100,8 @@ import DefaultProductImage from '~/assets/images/product-image.png'
 import {useCartStore} from "~/stores/cart.js";
 import {useCurrencyStore} from "~/stores/currency.js";
 import {useWindowWidthWatcher} from "~/composables/useWindowWidthWatcher.js";
+import {storeToRefs} from "pinia";
+import {useAuthStore} from "~/stores/auth.js";
 
 const {locale} = useI18n()
 
@@ -123,6 +125,8 @@ const props = defineProps({
 
 const emit = defineEmits(['add-to-cart'])
 
+const {isAuthenticated} = storeToRefs(useAuthStore());
+
 const cartStore = useCartStore()
 
 const currencyStore = useCurrencyStore()
@@ -130,8 +134,6 @@ const currencyStore = useCurrencyStore()
 const getWidth = useWindowWidthWatcher()
 
 const {t} = useI18n()
-
-const token = useCookie('token')
 
 const windowWidth = computed(() => getWidth())
 

@@ -37,7 +37,7 @@ import MainBannerSkeleton from '~/components/Skeletons/MainBannerSkeleton/MainBa
 
 import BannerImage from '~/public/images/banner-image.webp'
 
-const images = [ BannerImage, BannerImage ]
+const images = [ BannerImage, BannerImage, BannerImage ]
 
 const hydrated = ref(false)
 onMounted(() => {

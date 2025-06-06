@@ -228,6 +228,8 @@ import RegionSelect from "~/components/UI/RegionSelect/RegionSelect.vue";
 import {calculateTotal} from "~/utils/index.js";
 import {computed} from "vue";
 import {useWindowWidthWatcher} from "~/composables/useWindowWidthWatcher.js";
+import {storeToRefs} from "pinia";
+import {useAuthStore} from "~/stores/auth.js";
 
 definePageMeta({
   layout: 'breadcrumb',
@@ -249,7 +251,7 @@ const cartStore = useCartStore()
 
 const currencyStore = useCurrencyStore()
 
-const token = useCookie('token')
+const {isAuthenticated} = storeToRefs(useAuthStore());
 
 const isUsePromoCode = ref(false)
 
@@ -382,7 +384,7 @@ const togglePromoCodeUse = () => {
 }
 
 onMounted(async () => {
-  if (token.value) {
+  if (isAuthenticated.value) {
     userData.value = await getCurrentUser()
   }
 

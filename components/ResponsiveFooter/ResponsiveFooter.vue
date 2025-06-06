@@ -33,15 +33,9 @@ const emit = defineEmits(['handle-mobile-sidebar'])
 
 const cartStore = useCartStore();
 
-const token = useCookie('token')
-
-const { t } = useI18n()
-
 const showShoppingCart = () => {
   cartStore.open()
 };
-
-
 
 </script>
 

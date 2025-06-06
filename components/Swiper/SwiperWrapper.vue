@@ -4,11 +4,12 @@
       <swiper-container
           ref="containerRef"
           class="w-full"
+          :style="paginationStyles"
       >
         <swiper-slide
             v-for="(item, idx) in items"
             :key="idx"
-            :class="['flex items-center px-2', alignStart ? 'justify-start' : 'justify-center']"
+            :class="['flex items-center', alignStart ? 'justify-start px-2' : 'justify-center']"
         >
           <slot :item="item" :index="idx"/>
         </swiper-slide>
@@ -16,13 +17,13 @@
 
       <button
           v-show="isShowSlideButton"
-          class="swiper-btn  -left-6"
+          class="swiper-btn -left-6"
           @click="swipeToLeft"
           :style="buttonStyles"
           :class="buttonClass"
       >
         <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M8 15L1 8L8 1" :stroke="arrowColor " stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8 15L1 8L8 1" :stroke="arrowColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
 
@@ -41,9 +42,7 @@
   </ClientOnly>
 </template>
 
-
 <script setup>
-
 const props = defineProps({
   items: {
     type: Array,
@@ -52,9 +51,8 @@ const props = defineProps({
   },
   options: {
     type: Object,
-    required: true,
-    default: () => {
-    }
+    required: false,
+    default: () => ({})
   },
   buttonStyles: {
     type: Object,
@@ -79,11 +77,19 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['swiper-slide-to-right'])
+const emit = defineEmits(['swiper-slide-to-right', 'swiper-slide-to-left'])
 
 const containerRef = ref(null)
 
-const swiper = useSwiper(containerRef, props.options)
+// Объединяем переданные опции с настройками пагинации
+const swiperOptions = {
+  ...props.options,
+  pagination: {
+    clickable: true,
+  }
+}
+
+const swiper = useSwiper(containerRef, swiperOptions)
 
 const swipeToRight = () => {
   swiper.next()
@@ -94,6 +100,13 @@ const swipeToLeft = () => {
   emit('swiper-slide-to-left')
 }
 
+const paginationStyles = {
+  "--swiper-pagination-color": "var(--color-muted-gray)",
+  "--swiper-pagination-bullet-inactive-color": "var(--color-primary-pure-white)",
+  "--swiper-pagination-bullet-inactive-opacity": "1",
+  "--swiper-pagination-bullet-size": "12px",
+  "--swiper-pagination-bullet-horizontal-gap": "6px"
+}
 </script>
 
 <style scoped>

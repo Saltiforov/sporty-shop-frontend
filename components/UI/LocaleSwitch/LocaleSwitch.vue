@@ -2,16 +2,10 @@
   <div class="flex locale-switch items-center">
     <Select
         :pt="{
-        root: {
-          style: 'background-color: transparent; border: none; w-auto'
-        },
-        label: {
-          style: labelStyles
-        },
-        dropdown: {
-          style: 'width: 1.25rem;'
-        }
-      }"
+          root: { class: 'locale-select-root' },
+          label: { class: 'locale-select-label' },
+          dropdown: { class: 'locale-select-dropdown' }
+        }"
         class="w-full"
         v-model="selectedLanguage"
         optionLabel="name"
@@ -43,16 +37,6 @@ const languages = computed(() =>
 
 const defaultLanguage = computed(() => languages.value.find(l => l.code === defaultLocale))
 
-const labelStyles = computed(() => {
-  return {
-    color: 'var(--color-gray-pale-lavender)',
-    textAlign: 'end',
-    lineHeight: '22px',
-    fontWeight: 600,
-    fontSize: windowWidth.value < 500 ? '12px' : '20px',
-  }
-})
-
 const selectedLanguage = ref(
     languages.value.find(l => l.code === storedLocale.value) || defaultLanguage.value
 )
@@ -64,3 +48,29 @@ const switchLocale = () => {
   setLocale(selectedLanguage.value.code)
 }
 </script>
+
+<style>
+.locale-select-root {
+  background-color: transparent !important;
+  border: none !important;
+  width: auto !important;
+}
+
+.locale-select-label {
+  color: var(--color-gray-pale-lavender) !important;
+  text-align: end !important;
+  line-height: 22px !important;
+  font-weight: 600 !important;
+  font-size: 20px !important;
+}
+
+@media (max-width: 500px) {
+  .locale-select-label {
+    font-size: 12px !important;
+  }
+}
+
+.locale-select-dropdown {
+  width: 1.25rem !important;
+}
+</style>

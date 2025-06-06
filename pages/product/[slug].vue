@@ -15,7 +15,7 @@
       <div class="image relative w-full max-w-[678px]">
         <div class="favorite-button-wrapper absolute z-[100] top-2 -right-4">
           <FavoriteButton
-              v-if="token"
+              v-if="isAuthenticated"
               inactive-color="var(--color-primary-dark-red)"
               :is-favorite="product.isFavorite"
               :product="product"
@@ -247,16 +247,16 @@ import AboutProductAccordion from "~/components/AboutProductAccordion/AboutProdu
 import LayoutBreadcrumb from "~/components/UI/LayoutBreadcrumb/LayoutBreadcrumb.vue";
 import BreadcrumbSkeleton from "~/components/Skeletons/BreadcrumbSkeleton/BreadcrumbSkeleton.vue";
 import {useWindowWidthWatcher} from "~/composables/useWindowWidthWatcher.js";
+import {storeToRefs} from "pinia";
+import {useAuthStore} from "~/stores/auth.js";
 
 const {t} = useI18n()
 
 const cartStore = useCartStore()
 
-const token = useCookie('token')
+const {isAuthenticated} = storeToRefs(useAuthStore());
 
 const slug = useRoute().params.slug
-
-console.log('slug', slug);
 
 const {data: productItem, pending, error} = await useAsyncData(
     'product slug',

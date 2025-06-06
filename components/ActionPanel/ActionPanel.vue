@@ -53,6 +53,8 @@
 
 <script setup>
 import {useCartStore} from "~/stores/cart.js";
+import {storeToRefs} from "pinia";
+import {useAuthStore} from "~/stores/auth.js";
 
 const props = defineProps({
   canUseFavorite: String,
@@ -69,14 +71,18 @@ const props = defineProps({
   }
 })
 
+const {isAuthenticated} = storeToRefs(useAuthStore());
 
 const emit = defineEmits(['toggle', 'showShoppingCart', 'handle-mobile-sidebar'])
 
-const token = useCookie('token')
+const route = useRoute()
+const router = useRouter()
 
-const isUserLogin = computed(() => token.value ? 'var(--color-primary-green)' : 'var(--color-gray-pale-lavender)')
+const { locale } = useI18n()
 
-const canUseFavorite = computed(() => token.value ? 'var(--color-gray-pale-lavender)' : 'var(--color-muted-gray)')
+const isUserLogin = computed(() => isAuthenticated.value ? 'var(--color-primary-green)' : 'var(--color-gray-pale-lavender)')
+
+const canUseFavorite = computed(() => isAuthenticated.value ? 'var(--color-gray-pale-lavender)' : 'var(--color-muted-gray)')
 
 const isShoppingCartOpen = computed(() => useCartStore().isOpen)
 
@@ -93,9 +99,13 @@ const toggle = (event) => {
 };
 
 const redirectToProfile = () => {
-  return token.value
-      ? navigateTo('/profile/personal-information')
-      : navigateTo('/auth/login')
+  const targetPath = isAuthenticated.value
+      ? `/${locale.value}/profile/personal-information`
+      : `/${locale.value}/auth/login`
+
+  if (route.path !== targetPath) {
+    return router.replace(targetPath)
+  }
 }
 
 const buttonPT = {
@@ -109,19 +119,10 @@ const buttonPT = {
 }
 
 const menuPT = {
-  root: {
-    class: `
-      absolute left-1/2 translate-x-[15%] translate-y-[10%] top-full mt-20 z-500
-      bg-[var(--color-gray-light-lavender)]
-      before:content-[''] before:absolute before:top-[-26px]
-      before:right-[40px] before:border-[13px] before:border-transparent
-      before:border-b-[var(--color-gray-light-lavender)]
-    `
-  },
-  submenuLabel: {class: 'p-0'},
-  itemLink: {class: 'border-b border-[var(--color-primary-pure-white)] last:pb-[10px]'}
+  root: { class: 'menu-root' },
+  submenuLabel: { class: 'submenu-label' },
+  itemLink: { class: 'item-link' }
 }
-
 </script>
 
 <style scoped>
