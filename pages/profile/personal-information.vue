@@ -5,7 +5,7 @@
       <div class="main-content">
         <h1 class="personal-information-title title-lg-20 mb-[30px]">{{ t('contact_information') }}</h1>
         <FieldsBlock v-if="userData && userData._id" class="personal-information-fields-block mb-[73px] murecho-font"
-                     :config="config.fields" ref="fieldsBlock" :data="userData"/>
+                     :config="config.fields" ref="fieldsBlock" :data="formattedUserData"/>
         <FieldsBlockSkeleton v-else/>
       </div>
       <div class="footer">
@@ -41,16 +41,45 @@ const {currentUser} = storeToRefs(useAuthStore());
 
 const userData = ref({})
 
+const formattedUserData = computed(() => {
+  const {address = {}, ...rest} = userData.value || {};
+
+  return {
+    ...rest,
+    ...address
+  };
+})
+
 const fieldsBlock = ref(null)
 
 const isLoading = ref(false);
+
+const buildPersonalInfoPayload = (info) => {
+  const {
+    city,
+    postalCode,
+    street,
+    country,
+    ...rest
+  } = info;
+
+  return {
+    ...rest,
+    address: {
+      city,
+      postalCode,
+      street,
+      country,
+    },
+  };
+};
 
 const savePersonalInformation = async () => {
   const isValid = fieldsBlock.value?.validateFields()
   const userInfo = fieldsBlock.value?.getData()
 
   if (isValid) {
-    updateInfoAboutUser(currentUser.value._id, userInfo)
+    updateInfoAboutUser(currentUser.value._id, buildPersonalInfoPayload(userInfo))
   }
 }
 
@@ -108,8 +137,8 @@ const config = {
       },
 
       {
-        name: 'postCode',
-        code: 'postCode',
+        name: 'postalCode',
+        code: 'postalCode',
         label: computed(() => t('post_code')),
         type: 'InputNumber',
         props: {
@@ -117,23 +146,10 @@ const config = {
           half: true,
           placeholder: '',
           useGrouping: false,
-          modelValue: 'postCode',
+          modelValue: 'postalCode',
         },
         validators: [
           (value) => (value ? true : "Postal Code is required"),
-        ],
-      },
-      {
-        name: 'state',
-        code: 'state',
-        label: computed(() => t('state')),
-        type: 'InputText',
-        props: {
-          side: 'right',
-          placeholder: ''
-        },
-        validators: [
-          (value) => (value ? true : "State is required"),
         ],
       },
       {
@@ -207,38 +223,29 @@ const config = {
       {
         name: 'phone',
         code: 'phone',
-        label: computed(() => t('phone_number')),
-        type: 'Custom',
+        label: computed(() => t('auth_phone_number')),
+        type: 'InputText',
         props: {
           side: 'left',
+          type: 'tel',
+          placeholder: '',
+          required: true,
+          onKeydown: (e) => {
+            const allowedKeys = [
+              'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab',
+              '+', '-', '(', ')', ' '
+            ];
+            if (
+                !allowedKeys.includes(e.key) &&
+                !e.key.match(/[0-9]/)
+            ) {
+              e.preventDefault();
+            }
+          }
         },
         validators: [
-          (value) => (value ? true : "Phone is required"),
-          (value) => (value?.toString().length <= 11 ? true : "Phone number must be no more than 11 digits")
+          (value) => (value ? true : "Phone Number is required"),
         ],
-        render: ({modelValue, 'onUpdate:modelValue': update, disabled}) =>
-            h(InputGroup, {}, {
-              default: () => [
-                h(InputGroupAddon, {
-                  pt: {
-                    root: {
-                      style: {
-                        backgroundColor: 'white',
-                        color: 'var(--color-primary-dark)',
-                      }
-                    }
-                  }
-                }, () => '+380'),
-                h(InputNumber, {
-                  modelValue,
-                  'onUpdate:modelValue': update,
-                  useGrouping: false,
-                  placeholder: '',
-                  defaultValue: null,
-                  disabled
-                })
-              ]
-            })
       },
 
     ]
@@ -263,18 +270,22 @@ const config = {
     margin-bottom: 26px;
   }
 }
+
 @media (max-width: 520px) {
   .personal-information-wrapper__btn {
     padding: 0;
   }
+
   .personal-information__btn {
     font-size: 14px !important;
 
   }
+
   .main-content {
     max-width: 269px;
     margin: 0 auto;
   }
+
   .personal-information-fields-block {
     max-width: 100%;
   }
