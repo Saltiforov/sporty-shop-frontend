@@ -24,10 +24,6 @@
         @handle-mobile-sidebar="handleMobileMenu"
     />
     <Toast
-        :class="{
-          'max-w-[240px] top-[70]': isMobileToast
-        }"
-        :pt="toastPt"
         position="bottom-right"
         group="br"
     />
@@ -61,31 +57,6 @@ const handleContinueShopping = () => {
   cartStore.close()
   navigateTo('/')
 }
-
-const toastPt = computed(() => {
-  return {
-    message: {
-      style: {
-        width: isMobileToast.value ? '250px' : '',
-      }
-    },
-    messageContent: {
-      style: {
-        padding: isMobileToast.value ? '5px' : '',
-      }
-    },
-    summary: {
-      style: {
-        fontSize: isMobileToast.value ? '14px' : '',
-      }
-    },
-    detail: {
-      style: {
-        fontSize: isMobileToast.value ? '12px' : '',
-      }
-    },
-  }
-})
 
 const fetchStaticPages = async () => {
   const response = await getStaticPagesInfo()

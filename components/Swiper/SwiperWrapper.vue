@@ -74,19 +74,24 @@ const props = defineProps({
   alignStart: {
     type: Boolean,
     default: false
-  }
+  },
+  showPagination: {
+    type: Boolean,
+    default: false
+  },
 })
 
 const emit = defineEmits(['swiper-slide-to-right', 'swiper-slide-to-left'])
 
 const containerRef = ref(null)
 
-// Объединяем переданные опции с настройками пагинации
 const swiperOptions = {
   ...props.options,
-  pagination: {
-    clickable: true,
-  }
+  ...(props.showPagination && {
+    pagination: {
+      clickable: true
+    }
+  })
 }
 
 const swiper = useSwiper(containerRef, swiperOptions)

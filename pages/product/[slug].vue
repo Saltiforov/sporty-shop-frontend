@@ -110,7 +110,7 @@
           <div>
 
             <div class="price mb-10 flex items-center">
-              <div class="mr-[57px] max-w-[150px] w-full price_and_discount">
+              <div class="mr-[57px] max-w-[170px] w-full price_and_discount">
                 <div :class="[hasDiscount ? 'text-[16px] line-through text-[#999]' : 'text-[36px]']"
                      class="fw-600 discount mr-[57px] text-[var(--color-primary-black)] leading-[34px]">
                   {{ priceByCurrency }}
@@ -303,13 +303,13 @@ const amountButtonSize = computed(() => {
 })
 
 const priceByCurrencyWithDiscount = computed(() => {
-  return currencyStore.getCurrency === 'UAH'
+  return currencyStore.getCurrency === 'uah'
       ? product.value.price.uah - product.value.discount.uah
       : product.value.price.eur - product.value.discount.eur
 })
 
 const priceByCurrency = computed(() => {
-  return currencyStore.getCurrency === 'UAH' ? product.value.price?.uah : product.value.price?.eur
+  return currencyStore.getCurrency === 'uah' ? product.value.price?.uah : product.value.price?.eur
 })
 
 const counterContainerStyle = computed(() => {

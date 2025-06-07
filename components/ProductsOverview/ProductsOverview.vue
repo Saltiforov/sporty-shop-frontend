@@ -40,7 +40,14 @@
 
     </div>
   </div>
-  <ConfirmDialog></ConfirmDialog>
+  <ConfirmDialog
+      :pt="{
+    root: { class: 'my-dialog-root' },
+    footer: { class: 'my-dialog-footer' },
+    acceptButton: { class: 'my-accept-btn' },
+    rejectButton: { class: 'my-reject-btn' }
+  }"
+  />
   <Toast/>
 </template>
 

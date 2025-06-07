@@ -170,7 +170,7 @@ header {
     font-style: italic;
 }
 
-.menu-root {
+.p-menu {
     position: absolute;
     left: 50%;
     top: 100%;
@@ -180,7 +180,7 @@ header {
     background-color: var(--color-gray-light-lavender);
 }
 
-.menu-root::before {
+.p-menu::before {
     content: '';
     position: absolute;
     top: -26px;
@@ -191,18 +191,53 @@ header {
     border-bottom-color: var(--color-gray-light-lavender);
 }
 
-.submenu-label {
+.p-menu-submenu-label {
     padding: 0;
 }
 
-.item-link {
+.p-menu-item-link {
     border-bottom: 1px solid var(--color-primary-pure-white);
-}
-
-li:last-child .item-link {
-    border-bottom: none;
-}
-
-.item-link:last-child {
     padding-bottom: 10px;
+}
+
+.p-menu-item:last-child .p-menu-item-link {
+    border-bottom: none;
+    padding-bottom: 10px;
+}
+
+
+.p-button-outlined.p-button-secondary {
+    border: 2px solid transparent;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.p-button-outlined.p-button-secondary:hover {
+    border: 2px solid transparent;
+}
+
+.p-dialog .p-dialog-header-icon,
+.p-dialog .p-dialog-close-button {
+    padding: 0.5rem;
+    border: none;
+    background-color: transparent;
+    color: inherit;
+    box-shadow: none;
+    outline: none;
+    font-weight: inherit;
+    transition: none;
+}
+
+.p-dialog .p-dialog-header-icon:hover,
+.p-dialog .p-dialog-header-icon:focus,
+.p-dialog .p-dialog-header-icon:active,
+.p-dialog .p-dialog-close-button:hover,
+.p-dialog .p-dialog-close-button:focus,
+.p-dialog .p-dialog-close-button:active {
+    background-color: transparent !important;
+    border: none !important;
+    color: inherit !important;
+    box-shadow: none !important;
+    transform: none !important;
+    outline: none !important;
 }

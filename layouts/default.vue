@@ -6,6 +6,7 @@
             v-if="hydrated"
             :items="images"
             :options="swiperOptions"
+            :is-main-banner="true"
         >
           <template #default="{ item }">
             <NuxtImg

@@ -9,7 +9,7 @@
     </div>
 
     <Button
-        :disabled="!canUseFavorite"
+        :disabled="!isAuthenticated"
         @click="navigateTo('/profile/favorites')"
         :pt="buttonPT"
     >
@@ -36,7 +36,6 @@
           :model="items"
           :popup="true"
           :class="{ top: '90px' }"
-          :pt="menuPT"
       />
 
     <Button :disabled="isShoppingCartOpen" @click="$emit('showShoppingCart')" :pt="buttonPT" class="badge-button">
@@ -116,12 +115,6 @@ const buttonPT = {
       padding: '5px',
     }
   }
-}
-
-const menuPT = {
-  root: { class: 'menu-root' },
-  submenuLabel: { class: 'submenu-label' },
-  itemLink: { class: 'item-link' }
 }
 </script>
 

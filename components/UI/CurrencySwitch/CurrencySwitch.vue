@@ -2,16 +2,10 @@
   <div class="flex currency-switch items-center">
     <Select
         :pt="{
-          root: {
-            class: 'currency-select-root'
-          },
-          label: {
-            class: 'currency-select-label'
-          },
-          dropdown: {
-            class: 'currency-select-dropdown'
-          }
-        }"
+        root: { class: 'currency-select-root' },
+        label: { class: 'currency-select-label' },
+        dropdown: { class: 'currency-select-dropdown' }
+      }"
         class="w-full"
         v-model="selectedCurrency"
         optionLabel="label"
@@ -21,47 +15,45 @@
 </template>
 
 <script setup>
-import {ref, watch, onBeforeMount, computed} from 'vue'
+import { ref, watch, onBeforeMount } from 'vue'
 import Select from 'primevue/select'
-import {useCurrencyStore} from '~/stores/currency'
-import {useCookie} from '#app'
+import { useCurrencyStore } from '~/stores/currency'
+import { useCookie } from '#app'
 
 const currencyStore = useCurrencyStore()
 const currencyCookie = useCookie('currency')
 
 const currencyOptions = [
-  {label: 'Ukraine', code: 'UAH', value: 'uah'},
-  {label: 'Europe', code: 'EUR', value: 'eur'}
+  { label: 'Ukraine', code: 'UAH', value: 'uah' },
+  { label: 'Europe', code: 'EUR', value: 'eur' }
 ]
 
-const defaultCode = currencyCookie.value || currencyOptions[0].code
+const defaultValue = currencyCookie.value || localStorage.getItem('currency') || currencyOptions[0].value
 
 const selectedCurrency = ref(
-    currencyOptions.find(el => el.code === defaultCode)
-    || currencyOptions[0]
+    currencyOptions.find(el => el.value === defaultValue.toLowerCase()) || currencyOptions[0]
 )
 
 onBeforeMount(() => {
-  let code = currencyCookie.value
+  let code = currencyCookie.value || localStorage.getItem('currency') || ''
+  code = code.toLowerCase()
 
-  if (!code) {
-    code = localStorage.getItem('currency') || ''
+  let match = currencyOptions.find(c => c.value === code)
+  if (!match) {
+    match = currencyOptions[0]
   }
 
-  const match = currencyOptions.find(c => c.code === code)
+  selectedCurrency.value = match
 
-  if (match) {
-    selectedCurrency.value = match
-  }
-
-  currencyStore.setCurrency(selectedCurrency.value.code)
-  currencyCookie.value = selectedCurrency.value.code
+  currencyStore.setCurrency(match.value)
+  currencyCookie.value = match.value
+  localStorage.setItem('currency', match.value)
 })
 
 watch(selectedCurrency, (newVal) => {
-  currencyStore.setCurrency(newVal.code)
-  currencyCookie.value = newVal.code
-  localStorage.setItem('currency', newVal.code)
+  currencyStore.setCurrency(newVal.value)
+  currencyCookie.value = newVal.value
+  localStorage.setItem('currency', newVal.value)
 })
 </script>
 
