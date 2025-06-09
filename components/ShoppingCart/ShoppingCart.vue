@@ -153,13 +153,13 @@ const recommendedProductsIconSizes = computed(() => {
       : { width: '29px', height: '29px',}
 })
 
-watch(() => props.isOpen, (newVal) => {
-  document.body.style.overflow = newVal ? 'hidden' : '';
-});
-
-onUnmounted(() => {
-  document.body.style.overflow = '';
-});
+// watch(() => props.isOpen, (newVal) => {
+//   document.body.style.overflow = newVal ? 'hidden' : '';
+// });
+//
+// onUnmounted(() => {
+//   document.body.style.overflow = '';
+// });
 
 const products = ref([
   {

@@ -155,6 +155,8 @@
   "logout": "Вийти",
   "checkout_region_label": "Регіон оформлення замовлення",
 
+  "confirmation": "Підтвердження",
+
   "change_password": "Зміна паролю",
   "change_password_button": "Змінити пароль",
   "old_password": "Старий пароль*",

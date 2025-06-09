@@ -139,6 +139,9 @@
   "cash_on_delivery_text": "Cash on Delivery",
   "empty_search_message": "You haven't entered anything yet - try searching for the product you're looking for",
   "menu_label": "Menu",
+
+  "confirmation": "Confirmation",
+
   "account_label": "Account",
 
   "checkout_list_title": "List of products to order",

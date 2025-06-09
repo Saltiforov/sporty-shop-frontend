@@ -16,7 +16,7 @@
           </div>
           <div class="order-number">
             <CountdownTimer
-                :orderCreatedAt="new Date('2025-05-24T11:05:00')"
+                :orderCreatedAt="new Date(orderCreatedAt)"
                 @expired="timerExpired"
             />
           </div>
@@ -73,20 +73,25 @@
 
 <script setup>
 
-defineProps({
+const props = defineProps({
   managerName: {
     type: String,
     required: true,
     default: 'Manager'
   },
-  orderNumber: {
-    type: String,
+  order: {
+    type: Object,
     required: true,
-    default: "1"
-  }
+    default: {}
+  },
+
 })
 
 const { t } = useI18n()
+
+const orderNumber = computed(() => props.order.orderNumber)
+
+const orderCreatedAt = computed(() => props.order.createdAt)
 
 const isTimerExpired = ref(false)
 

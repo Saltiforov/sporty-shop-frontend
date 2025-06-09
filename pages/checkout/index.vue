@@ -241,13 +241,15 @@ const fieldsBlock = ref(null)
 
 const isLoading = ref(false)
 
-const {t} = useI18n()
+const {t, locale} = useI18n()
 
 const toast = useToast();
 
 const authPopup = useAuthPopup();
 
 const cartStore = useCartStore()
+
+const orderStore = useOrderStore()
 
 const currencyStore = useCurrencyStore()
 
@@ -320,26 +322,25 @@ const currency = computed(() => currencyStore.isUAHSelected ? 'uah' : 'eur')
 const region = computed(() => currencyStore.isRegionEurope ? 'eu' : 'ua')
 
 const mappedUserDataForOrder = (data) => {
-  const {street, city, postalCode, country, firstName, lastName, phone, email, telegramUsername, deliveryInfo} = data
+  const {street, city, postalCode, country, firstName, lastName, phone, email, tgUsername, delivery} = data
   return {
     shippingAddress: {
       street,
       city,
       postalCode,
       country,
+      delivery
     },
-    paymentMethod: "telegram",
     customerInfo: {
       firstName,
       lastName,
       phone,
       email,
-      telegramUsername
+      telegramUsername: tgUsername,
     },
     description: commentForOrder.value,
     currency: currency.value,
     region: region.value,
-    deliveryInfo
   }
 }
 
@@ -354,11 +355,12 @@ const handleCreateOrder = async () => {
 
   if (isValid && data.products) {
     await createOrder(data)
-        .then(() => {
+        .then((data) => {
+          orderStore.setRecentOrder(data)
           clearCreateOrderForm()
           showTopRight()
           setTimeout(() => {
-            navigateTo('/')
+            navigateTo(`/confirmation`)
           }, 500)
         })
         .catch(() => {
@@ -432,8 +434,8 @@ const configUkraine = ref({
       },
 
       {
-        name: 'telegramUsername',
-        code: 'telegramUsername',
+        name: 'tgUsername',
+        code: 'tgUsername',
         label: computed(() => t('telegram_username')),
         tooltipComponent: defineAsyncComponent(() => import('~/components/UI/TooltipIcon/TooltipIcon.vue')),
         type: 'InputText',
@@ -489,8 +491,8 @@ const configUkraine = ref({
       },
 
       {
-        name: 'deliveryInfo',
-        code: 'deliveryInfo',
+        name: 'delivery',
+        code: 'delivery',
         label: computed(() => t('delivery_info')),
         type: 'InputText',
         props: {
@@ -554,8 +556,8 @@ const configEurope = ref({
       },
 
       {
-        name: 'telegramUsername',
-        code: 'telegramUsername',
+        name: 'tgUsername',
+        code: 'tgUsername',
         label: computed(() => t('telegram_username')),
         tooltipComponent: defineAsyncComponent(() => import('~/components/UI/TooltipIcon/TooltipIcon.vue')),
         type: 'InputText',

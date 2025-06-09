@@ -5,7 +5,7 @@
           :class="[
     'card-image shrink rounded-[16px]',
     isHistoryView
-      ? 'mb-[22px] mr-[36px] h-[210px] w-[145px]'
+      ? 'mb-[22px] mr-[36px] h-[210px] w-[145px] card-image-history'
       : 'mr-[22px] min-w-[100px] min-h-[100px] max-w-[156px] max-h-[156px] w-full h-auto'
   ]"
       >
@@ -20,15 +20,18 @@
             alt="product-image.png"
             @click="redirectToProduct(cartProduct)"
         />
+
+        <p class="product-name-history-responsive">{{ cartProduct.name }}</p>
+
       </div>
 
       <div
           :class="[isHistoryView ? 'items-start' : 'flex-col']"
           class="card-content flex flex-1 justify-between"
       >
-        <div class="flex">
+        <div :class="['flex', 'card-title-wrapper', { 'card-title-wrapper-history': isHistoryView }]">
           <p
-              :class="[isHistoryView ? 'text-[20px]' : 'text-[16px]']"
+              :class="[isHistoryView ? 'text-[20px] card-title-history-view' : 'text-[16px]']"
               class="card-title max-w-[276px] w-full fw-500 leading-[var(--line-height-base)]"
           >
             {{ cartProduct.name }}
@@ -205,9 +208,15 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
   border: none;
   padding: 0;
 }
-
+.product-name-history-responsive {
+  display: none;
+}
 .remove-product-cart-responsive {
   display: none;
+}
+
+.card-title-wrapper {
+  width: 100%;
 }
 
 .cart-item__delete-btn:hover {
@@ -237,7 +246,9 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
   .card-content__footer {
     align-items: flex-start;
   }
-
+  .card-quantity {
+    justify-content: center;
+  }
   .card-product-price {
     margin-bottom: 8px;
   }
@@ -358,6 +369,17 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
 @media (max-width: 450px) {
   .discount-price__history-view {
     margin-right: 7px;
+  }
+  .card-image-history {
+    margin-right: 66px;
+  }
+  .product-name-history-responsive {
+    display: block;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  .card-title-wrapper-history {
+    display: none;
   }
 }
 </style>

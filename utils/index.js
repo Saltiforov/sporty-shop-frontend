@@ -39,7 +39,7 @@ const getOrderUserInfo = (order) => {
     const shipping = order.shippingAddress || {}
     const email =  order.user.email || '----'
     const description =  order.description || '----'
-    const { telegramUsername, ...rest } = order.customerInfo || {};
+    const { tgUsername, ...rest } = order.customerInfo || {};
     return {
         ...rest,
         email,
