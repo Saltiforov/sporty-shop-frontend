@@ -6,18 +6,22 @@
     ]"
   >
     <div class="header-content w-full items-end flex">
-      <div class="logo mr-[67px]">
+      <div class="logo">
         <NuxtLink :to="logoLink">
-          <NuxtImg
-              src="/images/header-logo.svg"
-              alt="header-logo"
-              width="147"
-              height="115"
-              preload
-              format="webp"
-              :modifiers="{ quality: 100 }"
-              fetchpriority="high"
-          />
+          <picture>
+            <source srcset="/images/mobile-header-icon.svg" media="(max-width: 679px)" type="image/svg+xml" />
+            <NuxtImg
+                class="logo-image"
+                src="/images/header-logo.svg"
+                alt="header-logo"
+                width="147"
+                height="115"
+                preload
+                format="webp"
+                :modifiers="{ quality: 100 }"
+                fetchpriority="high"
+            />
+          </picture>
         </NuxtLink>
       </div>
 
@@ -173,7 +177,7 @@ const links = ref([
   {
     label: computed(() => t('frequently_questions')),
     icon: "pi pi-user",
-    page: "content/frequently-questions",
+    page: "/content/frequently-questions",
   },
 ])
 
@@ -186,6 +190,10 @@ const links = ref([
 
 .menu {
   display: none;
+}
+
+.logo {
+  margin-right: 67px;
 }
 
 .links-container {
@@ -271,6 +279,14 @@ const links = ref([
   }
 }
 
+@media (max-width: 679px) {
+  .logo {
+    padding-left: 0;
+    width: 100%;
+  }
+}
+
+
 
 @media (max-width: 670px) {
   .action-panel {
@@ -298,6 +314,7 @@ const links = ref([
   .locale-switch {
     flex-direction: column;
     width: auto;
+    align-items: flex-end;
   }
   .action-panel {
     display: none;

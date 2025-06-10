@@ -91,7 +91,7 @@
             <ClientOnly>
               <div class="description">
                 <p v-if="product.description"
-                   class="fw-500 text-[18px] leading-[34px] truncate-6-lines text-[var(--color-primary-dark)]"
+                   class="fw-500 leading-[34px] truncate-6-lines text-[var(--color-primary-dark)]"
                    v-html="product.description"></p>
                 <p v-else class="no-data-text">
                   {{ t('description_no_data') }}

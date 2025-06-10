@@ -6,18 +6,20 @@
     !noAutoMargin && 'mx-auto'
   ]"
   >
-    <div v-if="product.status" class="absolute max-w-[82px] w-full -top-3 -left-5 z-100">
+    <div v-if="product.showAsNew" class="product-badge">
       <StatusBadge :label="product.status" :background-color="product.backgroundStatus"/>
     </div>
 
     <div class="product-card-content">
       <div class="product-card-header flex relative flex-col items-center justify-center">
 
-        <div v-if="isAuthenticated" :class="favoriteButtonPosition" class="absolute flex items-center justify-center h-[31px] w-[31px] z-10 ">
+        <div v-if="isAuthenticated" :class="favoriteButtonPosition"
+             class="absolute flex items-center justify-center h-[31px] w-[31px] z-10 ">
           <FavoriteButton
               :is-favorite="product.isFavorite"
               :product="product"
               :icon-size="iconSize"
+              @remove-from-favorites="removeFromFavorites"
           />
         </div>
         <NuxtLink :to="`/product/${product.slug}`" :style="{ marginBottom: variant === 'small' ? '4px' : '' }"
@@ -33,7 +35,7 @@
               alt="Product image"
           />
         </NuxtLink>
-        <div  class="product-name w-full min-h-[52px]">
+        <div class="product-name w-full min-h-[52px]">
           <p :style="{ fontSize: variant === 'small' ? '16px' : '', }"
              class="text-[20px] leading-[22px] fw-500 line-clamp-2">{{ product.name }}</p>
         </div>
@@ -123,7 +125,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['add-to-cart'])
+const emit = defineEmits(['add-to-cart', 'remove-from-favorites'])
 
 const {isAuthenticated} = storeToRefs(useAuthStore());
 
@@ -140,6 +142,10 @@ const windowWidth = computed(() => getWidth())
 const addToCart = (product) => {
   emit('add-to-cart', product)
   cartStore.addToCart(product);
+}
+
+const removeFromFavorites = (productId) => {
+  emit('remove-from-favorites', productId);
 }
 
 const priceByCurrency = computed(() => {
@@ -168,15 +174,15 @@ const favoriteButtonPosition = computed(() => {
 
 const productCardIconSizes = computed(() => {
   return windowWidth.value < 500
-      ? { width: '36px', height: '36px',}
-      : { width: '47px', height: '47px',}
+      ? {width: '36px', height: '36px',}
+      : {width: '47px', height: '47px',}
 })
 
 const imageSizeSmallClasses = computed(() => {
   const breakpoints = [
-    { min: 1024, class: 'lg:max-w-[135px] lg:h-[135px]' },
-    { min: 768, class: 'md:max-w-[140px] md:h-[140px]' },
-    { min: 0, class: 'max-w-[128px] h-[114px]' }
+    {min: 1024, class: 'lg:max-w-[135px] lg:h-[135px]'},
+    {min: 768, class: 'md:max-w-[140px] md:h-[140px]'},
+    {min: 0, class: 'max-w-[128px] h-[114px]'}
   ]
   return breakpoints.find(bp => windowWidth.value >= bp.min).class
 })
@@ -184,10 +190,10 @@ const imageSizeSmallClasses = computed(() => {
 const maxWidthSmallClass = computed(() => {
 
   const breakpoints = [
-    { min: 1201, class: 'max-h-[316px]' },
-    { min: 801,  class: 'max-h-[290px]' },
-    { min: 438, class: 'max-h-[300px]' },
-    { min: 0,    class: 'min-h-[240px]' }
+    {min: 1201, class: 'max-h-[316px]'},
+    {min: 801, class: 'max-h-[290px]'},
+    {min: 438, class: 'max-h-[300px]'},
+    {min: 0, class: 'min-h-[240px]'}
   ]
 
 
@@ -203,6 +209,15 @@ const iconSize = computed(() => {
 </script>
 
 <style scoped>
+.product-badge {
+  position: absolute;
+  max-width: 82px;
+  width: 100%;
+  top: -8px;
+  left: -12px;
+  z-index: 100;
+}
+
 .card-buy-button {
   border: none;
   background: #28A745;
@@ -325,6 +340,12 @@ const iconSize = computed(() => {
     max-width: 200px;
     padding: 20px 16px 15px 16px;
   }
+
+  .product-badge {
+    top: -5px;
+    left: -7px;
+  }
+
   .product-grade {
     font-size: 10px;
   }

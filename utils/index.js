@@ -145,3 +145,8 @@ export function isEqual(a, b) {
 
     return checkCircular(a, b);
 }
+
+
+export function matchPathPrefix(path, prefix) {
+    return new RegExp(`^\/[a-z]{2}${prefix}`).test(path)
+}

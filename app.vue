@@ -80,7 +80,7 @@ const checkWindowSize = () => {
 
 onMounted(async () => {
 
-  auth.restoreAuthFromLocalStorage()
+  // auth.restoreAuthFromLocalStorage()
 
   $eventBus.on('user-authenticated', () => {
     isOpenMenu.value = false

@@ -3,10 +3,10 @@
     <li
         v-for="item in links"
         :key="item.label"
-        :class="linkClass"
+        :class="[linkClass, isActive(item.page) && 'router-link-active']"
         class="link"
     >
-      <NuxtLink :to="item.page">
+      <NuxtLink class="cursor-pointer" @click="navigateTo(item.page)">
         <p :style="labelStyle" :class="labelClass">
           {{ item.label }}
         </p>
@@ -16,7 +16,6 @@
 </template>
 
 <script setup>
-
 const props = defineProps({
   links: {
     type: Array,
@@ -43,7 +42,20 @@ const props = defineProps({
 
 const emit = defineEmits(['handle-navigation'])
 
+const { locale } = useI18n()
 const router = useRouter()
+const route = useRoute()
+
+function navigateTo(targetPath) {
+  const pathTo = `/${locale.value}${targetPath}`
+  if (route.path === pathTo) return
+  router.push(targetPath)
+}
+
+function isActive(page) {
+  const fullPath = `/${locale.value}${page}`
+  return route.path === fullPath
+}
 
 const parentClasses = computed(() => {
   return Array.isArray(props.parentClasses) ? props.parentClasses.join(' ') : props.parentClasses
@@ -60,12 +72,10 @@ const labelClass = computed(() => {
 const labelStyle = computed(() => {
   return Array.isArray(props.labelStyle) ? props.labelStyle.join(' ') : props.labelStyle
 })
-
 </script>
-
 
 <style scoped>
 .router-link-active {
-  color: orange;
+  color: var(--color-primary-lavender);
 }
 </style>

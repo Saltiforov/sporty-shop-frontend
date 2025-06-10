@@ -11,7 +11,7 @@
       </div>
       <div class="confirmation-popup-content">
         <div class="order-meta flex justify-between">
-          <div class="order-number p-2 confirmation-large-text text-[var(--color-primary-pink)]">
+          <div class="order-number p-2 confirmation-large-text text-[var(--color-primary-green)]">
             {{ t('confirmation_order_number', { orderNumber }) }}
           </div>
           <div class="order-number">

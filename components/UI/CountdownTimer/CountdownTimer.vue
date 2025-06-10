@@ -102,9 +102,8 @@ watch(() => isExpired.value, (newValue) => {
   font-size: 2rem;
   font-weight: bold;
   color: white;
-  background: linear-gradient(135deg, #212094, #817FDF);
+  background: linear-gradient(135deg, rgba(230, 231, 248, 0.2), #5856D6);
   border-radius: 8px;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }
 
 .time-pair {

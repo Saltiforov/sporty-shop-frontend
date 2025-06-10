@@ -4,6 +4,7 @@
       <div class="popup-header">
         <Tabs v-model:value="activeTab">
           <TabList
+              class="tab-list"
               :pt="{
               tabList: {
                 style:  tabListStyles,
@@ -11,19 +12,20 @@
             activeBar: {
                 style: {
                   height: '2px',
-                  backgroundColor: 'var(--color-primary-purple)',
+                  backgroundColor: 'var(--color-primary-dark)',
                 }
           }
             }"
           >
             <Tab
-                :pt="tabStyles"
+                class="tablist-tab"
                 value="login"
                 @click="setActiveTab('login')"
             >
               {{ t('login_tab') }}
             </Tab>
             <Tab
+                class="tablist-tab"
                 value="register"
                 @click="setActiveTab('register')"
             >
@@ -86,7 +88,6 @@ const tabListStyles = computed(() => {
     fontWeight: 400,
     backgroundColor: 'var(--color-primary-lavender)',
     borderTop: 'none',
-    borderBottom: '2px solid var(--link-color)',
   }
 })
 const handleOverlayClick = (e) => {
@@ -111,6 +112,16 @@ const handleOverlayClick = (e) => {
   z-index: 999;
 }
 
+.tablist-tab {
+  padding-top: 0px;
+  padding-bottom: 7px;
+  color: var(--color-primary-black);
+}
+.tablist-tab:hover {
+  color: var(--color-primary-black);
+}
+
+
 .popup {
   position: relative;
   background: #E6E7F8;
@@ -126,8 +137,8 @@ const handleOverlayClick = (e) => {
 
 .close-btn {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 15px;
+  right: 10px;
   background: transparent;
   border: none;
   font-size: 20px;

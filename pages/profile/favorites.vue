@@ -20,6 +20,7 @@
             :key="product._id"
             :product="product"
             @add-to-cart="addToCart"
+            @remove-from-favorites="handleRemoveFromFavorites"
         />
       </template>
     </section>
@@ -62,6 +63,10 @@ const favoriteProducts = ref([])
 const addToCart = (product) => {
   showProductAddedToast(product)
   cartStore.addToCart(product);
+}
+
+const handleRemoveFromFavorites = (productId) => {
+  favoriteProducts.value = favoriteProducts.value.filter(favorite => favorite._id !== productId);
 }
 
 onMounted(async () => {

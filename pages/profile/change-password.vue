@@ -1,10 +1,10 @@
 <template>
-  <section class="change-password">
-    <section class="max-w-[432px] change-password-content">
+  <section class="change-password max-w-[432px]">
+    <section class=" change-password-content">
       <h1 class="title-lg-20 mb-[30px]">{{ t('change_password') }}</h1>
       <FieldsBlock :config="config.fields" />
     </section>
-    <div class="max-w-[377px] mx-auto">
+    <div class="change-password-wrapper">
       <Button :pt="{
           root: {
             class: 'change-password__btn btn-hover-default'
@@ -117,6 +117,17 @@ const config = {
 .change-password__btn {
   background-color: var(--color-primary-dark);
   width: 100%;
+}
+
+.change-password-wrapper {
+  max-width: 377px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+  .change-password {
+    margin: 0 auto;
+  }
 }
 
 @media (max-width: 520px) {

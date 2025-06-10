@@ -110,6 +110,7 @@ export const useAuthStore = defineStore('auth', () => {
         isAuthenticated,
         userToken,
         setCurrentUser,
-        restoreAuthFromLocalStorage
+        restoreAuthFromLocalStorage,
+        fetchUserData
     }
 })

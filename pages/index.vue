@@ -243,13 +243,14 @@ const isLoading = ref(false)
 onMounted(async () => {
   isLoading.value = true
   await getPromotionalProducts()
-
+  $eventBus.emit('close-sidebar')
   hydrated.value = true
   isLoading.value = false
 })
 
 onBeforeUnmount(() => {
   $eventBus.off('filters-updated')
+  $eventBus.off('close-sidebar')
 })
 </script>
 
@@ -458,6 +459,7 @@ onBeforeUnmount(() => {
 
   .main-content {
     gap: 0;
+    padding: 0 10px;
   }
 
   .responsive-filters {
@@ -472,6 +474,7 @@ onBeforeUnmount(() => {
   .select-filters {
     margin-top: 30px;
     padding-top: 25px;
+    margin-bottom: 16px;
   }
 }
 

@@ -65,11 +65,18 @@ const props = defineProps({
   }
 })
 
-const toggleFavorite = async () => {
+const emit = defineEmits(['add-to-favorites', 'remove-from-favorites'])
 
-  props.product.isFavorite
-      ? await deleteProductFromFavorites(props.product._id)
-      : await addProductToFavorites(props.product._id)
+const toggleFavorite = async () => {
+  const productId = props.product._id;
+
+  if (props.product.isFavorite) {
+    await deleteProductFromFavorites(productId);
+    emit('remove-from-favorites', productId);
+  } else {
+    await addProductToFavorites(productId);
+    emit('add-to-favorites', productId);
+  }
 
   props.product.isFavorite = !props.product.isFavorite;
 }

@@ -21,7 +21,7 @@
       :value="nodes"
       :expanded-keys="expandedKeys"
       @update:expandedKeys="onExpandedKeysChange"
-      class="w-full p-7 pb-[2px] rounded-[var(--default-rounded)]"
+      class="w-full p-7 pb-[2px] filters-component"
       :toggler-icon="null"
   >
     <template #togglericon></template>
@@ -384,5 +384,14 @@ const afterLeave = el => {
 .filters-block-text-child {
   font-weight: 300;
   font-size: 18px;
+}
+.filters-component {
+  border-radius: var(--default-rounded);
+}
+
+@media (max-width: 680px) {
+  .filters-component {
+    border-radius: 0;
+  }
 }
 </style>

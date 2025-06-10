@@ -68,6 +68,8 @@ const switchLocale = () => {
   .locale-select-label {
     font-size: 12px !important;
   }
+  .locale-switch {
+  }
 }
 
 .locale-select-dropdown {

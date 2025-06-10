@@ -14,7 +14,7 @@ defineProps({
   backgroundColor: {
     type: String,
     required: false,
-    default: '#B3261E'
+    default: 'var(--color-primary-blue)'
   },
    color: {
     type: String,

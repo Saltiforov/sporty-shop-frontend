@@ -14,7 +14,7 @@
           <template v-for="field in leftFullFields" :key="field.name">
             <fieldset class="form-group">
               <legend class="form__title mb-[11px] flex items-center gap-2">
-                <span class="whitespace-nowrap">{{ field.label }}:</span>
+                <span class="whitespace-nowrap fields-block-label">{{ field.label }}:</span>
                 <component
                     v-if="field.tooltipComponent"
                     :is="field.tooltipComponent"
@@ -53,7 +53,7 @@
               <template v-for="field in pair" :key="field.name">
                 <fieldset class="form-group w-1/2">
                   <legend class="form__title mb-[11px] flex items-center gap-2">
-                    <span class="whitespace-nowrap">{{ field.label }}:</span>
+                    <span class="whitespace-nowrap fields-block-label">{{ field.label }}:</span>
                     <component
                         v-if="field.tooltipComponent"
                         :is="field.tooltipComponent"
@@ -96,7 +96,7 @@
               <template v-for="field in pair" :key="field.name">
                 <fieldset class="half-field form-group w-1/2">
                   <legend class="form__title mb-[11px] flex items-center gap-2">
-                    <span class="whitespace-nowrap">{{ field.label }}:</span>
+                    <span class="whitespace-nowrap fields-block-label">{{ field.label }}:</span>
                     <component
                         v-if="field.tooltipComponent"
                         :is="field.tooltipComponent"
@@ -135,7 +135,7 @@
           <template v-for="field in rightFullFields" :key="field.name">
             <fieldset class="form-group">
               <legend class="form__title mb-[11px] flex items-center gap-2">
-                <span class="whitespace-nowrap">{{ field.label }}:</span>
+                <span class="whitespace-nowrap fields-block-label">{{ field.label }}:</span>
                 <component
                     v-if="field.tooltipComponent"
                     :is="field.tooltipComponent"
@@ -264,6 +264,9 @@ defineExpose({
 </script>
 
 <style scoped>
+.fields-block-label {
+  color: var(--color-gray-deep-graphite);
+}
 @media (max-width: 800px) {
   .fields-block-content {
     grid-template-columns: 1fr;

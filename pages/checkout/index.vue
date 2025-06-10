@@ -198,12 +198,8 @@
   </section>
 
   <Toast
-      :class="{
-          'max-w-[240px] top-[70]': isMobileToast
-        }"
-      :pt="toastPt"
-      position="top-left"
-      group="tl"
+      position="top-right"
+      group="tr"
   />
 </template>
 

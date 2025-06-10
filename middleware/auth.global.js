@@ -1,21 +1,16 @@
 import { storeToRefs } from "pinia"
 import { useAuthStore } from "~/stores/auth.js"
+import {matchPathPrefix} from "~/utils/index.js";
 
 export default defineNuxtRouteMiddleware((to) => {
-    if (process.server) return
+    const {isAuthenticated} = storeToRefs(useAuthStore());
 
-    const auth = useAuthStore()
-    const { isAuthenticated } = storeToRefs(auth)
-
-    const locale = useCookie('locale')
-
-    if (!isAuthenticated.value && to.path.startsWith(`${locale.value}/profile`)) {
-        return navigateTo('/')
+    if (!isAuthenticated.value && matchPathPrefix(to.path, '/profile')) {
+        return navigateTo(`/`)
     }
 
-    if (isAuthenticated.value && to.path.startsWith(`${locale.value}/auth/`)) {
-        return navigateTo('/')
+     if (isAuthenticated.value && matchPathPrefix(to.path, '/auth')) {
+        return navigateTo(`/`)
     }
 
-    console.log("auth.isAuthenticated", isAuthenticated.value)
 })
