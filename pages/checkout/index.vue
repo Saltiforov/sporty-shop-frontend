@@ -176,8 +176,6 @@
 
 
         </div>
-
-
       </section>
 
 
@@ -263,36 +261,7 @@ const isPaymentOnDelivery = ref(false)
 
 const isSendSmsWithFormData = ref(false)
 
-const isMobileToast = computed(() => getWidth() < 500)
-
-const toastPt = computed(() => {
-  return {
-    message: {
-      style: {
-        width: isMobileToast.value ? '250px' : '',
-      }
-    },
-    messageContent: {
-      style: {
-        padding: isMobileToast.value ? '5px' : '',
-      }
-    },
-    summary: {
-      style: {
-        fontSize: isMobileToast.value ? '14px' : '',
-      }
-    },
-    detail: {
-      style: {
-        fontSize: isMobileToast.value ? '12px' : '',
-      }
-    },
-  }
-})
-
 const userData = ref({})
-
-const uaPhoneCode = ref('+380')
 
 const MIN_EU_PRICE = 300
 
@@ -301,11 +270,24 @@ const checkoutPrice = computed(() => calculateTotal(cartStore.getCartProducts, '
 const minimumEuropePrice = computed(() => checkoutPrice.value >= MIN_EU_PRICE)
 
 const showTopRight = () => {
-  toast.add({severity: 'success', summary: 'Info Message', detail: 'Message Content', group: 'tl', life: 3000});
+  toast.add({
+    severity: 'success',
+    summary: t('toast_order_success_title'),
+    detail: t('toast_order_success_message'),
+    group: 'tr',
+    life: 3000
+  });
 };
 
+
 const showError = () => {
-  toast.add({severity: 'error', summary: 'Error Message', detail: 'Message Content', group: 'tl', life: 3000});
+  toast.add({
+    severity: 'error',
+    summary: t('toast_order_error_title'),
+    detail: t('toast_order_error_message'),
+    group: 'tl',
+    life: 3000
+  });
 };
 
 const mappedProductsForOrder = arr => arr.map(({quantity, ...withoutQuantity}) => ({
@@ -453,37 +435,29 @@ const configUkraine = ref({
       {
         name: 'phone',
         code: 'phone',
-        label: computed(() => t('phone_number')),
-        type: 'Custom',
+        label: computed(() => t('auth_phone_number')),
+        type: 'InputText',
         props: {
           side: 'left',
+          type: 'tel',
+          placeholder: '',
+          required: true,
+          onKeydown: (e) => {
+            const allowedKeys = [
+              'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab',
+              '+', '-', '(', ')', ' '
+            ];
+            if (
+                !allowedKeys.includes(e.key) &&
+                !e.key.match(/[0-9]/)
+            ) {
+              e.preventDefault();
+            }
+          }
         },
         validators: [
-          (value) => (value ? true : "Phone is required"),
-          (value) => (value?.toString().length <= 11 ? true : "Phone number must be no more than 11 digits")
+          (value) => (value ? true : "Phone Number is required"),
         ],
-        render: ({modelValue, 'onUpdate:modelValue': update}) =>
-            h(InputGroup, {}, {
-              default: () => [
-                h(InputGroupAddon, {
-                  pt: {
-                    root: {
-                      style: {
-                        backgroundColor: 'white',
-                        color: 'var(--color-primary-dark)',
-                      }
-                    }
-                  }
-                }, () => uaPhoneCode.value),
-                h(InputNumber, {
-                  modelValue,
-                  'onUpdate:modelValue': update,
-                  useGrouping: false,
-                  placeholder: '',
-                  defaultValue: null
-                })
-              ]
-            })
       },
 
       {
@@ -604,20 +578,29 @@ const configEurope = ref({
       {
         name: 'phone',
         code: 'phone',
-        label: computed(() => t('phone_number')),
-        type: 'InputMask',
+        label: computed(() => t('auth_phone_number')),
+        type: 'InputText',
         props: {
-          id: 'phone',
           side: 'left',
-          placeholder: '(999) 999-9999',
-          mask: '(999) 999-9999',
-          unmask: true,
-          class: 'w-full'
+          type: 'tel',
+          placeholder: '',
+          required: true,
+          onKeydown: (e) => {
+            const allowedKeys = [
+              'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab',
+              '+', '-', '(', ')', ' '
+            ];
+            if (
+                !allowedKeys.includes(e.key) &&
+                !e.key.match(/[0-9]/)
+            ) {
+              e.preventDefault();
+            }
+          }
         },
         validators: [
-          (value) => (value ? true : t('validation_required')),
-          (value) => (value?.length === 10 ? true : t('validation_phone_format'))
-        ]
+          (value) => (value ? true : "Phone Number is required"),
+        ],
       },
 
       {

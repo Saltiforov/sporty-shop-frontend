@@ -2,34 +2,23 @@
   <div class="flex items-center">
     <Select
         :pt="{
-        root: {
-          style: 'background-color: transparent; border: none;'
-        },
-        label: {
-          style: labelStyles,
-          class: 'select-label'
-        },
-        dropdown: {
-          style: 'width: 0.75rem; color: var(--color-gray-dark-charcoal);'
-        },
-        optionLabel: {
-          style: optionLabel
-        }
+        root: { class: 'select-root' },
+        label: { class: 'select-label' },
+        dropdown: { class: 'select-dropdown' },
+        optionLabel: { class: 'select-option-label' }
       }"
         v-model="selectedOption"
         optionLabel="name"
         :options="sortOptions"
         @change="applySort"
-    ></Select>
+    />
   </div>
 </template>
 
 <script setup>
 import Select from "primevue/select";
 import { ref, computed } from "vue";
-import { useI18n } from "vue-i18n";
 import { useWindowWidthWatcher } from "~/composables/useWindowWidthWatcher";
-import { useRoute, useRouter } from "vue-router"; // Добавляем для работы с маршрутами
 
 const { t } = useI18n();
 const getWidth = useWindowWidthWatcher();
@@ -84,26 +73,33 @@ onMounted(syncWithRoute);
 watch(() => route.query.sort, syncWithRoute);
 </script>
 
-<style scoped>
+<style>
 .select-root {
-  background: transparent;
-  border: none;
+  background-color: transparent !important;
+  border: none !important;
 }
+
 .select-label {
-  color: var(--color-primary-dark);
-  margin-right: 2px;
-  padding: 0px;
-  line-height: 22px;
-  font-weight: 500;
-  font-size: 15px;
+  color: var(--color-primary-dark) !important;
+  margin-right: 0.5rem !important;
+  padding: 0 !important;
+  line-height: 22px !important;
+  font-weight: 500 !important;
+  font-size: 15px !important;
 }
+
 .select-dropdown {
-  width: 12px;
-  color: var(--color-gray-dark-charcoal);
+  width: 0.75rem !important;
+  color: var(--color-gray-dark-charcoal) !important;
+}
+
+.select-option-label {
+  font-size: 15px !important;
 }
 
 @media (max-width: 510px) {
-  .select-label {
+  .select-label,
+  .select-option-label {
     font-size: 10px !important;
   }
 }

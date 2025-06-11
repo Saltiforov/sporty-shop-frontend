@@ -2,8 +2,13 @@
   <div class="auth-component">
     <LoadingOverlay :visible="isLoading"/>
     <FieldsBlock
-        :config="fieldsConfig.fields"
+        class="fields-block"
         ref="fieldsBlock"
+        :config="fieldsConfig.fields"
+        :class="{
+          'mb-[4px]': isLogin && !responsive,
+          'mb-[32px]': !isLogin && !responsive
+        }"
     />
     <div v-if="isLogin" class="reset-password justify-end mb-[27px] flex">
       <NuxtLink><p class="text-[var(--color-muted-gray)] text-[14px]">{{ t('forgot_password') }}</p></NuxtLink>
@@ -113,8 +118,9 @@ const wrapperClass = computed(() => [
   'murecho-font',
   'mx-auto',
   'mb-[36px]',
-  props.responsive ? 'responsive-class' : '',
-  props.isLogin ? 'max-w-[320px]' : 'max-w-[285px]',
+  props.responsive && props.isLogin ? 'login-responsive-class' : '',
+  props.responsive && !props.isLogin ? 'non-login-responsive-class' : '',
+  props.isLogin  && !props.responsive ? 'max-w-[320px]' : 'max-w-[386px]',
   (!props.isLogin && props.responsive) ? 'responsive-class' : ''
 ])
 
@@ -242,7 +248,7 @@ const registerFields = {
             ];
             if (
                 !allowedKeys.includes(e.key) &&
-                !e.key.match(/[0-9]/) // цифры
+                !e.key.match(/[0-9]/)
             ) {
               e.preventDefault();
             }
@@ -344,10 +350,13 @@ const registerFields = {
   border-radius: 4px;
 }
 
-.responsive-class {
+.login-responsive-class {
   width: 243px;
   font-size: 14px;
   margin-bottom: 24px;
+}
+.non-login-responsive-class {
+  width: 285px;
 }
 .responsive-class-root {
   font-size: 14px;

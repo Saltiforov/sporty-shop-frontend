@@ -32,6 +32,11 @@
   "timer_hours": "Hours",
   "timer_minutes": "Minutes",
 
+  "toast_order_success_title": "Created successfully",
+  "toast_order_success_message": "Your order has been placed successfully",
+  "toast_order_error_title": "Error",
+  "toast_order_error_message": "Failed to create the order. Please try again later",
+
   "confirm_delete_message": "Are you sure you want to delete {product}?",
   "confirm_delete_header": "Delete Confirmation",
   "confirm_delete_accept_label": "Delete",

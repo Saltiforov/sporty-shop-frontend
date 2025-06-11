@@ -7,6 +7,7 @@
           v-for="item in productsOverview"
           :cart-product="item"
           :key="item.id"
+          :is-history-view="isHistoryView"
           @remove-product="confirmDelete"
           @handle-cart-item="emit('handle-cart-item')"
       />
@@ -77,6 +78,10 @@ const {productsOverview, scrollAfter} = defineProps({
   scrollAfter: {
     type: Number,
     default: 2,
+  },
+  isHistoryView: {
+    type: Boolean,
+    default: false,
   }
 });
 

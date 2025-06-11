@@ -76,6 +76,6 @@ const labelStyle = computed(() => {
 
 <style scoped>
 .router-link-active {
-  color: var(--color-primary-lavender);
+  color: var(--color-muted-light-gray);
 }
 </style>

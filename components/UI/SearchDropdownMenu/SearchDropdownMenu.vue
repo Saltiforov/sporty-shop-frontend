@@ -1,7 +1,7 @@
 <template>
   <ul
       v-if="show"
-      class="search-dropdown-menu absolute z-50 mt-1 w-full bg-white border border-gray-300 rounded shadow-md max-w-[420px] max-h-[300px] min-h-[50px] overflow-auto"
+      class="search-dropdown-menu absolute z-[120] mt-1 w-full bg-white border border-gray-300 rounded shadow-md max-w-[420px] max-h-[300px] min-h-[50px] overflow-auto"
   >
     <div v-if="items.length" class="flex flex-col">
       <div v-for="(product, index) in items" :key="index">
@@ -11,13 +11,19 @@
             class="product-item flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
             @click.native="selectItem(product)"
         >
-          <img
-              :src="fullImageUrls(product.images)[0] || DefaultProductImage"
-              alt="item image"
-              class="search-image w-8 h-8 object-cover mr-3 rounded"
-          />
-          <span class="search-name text-sm text-gray-800 px-2">{{ product.name }}</span>
-          <span class="search-price text-sm text-gray-800 font-bold">{{ getProductPrice(product) }}</span>
+          <div class="flex items-center w-full">
+            <img
+                :src="fullImageUrls(product.images)[0] || DefaultProductImage"
+                alt="item image"
+                class="search-image w-8 h-8 object-cover mr-3 rounded"
+            />
+            <span class="search-name text-sm text-gray-800 px-2 flex-grow">
+              {{ product.name }}
+            </span>
+                      <span class="search-price text-sm text-gray-800 font-bold">
+              {{ getProductPrice(product) }}
+            </span>
+          </div>
         </NuxtLink>
         <div
             v-else
@@ -29,8 +35,8 @@
               alt="item image"
               class="w-8 h-8 object-cover mr-3 rounded"
           />
-          <span class="text-sm text-gray-800 px-2">{{ product.name }}</span>
-          <span class="text-sm text-gray-800 font-bold">{{ getProductPrice(product) }}</span>
+          <span class="text-xs text-gray-800 px-2">{{ product.name }}</span>
+          <span class="text-xs text-gray-800 font-bold">{{ getProductPrice(product) }}</span>
         </div>
       </div>
     </div>

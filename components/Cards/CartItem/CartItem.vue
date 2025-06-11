@@ -21,7 +21,7 @@
             @click="redirectToProduct(cartProduct)"
         />
 
-        <p class="product-name-history-responsive">{{ cartProduct.name }}</p>
+        <p v-show="isHistoryView" class="product-name-history-responsive">{{ cartProduct.name }}</p>
 
       </div>
 
@@ -185,8 +185,14 @@ const discountPriceByCurrency = computed(() => {
       : currencyStore.isUAHSelected ? cartProduct?.priceAfterDiscount?.uah : cartProduct?.priceAfterDiscount?.eur
 })
 
+const currencyByOrder = computed(() => {
+  return currency === 'uah'
+      ? 'currency_uah'
+      : 'currency_eur'
+})
+
 const currentCurrency = computed(() => {
-  return isHistoryView ? currency : currencyStore.label;
+  return isHistoryView ? currencyByOrder.value : currencyStore.label;
 });
 
 const hasDiscount = computed(() => {
@@ -194,8 +200,6 @@ const hasDiscount = computed(() => {
   const discounted = discountPriceByCurrency.value
   return discounted !== null && discounted !== undefined && discounted < price
 })
-
-console.log("cartProduct", cartProduct)
 
 const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] || DefaultProductImage)
 
@@ -208,21 +212,23 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
   border: none;
   padding: 0;
 }
+
+.cart-item__delete-btn:hover {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
 .product-name-history-responsive {
   display: none;
 }
+
 .remove-product-cart-responsive {
   display: none;
 }
 
 .card-title-wrapper {
   width: 100%;
-}
-
-.cart-item__delete-btn:hover {
-  background: transparent;
-  border: none;
-  padding: 0;
 }
 
 .discount-price__history-view {
@@ -246,9 +252,11 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
   .card-content__footer {
     align-items: flex-start;
   }
+
   .card-quantity {
     justify-content: center;
   }
+
   .card-product-price {
     margin-bottom: 8px;
   }
@@ -370,14 +378,17 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
   .discount-price__history-view {
     margin-right: 7px;
   }
+
   .card-image-history {
     margin-right: 66px;
   }
+
   .product-name-history-responsive {
     display: block;
     font-weight: 500;
     font-size: 14px;
   }
+
   .card-title-wrapper-history {
     display: none;
   }

@@ -44,8 +44,6 @@
 
         <div class="action-panel max-w-[144px] w-full  ml-[10px]">
           <ActionPanel
-              :canUseFavorite="canUseFavorite"
-              :isUserLogin="isUserLogin"
               :items="items"
               :cartCount="cartStore.cartCount"
               @showShoppingCart="showShoppingCart"
@@ -279,11 +277,23 @@ const links = ref([
   }
 }
 
+@media (max-width: 680px) {
+  .product-search-wrapper {
+    position: absolute !important;
+    top: 85px !important;
+    right: 20px !important;
+    left: auto !important;
+    max-width: 340px !important;
+  }
+}
+
+
 @media (max-width: 679px) {
   .logo {
     padding-left: 0;
     width: 100%;
   }
+
 }
 
 
@@ -300,7 +310,7 @@ const links = ref([
   }
   .product-search-wrapper {
     position: absolute !important;
-    top: 90px !important;
+    top: 60px !important;
     right: 20px !important;
     left: auto !important;
     max-width: 340px !important;

@@ -18,7 +18,7 @@
           <p class="title-lg-20 order-number">{{ t('order_number', {number: order.orderNumber}) }}</p>
           <span
               class="order-status text-white px-[12px] bg-[var(--color-primary-purple)] rounded-[var(--default-rounded)] py-[10px] mx-[20px]">
-            {{ capitalizeFirstLetter(order?.status) }}
+            {{ t(localizeStatus(order?.status)) }}
           </span>
         </div>
       </AccordionHeader>
@@ -27,7 +27,12 @@
           <section class="card-item grid gap-7 mb-[27px]">
             <div class="order-countdown-timer flex items-center justify-between">
               <div>
-                <h2 class="timer-title text-[var(--color-primary-pink)] mb-2 title-lg-20 p-2">{{ t('payment_timer_warning') }}</h2>
+                <h2 v-if="!isTimerExpired" class="timer-title text-[var(--color-primary-pink)] mb-2 title-lg-20 p-2">
+                  {{ t('confirmation_order_accepted') }}
+                </h2>
+                <p v-else class="text-red-500 timer-title text-[var(--color-primary-pink)] mb-2 title-lg-20 p-2">
+                  {{ t('confirmation_time_expired') }}
+                </p>
                 <div class="confirmation-hint text-[14px]">
                   <p class="text-[var(--color-muted-gray)] text-center">
                     {{ t('payment_instruction_text_part1') }}
@@ -43,7 +48,7 @@
                   </p>
                 </div>
               </div>
-              <CountdownTimer :orderCreatedAt="new Date(order.createdAt)" />
+              <CountdownTimer :orderCreatedAt="new Date(order.createdAt)" @expired="timerExpired"/>
             </div>
 
             <CartItem
@@ -60,14 +65,32 @@
                 }}</p>
             </div>
           </section>
-          <section class="flex text-[var(--color-gray-dark-charcoal)] max-w-[890px] justify-between">
-            <address class="flex delivery-info__item flex-col gap-6 w-full max-w-[427px] not-italic mr-[36px]">
-              <p v-for="(labelKey, index) in userInfoLabels" :key="index">{{ t(labelKey) }}</p>
+
+          <section
+              class="flex md:flex-row text-[var(--color-gray-dark-charcoal)] max-w-[890px] justify-between gap-6"
+          >
+            <address class="flex delivery-info__item flex-col gap-5 w-full max-w-[427px] not-italic mr-0 md:mr-[36px]">
+              <p
+                  v-for="(item, index) in localizedUserInfo(order.userInfo)"
+                  :key="index"
+                  class="text-base font-semibold tracking-wide leading-6 text-[var(--color-gray-dark-charcoal)]"
+              >
+                {{ t(item.label) }}
+              </p>
             </address>
-            <address class="flex delivery-info__item flex-col gap-6 w-full max-w-[427px] not-italic">
-              <p v-for="(value, label) in order.userInfo" :key="label">{{ value || '-----' }}</p>
+
+            <address class="flex delivery-info__item flex-col gap-5 w-full max-w-[427px] not-italic">
+              <p
+                  v-for="(item, index) in localizedUserInfo(order.userInfo)"
+                  :key="index"
+                  class="text-base font-medium leading-6 text-[var(--color-primary-dark)] whitespace-nowrap"
+              >
+                {{ item.value || '-----' }}
+              </p>
             </address>
           </section>
+
+
         </section>
       </AccordionContent>
     </AccordionPanel>
@@ -83,7 +106,11 @@ import {useCurrencyStore} from "~/stores/currency.js";
 
 const {t} = useI18n();
 
-const currencyStore = useCurrencyStore()
+const isTimerExpired = ref(false)
+
+const timerExpired = () => {
+  isTimerExpired.value = true
+}
 
 defineProps({
   orderList: {
@@ -93,24 +120,34 @@ defineProps({
   }
 })
 
-const userInfoLabels = [
-  'user_info_first_name',
-  'user_info_last_name',
-  'user_info_phone',
-  'user_info_email',
-  'user_info_address',
-  'user_info_delivery_comment'
-];
+function localizedUserInfo(userInfo) {
+  const userInfoMap = {
+    user_info_first_name: 'firstName',
+    user_info_last_name: 'lastName',
+    user_info_phone: 'phone',
+    user_info_email: 'email',
+    user_info_address: 'address',
+    user_info_delivery_comment: 'description'
+  };
+
+  return Object.entries(userInfoMap).reduce((acc, [labelKey, dataKey]) => {
+    acc.push({
+      label: labelKey,
+      value: userInfo?.[dataKey] || '-----'
+    });
+    return acc;
+  }, []);
+}
 
 const statusLocalization = {
-  'Відправлено': 'status_sent',
-  'В обробці': 'status_processing',
-  'Доставлено': 'status_delivered',
-  'Скасовано': 'status_cancelled',
-  'Очікує обробки': 'status_pending',
-  'Відправлений': 'status_shipped',
-  'Завершено': 'status_completed',
-  'Повернуто': 'status_returned'
+  pending: 'status_pending',
+  processing: 'status_processing',
+  shipped: 'status_shipped',
+  sent: 'status_sent',
+  delivered: 'status_delivered',
+  completed: 'status_completed',
+  cancelled: 'status_cancelled',
+  returned: 'status_returned'
 };
 
 const localizeStatus = (status) => {
@@ -140,15 +177,18 @@ const localizeStatus = (status) => {
     padding: 0;
   }
 }
+
 @media (max-width: 800px) {
   .order-countdown-timer {
     flex-direction: column-reverse;
     margin-bottom: 12px;
   }
 }
+
 @media (max-width: 750px) {
   .timer-title {
-    font-size: 15px;
+    font-size: 14px;
+    text-align: center;
   }
 }
 
@@ -163,8 +203,12 @@ const localizeStatus = (status) => {
     padding: 0px 14.5px;
   }
 
+  .discount-price {
+    font-size: 14px;
+  }
+
   .history-view-price {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .delivery-info__item p {

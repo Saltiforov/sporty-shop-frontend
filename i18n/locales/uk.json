@@ -182,6 +182,11 @@
   "toast_success_title": "Успішно додано",
   "toast_added_to_cart": "{productName} додано до кошика",
 
+  "toast_order_success_title": "Успішно створено",
+  "toast_order_success_message": "Ваше замовлення було успішно оформлено",
+  "toast_order_error_title": "Помилка",
+  "toast_order_error_message": "Не вдалося створити замовлення. Спробуйте ще раз пізніше",
+
   "login": "Увійти",
   "login_tab": "Вхід",
   "register_tab": "Реєстрація",
@@ -196,8 +201,8 @@
   "user_info_phone": "Номер телефону",
   "user_info_address": "Адреса доставки",
   "user_info_delivery_comment": "Додаткова інформація щодо доставки",
-  "total": "Всього",
-  "unit": "шт",
+  "total": "Разом",
+  "unit": "од",
 
   "status_sent": "Відправлено",
   "status_processing": "Обробляється",

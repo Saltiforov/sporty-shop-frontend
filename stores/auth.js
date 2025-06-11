@@ -11,13 +11,15 @@ export const useAuthStore = defineStore('auth', () => {
     const userToken = ref('')
     const currentUser = ref({})
 
+    const authInitialized = ref(false)
+
     const setCurrentUser = (user) => {
         currentUser.value = user
     }
 
     const { $api } = useNuxtApp()
 
-    function restoreAuthFromLocalStorage() {
+    function  restoreAuthFromLocalStorage() {
         const storedToken = localStorage.getItem('authToken')
         const storedUser = localStorage.getItem('currentUser')
 
@@ -101,6 +103,8 @@ export const useAuthStore = defineStore('auth', () => {
 
     const isAuthenticated = computed(() => authenticated.value)
 
+    const isInitialized = computed(() => authInitialized.value)
+
     return {
         authenticated,
         authenticateUser,
@@ -111,6 +115,7 @@ export const useAuthStore = defineStore('auth', () => {
         userToken,
         setCurrentUser,
         restoreAuthFromLocalStorage,
-        fetchUserData
+        fetchUserData,
+        isInitialized
     }
 })

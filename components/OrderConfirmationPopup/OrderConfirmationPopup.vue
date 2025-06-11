@@ -116,4 +116,25 @@ ol li {
   font-weight: 500;
   font-size: 36px;
 }
+
+@media (max-width: 650px) {
+  .order-meta {
+    flex-direction: column;
+  }
+  .order-meta {
+    align-items: center;
+  }
+  .confirmation-popup {
+    padding: 20px;
+  }
+  .payment-instruction {
+    margin-bottom: 12px;
+  }
+  .confirmation-large-text {
+    font-size: 28px;
+  }
+  .instruction-text {
+    font-size: 20px;
+  }
+}
 </style>

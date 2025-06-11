@@ -6,11 +6,11 @@
           'fields-block-content': true,
           'form-content': true,
           'grid-cols-1': !leftFullFields.length || !rightFullFields.length,
-          'grid-cols-2': leftFullFields.length && rightFullFields.length
+          'grid-cols-2 gap-6': leftFullFields.length && rightFullFields.length
         }"
-          class="grid gap-6"
+          class="grid "
       >
-        <div class="block flex flex-col gap-6">
+        <div class="block flex flex-col gap-3">
           <template v-for="field in leftFullFields" :key="field.name">
             <fieldset class="form-group">
               <legend class="form__title mb-[11px] flex items-center gap-2">
@@ -90,9 +90,9 @@
           </template>
         </div>
 
-        <div class="block flex flex-col gap-6">
+        <div class="block flex flex-col gap-3">
           <template v-for="(pair, index) in rightHalfPairs" :key="'rh' + index">
-            <div class="flex gap-6 responsive-pair">
+            <div class="flex gap-3 responsive-pair">
               <template v-for="field in pair" :key="field.name">
                 <fieldset class="half-field form-group w-1/2">
                   <legend class="form__title mb-[11px] flex items-center gap-2">
