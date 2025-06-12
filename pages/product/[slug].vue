@@ -55,7 +55,7 @@
 
       <div
           v-if="productItem"
-          class="about-product-info w-full min-h-[625px] mx-auto flex flex-col self-start max-w-full lg:max-w-[870px]"
+          class="about-product-info w-full min-h-[625px]  flex flex-col self-start max-w-full lg:max-w-[870px]"
       >
         <div
             class="about-product-info__content bg-[var(--color-gray-lavender)] h-full min-h-[625px] rounded-[8px] p-[35px_55px_65px_31px] flex flex-col justify-between">

@@ -229,8 +229,6 @@ definePageMeta({
   layout: 'breadcrumb',
 })
 
-const getWidth = useWindowWidthWatcher()
-
 const fieldsBlock = ref(null)
 
 const isLoading = ref(false)

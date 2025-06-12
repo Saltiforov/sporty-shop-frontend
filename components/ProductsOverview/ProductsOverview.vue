@@ -8,7 +8,7 @@
           :cart-product="item"
           :key="item.id"
           :is-history-view="isHistoryView"
-          @remove-product="confirmDelete"
+          @remove-product="handleRemoveProduct"
           @handle-cart-item="emit('handle-cart-item')"
       />
     </div>
@@ -41,14 +41,6 @@
 
     </div>
   </div>
-  <ConfirmDialog
-      :pt="{
-    root: { class: 'my-dialog-root' },
-    footer: { class: 'my-dialog-footer' },
-    acceptButton: { class: 'my-accept-btn' },
-    rejectButton: { class: 'my-reject-btn' }
-  }"
-  />
   <Toast/>
 </template>
 
@@ -87,6 +79,11 @@ const {productsOverview, scrollAfter} = defineProps({
 
 const deleteProduct = (id, name) => {
   cartStore.removeFromCart(id)
+}
+
+const handleRemoveProduct = (product) => {
+  console.log("handleRemoveProduct", product)
+  confirmDelete(product)
 }
 
 const confirmDelete = ({ _id, name }) => {

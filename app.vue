@@ -23,6 +23,15 @@
         :is-mobile-sidebar-open="isOpenMenu"
         @handle-mobile-sidebar="handleMobileMenu"
     />
+    <ConfirmDialog
+        :pt="{
+    root: { class: 'my-dialog-root' },
+    footer: { class: 'my-dialog-footer' },
+    acceptButton: { class: 'my-accept-btn' },
+    rejectButton: { class: 'my-reject-btn' }
+  }"
+    />
+
     <Toast
         position="bottom-right"
         group="br"
