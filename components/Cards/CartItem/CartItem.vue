@@ -120,7 +120,15 @@
           class="remove-product-cart-wrapper ml-auto pl-10 flex flex-col justify-center"
       >
         <Button
-            :pt="{ root: { class: 'cart-item__delete-btn' } }"
+            :pt="{
+                  root: {
+                    style: {
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      padding: '0',
+                    }
+                  }
+                }"
             @click="handleRemoveProduct(cartProduct)"
         >
           <svg

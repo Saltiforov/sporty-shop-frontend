@@ -13,6 +13,15 @@
 
       <Button
           v-show="content === 'filters'"
+          :pt="{
+            root: {
+              style: {
+                backgroundColor: 'transparent',
+                border: 'none',
+                padding: '0',
+              }
+            }
+          }"
           @click="$emit('close')"
           class="mobile-filter-close__btn"
           aria-label="Закрыть"

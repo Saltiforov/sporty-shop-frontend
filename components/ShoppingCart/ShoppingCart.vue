@@ -16,7 +16,19 @@
           <p class="cart-count large-title" style="color: var(--color-muted-light-gray)">({{ cartStore.cartCount || 0 }})</p>
         </div>
         <div class="pr-[8px]">
-          <Button :pt="{ root: { class: 'close-cart' } }" @click="$emit('close')">
+          <Button
+              :pt="{
+                root: {
+                  style: {
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    padding: '0',
+                  }
+                }
+              }"
+              @click="$emit('close')"
+              class="close-cart"
+          >
             <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
                  xmlns="http://www.w3.org/2000/svg">
               <path
