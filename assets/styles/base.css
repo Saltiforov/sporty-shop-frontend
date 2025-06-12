@@ -170,7 +170,7 @@ header {
     font-style: italic;
 }
 
-.p-menu-overlay {
+.p-menu {
     position: absolute;
     left: 50%;
     top: 100%;
@@ -180,7 +180,7 @@ header {
     background-color: var(--color-gray-light-lavender);
 }
 
-.p-menu-overlay::before {
+.p-menu::before {
     content: '';
     position: absolute;
     top: -26px;
