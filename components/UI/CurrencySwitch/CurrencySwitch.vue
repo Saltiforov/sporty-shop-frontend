@@ -28,10 +28,14 @@ const currencyOptions = [
   { label: 'Europe', code: 'EUR', value: 'eur' }
 ]
 
-const defaultValue = currencyCookie.value || localStorage.getItem('currency') || currencyOptions[0].value
+const defaultValue = ref(
+    currencyCookie.value ||
+    (import.meta.client ? localStorage.getItem('currency') : null) ||
+    currencyOptions[0].value
+);
 
 const selectedCurrency = ref(
-    currencyOptions.find(el => el.value === defaultValue.toLowerCase()) || currencyOptions[0]
+    currencyOptions.find(el => el.value === defaultValue.value.toLowerCase()) || currencyOptions[0]
 )
 
 onBeforeMount(() => {
