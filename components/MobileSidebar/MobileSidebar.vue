@@ -11,13 +11,10 @@
         :class="isOpen ? 'translate-x-0' : '-translate-x-full'"
     >
 
-      <Button v-show="content === 'filters'" :pt="{
-        root: {
-          class: 'mobile-filter-close__btn'
-        }
-      }"
+      <Button
+          v-show="content === 'filters'"
           @click="$emit('close')"
-          class="absolute top-4 right-4 p-2 cursor-pointer z-10"
+          class="mobile-filter-close__btn"
           aria-label="Закрыть"
       >
         <svg width="9" height="15" viewBox="0 0 9 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -87,9 +84,18 @@ const sidebarContent = computed(() => props.content === 'menu' ? MobileSidebarMe
 }
 
 .mobile-filter-close__btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  z-index: 10;
+  width: auto;
+
   background: transparent;
   border: none;
 }
+
 .mobile-filter-close__btn:hover {
   background: transparent;
   border: none;

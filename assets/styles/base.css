@@ -205,15 +205,16 @@ header {
     padding-bottom: 10px;
 }
 
-
 .p-button-outlined.p-button-secondary {
-    border: 2px solid transparent;
+    border: 0 solid transparent;
     padding: 0.5rem 1rem;
     transition: all 0.2s ease-in-out;
 }
 
 .p-button-outlined.p-button-secondary:hover {
-    border: 2px solid transparent;
+    border: 0 solid transparent;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease-in-out;
 }
 
 .p-dialog .p-dialog-header-icon,

@@ -153,6 +153,9 @@ const totalDiscount = computed(() => totalPriceBeforeDiscount.value - totalPrice
   .final-price {
     padding-right: 20px;
   }
+  .cart-items-wrapper {
+    gap: 22px;
+  }
   .total-price-label,
   .total-discount-label,
   .amount-to-pay-label {

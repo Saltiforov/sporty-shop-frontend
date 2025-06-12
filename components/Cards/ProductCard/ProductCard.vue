@@ -52,7 +52,7 @@
           <span>({{ product.reviews?.reviewCount || '0' }})</span></p>
       </div>
       <div class="flex relative items-center justify-between">
-        <div>
+        <div class="product-pricing">
           <p v-if="hasDiscount" class="discount-price absolute -top-3 left-0 fw-500 text-[15px] line-through">
             {{ priceByCurrency }} {{ t(currencyStore.label) }}
           </p>

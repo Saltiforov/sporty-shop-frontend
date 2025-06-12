@@ -41,7 +41,7 @@
               class="remove-product-cart-responsive ml-auto flex flex-col justify-center"
           >
             <Button
-                :pt="{ root: { class: 'cart-item__delete-btn' } }"
+                class="cart-item__delete-btn"
                 @click="handleRemoveProduct(cartProduct)"
             >
               <svg

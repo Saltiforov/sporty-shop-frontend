@@ -182,6 +182,10 @@
   "toast_success_title": "Успішно додано",
   "toast_added_to_cart": "{productName} додано до кошика",
 
+  "guarantees": "Гарантії",
+  "term_of_use": "Умови використання",
+  "delivery": "Доставка",
+
   "toast_order_success_title": "Успішно створено",
   "toast_order_success_message": "Ваше замовлення було успішно оформлено",
   "toast_order_error_title": "Помилка",
