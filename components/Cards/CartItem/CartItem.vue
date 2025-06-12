@@ -36,11 +36,21 @@
           >
             {{ cartProduct.name }}
           </p>
+
           <div
               v-if="!isHistoryView"
               class="remove-product-cart-responsive ml-auto flex flex-col justify-center"
           >
             <Button
+                :pt="{
+                  root: {
+                    style: {
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      padding: '0',
+                    }
+                  }
+                }"
                 class="cart-item__delete-btn"
                 @click="handleRemoveProduct(cartProduct)"
             >

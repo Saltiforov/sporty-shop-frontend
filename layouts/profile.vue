@@ -101,8 +101,8 @@ const getRouteForLink = (routePath) => {
 }
 
 const fullUserName = computed(() => {
-  const first = capitalizeFirstLetter(currentUser.value?.firstName ?? '')
-  const last = capitalizeFirstLetter(currentUser.value?.lastName ?? '')
+  const first = capitalizeFirstLetter(userData.value?.firstName ?? '')
+  const last = capitalizeFirstLetter(userData.value?.lastName ?? '')
   return `${first} ${last}`.trim()
 })
 

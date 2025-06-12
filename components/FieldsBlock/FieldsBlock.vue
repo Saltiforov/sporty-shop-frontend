@@ -272,12 +272,6 @@ defineExpose({
     grid-template-columns: 1fr;
   }
 }
-@media (max-width: 670px) {
-  .fields-block-content {
-    gap: 0;
-    margin-bottom: 36px;
-  }
-}
 
 @media (max-width: 600px) {
   .form__title {
@@ -285,7 +279,12 @@ defineExpose({
   }
 
   .block {
+    gap: 26px;
     margin-bottom: 26px;
+  }
+
+  .responsive-pair {
+    gap: 26px;
   }
 
   .block:last-child {

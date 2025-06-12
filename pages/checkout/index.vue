@@ -401,7 +401,7 @@ const configUkraine = ref({
         label: computed(() => t('last_name')),
         type: 'InputText',
         props: {
-          side: 'right',
+          side: 'left',
           type: 'text',
           placeholder: "",
           required: true
@@ -461,18 +461,6 @@ const configUkraine = ref({
       },
 
       {
-        name: 'delivery',
-        code: 'delivery',
-        label: computed(() => t('delivery_info')),
-        type: 'InputText',
-        props: {
-          side: 'left',
-          placeholder: ''
-        }
-      },
-
-
-      {
         name: 'city',
         code: 'city',
         label: computed(() => t('city')),
@@ -485,6 +473,18 @@ const configUkraine = ref({
           (value) => (value ? true : "City is required"),
         ],
       },
+
+      {
+        name: 'delivery',
+        code: 'delivery',
+        label: computed(() => t('delivery_info')),
+        type: 'InputText',
+        props: {
+          side: 'right',
+          placeholder: ''
+        }
+      },
+
 
     ]
   }
@@ -515,7 +515,7 @@ const configEurope = ref({
         label: computed(() => t('last_name')),
         type: 'InputText',
         props: {
-          side: 'right',
+          side: 'left',
           type: 'text',
           placeholder: "",
           required: true
@@ -526,25 +526,20 @@ const configEurope = ref({
       },
 
       {
-        name: 'tgUsername',
-        code: 'tgUsername',
-        label: computed(() => t('telegram_username')),
-        tooltipComponent: defineAsyncComponent(() => import('~/components/UI/TooltipIcon/TooltipIcon.vue')),
+        name: 'city',
+        code: 'city',
+        label: computed(() => t('state')),
         type: 'InputText',
-        tooltipProps: {
-          message: computed(() => t('telegram_tooltip'))
-        },
         props: {
           side: 'right',
-          type: 'text',
-          placeholder: "",
-          required: true,
-          class: 'w-full'
+          placeholder: ''
         },
         validators: [
-          (value) => (value ? true : "Telegram Username is required"),
+          (value) => (value ? true : "State is required"),
         ],
       },
+
+
 
       {
         name: 'street',
@@ -620,16 +615,23 @@ const configEurope = ref({
       },
 
       {
-        name: 'city',
-        code: 'city',
-        label: computed(() => t('state')),
+        name: 'tgUsername',
+        code: 'tgUsername',
+        label: computed(() => t('telegram_username')),
+        tooltipComponent: defineAsyncComponent(() => import('~/components/UI/TooltipIcon/TooltipIcon.vue')),
         type: 'InputText',
+        tooltipProps: {
+          message: computed(() => t('telegram_tooltip'))
+        },
         props: {
           side: 'left',
-          placeholder: ''
+          type: 'text',
+          placeholder: "",
+          required: true,
+          class: 'w-full'
         },
         validators: [
-          (value) => (value ? true : "State is required"),
+          (value) => (value ? true : "Telegram Username is required"),
         ],
       },
 
@@ -639,7 +641,7 @@ const configEurope = ref({
         label: computed(() => t('post_code')),
         type: 'InputText',
         props: {
-          side: 'left',
+          side: 'right',
           placeholder: ''
         },
       },
