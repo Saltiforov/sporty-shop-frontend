@@ -186,6 +186,16 @@
   "term_of_use": "Умови використання",
   "delivery": "Доставка",
 
+  "no_orders_message": "Ви ще не маєте замовлень. Коли з’являться, вони відобразяться тут.",
+
+  "validation_username_required": "Ім'я користувача обов'язкове",
+  "validation_username_min_length": "Ім'я користувача має містити щонайменше 3 символи",
+  "validation_password_required": "Пароль обов'язковий",
+  "validation_first_name_required": "Ім'я обов'язкове",
+  "validation_last_name_required": "Прізвище обов'язкове",
+  "validation_phone_required": "Номер телефону обов'язковий",
+  "validation_email_required": "Email обов'язковий",
+
   "toast_order_success_title": "Успішно створено",
   "toast_order_success_message": "Ваше замовлення було успішно оформлено",
   "toast_order_error_title": "Помилка",

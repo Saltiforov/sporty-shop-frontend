@@ -3,7 +3,7 @@
     <LoadingOverlay :visible="isLoading"/>
     <div class="personal-information-content">
       <div class="main-content">
-        <h1 class="personal-information-title title-lg-20 mb-[30px]">{{ t('contact_information') }}</h1>
+        <h1 class="personal-information-title title-semibold-24 mb-[30px]">{{ t('contact_information') }}</h1>
         <FieldsBlock v-if="userData && userData._id" class="personal-information-fields-block mb-[73px] murecho-font"
                      :config="config.fields" ref="fieldsBlock" :data="formattedUserData"/>
         <FieldsBlockSkeleton v-else/>
@@ -28,9 +28,7 @@ import FieldsBlockSkeleton from "~/components/Skeletons/FieldsBlockSkeleton/Fiel
 
 definePageMeta({layout: 'profile'})
 
-import {onMounted} from "vue";
-import {InputGroup, InputGroupAddon, InputNumber} from "primevue";
-import {getCurrentUser, updateInfoAboutUser} from "~/services/api/user-service.js";
+import {updateInfoAboutUser} from "~/services/api/user-service.js";
 import {storeToRefs} from "pinia";
 import {useAuthStore} from "~/stores/auth.js";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
@@ -39,7 +37,7 @@ const {t} = useI18n();
 
 const {currentUser} = storeToRefs(useAuthStore());
 
-const userData = ref({})
+const userData = computed(() => currentUser.value || {});
 
 const formattedUserData = computed(() => {
   const {address = {}, ...rest} = userData.value || {};
@@ -82,25 +80,6 @@ const savePersonalInformation = async () => {
     updateInfoAboutUser(currentUser.value._id, buildPersonalInfoPayload(userInfo))
   }
 }
-
-const loadUserData = async () => {
-  isLoading.value = true
-  try {
-    userData.value = await getCurrentUser()
-  } catch (e) {
-    console.error('Ошибка при загрузке пользователя', e)
-  } finally {
-    setTimeout(() => {
-      isLoading.value = false
-    }, 500)
-  }
-}
-
-onMounted(async () => {
-
-  await loadUserData()
-
-})
 
 const config = {
   fields: {

@@ -1,5 +1,5 @@
 <template>
-  <div class="action-panel w-full flex justify-between items-center">
+  <div v-if="authInitialized" class="action-panel w-full flex justify-between items-center">
 
     <div v-if="responsive" class="menu">
       <Button @click="handleMobileMenu" :pt="buttonPT">
@@ -7,9 +7,8 @@
         <img v-else src="~/assets/icons/menu-icon-close.svg" alt="menu-icon-close.svg">
       </Button>
     </div>
-
     <Button
-        :disabled="!isAuthenticated"
+        :disabled="isFavoritesDisabled"
         @click="navigateTo('/profile/favorites')"
         :pt="buttonPT"
     >
@@ -72,7 +71,7 @@ const props = defineProps({
   }
 })
 
-const {isAuthenticated} = storeToRefs(useAuthStore());
+const {isAuthenticated, authInitialized} = storeToRefs(useAuthStore());
 
 const emit = defineEmits(['toggle', 'showShoppingCart', 'handle-mobile-sidebar'])
 
@@ -81,9 +80,23 @@ const router = useRouter()
 
 const {locale} = useI18n()
 
-const isUserLogin = computed(() => isAuthenticated.value ? 'var(--color-primary-green)' : 'var(--color-gray-pale-lavender)')
+const isFavoritesDisabled = computed(() =>
+    !authInitialized.value || !isAuthenticated.value
+)
 
-const canUseFavorite = computed(() => isAuthenticated.value ? 'var(--color-gray-pale-lavender)' : 'var(--color-muted-gray)')
+const isUserLogin = computed(() => {
+  if (!authInitialized.value) return 'var(--color-gray-pale-lavender)'
+  return isAuthenticated.value
+      ? 'var(--color-primary-green)'
+      : 'var(--color-gray-pale-lavender)'
+})
+
+const canUseFavorite = computed(() => {
+  if (!authInitialized.value) return 'var(--color-muted-gray)'
+  return isAuthenticated.value
+      ? 'var(--color-gray-pale-lavender)'
+      : 'var(--color-muted-gray)'
+})
 
 const isShoppingCartOpen = computed(() => useCartStore().isOpen)
 

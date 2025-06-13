@@ -1,7 +1,7 @@
 <template>
   <section class="change-password max-w-[432px]">
-    <section class=" change-password-content">
-      <h1 class="title-lg-20 mb-[30px]">{{ t('change_password') }}</h1>
+    <section class="change-password-content mb-[36px]">
+      <h1 class="title-semibold-24 mb-[30px]">{{ t('change_password') }}</h1>
       <FieldsBlock :config="config.fields" />
     </section>
     <div class="change-password-wrapper">

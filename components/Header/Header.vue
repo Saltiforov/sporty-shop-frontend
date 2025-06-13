@@ -2,7 +2,6 @@
   <header
       :class="[
       'flex relative header flex-col items-end pt-[13px] pr-[24px] pb-[8px] pl-[71px]',
-      { 'mb-[98px]': isHomePage }
     ]"
   >
     <div class="header-content w-full items-end flex">
@@ -234,9 +233,6 @@ const links = ref([
 @media (max-width: 1400px) {
   .menu {
     display: block;
-  }
-  .header {
-    margin-bottom: 36px;
   }
   .links-list {
     display: none;

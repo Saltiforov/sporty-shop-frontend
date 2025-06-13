@@ -9,7 +9,7 @@
     />
     <p
         v-else
-        class="text-gray-600 min-h-[200px] flex items-center justify-center px-4 text-center text-lg md:text-xl lg:text-2xl max-w-md mx-auto"
+        class="no-data-text"
         style="line-height: 1.4;"
     >
       {{ t('text_no_info') }}

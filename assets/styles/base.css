@@ -124,6 +124,12 @@ header {
     line-height: 22px;
 }
 
+.title-semibold-24 {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 22px;
+}
+
 .title-lg-20 {
     font-size: 20px;
     font-weight: 600;
@@ -165,10 +171,20 @@ header {
 }
 
 .no-data-text {
-    color: var(--color-primary-black);
-    font-size: 26px;
-    font-style: italic;
+    color: #4B5563;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    text-align: center;
+    font-size: 1rem;
+    max-width: 28rem;
+    margin-left: auto;
+    margin-right: auto;
 }
+
 
 .p-menu {
     position: absolute;

@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen flex flex-col">
-    <div class="w-full main-banner px-8 mx-auto mb-[53px]">
+    <div class="w-full main-banner px-8 mx-auto mt-[92px] mb-[53px]">
       <div class="mx-auto w-full max-w-[1756px]">
         <SwiperWrapper
             v-if="hydrated"
@@ -81,6 +81,12 @@ const swiperOptions = {
 
 :deep(.swiper-pagination-bullet-active) {
   background-color: #7e5bef;
+}
+
+@media (max-width: 1400px) {
+  .main-banner {
+    margin-top: 34px;
+  }
 }
 
 @media (max-width: 750px) {

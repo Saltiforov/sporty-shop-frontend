@@ -1,12 +1,17 @@
 <template>
   <section class="order-history">
-    <LoadingOverlay :visible="isLoading" />
-    <h1 class="title-lg-20 mb-[30px]">{{ t('contact_information') }}</h1>
-    <OrderHistoryItem v-if="orderList.length" :order-list="orderList" />
-    <OrderSkeletonItem v-else v-for="i in 8" :key="'loading-skeleton-' + i" />
+    <h1 class="title-semibold-24 mb-[30px]">{{ t('contact_information') }}</h1>
+
+    <template v-if="isLoading">
+      <OrderSkeletonItem v-for="i in 8" :key="'loading-skeleton-' + i" />
+    </template>
+
+    <template v-else>
+      <OrderHistoryItem v-if="orderList.length" :order-list="orderList" />
+      <p v-else class="empty-message no-data-text">{{ t('no_orders_message') }}</p>
+    </template>
   </section>
 </template>
-
 <script setup>
 import OrderSkeletonItem from "~/components/Skeletons/OrderItemSkeleton/OrderSkeletonItem.vue";
 

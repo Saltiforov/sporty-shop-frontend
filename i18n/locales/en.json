@@ -26,6 +26,16 @@
   "term_of_use": "Terms of Use",
   "delivery": "Delivery",
 
+  "no_orders_message": "There are no orders yet.",
+
+  "validation_username_required": "Username is required",
+  "validation_username_min_length": "Username must be at least 3 characters",
+  "validation_password_required": "Password is required",
+  "validation_first_name_required": "First Name is required",
+  "validation_last_name_required": "Last Name is required",
+  "validation_phone_required": "Phone Number is required",
+  "validation_email_required": "Email is required",
+
   "filters_sports_nutrition": "Sports Nutrition",
   "filters_protein": "Protein",
   "filters_amino_acids": "Amino Acids",

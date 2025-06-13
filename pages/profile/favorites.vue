@@ -2,7 +2,7 @@
   <main class="favorite-products">
     <LoadingOverlay :visible="isLoading" />
 
-    <h1 class="profile-page-title title-lg-20 mb-8">
+    <h1 class="profile-page-title title-semibold-24 mb-8">
       {{ t('favorites') }}
     </h1>
 
@@ -27,10 +27,10 @@
 
     <section
         v-if="!favoriteProducts.length"
-        class="empty-favorites-text text-center py-10 text-gray-400 text-xl font-medium"
+        class="empty-favorites-text text-center"
         aria-live="polite"
     >
-      <p>{{ t('favorite_products_empty') }}</p>
+      <p class="no-data-text">{{ t('favorite_products_empty') }}</p>
     </section>
   </main>
 

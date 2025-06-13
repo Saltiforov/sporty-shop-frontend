@@ -17,9 +17,7 @@ export const useAuthStore = defineStore('auth', () => {
         currentUser.value = user
     }
 
-    const { $api } = useNuxtApp()
-
-    function  restoreAuthFromLocalStorage() {
+    function restoreAuthFromLocalStorage() {
         const storedToken = localStorage.getItem('authToken')
         const storedUser = localStorage.getItem('currentUser')
 
@@ -47,6 +45,8 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     async function authenticateUser({ username, password }) {
+        const { $api } = useNuxtApp()
+
         return $api
             .post(routes.login, { username, password })
             .then(({ token: accessToken }) => {
@@ -66,7 +66,17 @@ export const useAuthStore = defineStore('auth', () => {
             })
     }
 
-    async function registerUser({ username, email, password, firstName, lastName, phone, address }) {
+    async function registerUser({
+                                    username,
+                                    email,
+                                    password,
+                                    firstName,
+                                    lastName,
+                                    phone,
+                                    address
+                                }) {
+        const { $api } = useNuxtApp()
+
         return $api
             .post(routes.signup, {
                 username,
@@ -102,7 +112,6 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     const isAuthenticated = computed(() => authenticated.value)
-
     const isInitialized = computed(() => authInitialized.value)
 
     return {
@@ -116,6 +125,7 @@ export const useAuthStore = defineStore('auth', () => {
         setCurrentUser,
         restoreAuthFromLocalStorage,
         fetchUserData,
-        isInitialized
+        isInitialized,
+        authInitialized
     }
 })

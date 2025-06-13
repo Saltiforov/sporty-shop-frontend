@@ -172,8 +172,8 @@ const loginFields = {
           required: true
         },
         validators: [
-          (value) => (value ? true : "Username is required"),
-          (value) => (value.length >= 3 ? true : "Username must be at least 3 characters"),
+          (value) => (value ? true : t('validation_username_required')),
+          (value) => (value.length >= 3 ? true : t('validation_username_min_length')),
         ],
       },
 
@@ -190,7 +190,7 @@ const loginFields = {
           toggleMask: true,
         },
         validators: [
-          (value) => (value ? true : "Password is required"),
+          (value) => (value ? true : t('validation_password_required')),
         ],
       },
     ]
@@ -200,6 +200,22 @@ const loginFields = {
 const registerFields = {
   fields: {
     items: [
+      {
+        name: 'username',
+        code: 'username',
+        label: computed(() => t('auth_username')),
+        type: 'InputText',
+        props: {
+          side: 'left',
+          type: 'text',
+          placeholder: "",
+          required: true
+        },
+        validators: [
+          (value) => (value ? true : t('validation_username_required')),
+        ],
+      },
+
       {
         name: 'firstName',
         code: 'firstName',
@@ -212,7 +228,7 @@ const registerFields = {
           required: true
         },
         validators: [
-          (value) => (value ? true : "First Name is required"),
+          (value) => (value ? true : t('validation_first_name_required')),
         ],
       },
 
@@ -228,7 +244,7 @@ const registerFields = {
           required: true
         },
         validators: [
-          (value) => (value ? true : "Last Name is required"),
+          (value) => (value ? true : t('validation_last_name_required')),
         ],
       },
       {
@@ -255,7 +271,7 @@ const registerFields = {
           }
         },
         validators: [
-          (value) => (value ? true : "Phone Number is required"),
+          (value) => (value ? true : t('validation_phone_required')),
         ],
       },
       {
@@ -270,7 +286,7 @@ const registerFields = {
           required: true
         },
         validators: [
-          (value) => (value ? true : "Email is required"),
+          (value) => (value ? true : t('validation_email_required')),
         ],
       },
       {
@@ -282,7 +298,7 @@ const registerFields = {
           side: 'left',
         },
         validators: [
-          (value) => (value ? true : "Password is required"),
+          (value) => (value ? true : t('validation_password_required')),
         ],
         render: ({modelValue, 'onUpdate:modelValue': update}) =>
             h(InputGroup, {}, {
