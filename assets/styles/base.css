@@ -185,6 +185,32 @@ header {
     margin-right: auto;
 }
 
+.p-tabview-tab-title {
+    font-size: 24px;
+    color: var(--color-primary-black);
+}
+
+.p-accordionheader[data-p-active="true"] {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.p-tabview-panel {
+    font-size: 24px;
+}
+
+.p-accordionheader {
+    border-radius: var(--default-rounded);
+    padding: 8px 16px;
+    font-weight: 500;
+    color: var(--color-primary-black);
+    font-size: 20px;
+}
+
+.p-accordionheader:hover {
+    color: var(--color-primary-black);
+}
+
 
 .p-menu {
     position: absolute;

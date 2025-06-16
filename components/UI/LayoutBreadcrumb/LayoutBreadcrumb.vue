@@ -103,4 +103,13 @@ const handleLinkClick = (item) => {
   line-height: 22px;
   color: var(--small-title-color);
 }
+
+@media (max-width: 500px) {
+  .breadcrumb-text {
+    font-size: 11px;
+  }
+  .breadcrumb {
+    padding: 35px 0 15px 0;
+  }
+}
 </style>

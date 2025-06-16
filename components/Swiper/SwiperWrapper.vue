@@ -85,16 +85,18 @@ const emit = defineEmits(['swiper-slide-to-right', 'swiper-slide-to-left'])
 
 const containerRef = ref(null)
 
-const swiperOptions = {
-  ...props.options,
-  ...(props.showPagination && {
-    pagination: {
-      clickable: true
-    }
-  })
-}
+const swiperOptions = computed(() => {
+  return {
+    ...props.options,
+    ...(props.showPagination && {
+      pagination: {
+        clickable: true
+      }
+    })
+  }
+})
 
-const swiper = useSwiper(containerRef, swiperOptions)
+const swiper = useSwiper(containerRef, swiperOptions.value)
 
 const swipeToRight = () => {
   swiper.next()
@@ -119,7 +121,7 @@ const paginationStyles = {
   @apply absolute bg-[#24242ACC] top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full shadow-md;
 }
 
-@media(max-width: 650px) {
+@media (max-width: 650px) {
   .swiper-btn {
     display: none;
   }

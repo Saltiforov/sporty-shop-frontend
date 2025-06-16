@@ -155,3 +155,13 @@
     }
 }
 /* P DIALOG COMPONENT */
+
+/* P ACCORDIONHEADER  */
+
+@media (max-width: 600px) {
+    .p-accordionheader {
+        font-weight: 600;
+    }
+}
+
+/* P ACCORDIONHEADER  */

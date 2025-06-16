@@ -66,15 +66,7 @@
         <slot name="buy-button">
           <Button
               :pt="{
-              root: {
-                style: {
-                border: 'none',
-                padding: '0px',
-                background: 'var( --color-primary-green)',
-                borderRadius: '50%',
-                ...productCardIconSizes
-                },
-              }
+             root: { class: 'buy-button' }
             }"
               @click="addToCart(product)"
               class="text-white add-product-button self-end flex items-center w-[47px] h-[47px]  px-4 py-2 rounded-[50%] transition">
@@ -172,12 +164,6 @@ const favoriteButtonPosition = computed(() => {
       : '-top-3 right-1'
 })
 
-const productCardIconSizes = computed(() => {
-  return windowWidth.value < 500
-      ? {width: '36px', height: '36px',}
-      : {width: '47px', height: '47px',}
-})
-
 const imageSizeSmallClasses = computed(() => {
   const breakpoints = [
     {min: 1024, class: 'lg:max-w-[135px] lg:h-[135px]'},
@@ -218,14 +204,22 @@ const iconSize = computed(() => {
   z-index: 100;
 }
 
-.card-buy-button {
+.buy-button {
   border: none;
-  background: #28A745;
+  padding: 0;
+  background: var(--color-primary-green);
+  border-radius: 50%;
+  width: 47px;
+  height: 47px;
 }
 
-.card-buy-button:hover {
+.buy-button:hover {
   border: none;
-  background: #28A745;
+  padding: 0;
+  background: var(--color-primary-green);
+  border-radius: 50%;
+  width: 47px;
+  height: 47px;
 }
 
 .product-card {
@@ -339,6 +333,16 @@ const iconSize = computed(() => {
   .product-card {
     max-width: 200px;
     padding: 20px 16px 15px 16px;
+  }
+
+  .buy-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .buy-button:hover {
+    width: 36px;
+    height: 36px;
   }
 
   .product-badge {

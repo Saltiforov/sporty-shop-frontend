@@ -155,6 +155,8 @@ import {getAllFilters} from "~/services/api/filters-http.service.js"
 import defaultFilterImage from '~/assets/icons/filters/injections-icon.svg'
 import {useWindowWidthWatcher} from "~/composables/useWindowWidthWatcher.js";
 
+const emit = defineEmits(['hydrated'])
+
 const getWidth = useWindowWidthWatcher();
 
 const mobileVersion = computed(() => getWidth() <= 1024)
@@ -339,6 +341,7 @@ onMounted(async () => {
   const response = await getAllFilters()
   nodes.value = mapNodes(response.list)
   syncTreeWithQuery()
+  emit('hydrated')
 })
 
 watch(() => route.query.filters, (newFilters) => {

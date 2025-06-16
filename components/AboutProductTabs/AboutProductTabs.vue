@@ -22,7 +22,7 @@
               v-html="product.description"
           />
         </div>
-        <p  v-else class="no-data-text">
+        <p v-else class="no-data-text">
           {{ t('description_no_data') }}
         </p>
       </ClientOnly>
@@ -46,7 +46,7 @@
           </p>
         </div>
       </div>
-      <p  v-else class="no-data-text">
+      <p v-else class="no-data-text">
         {{ t('characteristics_no_data') }}
       </p>
     </TabPanel>
@@ -54,15 +54,15 @@
       <div v-if="deliveryAndPaymentInfo" class="delivery-and-payment">
         <p v-html="staticDeliveryAndPayment.content"></p>
       </div>
-      <p  v-else class="no-data-text no-data-reviews">
+      <p v-else class="no-data-text no-data-reviews">
         {{ t('delivery_no_data') }}
       </p>
     </TabPanel>
     <TabPanel :header="tabs.reviews.header">
-      <section class="reviews-content murecho-font flex justify-between">
+      <section v-if="authInitialized" class="reviews-content murecho-font flex justify-between">
         <section v-if="paginatedReviews.length" class="review-list max-w-[650px] w-full pt-[26px] justify-self-start">
           <div class="min-h-[270px] flex flex-col justify-between">
-            <ul class="space-y-[23px]">
+            <ul class="space-y-[46px]">
               <li
                   is="article"
                   v-for="review in paginatedReviews"
@@ -79,10 +79,10 @@
                   <div class="review-card__stars mr-3">
                     <Rating v-model="review.rating" readonly>
                       <template #onicon>
-                        <img src="@/assets/icons/star-filled.svg" class="mr-1" />
+                        <img src="@/assets/icons/star-filled.svg" class="mr-1"/>
                       </template>
                       <template #officon>
-                        <img src="@/assets/icons/star-empty.svg" class="mr-1" />
+                        <img src="@/assets/icons/star-empty.svg" class="mr-1"/>
                       </template>
                     </Rating>
                   </div>
@@ -104,13 +104,14 @@
             </ul>
 
             <nav class="pagination-wrapper flex justify-end" aria-label="Review pagination">
-              <div class="pagination flex justify-between items-center max-w-[80px] w-full">
+              <div class="pagination flex justify-between items-center max-w-[90px] w-full">
                 <button
                     @click="changePage(currentPage - 1)"
                     :disabled="currentPage === 1"
                     :class="{ 'is-disabled': currentPage === 1 }"
                     aria-label="Previous page"
                 >
+                  <img src="~/assets/icons/pagination-btn-arrow-left.svg" alt="pagination-btn">
                 </button>
                 <span>{{ currentPage }}</span>
                 <button
@@ -119,9 +120,11 @@
                     :class="{ 'is-disabled': currentPage * itemsPerPage >= reviews.length }"
                     aria-label="Next page"
                 >
+                  <img src="~/assets/icons/pagination-btn-arrow-right.svg" alt="pagination-btn">
                 </button>
               </div>
             </nav>
+
           </div>
         </section>
 
@@ -156,14 +159,17 @@
                   :maxlength="MAX_REVIEW_LENGTH"
                   v-model="textareaValue"
                   style="resize: none"
-                  class="w-full rounded-[8px]"
+                  :class="[
+                    'w-full rounded-[8px]',
+                    isEmptyTextarea ? 'border border-red-500' : 'border border-[var(--color-border-gray)]'
+                  ]"
                   :placeholder="t('share_your_impressions')"
                   rows="5"
                   cols="30"
               />
             </div>
 
-            <div class="mb-[10px] text-[var(--color-muted-light-gray)] flex justify-end">
+            <div class="char-counter">
               {{ getReviewLength }} / {{ MAX_REVIEW_LENGTH }}
             </div>
 
@@ -173,10 +179,10 @@
                 <p class="mr-[10px] text-[14px]">{{ t('rate_product') }}</p>
                 <Rating :disabled="!isAuthenticated" v-model="rating">
                   <template #onicon>
-                    <img src="@/assets/icons/star-filled.svg" class="mr-1" />
+                    <img src="@/assets/icons/star-filled.svg" class="mr-1"/>
                   </template>
                   <template #officon>
-                    <img src="@/assets/icons/star-empty.svg" class="mr-1" />
+                    <img src="@/assets/icons/star-empty.svg" class="mr-1"/>
                   </template>
                 </Rating>
               </div>
@@ -209,7 +215,6 @@
           </form>
         </section>
       </section>
-
     </TabPanel>
   </TabView>
 </template>
@@ -231,75 +236,22 @@ const props = defineProps({
   }
 })
 
-const productCharacteristics = {
-  manufacturer: {
-    key: "Виробник",
-    value: "BioPharm Ukraine"
-  },
-  product_type: {
-    key: "Тип продукту",
-    value: "Харчова добавка"
-  },
-  release_form: {
-    key: "Форма випуску",
-    value: "Капсули"
-  },
-  quantity_in_pack: {
-    key: "Кількість в упаковці",
-    value: "90 шт."
-  },
-  main_ingredients: {
-    key: "Основні інгредієнти",
-    value: "L-аргінін, кофеїн, екстракт женьшеню"
-  },
-  purpose: {
-    key: "Призначення",
-    value: "Підвищення витривалості та енергії"
-  },
-  recommended_dose: {
-    key: "Рекомендована доза",
-    value: "2 капсули на день"
-  },
-  intake_time: {
-    key: "Час прийому",
-    value: "До тренування або зранку"
-  },
-  features: {
-    key: "Особливості",
-    value: "Без ГМО, підходить веганам"
-  },
-  suitable_for: {
-    key: "Кому підходить",
-    value: "Активним людям і спортсменам"
-  },
-  contraindications: {
-    key: "Протипоказання",
-    value: "Індивідуальна непереносимість компонентів"
-  },
-  expiration: {
-    key: "Термін придатності",
-    value: "24 місяці"
-  }
-};
-
 const staticPagesStore = useStaticPages()
 
 const deliveryAndPaymentInfo = ref(null)
 
 const staticDeliveryAndPayment = computed(() => {
-  const { title, ...data } = deliveryAndPaymentInfo.value.content[0]
+  const {title, ...data} = deliveryAndPaymentInfo.value.content[0]
   return data
 })
 
 const MAX_REVIEW_LENGTH = 300;
 
-const route = useRoute()
-
-const productSlug = computed(() => route.params.slug)
+const productId = computed(() => props.product._id)
 
 const {t} = useI18n()
 
-const {currentUser, isAuthenticated} = storeToRefs(useAuthStore());
+const {currentUser, isAuthenticated, authInitialized} = storeToRefs(useAuthStore());
 
 const fullNameOfUser = computed(() => isAuthenticated.value ? `${currentUser.value.firstName} ${currentUser.value.lastName}` : '');
 
@@ -341,6 +293,8 @@ const reviews = ref(props.product?.reviews?.list || [])
 
 const isEmptyRating = ref(false)
 
+const isEmptyTextarea = ref(false)
+
 const hasPurchasedProduct = ref('')
 
 const paginatedReviews = computed(() => {
@@ -360,16 +314,20 @@ const changePage = (page) => {
 };
 
 const leaveProductReview = async () => {
-  if (!rating.value) {
-    isEmptyRating.value = true
+  const noRating = !rating.value
+  const noText = !textareaValue.value.trim()
+
+  isEmptyRating.value = noRating
+  isEmptyTextarea.value = noText
+
+  if (noRating || noText) {
     return
   }
 
   isLoading.value = true
-  isEmptyRating.value = false
 
   try {
-    const response = await leaveReview(productSlug.value, rating.value, textareaValue.value)
+    const response = await leaveReview(productId.value, rating.value, textareaValue.value)
     reviews.value.push(response)
     hasPurchasedProduct.value = ''
     clearFields()
@@ -439,28 +397,61 @@ onMounted(() => {
   width: 100%;
 }
 
+.char-counter {
+  margin-bottom: 10px;
+  color: var(--color-muted-light-gray);
+  display: flex;
+  justify-content: end;
+  font-size: 16px;
+}
+
+.review-card__name {
+  font-size: 14px;
+  color: var(--color-primary-black);
+}
+
+.review-card__confirmed {
+  font-size: 16px;
+}
+
+.review-card__comment {
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 400;
+}
+
 .accordion-header {
   border-radius: var(--default-rounded);
   color: var(--color-primary-black);
   font-weight: 600;
   font-size: 24px;
 }
+
 .accordion-header:hover {
   color: var(--color-primary-black);
 }
 
-button .arrow-path {
-  stroke: #1B1F26;
-  stroke-opacity: 0.72;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: stroke 0.3s ease;
+.pagination-wrapper .pagination button {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  transition: opacity 0.2s ease;
 }
 
-button.is-disabled .arrow-path {
-  stroke: #D0D0D0;
-  stroke-opacity: 1;
+.pagination-wrapper .pagination button.is-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-wrapper .pagination span {
+  display: inline-block;
+  min-width: 20px;
+  text-align: center;
 }
 
 .empty-reviews-text {
@@ -474,6 +465,7 @@ button.is-disabled .arrow-path {
   .pagination-wrapper {
     justify-content: flex-start;
   }
+
   .empty-reviews-text {
     padding: 30px;
     margin-bottom: 30px;
@@ -484,9 +476,11 @@ button.is-disabled .arrow-path {
   .reviews-content {
     flex-wrap: wrap;
   }
+
   .review-list {
     margin-bottom: 12px;
   }
+
   .pagination-wrapper {
     justify-content: flex-end;
   }

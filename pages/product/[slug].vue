@@ -66,7 +66,7 @@
 
             <div class="availability-grade mb-[73px] flex justify-between">
               <div class="availability">
-                <p v-if="product.availability" class="text-[var(--color-primary-green)]">
+                <p v-if="product.availability">
                   {{ t('product_available') }}
                 </p>
                 <p v-else class="text-[var(--color-primary-red)]">
@@ -125,7 +125,6 @@
               <AmountSelector
                   v-model="product.quantity"
                   :style="counterContainerStyle"
-                  :inputClass="inputSizeClass"
                   :amount-selector-button="amountButtonSize"
               />
             </div>
@@ -165,7 +164,7 @@
     <div v-if="recommended.length" class="recommended-products">
       <div class="flex items-center justify-center mb-[70px] gap-6 my-8">
         <div class="h-px w-[56px] bg-[var(--color-primary-purple)]"></div>
-        <h2 class="text-xl font-semibold text-center whitespace-nowrap">
+        <h2 class="section-title">
           {{ t('recommended_products') }}
         </h2>
         <div class="h-px w-full bg-[var(--color-primary-purple)]"></div>
@@ -185,7 +184,7 @@
 
     <div v-if="viewed.length" class="viewed-products flex items-center justify-center gap-6 my-8">
       <div class="h-px w-[56px] bg-[var(--color-primary-purple)]"></div>
-      <h2 class="text-xl font-semibold text-center whitespace-nowrap">
+      <h2 class="section-title">
         {{ t('viewed_products') }}
       </h2>
       <div class="h-px w-full bg-[var(--color-primary-purple)]"></div>
@@ -227,9 +226,6 @@ import FavoriteButton from "~/components/UI/FavoriteButton/FavoriteButton.vue";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
 
 import {
-  getProduct,
-  addProductToFavorites,
-  deleteProductFromFavorites,
   getAllProducts, getProductBySlug
 } from "~/services/api/product-service.js";
 import {useCartStore} from "~/stores/cart.js";
@@ -294,13 +290,15 @@ const recommended = ref([])
 
 const selectedImage = ref(null)
 
-const amountButtonSize = computed(() => {
-  const size = windowWidth.value < 620 ? '27px' : '18px'
-  return {
-    width: size,
-    height: size
-  }
-})
+const amountButtonSize = ref({ width: '18px', height: '18px' })
+
+// const amountButtonSize = computed(() => {
+//   const size = windowWidth.value < 620 ? '27px' : '18px'
+//   return {
+//     width: size,
+//     height: size
+//   }
+// })
 
 const priceByCurrencyWithDiscount = computed(() => {
   return currencyStore.getCurrency === 'uah'
@@ -316,9 +314,6 @@ const counterContainerStyle = computed(() => {
   return windowWidth.value >= 500 ? 'width: 129px' : 'width: 139px';
 });
 
-const inputSizeClass = computed(() => {
-  return windowWidth.value >= 500 ? 'w-[53px] h-[60px]' : 'w-[36px] h-[36px]';
-});
 
 const hasDiscount = computed(() => {
   const price = priceByCurrency.value
@@ -396,6 +391,11 @@ const handleGalleryClick = (index) => {
 }
 
 onMounted(async () => {
+  windowWidth.value = window.innerWidth
+  amountButtonSize.value = windowWidth.value < 620
+      ? { width: '27px', height: '27px' }
+      : { width: '18px', height: '18px' }
+
   try {
     isLoading.value = true
   } catch (error) {
@@ -424,6 +424,13 @@ onMounted(async () => {
   color: darkred;
 }
 
+.section-title {
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+}
+
 .product-buy-now__btn:hover {
   border-radius: 17px;
   background: var(--color-primary-green);
@@ -438,6 +445,12 @@ onMounted(async () => {
 
 .product-buy-now__btn {
   border: none;
+}
+
+.availability p{
+  font-size: 24px;
+  font-weight: 200;
+  color: var(--color-primary-green);
 }
 
 .buy-now__btn-text {
@@ -663,6 +676,19 @@ onMounted(async () => {
     font-size: 18px;
   }
 
+}
+
+@media (max-width: 500px) {
+  .article {
+    font-size: 13px;
+  }
+  .section-title {
+    font-size: 16px;
+    line-height: 33px;
+  }
+  .availability p {
+    font-size: 16px;
+  }
 }
 
 @media (max-width: 420px) {

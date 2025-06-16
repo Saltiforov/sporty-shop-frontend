@@ -1,15 +1,20 @@
 <template>
   <div :style="style" class="counter-container w-[108px] flex items-center gap-[4px]">
-    <Button :pt="{
-      root: {
-        style: {
-          backgroundColor: 'transparent',
-          border: 'none',
-          padding: '0',
+    <Button
+        :pt="{
+        root: {
+          style: {
+            backgroundColor: 'transparent',
+            border: 'none',
+            padding: '0',
+          }
         }
-      }
-    }" @click="decrement" class="w-[34px] h-[34px] flex items-center justify-center border rounded">
-      <svg :width="amountSelectorButton.width" :height="amountSelectorButton.height" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      }"
+        @click="decrement"
+        class="w-[34px] h-[34px] flex items-center justify-center border rounded"
+    >
+      <svg :width="amountSelectorButton.width" :height="amountSelectorButton.height" viewBox="0 0 20 20" fill="none"
+           xmlns="http://www.w3.org/2000/svg">
         <path
             d="M6 10H14M10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10C19 14.9706 14.9706 19 10 19Z"
             stroke="#7F7F7F" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -19,30 +24,32 @@
             stroke="#3D3D3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
             style="mix-blend-mode:overlay"/>
       </svg>
-
     </Button>
 
     <input
         type="text"
-        :style="inputStyles"
-        :class="inputClass"
-        class="w-[32px] h-[34px] bg-transparent border border-[#ADADAD] text-[#000000] text-center text-[16px] fw-400 rounded-[8px] focus:outline-none"
+        :class="['custom-input', inputClass]"
         v-model="inputValue"
         :min="min"
         :max="max"
         @input="onInput"
     />
 
-    <Button :pt="{
-      root: {
-       style: {
-          backgroundColor: 'transparent',
-          border: 'none',
-          padding: '0',
+    <Button
+        :pt="{
+        root: {
+          style: {
+            backgroundColor: 'transparent',
+            border: 'none',
+            padding: '0',
+          }
         }
-      }
-    }" @click="increment" class="w-[34px] h-[34px] flex items-center justify-center border rounded">
-      <svg :width="amountSelectorButton.width" :height="amountSelectorButton.height" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      }"
+        @click="increment"
+        class="w-[34px] h-[34px] flex items-center justify-center border rounded"
+    >
+      <svg :width="amountSelectorButton.width" :height="amountSelectorButton.height" viewBox="0 0 20 20" fill="none"
+           xmlns="http://www.w3.org/2000/svg">
         <path
             d="M6 10H10M10 10H14M10 10V14M10 10V6M10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10C19 14.9706 14.9706 19 10 19Z"
             stroke="#7F7F7F" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -57,15 +64,15 @@
 </template>
 
 <script setup>
-import {ref, watch} from 'vue'
+import { ref, watch } from 'vue'
 
 const props = defineProps({
-  style: {type: Object},
-  inputStyles: {type: Object},
-  inputClass: {type: String},
-  min: {type: Number, default: 1},
-  max: {type: Number, default: 10},
-  modelValue: {type: Number, required: true, default: 1},
+  style: { type: Object },
+  inputStyles: { type: Object },
+  inputClass: { type: String },
+  min: { type: Number, default: 1 },
+  max: { type: Number, default: 10 },
+  modelValue: { type: Number, required: true, default: 1 },
   amountSelectorButton: {
     type: Object,
     required: false,
@@ -74,7 +81,6 @@ const props = defineProps({
       height: '20px'
     })
   }
-
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -83,7 +89,6 @@ const inputValue = ref(props.modelValue.toString())
 
 const onInput = () => {
   const num = Number(inputValue.value)
-
   if (isNaN(num)) return
 
   if (num > props.max) {
@@ -96,11 +101,15 @@ const onInput = () => {
 }
 
 const increment = () => {
-  if (props.modelValue < props.max) emit('update:modelValue', props.modelValue + 1)
+  if (props.modelValue < props.max) {
+    emit('update:modelValue', props.modelValue + 1)
+  }
 }
 
 const decrement = () => {
-  if (props.modelValue > props.min) emit('update:modelValue', props.modelValue - 1)
+  if (props.modelValue > props.min) {
+    emit('update:modelValue', props.modelValue - 1)
+  }
 }
 
 watch(() => props.modelValue, (newVal) => {
@@ -109,14 +118,28 @@ watch(() => props.modelValue, (newVal) => {
 </script>
 
 <style scoped>
-.amount-selector-button {
-  background: transparent;
-  border: none;
-  padding: 0;
+.custom-input {
+  width: 53px;
+  height: 60px;
+  background-color: transparent;
+  border: 1px solid #ADADAD;
+  color: #000000;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  border-radius: 8px;
+  outline: none;
 }
 
-.amount-selector-button:hover {
-  background: transparent;
-  border: none;
+.custom-input:focus {
+  outline: none;
+}
+
+@media (max-width: 500px) {
+  .custom-input {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
 }
 </style>

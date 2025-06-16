@@ -7,7 +7,6 @@
     <AccordionPanel class="accordion-item" value="0">
       <AccordionHeader :pt="{
         root: {
-          class: 'accordion-header',
           style: 'background-color: var(--color-gray-lavender); border: none;'
         }
       }">{{ tabs.description.header }}
@@ -34,7 +33,6 @@
     <AccordionPanel class="accordion-item" value="1">
       <AccordionHeader :pt="{
         root: {
-          class: 'accordion-header',
           style: 'background-color: var(--color-gray-lavender);'
         }
       }">{{ tabs.characteristics.header }}
@@ -68,7 +66,6 @@
     <AccordionPanel class="accordion-item" value="2">
       <AccordionHeader :pt="{
         root: {
-          class: 'accordion-header',
           style: 'background-color: var(--color-gray-lavender);'
         }
       }">{{ tabs.delivery.header }}
@@ -81,7 +78,7 @@
         <div v-if="deliveryAndPaymentInfo" class="delivery-and-payment">
           <p v-html="staticDeliveryAndPayment.content"></p>
         </div>
-        <p  v-else class="no-data-text no-data-reviews">
+        <p  v-else class="no-data-text">
           {{ t('delivery_no_data') }}
         </p>
       </AccordionContent>
@@ -90,7 +87,6 @@
     <AccordionPanel class="accordion-item" value="3">
       <AccordionHeader :pt="{
         root: {
-          class: 'accordion-header',
           style: 'background-color: var(--color-gray-lavender);'
         }
       }">{{ tabs.reviews.header }}
@@ -100,7 +96,7 @@
           style : 'background-color: var(--color-gray-lavender);'
         }
       }">
-        <section class="reviews-content murecho-font flex flex-col">
+        <section v-if="authInitialized" class="reviews-content murecho-font flex flex-col">
           <section v-if="paginatedReviews.length" class="review-list max-w-[650px] w-full pt-[26px] justify-self-start">
             <div class="reviews min-h-[270px] flex flex-col justify-between">
               <article
@@ -109,8 +105,8 @@
                   :key="review.id"
               >
                 <div class="review-header flex flex-col mb-2 items-start">
-                  <div class="max-w-[306px] w-full justify-between flex items-center">
-                    <strong class="mr-4">
+                  <div class="max-w-[306px] w-full flex items-center mb-[5px]">
+                    <strong class="mr-[20px]">
                       <p class="review-card__name fw-600">{{ fullReviewerName(review.user) }}</p>
                     </strong>
                     <time class="review-card__date mr-2 text-[14px]" :datetime="review.createdAt">
@@ -155,6 +151,7 @@
                       :class="{ 'is-disabled': currentPage === 1 }"
                       aria-label="Previous page"
                   >
+                    <img src="~/assets/icons/pagination-btn-arrow-left.svg" alt="pagination-btn">
                   </button>
                   <span>{{ currentPage }}</span>
                   <button
@@ -163,13 +160,14 @@
                       :class="{ 'is-disabled': currentPage * itemsPerPage >= reviews.length }"
                       aria-label="Next page"
                   >
+                    <img src="~/assets/icons/pagination-btn-arrow-right.svg" alt="pagination-btn">
                   </button>
                 </div>
               </nav>
             </div>
           </section>
 
-          <section v-else class="no-data-text no-data-reviews">
+          <section v-else class="no-data-text">
             <p class="no-data-text text-center mb-6">
               {{ t('no_reviews_yet') }}
             </p>
@@ -181,7 +179,7 @@
             </div>
 
             <form @submit.prevent="leaveProductReview">
-              <div class="mb-4 rounded-[8px] max-w-[354px]">
+              <div class="reviewer-name mb-4 rounded-[8px] max-w-[354px]">
                 <InputText
                     :disabled="!isAuthenticated"
                     v-model="reviewerInputValue"
@@ -191,19 +189,23 @@
               </div>
 
               <div class="rounded-[8px]">
-        <Textarea
-            :disabled="!isAuthenticated"
-            :maxlength="MAX_REVIEW_LENGTH"
-            v-model="textareaValue"
-            style="resize: none"
-            class="w-full rounded-[8px]"
-            :placeholder="t('share_your_impressions')"
-            rows="5"
-            cols="30"
-        />
+              <Textarea
+                  id="reviewTextarea"
+                  :disabled="!isAuthenticated"
+                  :maxlength="MAX_REVIEW_LENGTH"
+                  v-model="textareaValue"
+                  style="resize: none"
+                  :class="[
+                    'w-full rounded-[8px]',
+                    isEmptyTextarea ? 'border border-red-500' : 'border border-[var(--color-border-gray)]'
+                  ]"
+                  :placeholder="t('share_your_impressions')"
+                  rows="5"
+                  cols="30"
+              />
               </div>
 
-              <div class="mb-[10px] text-[var(--color-muted-light-gray)] flex justify-end">
+              <div class="char-counter">
                 {{ getReviewLength }} / {{ MAX_REVIEW_LENGTH }}
               </div>
 
@@ -296,6 +298,8 @@ const route = useRoute()
 
 const productSlug = computed(() => route.params.slug)
 
+const productId = computed(() => props.product._id)
+
 const deliveryAndPaymentInfo = ref(null)
 
 const staticDeliveryAndPayment = computed(() => {
@@ -305,7 +309,7 @@ const staticDeliveryAndPayment = computed(() => {
 
 const {t} = useI18n()
 
-const {currentUser, isAuthenticated} = storeToRefs(useAuthStore());
+const {currentUser, isAuthenticated, authInitialized} = storeToRefs(useAuthStore());
 
 const fullNameOfUser = computed(() => isAuthenticated.value ? `${currentUser.value.firstName} ${currentUser.value.lastName}` : '');
 
@@ -346,6 +350,8 @@ const reviews = ref(props.product?.reviews?.list || [])
 
 const isEmptyRating = ref(false)
 
+const isEmptyTextarea = ref(false)
+
 const hasPurchasedProduct = ref('')
 
 const paginatedReviews = computed(() => {
@@ -365,16 +371,20 @@ const changePage = (page) => {
 };
 
 const leaveProductReview = async () => {
-  if (!rating.value) {
-    isEmptyRating.value = true
+  const noRating = !rating.value
+  const noText = !textareaValue.value.trim()
+
+  isEmptyRating.value = noRating
+  isEmptyTextarea.value = noText
+
+  if (noRating || noText) {
     return
   }
 
   isLoading.value = true
-  isEmptyRating.value = false
 
   try {
-    const response = await leaveReview(productSlug.value, rating.value, textareaValue.value)
+    const response = await leaveReview(productId.value, rating.value, textareaValue.value)
     reviews.value.push(response)
     hasPurchasedProduct.value = ''
     clearFields()
@@ -415,14 +425,17 @@ onMounted(() => {
   border-bottom: none;
 }
 
-.accordion-header {
-  border-radius: var(--default-rounded);
-  padding: 8px 16px;
-  color: var(--color-primary-black);
-  font-size: 20px;
+.char-counter {
+  margin-bottom: 10px;
+  color: var(--color-muted-light-gray);
+  display: flex;
+  justify-content: end;
+  font-size: 16px;
 }
-.accordion-header:hover {
-  color: var(--color-primary-black);
+
+.pagination-wrapper .pagination button.is-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .characteristics-list__title {
@@ -474,10 +487,31 @@ button.is-disabled .arrow-path {
     padding: 15px;
     margin-bottom: 15px;
   }
+  .pagination-wrapper {
+    margin-bottom: 50px;
+  }
 }
 @media (max-width: 450px) {
+  .review-card__confirmed {
+    font-size: 14px;
+  }
+  .reviewer-name {
+    max-width: 178px;
+  }
+  .review-button__wrapper {
+    max-width: 271px;
+  }
   .characteristics-list__value {
     max-width: 45%;
+  }
+  .review-card__name {
+    font-size: 14px;
+  }
+  .review-card__comment {
+    font-size: 14px;
+  }
+  .pagination-wrapper {
+    margin-bottom: 36px;
   }
 }
 

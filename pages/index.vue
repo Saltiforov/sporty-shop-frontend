@@ -355,6 +355,10 @@ onBeforeUnmount(() => {
     display: none;
   }
 
+  .main-content {
+    grid-template-columns: 1fr !important;
+  }
+
   .empty-block {
     display: none;
   }
@@ -369,7 +373,7 @@ onBeforeUnmount(() => {
   }
 
   aside {
-    display: block;
+    display: none;
     border: none;
   }
 
