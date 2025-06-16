@@ -1,16 +1,11 @@
 <template>
   <Tree
+      v-if="isReady"
       :pt="{
         nodeChildren: {
           style: {
             display: 'none',
           }
-        },
-        root: {
-          style: mobileRootStyles
-        },
-        nodeContent: {
-          style: mobileNodeContentStyles
         },
         nodeToggleButton: {
                 style: {
@@ -56,7 +51,7 @@
           'rotate-90': expandedKeys[slotProps.node.key],
           'rotate-0': !expandedKeys[slotProps.node.key]
         }"
-              class="w-4 h-4 transform transition-transform"
+              class="w-3 h-3 transform transition-transform"
               viewBox="0 0 24 24"
               fill="none"
           >
@@ -111,8 +106,7 @@
 
           <div
               v-if="slotProps.node.children && slotProps.node.children.length > 1 && expandedKeys[slotProps.node.key]"
-              class="pt-3 mb-3 text-sm cursor-pointer filters-block-text w-[50%] mx-auto flex justify-center"
-              :style="mobileSelectAllStyles"
+              class="pt-3 mb-3 text-sm cursor-pointer filters-block-text w-[50%] mx-auto flex justify-center select-all-filters"
           >
         <span
             class="text-[12px]"
@@ -142,7 +136,7 @@
     </template>
   </Tree>
 
-  <PriceRangeFilter class="filters-block-text" :is-mobile-version="mobileVersion"/>
+  <PriceRangeFilter v-if="isReady" class="filters-block-text" :is-mobile-version="mobileVersion"/>
 </template>
 
 <script setup>
@@ -161,44 +155,11 @@ const getWidth = useWindowWidthWatcher();
 
 const mobileVersion = computed(() => getWidth() <= 1024)
 
-const mobileNodeContentStyles = computed(() => {
-  return mobileVersion.value
-      ? {
-        justifyContent: 'center',
-        backgroundColor: 'white',
-        padding: '8px',
-        marginBottom: '24px',
-      }
-      : {}
-})
-
-const mobileRootStyles = computed(() => {
-  return mobileVersion.value
-      ? {
-        backgroundColor: 'var(--color-primary-lavender)'
-      }
-      : {}
-})
-
-const mobileSelectAllStyles = computed(() => {
-  return mobileVersion.value
-      ? {
-        backgroundColor: 'var(--color-primary-lavender)',
-        padding: '5px 6.5px',
-        borderRadius: 'var(--default-rounded)',
-        marginTop: '14px',
-        marginBottom: '2px',
-        maxWidth: '80px',
-      }
-      : {}
-})
-
 const selectAllLabel = (allSelected) => {
   return mobileVersion.value && allSelected
       ? 'Deselect all'
       : 'Select all'
 }
-
 
 const shouldShowDivider = (node) => {
   const isRoot = isRootNode(node)
@@ -210,8 +171,10 @@ const {t, locale} = useI18n()
 const route = useRoute()
 const router = useRouter()
 
+const isReady = ref(false)
+
 const nodes = ref([])
-const expandedKeys = ref({"0": true})
+const expandedKeys = ref({"1": true})
 
 const isRootNode = (node) => !node.key.includes('-')
 
@@ -341,6 +304,11 @@ onMounted(async () => {
   const response = await getAllFilters()
   nodes.value = mapNodes(response.list)
   syncTreeWithQuery()
+
+  await nextTick()
+  isReady.value = true
+
+  await nextTick()
   emit('hydrated')
 })
 
@@ -390,6 +358,26 @@ const afterLeave = el => {
 }
 .filters-component {
   border-radius: var(--default-rounded);
+}
+
+@media (max-width: 1024px) {
+  :deep(.p-tree-node-content){
+    justify-content: center;
+    background-color: white;
+    padding: 8px;
+    margin-bottom: 24px;
+  }
+  .filters-component{
+    background-color: var(--color-primary-lavender) !important;
+  }
+  .select-all-filters {
+    background-color: var(--color-primary-lavender);
+    padding: 5px 6.5px;
+    border-radius: var(--default-rounded);
+    margin-top: 14px;
+    margin-bottom: 2px;
+    max-width: 80px;
+  }
 }
 
 @media (max-width: 680px) {

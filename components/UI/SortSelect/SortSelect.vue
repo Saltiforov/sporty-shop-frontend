@@ -77,6 +77,7 @@ watch(() => route.query.sort, syncWithRoute);
 .select-root {
   background-color: transparent !important;
   border: none !important;
+  box-shadow: none !important;
 }
 
 .select-label {

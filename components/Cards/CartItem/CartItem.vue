@@ -82,7 +82,13 @@
           ]"
         >
           <div v-if="!isHistoryView" class="card-product-count">
-            <AmountSelector v-model="cartProduct.quantity" min="1" max="100"/>
+            <AmountSelector
+                v-model="cartProduct.quantity"
+                min="1"
+                max="100"
+                :amount-selector-wrapper="'amount-selector-wrapper'"
+                :amount-selector-button="'amount-selector-button'"
+                :input-class="'counter-input'"/>
           </div>
 
           <div
@@ -231,6 +237,23 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
   padding: 0;
 }
 
+:deep(.counter-input) {
+  width: 32px !important;
+  height: 34px !important;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+:deep(.amount-selector-button) {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+:deep(.amount-selector-wrapper) {
+  width: 24px !important;
+  height: 24px !important;
+}
+
 .cart-item__delete-btn:hover {
   background: transparent;
   border: none;
@@ -329,7 +352,7 @@ const imageSource = computed(() => fullImageUrls(cartProduct.images || [])[0] ||
   }
 
   .card-image {
-    margin-right: 8px;
+    margin-right: 10px;
   }
 }
 

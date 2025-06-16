@@ -88,8 +88,10 @@
               </div>
             </div>
 
+            <ProductDescriptionSkeleton v-if="!clientReady"/>
+
             <ClientOnly>
-              <div class="description">
+              <div v-if="clientReady" class="description">
                 <p v-if="product.description"
                    class="fw-500 leading-[34px] truncate-6-lines text-[var(--color-primary-dark)]"
                    v-html="product.description"></p>
@@ -101,9 +103,9 @@
                     {{ t('product_developer') }} {{ product.vendor }}
                   </p>
                 </div>
-
               </div>
             </ClientOnly>
+
 
           </div>
 
@@ -124,8 +126,8 @@
 
               <AmountSelector
                   v-model="product.quantity"
-                  :style="counterContainerStyle"
-                  :amount-selector-button="amountButtonSize"
+                  :counter-container-class="'counter-container'"
+                  :amount-selector-button="'amount-selector-button'"
               />
             </div>
 
@@ -245,6 +247,8 @@ import BreadcrumbSkeleton from "~/components/Skeletons/BreadcrumbSkeleton/Breadc
 import {useWindowWidthWatcher} from "~/composables/useWindowWidthWatcher.js";
 import {storeToRefs} from "pinia";
 import {useAuthStore} from "~/stores/auth.js";
+import ProductDescriptionSkeleton
+  from "~/components/Skeletons/ProductDescriptionSkeleton/ProductDescriptionSkeleton.vue";
 
 const {t} = useI18n()
 
@@ -259,6 +263,8 @@ const {data: productItem, pending, error} = await useAsyncData(
     () => getProductBySlug(slug)
 )
 const isLoading = ref(pending.value)
+
+const clientReady = ref(false)
 
 const product = ref(productItem.value)
 
@@ -280,25 +286,11 @@ const {showProductAddedToast} = useToastManager()
 
 const {viewed, removeProductFromViewedAndRedirect} = useViewedProducts()
 
-const getWidth = useWindowWidthWatcher()
-
-const windowWidth = computed(() => getWidth())
-
 const currencyStore = useCurrencyStore()
 
 const recommended = ref([])
 
 const selectedImage = ref(null)
-
-const amountButtonSize = ref({ width: '18px', height: '18px' })
-
-// const amountButtonSize = computed(() => {
-//   const size = windowWidth.value < 620 ? '27px' : '18px'
-//   return {
-//     width: size,
-//     height: size
-//   }
-// })
 
 const priceByCurrencyWithDiscount = computed(() => {
   return currencyStore.getCurrency === 'uah'
@@ -309,11 +301,6 @@ const priceByCurrencyWithDiscount = computed(() => {
 const priceByCurrency = computed(() => {
   return currencyStore.getCurrency === 'uah' ? product.value.price?.uah : product.value.price?.eur
 })
-
-const counterContainerStyle = computed(() => {
-  return windowWidth.value >= 500 ? 'width: 129px' : 'width: 139px';
-});
-
 
 const hasDiscount = computed(() => {
   const price = priceByCurrency.value
@@ -391,11 +378,7 @@ const handleGalleryClick = (index) => {
 }
 
 onMounted(async () => {
-  windowWidth.value = window.innerWidth
-  amountButtonSize.value = windowWidth.value < 620
-      ? { width: '27px', height: '27px' }
-      : { width: '18px', height: '18px' }
-
+  clientReady.value = true
   try {
     isLoading.value = true
   } catch (error) {
@@ -411,6 +394,15 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.counter-container {
+  width: 129px;
+}
+
+:deep(.amount-selector-button) {
+  width: 18px !important;
+  height: 18px !important;
+}
+
 .send-review__btn {
   background: var(--color-primary-dark);
   width: 100%;
@@ -447,7 +439,7 @@ onMounted(async () => {
   border: none;
 }
 
-.availability p{
+.availability p {
   font-size: 24px;
   font-weight: 200;
   color: var(--color-primary-green);
@@ -464,7 +456,7 @@ onMounted(async () => {
 
 .truncate-6-lines {
   display: -webkit-box;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -649,6 +641,11 @@ onMounted(async () => {
     height: 290px;
   }
 
+  .amount-selector-button {
+    width: 27px;
+    height: 27px;
+  }
+
   .viewed-products__content {
     padding-bottom: 36px;
     padding-right: 0;
@@ -682,10 +679,21 @@ onMounted(async () => {
   .article {
     font-size: 13px;
   }
+
+  .counter-container {
+    width: 139px;
+  }
+
+  :deep(.amount-selector-button) {
+    width: 27px !important;
+    height: 27px !important;
+  }
+
   .section-title {
     font-size: 16px;
     line-height: 33px;
   }
+
   .availability p {
     font-size: 16px;
   }

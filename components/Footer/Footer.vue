@@ -5,7 +5,7 @@
 
     <footer
         ref="stickyFooter"
-        class=" bottom-0 sticky-footer px-[16px] left-0 w-full z-1000 responsive-footer flex flex-col p-4 shadow transition-transform duration-300"
+        class="bottom-0 sticky-footer px-[16px] left-0 w-full z-1000 responsive-footer flex flex-col p-4 shadow transition-transform duration-300"
         :class="[footerPositionClass]"
     >
       <section class="responsive-footer-container w-full flex justify-between">
@@ -46,27 +46,40 @@
                   {{ list.title }}
                 </h2>
                 <span v-if="isResponsiveVersion">
-                  <img v-if="list.expanded" src="/assets/icons/footer-icon-minus.svg" alt="footer-icon-minus">
-                  <img v-else src="/assets/icons/footer-icon-plus.svg" alt="footer-icon-plus">
+                  <img v-if="list.expanded" src="/assets/icons/footer-icon-minus.svg" alt="footer-icon-minus" />
+                  <img v-else src="/assets/icons/footer-icon-plus.svg" alt="footer-icon-plus" />
                 </span>
               </header>
 
-              <LinksList v-if="list.expanded || !isResponsiveVersion" :links="list.links" :parentClasses="['']"
-                         :linkClass="['text-[var(--color-primary-pure-white)]', 'last:mr-0', 'mb-[6px]', 'link-text']"
+              <LinksList
+                  v-if="list.expanded || !isResponsiveVersion"
+                  :links="list.links"
+                  :parentClasses="['']"
+                  :linkClass="['text-[var(--color-primary-pure-white)]', 'last:mr-0', 'mb-[6px]', 'link-text']"
               />
             </section>
+
             <aside class="socials-responsive">
               <section class="our-social w-full">
                 <header class="flex items-center mb-5 cursor-pointer">
-                  <p  @click="showSocialLinks = !showSocialLinks" class="small-title mr-1">{{ t('footer_social_networks') }}</p>
+                  <p @click="showSocialLinks = !showSocialLinks" class="small-title mr-1">
+                    {{ t('footer_social_networks') }}
+                  </p>
                   <span v-if="isResponsiveVersion">
-                  <img v-if="showSocialLinks" src="/assets/icons/footer-icon-minus.svg" alt="footer-icon-minus">
-                  <img v-else src="/assets/icons/footer-icon-plus.svg" alt="footer-icon-plus">
-                </span>
+                    <img
+                        v-if="showSocialLinks"
+                        src="/assets/icons/footer-icon-minus.svg"
+                        alt="footer-icon-minus"
+                    />
+                    <img v-else src="/assets/icons/footer-icon-plus.svg" alt="footer-icon-plus" />
+                  </span>
                 </header>
                 <div v-show="showSocialLinks">
                   <nav class="flex justify-between">
-                    <NuxtLink to="https://www.instagram.com/" class="flex flex-col items-center text-center gap-1">
+                    <NuxtLink
+                        to="https://www.instagram.com/"
+                        class="flex flex-col items-center text-center gap-1"
+                    >
                       <NuxtImg
                           src="/images/instagram-black-icon.png"
                           width="36"
@@ -75,7 +88,10 @@
                           loading="lazy"
                       />
                     </NuxtLink>
-                    <NuxtLink to="https://web.telegram.org/a/" class="flex flex-col items-center text-center gap-1">
+                    <NuxtLink
+                        to="https://web.telegram.org/a/"
+                        class="flex flex-col items-center text-center gap-1"
+                    >
                       <NuxtImg
                           src="/images/telegram-black-icon.png"
                           width="36"
@@ -88,11 +104,15 @@
                   <address class="contacts-wrapper">
                     <section class="contacts ml-4 mb-3">
                       <p class="small-title">{{ t('footer_contacts_title') }}</p>
-                      <NuxtLink class="text-[var(--color-primary-pure-white)] link-text" to="/news">qwerty@gmail.com
-                      </NuxtLink>
+                      <NuxtLink class="text-[var(--color-primary-pure-white)] link-text" to="/news"
+                      >qwerty@gmail.com</NuxtLink
+                      >
                     </section>
                     <nav class="contacts-links flex justify-between items-center">
-                      <NuxtLink to="https://www.instagram.com/" class="flex flex-col items-center text-center gap-1">
+                      <NuxtLink
+                          to="https://www.instagram.com/"
+                          class="flex flex-col items-center text-center gap-1"
+                      >
                         <NuxtImg
                             class="self-start"
                             src="/images/instagram-black-icon.png"
@@ -103,7 +123,10 @@
                         />
                         <p class="link-text">Instagram</p>
                       </NuxtLink>
-                      <NuxtLink to="https://web.telegram.org/a/" class="flex flex-col items-center text-center gap-1">
+                      <NuxtLink
+                          to="https://web.telegram.org/a/"
+                          class="flex flex-col items-center text-center gap-1"
+                      >
                         <NuxtImg
                             class="self-end"
                             src="/images/telegram-black-icon.png"
@@ -121,14 +144,20 @@
             </aside>
           </nav>
         </section>
+
         <aside class="right-side w-full max-w-[393px] justify-between flex-wrap sm:flex-nowrap gap-2 flex">
           <address class="contacts-wrapper w-[182px]">
             <section class="contacts ml-4 mb-3">
               <p class="small-title">{{ t('footer_contacts_title') }}</p>
-              <NuxtLink class="text-[var(--color-primary-pure-white)] link-text" to="/news">qwerty@gmail.com</NuxtLink>
+              <NuxtLink class="text-[var(--color-primary-pure-white)] link-text" to="/news"
+              >qwerty@gmail.com</NuxtLink
+              >
             </section>
             <nav class="contacts-links flex justify-between items-center">
-              <NuxtLink to="https://www.instagram.com/" class="flex flex-col items-center text-center gap-1">
+              <NuxtLink
+                  to="https://www.instagram.com/"
+                  class="flex flex-col items-center text-center gap-1"
+              >
                 <NuxtImg
                     src="/images/instagram-black-icon.png"
                     width="36"
@@ -138,7 +167,10 @@
                 />
                 <p class="link-text">Instagram</p>
               </NuxtLink>
-              <NuxtLink to="https://web.telegram.org/a/" class="flex flex-col items-center text-center gap-1">
+              <NuxtLink
+                  to="https://web.telegram.org/a/"
+                  class="flex flex-col items-center text-center gap-1"
+              >
                 <NuxtImg
                     src="/images/telegram-black-icon.png"
                     width="36"
@@ -151,7 +183,9 @@
             </nav>
           </address>
           <section class="our-social max-w-[102px] w-full">
-            <header><p class="small-title mb-5">{{ t('footer_social_networks') }}</p></header>
+            <header>
+              <p class="small-title mb-5">{{ t('footer_social_networks') }}</p>
+            </header>
             <nav class="flex justify-between">
               <NuxtLink to="https://www.instagram.com/" class="flex flex-col items-center text-center gap-1">
                 <NuxtImg
@@ -179,13 +213,12 @@
   </main>
 </template>
 
-
 <script setup>
-import {ref, onMounted, onBeforeUnmount} from 'vue'
-import {useCartStore} from '~/stores/cart.js'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { useCartStore } from '~/stores/cart.js'
 import { useWindowWidthWatcher } from '~/composables/useWindowWidthWatcher'
 
-const {t} = useI18n()
+const { t } = useI18n()
 
 const getWidth = useWindowWidthWatcher()
 
@@ -199,20 +232,19 @@ const props = defineProps({
 const emit = defineEmits(['handle-mobile-sidebar'])
 
 const footerMarker = ref(null)
+const stickyFooter = ref(null)
+const mainFooter = ref(null)
 
 const showShoppingCart = () => useCartStore().open()
 
 const isResponsiveVersion = computed(() => getWidth() <= 670)
 
+const showSocialLinks = ref(true)
+
+const isIntersecting = ref(false)
 const footerPositionClass = computed(() => {
   return isIntersecting.value ? 'relative translate-y-0' : 'fixed translate-y-0'
 })
-
-const showSocialLinks = ref(true)
-
-const stickyFooter = ref(null)
-const mainFooter = ref(null)
-const isIntersecting = ref(false)
 
 const toggle = (index) => {
   links.value[index].expanded = !links.value[index].expanded
@@ -223,18 +255,18 @@ const links = ref([
     title: computed(() => t('footer_about_us')),
     expanded: false,
     links: [
-      {label: computed(() => t('footer_about_us')), page: '/content/about-us'},
-      {label: computed(() => t('footer_warranties')), page: '/content/guarantees'},
-      {label: computed(() => t('footer_terms_of_use')), page: '/content/term-of-use'},
+      { label: computed(() => t('footer_about_us')), page: '/content/about-us' },
+      { label: computed(() => t('footer_warranties')), page: '/content/guarantees' },
+      { label: computed(() => t('footer_terms_of_use')), page: '/content/term-of-use' }
     ]
   },
   {
     title: computed(() => t('footer_payment_methods')),
     expanded: false,
     links: [
-      {label: computed(() => t('footer_payment_methods')), page: '/content/shipping-and-payment'},
-      {label: computed(() => t('footer_delivery')), page: '/content/delivery'},
-      {label: computed(() => t('footer_faq')), page: '/content/frequently-questions'},
+      { label: computed(() => t('footer_payment_methods')), page: '/content/shipping-and-payment' },
+      { label: computed(() => t('footer_delivery')), page: '/content/delivery' },
+      { label: computed(() => t('footer_faq')), page: '/content/frequently-questions' }
     ]
   }
 ])
@@ -364,6 +396,4 @@ onBeforeUnmount(() => {
     width: 130px;
   }
 }
-
-
 </style>

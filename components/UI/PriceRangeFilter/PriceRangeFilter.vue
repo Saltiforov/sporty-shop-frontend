@@ -1,12 +1,9 @@
 <template>
   <div  :class="[
     'price-range-filter p-[8px_36px] pb-[36px]',
-    isMobileVersion ? 'bg-[var(--color-primary-lavender)]' : ''
   ]">
 
-    <div :class="[
-    isMobileVersion ? 'bg-[var(--color-primary-pure-white)] px-[8px] py-[10px] rounded-[var(--default-rounded)]' : ''
-  ]">
+    <div class="price-range-filter-content">
       <div class="range-title mb-[9px]">{{ t('price_range_title', {currency: currentCurrency}) }}</div>
       <div class="range-fields-wrapper flex flex-col gap-[29px]">
         <div class="range-fields w-full flex justify-between items-center">
@@ -45,9 +42,6 @@
               root: {
                 class: 'h-[1px]',
                 style: sliderStyles
-              },
-              range: {
-                style: sliderRangeStyles
               },
             }"
               v-model="priceRange"
@@ -91,13 +85,6 @@ const maxLimit = computed(() => {
 })
 
 const currentCurrency = computed(() => currencyStore.getCurrency?.toUpperCase())
-
-const sliderRangeStyles = computed(() => {
-  return {
-    backgroundColor: 'var(--color-primary-purple)',
-    height: '2px',
-  }
-})
 
 const sliderStyles = computed(() => {
   const size = props.isMobileVersion ? '20px' : '12px'
@@ -175,6 +162,11 @@ const applyPriceRange = () => {
   background: black;
 }
 
+:deep(.p-slider-range) {
+  height: 2px;
+  background-color: var(--color-primary-purple);
+}
+
 .custom-slider-handle::before {
   content: '';
   position: absolute;
@@ -205,6 +197,12 @@ const applyPriceRange = () => {
 @media (max-width: 1024px) {
   .price-range-filter {
     padding: 0 24px;
+    background-color: var(--color-primary-lavender);
+  }
+  .price-range-filter-content {
+    background-color: var(--color-primary-pure-white);
+    padding: 10px 8px;
+    border-radius: var(--default-rounded);
   }
 }
 </style>

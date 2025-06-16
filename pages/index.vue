@@ -41,8 +41,8 @@
         <div class="main-content min-h-screen grid-cols-1 grid lg:grid-cols-[354px_1fr] gap-[89px]">
           <aside class="rounded-md">
             <div class="filters mb-[91px] w-full max-w-[354px] min-h-[575px] border rounded-[var(--default-rounded)]">
-              <Filters v-if="hydrated"/>
-              <FiltersSkeleton v-else/>
+              <Filters @hydrated="handleFiltersHydration" v-show="isFiltersHydrated"/>
+              <FiltersSkeleton v-show="!isFiltersHydrated"/>
             </div>
 
             <transition name="fade-slide">
@@ -129,20 +129,20 @@ definePageMeta({
 
 useHead({
   meta: [
-    { property: 'og:type', content: 'website' },
-    { property: 'og:url', content: 'http://localhost:4000/' },
-    { property: 'og:title', content: 'Магазин спортивного питания | SP BALKAN' },
-    { property: 'og:description', content: 'Лучший выбор протеинов и BCAA в Украине.' },
-    { property: 'og:image', content: 'https://example.com/og-image.jpg' },
-    { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: 'Магазин спортивного питания | SP BALKAN' },
-    { name: 'twitter:description', content: 'Лучший выбор протеинов и BCAA в Украине.' },
-    { name: 'twitter:image', content: 'https://example.com/twitter-image.jpg' },
+    {property: 'og:type', content: 'website'},
+    {property: 'og:url', content: 'http://localhost:4000/'},
+    {property: 'og:title', content: 'Магазин спортивного питания | SP BALKAN'},
+    {property: 'og:description', content: 'Лучший выбор протеинов и BCAA в Украине.'},
+    {property: 'og:image', content: 'https://example.com/og-image.jpg'},
+    {name: 'twitter:card', content: 'summary_large_image'},
+    {name: 'twitter:title', content: 'Магазин спортивного питания | SP BALKAN'},
+    {name: 'twitter:description', content: 'Лучший выбор протеинов и BCAA в Украине.'},
+    {name: 'twitter:image', content: 'https://example.com/twitter-image.jpg'},
   ],
   link: [
-    { rel: 'canonical', href: 'http://localhost:4000/' },
-    { rel: 'alternate', href: 'http://localhost:4000/ua/', hreflang: 'uk' },
-    { rel: 'alternate', href: 'http://localhost:4000/en/', hreflang: 'en' }
+    {rel: 'canonical', href: 'http://localhost:4000/'},
+    {rel: 'alternate', href: 'http://localhost:4000/ua/', hreflang: 'uk'},
+    {rel: 'alternate', href: 'http://localhost:4000/en/', hreflang: 'en'}
   ]
 })
 
@@ -150,21 +150,28 @@ import ProductCard from "~/components/Cards/ProductCard/ProductCard.vue";
 import BasePagination from "~/components/UI/BasePagination/BasePagination.vue";
 import Filters from "~/components/UI/Filters/Filters.vue";
 import LoadingOverlay from "~/components/UI/LoadingOverlay/LoadingOverlay.vue";
-import { useQueryParams } from "~/composables/useQueryParams.js";
-import { getAllProducts, getProductsOnSale } from "~/services/api/product-service.js";
-import { useToastManager } from "~/composables/useToastManager.js";
-import { useViewedProducts } from "~/composables/useViewedProducts.js";
+import {useQueryParams} from "~/composables/useQueryParams.js";
+import {getAllProducts, getProductsOnSale} from "~/services/api/product-service.js";
+import {useToastManager} from "~/composables/useToastManager.js";
+import {useViewedProducts} from "~/composables/useViewedProducts.js";
 import FiltersSkeleton from "~/components/Skeletons/FiltersSkeleton/FiltersSkeleton.vue";
-import { cacheService } from '~/services/cacheService.js'
+import {cacheService} from '~/services/cacheService.js'
 import {useCurrencyStore} from "~/stores/currency.js";
 
-const { $eventBus } = useNuxtApp()
-const { t, locale } = useI18n()
+const {$eventBus} = useNuxtApp()
+const {t, locale} = useI18n()
 const route = useRoute()
 const router = useRouter()
 
 const handleMobileFilters = () => {
   $eventBus.emit('handle-mobile-filters')
+}
+
+const isFiltersHydrated = ref(false);
+
+const handleFiltersHydration = () => {
+  isFiltersHydrated.value = true
+  console.log("handleFiltersHydration")
 }
 
 const page = ref(Number(route.query.page) || 1)
@@ -180,11 +187,11 @@ const productsQueryParams = computed(() => {
     filters: route.query.filters,
     price: route.query.price,
     sort: route.query.sort,
-    ...(q.value ? { q: q.value } : {}),
+    ...(q.value ? {q: q.value} : {}),
   }
 })
 
-const { updateQueryParams } = useQueryParams(productsQueryParams)
+const {updateQueryParams} = useQueryParams(productsQueryParams)
 updateQueryParams()
 
 const currencyStore = useCurrencyStore()
@@ -200,15 +207,15 @@ const sortQueryParams = (query) => {
   return sortedQuery
 }
 
-const { data: catalog, pending, error } = await useAsyncData(
+const {data: catalog, pending, error} = await useAsyncData(
     'products catalog',
     () => {
       const sortedQuery = sortQueryParams(productsQueryParams.value)
-      router.push({ query: sortedQuery })
-      const currency =  currencyStore.getCurrency;
-      return cacheService.getAllProducts({ ...sortedQuery, locale: locale.value, currency })
+      router.push({query: sortedQuery})
+      const currency = currencyStore.getCurrency;
+      return cacheService.getAllProducts({...sortedQuery, locale: locale.value, currency})
     },
-    { watch: [productsQueryParams] }
+    {watch: [productsQueryParams]}
 )
 
 const products = computed(() => catalog.value?.list || [])
@@ -223,9 +230,9 @@ const promotionalProductsSwiperOptions = {
   loop: true,
 }
 
-const { addProductToViewed } = useViewedProducts()
+const {addProductToViewed} = useViewedProducts()
 const hydrated = ref(false)
-const { showProductAddedToast } = useToastManager()
+const {showProductAddedToast} = useToastManager()
 const isMobileFiltersOpen = ref(false)
 const promotionalProducts = ref([])
 
@@ -262,6 +269,10 @@ onBeforeUnmount(() => {
   margin-bottom: 45px;
   width: 100%;
   grid-template-columns: repeat(4, 1fr);
+}
+
+.filters {
+  background-color: rgba(249, 250, 251, 0.51);
 }
 
 .product-pagination-wrapper {

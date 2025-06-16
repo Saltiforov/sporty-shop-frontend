@@ -36,7 +36,7 @@
           <ProductSearch />
         </div>
 
-        <div class="locale-switch max-w-[200px] w-full justify-between flex">
+        <div class="switch-wrapper max-w-[200px] w-full justify-between flex">
           <LocaleSwitch/>
           <CurrencySwitch />
         </div>
@@ -303,6 +303,7 @@ const links = ref([
   }
   .header-actions {
     padding-bottom: 16px;
+    width: auto;
   }
   .product-search-wrapper {
     position: absolute !important;
@@ -316,8 +317,13 @@ const links = ref([
 @media (max-width: 530px) {
   .header-actions {
     padding-bottom: 0px;
+    align-self: start;
   }
-  .locale-switch {
+  header img {
+    width: 234px;
+    height: 95px;
+  }
+  .switch-wrapper {
     flex-direction: column;
     width: auto;
     align-items: flex-end;
@@ -326,11 +332,10 @@ const links = ref([
     display: none;
   }
   .header  {
-    padding-bottom: 17px;
-
+    padding: 10px 10px 17px 10px;
   }
   .product-search-wrapper {
-    top: 95px !important;
+    top: 110px !important;
     right: 10px !important;
     left: auto !important;
     max-width: 259px !important;
