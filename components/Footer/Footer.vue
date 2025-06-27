@@ -27,15 +27,20 @@
     >
       <section class="footer-container flex justify-between flex-wrap items-center max-w-[1190px] px-[15px] mx-auto">
         <section class="left-side flex w-full max-w-[661px] justify-between gap-2">
-          <figure class="mb-auto">
+          <picture class="mb-auto">
+            <source srcset="/images/mobile-footer-icon.svg" media="(max-width: 679px)" type="image/svg+xml" />
             <NuxtImg
+                class="logo-image"
                 src="/images/footer-logo.svg"
-                :width="isResponsiveVersion ? 129 : 184"
-                :height="isResponsiveVersion ? 95 : 140"
-                alt="footer-logo"
-                loading="lazy"
+                alt="header-logo"
+                width="184"
+                height="140"
+                preload
+                format="webp"
+                :modifiers="{ quality: 100 }"
+                fetchpriority="high"
             />
-          </figure>
+          </picture>
           <nav class="links-list flex w-full max-w-[411px] justify-between sm:flex-nowrap gap-2">
             <section v-for="(list, index) in links" :key="index">
               <header class="flex mb-2 items-center">
@@ -45,7 +50,7 @@
                 >
                   {{ list.title }}
                 </h2>
-                <span v-if="isResponsiveVersion">
+                <span v-if="isResponsiveVersion" class="cursor-pointer" @click="toggle(index)">
                   <img v-if="list.expanded" src="/assets/icons/footer-icon-minus.svg" alt="footer-icon-minus" />
                   <img v-else src="/assets/icons/footer-icon-plus.svg" alt="footer-icon-plus" />
                 </span>
@@ -61,11 +66,11 @@
 
             <aside class="socials-responsive">
               <section class="our-social w-full">
-                <header class="flex items-center mb-5 cursor-pointer">
-                  <p @click="showSocialLinks = !showSocialLinks" class="small-title mr-1">
+                <header class="flex items-center mb-5">
+                  <p @click="showSocialLinks = !showSocialLinks" class="small-title  mr-1 cursor-pointer">
                     {{ t('footer_social_networks') }}
                   </p>
-                  <span v-if="isResponsiveVersion">
+                  <span v-if="isResponsiveVersion" class="cursor-pointer inline-block" @click="showSocialLinks = !showSocialLinks">
                     <img
                         v-if="showSocialLinks"
                         src="/assets/icons/footer-icon-minus.svg"
@@ -348,6 +353,10 @@ onBeforeUnmount(() => {
 @media (max-width: 670px) {
   .footer-container {
     flex-direction: column;
+  }
+  .logo-image {
+    width: 130px;
+    height: 127px;
   }
   .footer-marker {
     display: block;

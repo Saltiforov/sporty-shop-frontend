@@ -174,41 +174,51 @@
 
       <div class="recommended-products__content mx-auto max-w-[1500px] pb-[70px] p-4">
         <SwiperWrapper
-            :items="products"
-            :options="recommendedProductsSwiperOptions"
+            :items="recommended"
+            :options="recommendedSwiperOptions"
+            :type="'card'"
+            :is-show-slide-button="shouldDisplayButtonsRecommendedSwiper"
+            :align-start="recommended.length === 1"
         >
           <template #default="{ item }">
-            <ProductCard class="mt-3 mb-3" :product="item"/>
+            <ProductCard
+                class="mt-3 mb-3"
+                :product="item"
+                :no-auto-margin="recommended.length === 1"
+                @add-to-cart="showProductAddedToast"
+            />
           </template>
         </SwiperWrapper>
       </div>
     </div>
 
-    <div v-if="viewed.length" class="viewed-products flex items-center justify-center gap-6 my-8">
-      <div class="h-px w-[56px] bg-[var(--color-primary-purple)]"></div>
-      <h2 class="section-title">
-        {{ t('viewed_products') }}
-      </h2>
-      <div class="h-px w-full bg-[var(--color-primary-purple)]"></div>
-    </div>
-
-    <div
-        class="viewed-products__content mx-auto max-w-[1500px] pb-[70px] p-4">
-      <SwiperWrapper
-          :items="viewed"
-          :options="viewedSwiperOptions"
-          :is-show-slide-button="shouldDisplayButtonsViewedSwiper"
-          :align-start="viewed.length === 1"
-      >
-        <template #default="{ item }">
-          <ProductCard
-              class="mt-3 mb-3"
-              :product="item"
-              :no-auto-margin="viewed.length === 1"
-              @add-to-cart="showProductAddedToast"
-          />
-        </template>
-      </SwiperWrapper>
+    <div v-if="viewed.length" class="viewed-products">
+      <div class="viewed-products-title flex items-center justify-center gap-6 my-8">
+        <div class="h-px w-[56px] bg-[var(--color-primary-purple)]"></div>
+        <h2 class="section-title">
+          {{ t('viewed_products') }}
+        </h2>
+        <div class="h-px w-full bg-[var(--color-primary-purple)]"></div>
+      </div>
+      <div
+          class="viewed-products__content mx-auto max-w-[1500px] pb-[70px] p-4">
+        <SwiperWrapper
+            :items="viewed"
+            :options="viewedSwiperOptions"
+            :type="'card'"
+            :is-show-slide-button="shouldDisplayButtonsViewedSwiper"
+            :align-start="viewed.length === 1"
+        >
+          <template #default="{ item }">
+            <ProductCard
+                class="mt-3 mb-3"
+                :product="item"
+                :no-auto-margin="viewed.length === 1"
+                @add-to-cart="showProductAddedToast"
+            />
+          </template>
+        </SwiperWrapper>
+      </div>
     </div>
   </div>
 </template>
@@ -321,45 +331,30 @@ const swiperOptions = {
   },
 }
 
-const shouldDisplayButtonsViewedSwiper = computed(() => viewed.value.length >= 4)
-
-const viewedSwiperOptions = computed(() => {
-  const count = viewed.value.length
+const getSwiperOptions = (products) => {
+  const count = products.value.length
   return {
     slidesPerView: Math.min(count, 4),
     loop: count > 4,
     breakpoints: {
-      320: {slidesPerView: Math.min(count, 2),},
-      756: {slidesPerView: Math.min(count, 2),},
-      910: {slidesPerView: Math.min(count, 3),},
-      1024: {slidesPerView: Math.min(count, 3),},
-      1410: {slidesPerView: Math.min(count, 4),},
+      320: { slidesPerView: Math.min(count, 2) },
+      756: { slidesPerView: Math.min(count, 2) },
+      910: { slidesPerView: Math.min(count, 3) },
+      1024: { slidesPerView: Math.min(count, 3) },
+      1410: { slidesPerView: Math.min(count, 3) },
+      1580: { slidesPerView: Math.min(count, 3) },
+      1581: { slidesPerView: Math.min(count, 4) },
     },
   }
-})
-
-const recommendedProductsSwiperOptions = {
-  slidesPerView: 4,
-  loop: true,
-  breakpoints: {
-    320: {
-      slidesPerView: 2,
-    },
-    756: {
-      slidesPerView: 2,
-    },
-    910: {
-      slidesPerView: 3,
-    },
-    1024: {
-      slidesPerView: 3,
-    },
-    1410: {
-      slidesPerView: 4,
-    },
-
-  },
 }
+
+const shouldDisplayButtonsViewedSwiper = computed(() => viewed.value.length >= 4)
+
+const shouldDisplayButtonsRecommendedSwiper = computed(() => recommended.value.length >= 4)
+
+const viewedSwiperOptions = computed(() => getSwiperOptions(viewed))
+
+const recommendedSwiperOptions = computed(() => getSwiperOptions(recommended))
 
 const slideChange = (direction) => {
   const imageIdx = images.value.findIndex(img => img === selectedImage.value)
